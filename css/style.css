@@ -221,11 +221,29 @@ h3 {
   flex-direction: column;
   align-items: center;
 }
-.hero-logo-video {
+.hero-logo {
   width: min(400px, 72vw);
   aspect-ratio: 16 / 9;
-  object-fit: contain;
   margin-bottom: -8px;
+}
+.hero-logo img,
+.hero-logo video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.hero-logo img {
+  /* הלוגו הסטטי ממורכז כמו באנימציה — בערך 40% מרוחב הפריים */
+  padding: 11% 30%;
+  box-sizing: border-box;
+  animation: logoIn 1.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes logoIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-logo img { animation: none; }
 }
 .hero-label {
   font-size: 0.9rem;

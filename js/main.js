@@ -1,5 +1,32 @@
 // שיפט — אינטראקציות עדינות
 
+// אנימציית הלוגו בהירו — שדרוג מלוגו סטטי לווידאו רק בדפדפנים
+// שמנגנים WebM עם שקיפות באופן אמין (דסקטופ כרום/פיירפוקס).
+// בספארי ובמובייל הווידאו עלול להתנגן על רקע שחור — נשארים עם הלוגו הסטטי.
+const heroLogo = document.getElementById('heroLogo');
+if (heroLogo) {
+  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+  const canWebm = document.createElement('video')
+    .canPlayType('video/webm; codecs="vp9"') === 'probably';
+  if (canWebm && !isSafari && !isMobile) {
+    const video = document.createElement('video');
+    video.muted = true;
+    video.autoplay = true;
+    video.playsInline = true;
+    video.setAttribute('aria-label', 'אנימציית הלוגו של שיפט');
+    const src = document.createElement('source');
+    src.src = 'assets/video/logo-anim-1.webm';
+    src.type = 'video/webm';
+    video.appendChild(src);
+    video.addEventListener('canplay', () => {
+      heroLogo.replaceChildren(video);
+      video.play().catch(() => {});
+    }, { once: true });
+    video.load();
+  }
+}
+
 // אנימציות הופעה בגלילה
 const reveals = document.querySelectorAll('.reveal');
 if ('IntersectionObserver' in window) {
