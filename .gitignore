@@ -1,0 +1,9 @@
+# קבצי מקור כבדים שאינם נדרשים לאתר עצמו
+assets/video/logo-anim-1.mov
+assets/video/logo-anim-2.mov
+assets/video/logo-anim-blue-1.mov
+assets/video/logo-anim-blue-2.mov
+assets/img/story-a.jpg
+assets/img/story-b.jpg
+_old-version/
+.DS_Store
