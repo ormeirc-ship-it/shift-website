@@ -1,4 +1,4 @@
-// שיפט — אינטראקציות עדינות
+// SHIFT — אינטראקציות עדינות
 
 // אנימציית הלוגו בהירו — שדרוג מלוגו סטטי לווידאו רק בדפדפנים
 // שמנגנים WebM עם שקיפות באופן אמין (דסקטופ כרום/פיירפוקס).
@@ -14,7 +14,7 @@ if (heroLogo) {
     video.muted = true;
     video.autoplay = true;
     video.playsInline = true;
-    video.setAttribute('aria-label', 'אנימציית הלוגו של שיפט');
+    video.setAttribute('aria-label', 'אנימציית הלוגו של SHIFT');
     const src = document.createElement('source');
     src.src = 'assets/video/logo-anim-1.webm';
     src.type = 'video/webm';
