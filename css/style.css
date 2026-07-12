@@ -21,8 +21,30 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 html {
-  scroll-behavior: smooth;
+  /* גלילה חלקה מנוהלת ע"י Lenis (motion.js); fallback ב-JS לניווט עוגנים */
   -webkit-text-size-adjust: 100%;
+}
+
+/* ---------- מסך פתיחה ---------- */
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: var(--navy-deep, #121234);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  will-change: transform;
+}
+/* מוצג רק כש-JS פעיל — אחרת לעולם לא חוסם את הדף */
+html.js .preloader { display: flex; }
+html.preloader-done .preloader { display: none; }
+.preloader img {
+  width: min(320px, 58vw);
+  opacity: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .preloader { display: none !important; }
 }
 
 body {

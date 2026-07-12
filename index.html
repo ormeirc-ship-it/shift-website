@@ -14,8 +14,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@200;300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
+
+  <!-- מסך פתיחה -->
+  <div class="preloader" id="preloader" aria-hidden="true">
+    <img src="assets/brand/logo-white.png" alt="">
+  </div>
 
   <!-- ניווט -->
   <header class="nav" id="nav">
@@ -282,6 +288,10 @@
     </div>
   </footer>
 
+  <script src="assets/vendor/gsap.min.js" defer></script>
+  <script src="assets/vendor/ScrollTrigger.min.js" defer></script>
+  <script src="assets/vendor/lenis.min.js" defer></script>
+  <script src="js/motion.js" defer></script>
   <script src="js/main.js" defer></script>
 </body>
 </html>

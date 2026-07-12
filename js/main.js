@@ -1,5 +1,19 @@
 // SHIFT — אינטראקציות עדינות
 
+// המתנה לסיום מסך הפתיחה (motion.js משדר shift:reveal).
+// אם motion.js לא נטען מסיבה כלשהי — ממשיכים אחרי גיבוי של 4.5 שניות.
+const afterReveal = (fn) => {
+  if (!document.documentElement.classList.contains('js') ||
+      document.documentElement.classList.contains('preloader-done')) {
+    fn();
+    return;
+  }
+  let done = false;
+  const run = () => { if (!done) { done = true; fn(); } };
+  window.addEventListener('shift:reveal', run, { once: true });
+  setTimeout(run, 4500);
+};
+
 // אנימציית הלוגו בהירו — שדרוג מלוגו סטטי לווידאו רק בדפדפנים
 // שמנגנים WebM עם שקיפות באופן אמין (דסקטופ כרום/פיירפוקס).
 // בספארי ובמובייל הווידאו עלול להתנגן על רקע שחור — נשארים עם הלוגו הסטטי.
@@ -12,7 +26,6 @@ if (heroLogo) {
   if (canWebm && !isSafari && !isMobile) {
     const video = document.createElement('video');
     video.muted = true;
-    video.autoplay = true;
     video.playsInline = true;
     video.setAttribute('aria-label', 'אנימציית הלוגו של SHIFT');
     const src = document.createElement('source');
@@ -20,28 +33,35 @@ if (heroLogo) {
     src.type = 'video/webm';
     video.appendChild(src);
     video.addEventListener('canplay', () => {
-      heroLogo.replaceChildren(video);
-      video.play().catch(() => {});
+      // מחכים שמסך הפתיחה ייפתח — ואז ציור הלוגו מתחיל מאפס
+      afterReveal(() => {
+        heroLogo.replaceChildren(video);
+        video.currentTime = 0;
+        video.play().catch(() => {});
+      });
     }, { once: true });
     video.load();
   }
 }
 
-// אנימציות הופעה בגלילה
+// אנימציות הופעה בגלילה — מתחילות רק אחרי מסך הפתיחה,
+// כדי שחשיפת ההירו לא "תישרף" מאחוריו
 const reveals = document.querySelectorAll('.reveal');
-if ('IntersectionObserver' in window) {
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        io.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
-  reveals.forEach((el) => io.observe(el));
-} else {
-  reveals.forEach((el) => el.classList.add('visible'));
-}
+afterReveal(() => {
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    reveals.forEach((el) => io.observe(el));
+  } else {
+    reveals.forEach((el) => el.classList.add('visible'));
+  }
+});
 
 // ניווט: רקע אטום אחרי גלילה
 const nav = document.getElementById('nav');
