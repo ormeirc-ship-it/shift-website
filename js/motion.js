@@ -39,6 +39,7 @@
     lenis.on('scroll', function () { if (hasST) ScrollTrigger.update(); });
     gsap.ticker.add(function (time) { lenis.raf(time * 1000); });
     gsap.ticker.lagSmoothing(0);
+    window.__lenis = lenis; // חשוף לצורכי בדיקות אוטומטיות
   }
 
   /* ---------- ניווט עוגנים ---------- */
@@ -235,6 +236,8 @@
   /* ---------- הירו: שדה נוירונים חי + מגיב לעכבר ---------- */
   (function initNeurons() {
     if (!DESKTOP.matches) return;
+    // כשהמוח התלת-ממדי פעיל — הוא מחליף את שדה הנוירונים הדו-ממדי
+    if (window.SHIFT_BRAIN && window.SHIFT_BRAIN.ready) return;
     var canvas = document.getElementById('heroNeurons');
     var hero = document.querySelector('.hero');
     if (!canvas || !hero) return;
@@ -442,6 +445,7 @@
         gsap.set(row, { autoAlpha: i === 0 ? 1 : 0 });
       });
 
+      var brain = window.SHIFT_BRAIN;
       var tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
@@ -449,9 +453,22 @@
           end: '+=220%',
           pin: true,
           scrub: 0.6,
-          anticipatePin: 1
+          anticipatePin: 1,
+          refreshPriority: 1,
+          onEnter: function () { if (brain) brain.goTo('world1'); },
+          onEnterBack: function () { if (brain) brain.goTo('world3'); }
         }
       });
+      // המוח עובר אזור יחד עם הפאנלים — רק כשהסקשן באמת נעוץ על המסך,
+      // אחרת ה-scrub שמשלים תנועה אחרי קפיצה היה "חוטף" את המסע
+      if (brain) {
+        tl.call(function () {
+          if (tl.scrollTrigger.isActive) brain.goTo(tl.scrollTrigger.direction > 0 ? 'world2' : 'world1');
+        }, null, 0.5);
+        tl.call(function () {
+          if (tl.scrollTrigger.isActive) brain.goTo(tl.scrollTrigger.direction > 0 ? 'world3' : 'world2');
+        }, null, 1.5);
+      }
 
       function swap(from, to, pos) {
         var toImg = rows[to].querySelector('.world-media img');
@@ -481,6 +498,36 @@
       });
     }
   });
+
+  /* ---------- המסע במוח: תחנות לאורך הדף ---------- */
+  (function initBrainJourney() {
+    var brain = window.SHIFT_BRAIN;
+    if (!brain || !brain.ready) return;
+    // ההתגבשות מתוזמנת לפתיחת המסך
+    if (docEl.classList.contains('preloader-done')) brain.assemble();
+    else window.addEventListener('shift:reveal', function () { brain.assemble(); }, { once: true });
+    brain.goTo('hero');
+
+    var stops = [
+      ['.hero', 'hero'],
+      ['.statement', 'statement'],
+      ['.habits', 'habits'],
+      ['.story', 'story'],
+      ['.outcomes', 'outcomes'],
+      ['.path', 'path'],
+      ['.cta', 'cta']
+    ];
+    stops.forEach(function (pair) {
+      var el = document.querySelector(pair[0]);
+      if (!el) return;
+      ScrollTrigger.create({
+        trigger: el,
+        start: 'top 55%',
+        end: 'bottom 45%',
+        onToggle: function (self) { if (self.isActive) brain.goTo(pair[1]); }
+      });
+    });
+  })();
 
   /* ---------- הרגלים: קלפים בהדרגה ---------- */
   gsap.from('.cards-3 .card', {
