@@ -511,6 +511,7 @@
     var stops = [
       ['.hero', 'hero'],
       ['.statement', 'statement'],
+      ['.brainmap', 'brainmap'],
       ['.habits', 'habits'],
       ['.story', 'story'],
       ['.outcomes', 'outcomes'],
@@ -527,6 +528,17 @@
         onToggle: function (self) { if (self.isActive) brain.goTo(pair[1]); }
       });
     });
+
+    // מפת המוח: מצב מגע פעיל רק כשהסקשן על המסך
+    var mapSection = document.querySelector('.brainmap');
+    if (mapSection && brain.setInteractive) {
+      ScrollTrigger.create({
+        trigger: mapSection,
+        start: 'top 70%',
+        end: 'bottom 30%',
+        onToggle: function (self) { brain.setInteractive(self.isActive); }
+      });
+    }
   })();
 
   /* ---------- הרגלים: קלפים בהדרגה ---------- */

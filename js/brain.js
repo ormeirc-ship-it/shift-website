@@ -38,7 +38,31 @@
   var scatter = new Float32Array(N * 3);     // פיזור התחלתי (לפני ההתגבשות)
   var live = new Float32Array(N * 3);        // מצב נוכחי
   var colors = new Float32Array(N * 3);
-  var region = new Uint8Array(N);            // 0 קליפה | 1 קדם-מצחי | 2 ראייה | 3 מוחון | 4 גזע | 5 לימבי | 6 מוטורי
+  var region = new Uint8Array(N);
+
+  /* ---------- מפת אזורים — אנטומיה מוחית מקובלת (מפה סכמטית) ----------
+     0 קליפה מצחית | 1 קדם-מצחית | 2 עורפית (ראייה) | 3 מוחון | 4 גזע המוח
+     5 המערכת הלימבית | 6 קליפה מוטורית | 7 קליפה קודקודית | 8 אונה רקתית */
+  var REGION_DATA = [
+    { he: 'האונה המצחית', en: 'Frontal Lobe',
+      role: 'חשיבה, תכנון, שפה ויוזמה — מרכז הפיקוד של פעולה מכוונת.' },
+    { he: 'הקליפה הקדם-מצחית', en: 'Prefrontal Cortex',
+      role: 'תפקודים ניהוליים: קבלת החלטות, ויסות עצמי, קשב ובחירה מודעת.' },
+    { he: 'האונה העורפית', en: 'Occipital Lobe',
+      role: 'עיבוד ראייה — כאן הופך האור שנקלט בעיניים לתמונה ולפרשנות.' },
+    { he: 'המוחון', en: 'Cerebellum',
+      role: 'קואורדינציה, שיווי משקל ולמידה מוטורית — וגם תרומה לוויסות קוגניטיבי.' },
+    { he: 'גזע המוח', en: 'Brainstem',
+      role: 'נשימה, דופק, עוררות — מערכות החיים הבסיסיות ומסלולי ההישרדות.' },
+    { he: 'המערכת הלימבית', en: 'Limbic System',
+      role: 'רגש, זיכרון ותגובת לחץ — האמיגדלה וההיפוקמפוס יושבים כאן.' },
+    { he: 'הקליפה המוטורית', en: 'Motor Cortex',
+      role: 'תכנון וביצוע תנועה רצונית — מהחלטה לפעולה בשריר.' },
+    { he: 'האונה הקודקודית', en: 'Parietal Lobe',
+      role: 'אינטגרציה של תחושה, מרחב וגוף — היכן שאתם נמצאים בעולם.' },
+    { he: 'האונה הרקתית', en: 'Temporal Lobe',
+      role: 'שמיעה, שפה וזיכרון — עיבוד משמעות של מה שנשמע ונחווה.' }
+  ];
 
   function wrinkle(x, y, z) {
     return 0.055 * (Math.sin(7.1 * x + 1.3) * Math.sin(6.3 * y - 0.7) +
@@ -64,11 +88,13 @@
     if (Math.abs(px) < 0.05) continue;                // החריץ הבין-המיספרי
     var k = i * 3;
     positions[k] = px; positions[k + 1] = py; positions[k + 2] = pz;
-    // שיוך אזורים
-    if (pz > 0.62 && py > -0.1) region[i] = 1;        // קדם-מצחי
-    else if (pz < -0.66 && py > 0.02) region[i] = 2;  // ראייה (עורפי)
-    else if (py > 0.52 && pz > -0.35 && pz < 0.3) region[i] = 6; // מוטורי
-    else region[i] = 0;
+    // שיוך אזורים — לפי מיקום אנטומי (z חיובי = קדמת המוח)
+    if (pz > 0.62 && py > -0.1) region[i] = 1;                        // קדם-מצחית
+    else if (pz < -0.66 && py > 0.02) region[i] = 2;                  // עורפית (ראייה)
+    else if (py > 0.5 && pz > -0.05 && pz < 0.4) region[i] = 6;       // מוטורית (רצועה קדם-מרכזית)
+    else if (py > 0.42 && pz <= -0.05 && pz > -0.66) region[i] = 7;   // קודקודית
+    else if (py < 0.08 && Math.abs(px) > 0.5 && pz > -0.45 && pz < 0.5) region[i] = 8; // רקתית
+    else region[i] = 0;                                               // מצחית כללית / קליפה
     i++;
   }
   // מוחון
@@ -183,7 +209,7 @@
   /* ---------- מצב חי ---------- */
   var state = {
     assembled: 0,          // 0 אבק → 1 מוח
-    activeRegion: -1,      // אזור מודלק
+    activeRegion: -1,      // אזור מודלק (מסע)
     regionGlow: 0,         // עוצמת ההדלקה
     lightMode: 0,          // 0 כהה (תכלת) → 1 בהיר (נייבי)
     sparkle: 0,            // נצנוץ כלל-רשתי (AI)
@@ -192,7 +218,10 @@
     baseOpacity: 0.95,
     rotY: 0.35, rotX: -0.06,
     posX: 0, posY: -0.55, scale: 1.35,
-    leanX: 0, leanY: 0
+    leanX: 0, leanY: 0,
+    hoverRegion: -1,       // אזור תחת הסמן (מפת המוח)
+    hoverGlow: 0,          // עוצמת ההדגשה של המגע
+    interactive: false
   };
 
   var tmpA = new THREE.Color(), tmpB = new THREE.Color();
@@ -224,6 +253,18 @@
         wave = Math.max(0, wave); wave *= wave * state.pulse;
         lum += wave * 0.8;
       }
+      // מפת המוח: האזור שתחת הסמן בוער, השאר מתעמעמים מעט
+      if (state.hoverGlow > 0.01) {
+        if (region[p] === state.hoverRegion) {
+          var hg = state.hoverGlow;
+          r += (COL.skyBright.r - r) * hg;
+          g += (COL.skyBright.g - g) * hg;
+          b += (COL.skyBright.b - b) * hg;
+          lum += hg * 1.1;
+        } else {
+          lum *= 1 - state.hoverGlow * 0.45;
+        }
+      }
       colors[c] = r * lum; colors[c + 1] = g * lum; colors[c + 2] = b * lum;
     }
     geo.attributes.color.needsUpdate = true;
@@ -247,6 +288,49 @@
     lineMat.opacity = 0.22 * ease * (1 - state.open * 0.7) * (1 - state.lightMode * 0.35);
   }
 
+  /* ---------- מגע במוח: זיהוי אזור תחת הסמן ---------- */
+  var raycaster = new THREE.Raycaster();
+  raycaster.params.Points = { threshold: 0.09 };
+  var pointerNDC = new THREE.Vector2(-2, -2);
+  var pointerDirty = false;
+  var cardName = document.getElementById('brainCardName');
+  var cardEn = document.getElementById('brainCardEn');
+  var cardRole = document.getElementById('brainCardRole');
+  var card = document.getElementById('brainCard');
+
+  function updateCard(idx) {
+    if (!card) return;
+    if (idx >= 0 && REGION_DATA[idx]) {
+      cardName.textContent = REGION_DATA[idx].he;
+      cardEn.textContent = REGION_DATA[idx].en;
+      cardRole.textContent = REGION_DATA[idx].role;
+      card.classList.add('active');
+    } else {
+      card.classList.remove('active');
+    }
+  }
+
+  layer.addEventListener('pointermove', function (e) {
+    pointerNDC.x = (e.clientX / window.innerWidth) * 2 - 1;
+    pointerNDC.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    pointerDirty = true;
+  });
+  layer.addEventListener('pointerdown', function (e) {
+    pointerNDC.x = (e.clientX / window.innerWidth) * 2 - 1;
+    pointerNDC.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    pointerDirty = true;
+  });
+
+  function raycastRegion() {
+    raycaster.setFromCamera(pointerNDC, camera);
+    var hits = raycaster.intersectObject(points);
+    if (hits.length) {
+      var idx = hits[0].index;
+      return region[idx];
+    }
+    return -1;
+  }
+
   var running = false, lastMorphT = -1;
   function frame(tMs) {
     if (!running) return;
@@ -259,6 +343,18 @@
     // מעדכנים גיאומטריה רק כשמשהו זז (התגבשות/פתיחה)
     var mk = state.assembled * 1000 + state.open;
     if (mk !== lastMorphT) { morph(); lastMorphT = mk; }
+    // מפת המוח: בדיקת אזור תחת הסמן (רק כשהמפה פעילה והסמן זז)
+    if (state.interactive && pointerDirty) {
+      pointerDirty = false;
+      var hovered = raycastRegion();
+      if (hovered !== state.hoverRegion) {
+        state.hoverRegion = hovered;
+        updateCard(hovered);
+      }
+    }
+    // ריכוך עוצמת ההדגשה
+    var hoverTarget = (state.interactive && state.hoverRegion >= 0) ? 1 : 0;
+    state.hoverGlow += (hoverTarget - state.hoverGlow) * 0.12;
     paint(time);
     renderer.render(scene, camera);
     requestAnimationFrame(frame);
@@ -280,17 +376,21 @@
   /* ---------- תחנות המסע ----------
      RTL: posX חיובי = ימינה פיזית. הטקסט ברוב הסקשנים מיושר ימינה,
      לכן המוח נודד לצד שמאל (posX שלילי) כשצריך לפנות מקום. */
+  /* המיקומים חושבו מול פריסת הסקשנים כך שהמוח לעולם לא מכסה תוכן:
+     בסקשנים בהירים הוא ווטרמארק קטן בשולי העמוד; את הבמה המלאה
+     הוא מקבל בהירו, במפת המוח וב-CTA (רקעים כהים, מאחורי טקסט קצר). */
   var WAYPOINTS = {
     hero:      { posX: 0,     posY: -0.55, scale: 1.35, rotY: 0.35,  region: -1, lightMode: 0, sparkle: 0, pulse: 0, open: 0, baseOpacity: 0.95, label: '' },
-    statement: { posX: -1.35, posY: 0.05,  scale: 0.62, rotY: 2.35,  region: 2,  lightMode: 1, sparkle: 0, pulse: 0, open: 0, baseOpacity: 0.8,  label: 'קליפת הראייה · כאן נבנית הפרשנות' },
-    world1:    { posX: -1.15, posY: -0.2,  scale: 0.85, rotY: -0.9,  region: 1,  lightMode: 1, sparkle: 0, pulse: 0, open: 0, baseOpacity: 0.85, label: 'הקליפה הקדם-מצחית · מודעות ובחירה' },
-    world2:    { posX: -1.15, posY: -0.2,  scale: 0.85, rotY: 2.75,  region: 3,  lightMode: 1, sparkle: 0, pulse: 0, open: 0, baseOpacity: 0.85, label: 'המוחון וגזע המוח · חוכמת הגוף' },
-    world3:    { posX: -1.15, posY: -0.2,  scale: 0.85, rotY: 0.6,   region: -1, lightMode: 1, sparkle: 1, pulse: 0, open: 0, baseOpacity: 0.85, label: 'הרשת כולה · חיבורים חדשים' },
-    habits:    { posX: 0,     posY: 0,     scale: 1.5,  rotY: 0.2,   region: -1, lightMode: 0, sparkle: 0, pulse: 1, open: 0, baseOpacity: 0.5,  label: 'מסלולים עצביים · הרגל שמתחזק' },
-    story:     { posX: -1.3,  posY: 0,     scale: 0.6,  rotY: 1.5,   region: 5,  lightMode: 1, sparkle: 0, pulse: 0, open: 0, baseOpacity: 0.8,  label: 'המערכת הלימבית · הלב של הרגש' },
-    outcomes:  { posX: -1.35, posY: 0.1,   scale: 0.58, rotY: -2.2,  region: 6,  lightMode: 1, sparkle: 0.4, pulse: 0, open: 0, baseOpacity: 0.75, label: 'סנכרון כלל-מוחי · תודעה חדשה' },
-    path:      { posX: -1.35, posY: -0.1,  scale: 0.58, rotY: 0.9,   region: 6,  lightMode: 1, sparkle: 0, pulse: 0.6, open: 0, baseOpacity: 0.75, label: 'קליפת התנועה · מהחלטה לפעולה' },
-    cta:       { posX: 0,     posY: 0.05,  scale: 1.35, rotY: -0.3,  region: -1, lightMode: 0, sparkle: 0.5, pulse: 0, open: 0.5, baseOpacity: 0.8, label: '' }
+    statement: { posX: -2.05, posY: 0.05,  scale: 0.5,  rotY: 2.35,  region: 2,  lightMode: 1, sparkle: 0, pulse: 0, open: 0, baseOpacity: 0.45, label: 'האונה העורפית · כאן נבנית הפרשנות' },
+    world1:    { posX: 2.1,   posY: -0.6,  scale: 0.42, rotY: -0.9,  region: 1,  lightMode: 1, sparkle: 0, pulse: 0, open: 0, baseOpacity: 0.4,  label: 'הקליפה הקדם-מצחית · מודעות ובחירה' },
+    world2:    { posX: 2.1,   posY: -0.6,  scale: 0.42, rotY: 2.75,  region: 3,  lightMode: 1, sparkle: 0, pulse: 0, open: 0, baseOpacity: 0.4,  label: 'המוחון וגזע המוח · חוכמת הגוף' },
+    world3:    { posX: 2.1,   posY: -0.6,  scale: 0.42, rotY: 0.6,   region: -1, lightMode: 1, sparkle: 1, pulse: 0, open: 0, baseOpacity: 0.4,  label: 'הרשת כולה · חיבורים חדשים' },
+    brainmap:  { posX: -0.85, posY: -0.05, scale: 1.55, rotY: 0.5,   region: -1, lightMode: 0, sparkle: 0, pulse: 0, open: 0, baseOpacity: 1,    label: '' },
+    habits:    { posX: 0,     posY: 0,     scale: 1.4,  rotY: 0.2,   region: -1, lightMode: 0, sparkle: 0, pulse: 1, open: 0, baseOpacity: 0.3,  label: 'מסלולים עצביים · הרגל שמתחזק' },
+    story:     { posX: -2.6,  posY: 0,     scale: 0.45, rotY: 1.5,   region: 5,  lightMode: 1, sparkle: 0, pulse: 0, open: 0, baseOpacity: 0.5,  label: 'המערכת הלימבית · הלב של הרגש' },
+    outcomes:  { posX: -1.75, posY: 0.1,   scale: 0.5,  rotY: -2.2,  region: -1, lightMode: 1, sparkle: 0.4, pulse: 0, open: 0, baseOpacity: 0.42, label: 'סנכרון כלל-מוחי · תודעה חדשה' },
+    path:      { posX: -1.9,  posY: -1.15, scale: 0.4,  rotY: 0.9,   region: 6,  lightMode: 1, sparkle: 0, pulse: 0.6, open: 0, baseOpacity: 0.35, label: 'הקליפה המוטורית · מהחלטה לפעולה' },
+    cta:       { posX: 0,     posY: 0.05,  scale: 1.35, rotY: -0.3,  region: -1, lightMode: 0, sparkle: 0.5, pulse: 0, open: 0.5, baseOpacity: 0.75, label: '' }
   };
 
   var currentKey = null;
@@ -338,7 +438,22 @@
     gsap.to(state, { assembled: 1, duration: 2.4, ease: 'power2.inOut' });
   }
 
+  // מפת המוח: הפעלת מגע — השכבה תופסת אירועי סמן רק שם,
+  // כדי לא לחסום קליקים בשאר האתר
+  function setInteractive(on) {
+    state.interactive = !!on;
+    layer.classList.toggle('interactive', state.interactive);
+    if (!on) {
+      state.hoverRegion = -1;
+      updateCard(-1);
+    }
+  }
+
   paint(0); morph(); setRunning(true);
 
-  window.SHIFT_BRAIN = { ready: true, goTo: goTo, assemble: assemble };
+  window.SHIFT_BRAIN = {
+    ready: true, goTo: goTo, assemble: assemble, setInteractive: setInteractive,
+    // צוהר לבדיקות אוטומטיות בסביבות ללא rAF (טאב מוסתר)
+    _qa: { frame: frame, state: state, region: region, count: N, forceRun: function () { running = true; } }
+  };
 })();

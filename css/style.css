@@ -959,3 +959,55 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
 @media (max-width: 899px), (prefers-reduced-motion: reduce) {
   .brain-layer, .brain-label { display: none; }
 }
+
+/* ---------- מפת המוח ---------- */
+.brainmap { padding: clamp(80px, 12vw, 130px) 0; min-height: 92vh; display: flex; align-items: center; }
+.brainmap-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(300px, 380px);
+  gap: clamp(24px, 4vw, 64px);
+  align-items: center;
+  min-height: 46vh;
+}
+.brainmap-slot { min-height: 46vh; }
+.brain-card {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius);
+  padding: 30px 28px;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+.brain-card.active {
+  border-color: rgba(92, 187, 240, 0.55);
+  box-shadow: 0 0 40px rgba(92, 187, 240, 0.15);
+}
+.brain-card-hint { color: var(--white-faint); font-size: 1.05rem; }
+.brain-card.active .brain-card-hint { display: none; }
+.brain-card-body { display: none; }
+.brain-card.active .brain-card-body { display: block; }
+.brain-card-name { font-size: 1.5rem; font-weight: 600; color: var(--sky); }
+.brain-card-en {
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  color: var(--white-faint);
+  direction: ltr;
+  text-align: end;
+  margin: 2px 0 12px;
+}
+.brain-card-role { color: var(--white-soft); font-size: 1.05rem; }
+.brainmap-note {
+  margin-top: 28px;
+  font-size: 0.8rem;
+  color: var(--white-faint);
+  text-align: center;
+}
+/* שכבת המוח תופסת מגע רק כשמפת המוח פעילה */
+.brain-layer.interactive { pointer-events: auto; cursor: crosshair; }
+@media (max-width: 899px) {
+  /* חוויית המגע במוח היא דסקטופ — במובייל הסקשן מוסתר יחד עם שכבת המוח */
+  .brainmap { display: none; }
+}

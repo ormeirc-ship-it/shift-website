@@ -65,6 +65,7 @@
   <nav class="dot-nav" id="dotNav" aria-label="ניווט פרקים">
     <a href="#top" data-label="פתיחה"></a>
     <a href="#method" data-label="השיטה"></a>
+    <a href="#brainmap" data-label="מפת המוח"></a>
     <a href="#habits" data-label="הרגלים"></a>
     <a href="#story" data-label="הסיפור"></a>
     <a href="#outcomes" data-label="מה נפתח"></a>
@@ -185,6 +186,32 @@
       </div>
 
       <img src="assets/brand/asset7.png" alt="" class="worlds-sphere float-slow" aria-hidden="true" loading="lazy">
+    </div>
+  </section>
+
+  <!-- מפת המוח — אינטראקטיבי -->
+  <section class="brainmap section-dark" id="brainmap">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="label label-sky">מפת המוח</p>
+        <h2>געו במוח. הכירו את עצמכם.</h2>
+        <p class="section-intro">
+          העבירו את הסמן על אזורי המוח — כל אזור נדלק ומספר מה תפקידו.
+          זו המפה שאיתה אנחנו עובדים בתוכנית.
+        </p>
+      </div>
+      <div class="brainmap-stage">
+        <div class="brainmap-slot" aria-hidden="true"><!-- המוח הקבוע מרחף כאן --></div>
+        <aside class="brain-card" id="brainCard" aria-live="polite">
+          <p class="brain-card-hint">העבירו סמן על המוח ←</p>
+          <div class="brain-card-body">
+            <p class="brain-card-name" id="brainCardName"></p>
+            <p class="brain-card-en" id="brainCardEn"></p>
+            <p class="brain-card-role" id="brainCardRole"></p>
+          </div>
+        </aside>
+      </div>
+      <p class="brainmap-note">מפה סכמטית על בסיס אנטומיה מוחית מקובלת</p>
     </div>
   </section>
 
