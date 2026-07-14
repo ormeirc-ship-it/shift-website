@@ -231,11 +231,33 @@ h3 {
   justify-content: center;
   text-align: center;
   color: #fff;
+  background: var(--navy-deep);
+  padding: calc(var(--nav-h) + 32px) 24px 80px;
+}
+/* שכבת הרקע נפרדת — מאפשרת זום פתיחה ופרלקסת עכבר */
+.hero-bg {
+  position: absolute;
+  inset: -7%;
   background:
     linear-gradient(rgba(18, 18, 52, 0.25), rgba(18, 18, 52, 0.05) 55%, rgba(18, 18, 52, 0.4)),
     url("../assets/img/hero-bg-b.jpg") center / cover no-repeat,
     var(--navy-deep);
-  padding: calc(var(--nav-h) + 32px) 24px 80px;
+  will-change: transform;
+}
+/* זוהר צפוני נושם מאחורי הכותרת */
+.hero-aurora {
+  position: absolute;
+  inset: -15%;
+  background:
+    radial-gradient(ellipse 42% 30% at 62% 38%, rgba(92, 187, 240, 0.14), transparent 70%),
+    radial-gradient(ellipse 36% 26% at 34% 62%, rgba(58, 95, 138, 0.22), transparent 70%);
+  animation: aurora 16s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+@keyframes aurora {
+  from { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 0.75; }
+  50%  { opacity: 1; }
+  to   { transform: translate(3%, -4%) rotate(4deg) scale(1.08); opacity: 0.8; }
 }
 .hero-content {
   max-width: 760px;
@@ -414,11 +436,15 @@ h3 {
   gap: clamp(36px, 6vw, 72px);
   align-items: center;
 }
-.story-media img {
+.story-media {
   border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(24, 22, 59, 0.25);
+}
+.story-media img {
   aspect-ratio: 4 / 5;
   object-fit: cover;
-  box-shadow: 0 24px 60px rgba(24, 22, 59, 0.25);
+  width: 100%;
 }
 .story-body h2 { margin-bottom: 20px; }
 .story-body p { color: var(--ink-soft); margin-bottom: 16px; }
@@ -767,7 +793,7 @@ html.worlds-pinned .world-row {
   opacity: 0;
   visibility: hidden;
 }
-html.worlds-pinned .world-row:first-of-type { opacity: 1; visibility: visible; }
+html.worlds-pinned .world-bignum + .world-row { opacity: 1; visibility: visible; }
 html.worlds-pinned .world-media { margin-top: 0; max-width: none; }
 html.worlds-pinned .world-body { max-width: 560px; }
 
@@ -875,3 +901,21 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
 
 /* קנבס הנוירונים פעיל רק בדסקטופ */
 @media (max-width: 899px) { .hero-neurons { display: none; } }
+
+/* ---------- נקודת עכבר זוהרת (דסקטופ בלבד) ---------- */
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(92, 187, 240, 0.95);
+  box-shadow: 0 0 18px rgba(92, 187, 240, 0.8), 0 0 46px rgba(92, 187, 240, 0.35);
+  pointer-events: none;
+  z-index: 400;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+}
+@media (hover: none), (max-width: 899px) { .cursor-dot { display: none; } }
+@media (prefers-reduced-motion: reduce) { .cursor-dot { display: none; } }

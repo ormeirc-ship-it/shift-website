@@ -14,7 +14,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@200;300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
-  <script>document.documentElement.classList.add('js');</script>
+  <script>
+    document.documentElement.classList.add('js');
+    // מנוע התנועה מוכרז מראש כדי שחוקי ה-reveal של ה-CSS לא יידלקו לרגע;
+    // motion.js מסיר את המחלקה אם הספריות לא נטענו
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('gsap-on');
+    }
+  </script>
 </head>
 <body>
 
@@ -65,9 +72,12 @@
     <a href="#contact" data-label="בואו נדבר"></a>
   </nav>
   <div class="grain" aria-hidden="true"></div>
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
 
   <!-- פתיח -->
   <section class="hero" id="top">
+    <div class="hero-bg" id="heroBg" aria-hidden="true"></div>
+    <div class="hero-aurora" aria-hidden="true"></div>
     <canvas class="hero-neurons" id="heroNeurons" aria-hidden="true"></canvas>
     <div class="hero-content">
       <div class="hero-logo" id="heroLogo">
