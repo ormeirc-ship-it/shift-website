@@ -956,7 +956,10 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
   background: var(--navy);
   box-shadow: 0 0 8px rgba(24, 22, 59, 0.4);
 }
-@media (max-width: 899px), (prefers-reduced-motion: reduce) {
+@media (max-width: 899px) {
+  .brain-label { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
   .brain-layer, .brain-label { display: none; }
 }
 
@@ -1008,6 +1011,8 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
 /* שכבת המוח תופסת מגע רק כשמפת המוח פעילה */
 .brain-layer.interactive { pointer-events: auto; cursor: crosshair; }
 @media (max-width: 899px) {
-  /* חוויית המגע במוח היא דסקטופ — במובייל הסקשן מוסתר יחד עם שכבת המוח */
-  .brainmap { display: none; }
+  .brainmap { min-height: auto; }
+  .brainmap-stage { grid-template-columns: 1fr; min-height: auto; }
+  .brainmap-slot { min-height: 46vh; }
+  .brain-card { min-height: 190px; }
 }

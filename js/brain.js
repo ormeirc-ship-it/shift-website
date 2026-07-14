@@ -10,7 +10,8 @@
 
   var REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var DESKTOP = window.matchMedia('(min-width: 900px)');
-  if (REDUCED || !DESKTOP.matches) return;
+  var MOBILE = !DESKTOP.matches;
+  if (REDUCED) return;
   if (typeof THREE === 'undefined' || typeof gsap === 'undefined') return;
 
   var layer = document.getElementById('brainLayer');
@@ -32,8 +33,9 @@
     navyGlow: new THREE.Color(0x3a5f8a)
   };
 
-  /* ---------- גיאומטריה: מוח פרוצדורלי ---------- */
-  var N = 2300;
+  /* ---------- גיאומטריה: מוח פרוצדורלי ----------
+     במובייל: פחות חלקיקים — אותו מוח, חצי מהעומס */
+  var N = MOBILE ? 1200 : 2300;
   var positions = new Float32Array(N * 3);   // יעד סופי
   var scatter = new Float32Array(N * 3);     // פיזור התחלתי (לפני ההתגבשות)
   var live = new Float32Array(N * 3);        // מצב נוכחי
@@ -290,7 +292,7 @@
 
   /* ---------- מגע במוח: זיהוי אזור תחת הסמן ---------- */
   var raycaster = new THREE.Raycaster();
-  raycaster.params.Points = { threshold: 0.09 };
+  raycaster.params.Points = { threshold: MOBILE ? 0.14 : 0.09 }; // אצבע רחבה מסמן
   var pointerNDC = new THREE.Vector2(-2, -2);
   var pointerDirty = false;
   var cardName = document.getElementById('brainCardName');
@@ -346,6 +348,7 @@
     // מפת המוח: בדיקת אזור תחת הסמן (רק כשהמפה פעילה והסמן זז)
     if (state.interactive && pointerDirty) {
       pointerDirty = false;
+      group.updateMatrixWorld(true); // המטריצה עדכנית גם לפני הרינדור הראשון
       var hovered = raycastRegion();
       if (hovered !== state.hoverRegion) {
         state.hoverRegion = hovered;
@@ -392,6 +395,19 @@
     path:      { posX: -1.9,  posY: -1.15, scale: 0.4,  rotY: 0.9,   region: 6,  lightMode: 1, sparkle: 0, pulse: 0.6, open: 0, baseOpacity: 0.35, label: 'הקליפה המוטורית · מהחלטה לפעולה' },
     cta:       { posX: 0,     posY: 0.05,  scale: 1.35, rotY: -0.3,  region: -1, lightMode: 0, sparkle: 0.5, pulse: 0, open: 0.5, baseOpacity: 0.75, label: '' }
   };
+
+  /* מובייל: מסך צר — המוח מופיע רק ברגעים הגדולים (הירו, מפת המוח,
+     הרגלים כרקע עדין, CTA); בשאר הסקשנים הוא מתפוגג כדי לא להפריע לתוכן */
+  if (MOBILE) {
+    WAYPOINTS.hero = Object.assign({}, WAYPOINTS.hero, { scale: 0.95, posY: -0.45, baseOpacity: 0.9 });
+    // קנה מידה שנכנס כולו ברוחב מסך צר — כדי שאפשר יהיה לגעת בכל אזור
+    WAYPOINTS.brainmap = Object.assign({}, WAYPOINTS.brainmap, { posX: 0, posY: 0.5, scale: 0.55 });
+    WAYPOINTS.habits = Object.assign({}, WAYPOINTS.habits, { scale: 1.15, baseOpacity: 0.2 });
+    WAYPOINTS.cta = Object.assign({}, WAYPOINTS.cta, { scale: 1.05 });
+    ['statement', 'world1', 'world2', 'world3', 'story', 'outcomes', 'path'].forEach(function (k) {
+      WAYPOINTS[k] = Object.assign({}, WAYPOINTS[k], { baseOpacity: 0, scale: 0.5, label: '' });
+    });
+  }
 
   var currentKey = null;
   function goTo(key) {
