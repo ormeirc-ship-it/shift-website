@@ -553,13 +553,15 @@ h3 {
 .footer-links a:hover { color: #fff; }
 .footer-bottom { padding-top: 24px; font-size: 0.85rem; }
 
-/* ---------- אנימציות הופעה ---------- */
-.reveal {
+/* ---------- אנימציות הופעה ----------
+   מוסתר רק כש-JS פעיל — בלי JS הכול גלוי.
+   כשמנוע התנועה פעיל (html.gsap-on) GSAP מנהל את הכניסות במקום מערכת ה-IO. */
+html.js:not(.gsap-on) .reveal {
   opacity: 0;
   transform: translateY(26px);
   transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.reveal.visible { opacity: 1; transform: none; }
+html.js:not(.gsap-on) .reveal.visible { opacity: 1; transform: none; }
 .delay-1 { transition-delay: 0.12s; }
 .delay-2 { transition-delay: 0.24s; }
 .delay-3 { transition-delay: 0.36s; }
@@ -594,3 +596,282 @@ h3 {
 
   .footer-grid { flex-direction: column; }
 }
+
+/* ============================================================
+   שכבת התנועה (motion layer) — נטענת מעל העיצוב הקיים
+   ============================================================ */
+
+/* ---------- פס התקדמות עליון ---------- */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  inset-inline: 0;
+  height: 3px;
+  z-index: 150;
+  background: linear-gradient(270deg, var(--sky), var(--blue-mid));
+  transform: scaleX(0);
+  transform-origin: right; /* RTL: מתמלא מימין לשמאל */
+  pointer-events: none;
+}
+
+/* ---------- ניווט נקודות צף (דסקטופ) ---------- */
+.dot-nav {
+  position: fixed;
+  inset-inline-end: 28px; /* RTL: צד שמאל פיזית? לא — inline-end ב-RTL הוא שמאל */
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 140;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.dot-nav a {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+  background: transparent;
+  transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+}
+.dot-nav a:hover { border-color: var(--sky); transform: scale(1.25); }
+.dot-nav a.active {
+  background: var(--sky);
+  border-color: var(--sky);
+  box-shadow: 0 0 12px rgba(92, 187, 240, 0.6);
+}
+/* בסקשנים בהירים הנקודות מתכהות */
+.dot-nav.on-light a { border-color: rgba(24, 22, 59, 0.35); }
+.dot-nav.on-light a:hover { border-color: var(--navy); }
+.dot-nav.on-light a.active {
+  background: var(--navy);
+  border-color: var(--navy);
+  box-shadow: 0 0 12px rgba(24, 22, 59, 0.35);
+}
+.dot-nav a::after {
+  content: attr(data-label);
+  position: absolute;
+  inset-inline-start: 22px;
+  top: 50%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: inherit;
+  background: rgba(18, 18, 52, 0.85);
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 999px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.dot-nav a:hover::after { opacity: 1; }
+@media (max-width: 899px) { .dot-nav { display: none; } }
+
+/* ---------- גרעין קולנועי עדין ---------- */
+.grain {
+  position: fixed;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  z-index: 130;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+  animation: grainShift 9s steps(6) infinite;
+}
+@keyframes grainShift {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-4%, 3%); }
+  40% { transform: translate(3%, -5%); }
+  60% { transform: translate(-5%, -2%); }
+  80% { transform: translate(4%, 4%); }
+  100% { transform: translate(0, 0); }
+}
+
+/* ---------- הירו: קנבס נוירונים + מילים ---------- */
+.hero { position: relative; overflow: hidden; }
+.hero-neurons {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.65;
+}
+.hero-content { position: relative; z-index: 1; }
+h1 .w { display: inline-block; }
+
+/* ---------- הצהרה: מילים ---------- */
+.statement-title .w { display: inline-block; }
+
+/* ---------- השיטה: במה נעוצה (דסקטופ) ---------- */
+.world-bignum {
+  position: absolute;
+  inset-inline-start: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 34vh;
+  overflow: hidden;
+  pointer-events: none;
+  display: none;
+  z-index: 0;
+}
+.world-bignum-roll {
+  display: flex;
+  flex-direction: column;
+}
+.world-bignum-roll span {
+  font-size: 34vh;
+  line-height: 1;
+  font-weight: 200;
+  color: rgba(24, 22, 59, 0.07);
+  direction: ltr;
+  height: 34vh;
+  display: block;
+}
+.world-media img {
+  border-radius: var(--radius);
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  box-shadow: 0 24px 60px rgba(24, 22, 59, 0.22);
+}
+
+/* מובייל / ללא תנועה: התמונות נכנסות בתוך הזרימה */
+.world-row { grid-template-columns: 110px 1fr; }
+.world-media { margin-top: 20px; max-width: 440px; }
+@media (max-width: 899px) {
+  .world-media { max-width: 100%; }
+}
+
+/* מצב במה נעוצה — מופעל רק ע"י מנוע התנועה בדסקטופ */
+html.worlds-pinned .worlds .section-head { margin-bottom: 0; }
+html.worlds-pinned .world-rows {
+  border-top: none;
+  position: relative;
+  min-height: 62vh;
+  display: grid;
+  align-items: center;
+}
+html.worlds-pinned .world-bignum { display: block; }
+html.worlds-pinned .world-row {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 90px minmax(0, 1fr) minmax(280px, 400px);
+  gap: clamp(24px, 4vw, 56px);
+  align-items: center;
+  border-bottom: none;
+  padding: 0;
+  opacity: 0;
+  visibility: hidden;
+}
+html.worlds-pinned .world-row:first-of-type { opacity: 1; visibility: visible; }
+html.worlds-pinned .world-media { margin-top: 0; max-width: none; }
+html.worlds-pinned .world-body { max-width: 560px; }
+
+/* ---------- המסלול: קו התקדמות ---------- */
+.path .container { position: relative; }
+.path-track {
+  position: absolute;
+  top: 0;
+  inset-inline: 0;
+  height: 0;
+  pointer-events: none;
+}
+.path-line {
+  position: absolute;
+  display: block;
+  background: linear-gradient(270deg, var(--sky), var(--blue-mid));
+  border-radius: 2px;
+  /* דסקטופ: קו אופקי בגובה מספרי הצעדים */
+  top: 52px;
+  inset-inline: 26px;
+  height: 3px;
+  transform: scaleX(0);
+  transform-origin: right; /* RTL: נמתח מימין לשמאל */
+}
+.steps { position: relative; }
+.step { position: relative; z-index: 1; }
+.step-num {
+  transition: background-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease;
+}
+.step.lit .step-num {
+  background: var(--sky);
+  color: var(--navy-deep);
+  box-shadow: 0 0 20px rgba(92, 187, 240, 0.55);
+}
+@media (max-width: 899px) {
+  .path-line {
+    top: 0;
+    bottom: 0;
+    height: auto;
+    width: 3px;
+    inset-inline: auto;
+    inset-inline-start: 48px;
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+}
+
+/* ---------- מה נפתח: הרגע של אהבה ---------- */
+.love-card { position: relative; }
+.love-card strong {
+  display: inline-block;
+  text-shadow: 0 0 0 rgba(92, 187, 240, 0);
+}
+.love-card.glow strong {
+  animation: loveGlow 2.4s ease-out 1;
+}
+@keyframes loveGlow {
+  0% { text-shadow: 0 0 0 rgba(92, 187, 240, 0); }
+  35% { text-shadow: 0 0 26px rgba(92, 187, 240, 0.9), 0 0 60px rgba(92, 187, 240, 0.45); }
+  100% { text-shadow: 0 0 8px rgba(92, 187, 240, 0.25); }
+}
+
+/* ---------- CTA: שכבת "הגעה" ---------- */
+.cta { position: relative; overflow: hidden; }
+.cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 55% at 50% 100%, rgba(92, 187, 240, 0.28), transparent 65%);
+  opacity: 0;
+  pointer-events: none;
+}
+.cta .container { position: relative; z-index: 1; }
+
+/* ---------- כפתורים: ברק ומגנטיות ---------- */
+.btn { will-change: transform; }
+.btn-primary:hover { box-shadow: 0 10px 40px rgba(92, 187, 240, 0.6); }
+
+/* ---------- כיבוד reduced-motion לשכבת התנועה ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .grain { animation: none; }
+  .scroll-progress, .dot-nav { display: none; }
+  .hero-neurons { display: none; }
+  .path-line { transform: none; }
+  .step .step-num { transition: none; }
+}
+
+/* ---------- השלמות למצב הבמה הנעוצה ---------- */
+html.worlds-pinned .worlds {
+  padding: calc(var(--nav-h) + 36px) 0 40px;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)); }
+
+/* ---------- קו הדגשה נמתח בהצהרה ---------- */
+.em-underline {
+  background-image: linear-gradient(var(--sky), var(--sky));
+  background-repeat: no-repeat;
+  background-position: bottom right; /* RTL: מתחיל מימין */
+  background-size: 0% 2px;
+  padding-bottom: 4px;
+}
+
+/* קנבס הנוירונים פעיל רק בדסקטופ */
+@media (max-width: 899px) { .hero-neurons { display: none; } }

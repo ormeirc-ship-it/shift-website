@@ -53,8 +53,22 @@
     </nav>
   </div>
 
+  <!-- שכבות גלובליות: פס התקדמות, ניווט נקודות, גרעין קולנועי -->
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+  <nav class="dot-nav" id="dotNav" aria-label="ניווט פרקים">
+    <a href="#top" data-label="פתיחה"></a>
+    <a href="#method" data-label="השיטה"></a>
+    <a href="#habits" data-label="הרגלים"></a>
+    <a href="#story" data-label="הסיפור"></a>
+    <a href="#outcomes" data-label="מה נפתח"></a>
+    <a href="#path" data-label="המסלול"></a>
+    <a href="#contact" data-label="בואו נדבר"></a>
+  </nav>
+  <div class="grain" aria-hidden="true"></div>
+
   <!-- פתיח -->
   <section class="hero" id="top">
+    <canvas class="hero-neurons" id="heroNeurons" aria-hidden="true"></canvas>
     <div class="hero-content">
       <div class="hero-logo" id="heroLogo">
         <img src="assets/brand/logo-white.png" alt="SHIFT">
@@ -102,7 +116,13 @@
         </p>
       </div>
 
-      <div class="world-rows">
+      <div class="world-rows" id="worldStage">
+        <div class="world-bignum" aria-hidden="true">
+          <div class="world-bignum-roll">
+            <span>01</span><span>02</span><span>03</span>
+          </div>
+        </div>
+
         <div class="world-row reveal">
           <span class="world-num">01</span>
           <div class="world-body">
@@ -113,6 +133,9 @@
               נוירופלסטיות, אפיגנטיקה ומדעי ההתנהגות — בשפה פשוטה וברורה.
             </p>
           </div>
+          <figure class="world-media">
+            <img src="assets/img/world-neuro.jpg" alt="סינפסות זוהרות — רשת עצבית" loading="lazy">
+          </figure>
         </div>
 
         <div class="world-row reveal">
@@ -124,6 +147,9 @@
               מפעיל את כל המערכות שלנו — ומאפשר לתודעה החדשה להיטמע בגוף, לא רק במחשבה.
             </p>
           </div>
+          <figure class="world-media">
+            <img src="assets/img/world-body.jpg" alt="דמות במדיטציה מול מים שקטים לפנות בוקר" loading="lazy">
+          </figure>
         </div>
 
         <div class="world-row reveal">
@@ -135,6 +161,9 @@
               והופך תובנות עמוקות לפעולות קטנות ומדויקות, שמתאימות בדיוק לכם.
             </p>
           </div>
+          <figure class="world-media">
+            <img src="assets/img/world-ai.jpg" alt="שדה חלקיקים זוהר — דפוסי בינה" loading="lazy">
+          </figure>
         </div>
       </div>
 
@@ -226,6 +255,7 @@
         <p class="label">המסלול</p>
         <h2>איך עושים SHIFT</h2>
       </div>
+      <div class="path-track" aria-hidden="true"><span class="path-line" id="pathLine"></span></div>
       <ol class="steps">
         <li class="step reveal">
           <span class="step-num">1</span>
