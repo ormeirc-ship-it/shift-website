@@ -365,6 +365,19 @@
     scrollTrigger: { trigger: '.hero', start: '5% top', end: '20% top', scrub: true }
   });
 
+  /* ---------- הירו: הצלילה אל תוך המוח ----------
+     הגלילה מזיזה את המצלמה פנימה — נכנסים לתוך הרשת */
+  if (window.SHIFT_BRAIN && window.SHIFT_BRAIN.setDive) {
+    ScrollTrigger.create({
+      trigger: '.hero',
+      start: 'top top',
+      end: 'bottom top',
+      scrub: true,
+      onUpdate: function (self) { window.SHIFT_BRAIN.setDive(self.progress); },
+      onLeave: function () { window.SHIFT_BRAIN.setDive(0, true); }
+    });
+  }
+
   /* ---------- נקודת עכבר זוהרת ---------- */
   (function initCursor() {
     if (!FINE_POINTER.matches || !DESKTOP.matches) return;
