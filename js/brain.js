@@ -1,8 +1,9 @@
 /* ============================================================
-   SHIFT — brain.js · המסע בגוף האדם
-   מנוע חלקיקים אחד, גוף שלם: אותם 2,300 חלקיקים משנים צורה
-   בין מערכות הגוף — מוח, ריאות, לב, DNA, גוף מלא, גרעין —
-   ובהירו: המצלמה צוללת אל תוך המוח.
+   SHIFT — brain.js · המוח החי
+   מוח זוהר בצפיפות גבוהה: ~9,000 חלקיקים רכים שמתמזגים לרקמה,
+   קפלים קורטיקליים מאורגנים, הילה נושמת — שכבה קבועה שחיה
+   לאורך כל הדף ומדליקה אזור אמיתי בכל סקשן.
+   בהירו: המוח נגרר למרכז ואז המצלמה נכנסת אל תוכו.
    API: window.SHIFT_BRAIN = { ready, goTo, assemble, setInteractive, setDive }
    ============================================================ */
 
@@ -22,10 +23,9 @@
 
   var renderer;
   try {
-    renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'low-power' });
-  } catch (e) { return; } // אין WebGL — האתר ממשיך כרגיל בלעדיו
+    renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false, powerPreference: 'low-power' });
+  } catch (e) { return; }
 
-  /* ---------- פלטת מותג ---------- */
   var COL = {
     skyBase: new THREE.Color(0x3a5f8a),
     skyGlow: new THREE.Color(0x5cbbf0),
@@ -34,12 +34,31 @@
     navyGlow: new THREE.Color(0x3a5f8a)
   };
 
-  var N = MOBILE ? 1200 : 2300;
+  var N = MOBILE ? 3500 : 9000;
 
-  /* ============================================================
-     צורה 1: המוח — אנטומיה סכמטית עם אזורים אמיתיים
-     ============================================================ */
-  var brainPos = new Float32Array(N * 3);
+  /* ---------- טקסטורת חלקיק רך — הנקודות מתמזגות לרקמה זוהרת ---------- */
+  function makeGlowTexture(inner, mid) {
+    var c = document.createElement('canvas');
+    c.width = c.height = 64;
+    var ctx = c.getContext('2d');
+    var g = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+    g.addColorStop(0, 'rgba(255,255,255,' + inner + ')');
+    g.addColorStop(0.35, 'rgba(255,255,255,' + mid + ')');
+    g.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, 64, 64);
+    var tex = new THREE.CanvasTexture(c);
+    tex.needsUpdate = true;
+    return tex;
+  }
+  var dotTex = makeGlowTexture(1, 0.5);
+  var haloTex = makeGlowTexture(0.55, 0.18);
+
+  /* ---------- אנטומיה: מוח עם קפלים מאורגנים ---------- */
+  var positions = new Float32Array(N * 3);
+  var scatter = new Float32Array(N * 3);
+  var live = new Float32Array(N * 3);
+  var colors = new Float32Array(N * 3);
   var region = new Uint8Array(N);
 
   var REGION_DATA = [
@@ -63,29 +82,42 @@
       role: 'שמיעה, שפה וזיכרון — עיבוד משמעות של מה שנשמע ונחווה.' }
   ];
 
-  function wrinkle(x, y, z) {
-    return 0.055 * (Math.sin(7.1 * x + 1.3) * Math.sin(6.3 * y - 0.7) +
-                    Math.sin(5.7 * z + 2.9) * Math.sin(8.3 * x * y));
+  // קפלים (גירי) מאורגנים: רכסים שרצים מלפנים לאחור ומתעקלים סביב הצדדים
+  function gyri(x, y, z) {
+    var theta = Math.atan2(y, Math.abs(x) * 0.75 + 0.15);
+    var ridge = Math.sin(theta * 7.2 + Math.sin(z * 2.6) * 1.9 + z * 1.4);
+    var fine = Math.sin(z * 11.0 + theta * 3.0) * 0.25;
+    var r = Math.sign(ridge) * Math.pow(Math.abs(ridge), 0.65);
+    return r * 0.055 + fine * 0.016;
   }
 
   (function makeBrain() {
     var i = 0, px, py, pz;
-    var HEMI = Math.floor(N * 0.8);
+    var HEMI = Math.floor(N * 0.78);
     while (i < HEMI) {
       var side = i % 2 === 0 ? 1 : -1;
       var u = Math.random() * Math.PI * 2;
       var v = Math.acos(2 * Math.random() - 1);
-      var rr = 0.86 + 0.14 * Math.pow(Math.random(), 0.35);
-      px = Math.sin(v) * Math.cos(u) * 0.60 * rr;
-      py = Math.cos(v) * 0.74 * rr;
-      pz = Math.sin(v) * Math.sin(u) * 1.08 * rr;
-      if (py < -0.42 && pz < -0.15) continue;
-      var w = wrinkle(px, py, pz);
-      px += px * w; py += py * w; pz += pz * w;
-      px = px * 0.92 + side * 0.34;
-      if (Math.abs(px) < 0.05) continue;
+      // הטיה חזקה לפני השטח — הקליפה נקראת כרקמה מלאה
+      var rr = 0.90 + 0.10 * Math.pow(Math.random(), 0.22);
+      px = Math.sin(v) * Math.cos(u) * 0.62 * rr;
+      py = Math.cos(v) * 0.76 * rr;
+      pz = Math.sin(v) * Math.sin(u) * 1.10 * rr;
+      // צורת סילואטה: מצח מלא, עורף מתחדד מעט, בסיס שטוח יותר
+      if (pz < -0.2) py *= 0.96;
+      if (py < -0.45 && pz < -0.1) continue;           // מקום למוחון
+      if (py < -0.62) continue;                         // בסיס
+      // בליטת האונה הרקתית בצדדים
+      if (py < 0.05 && py > -0.45 && Math.abs(px) > 0.3 && pz > -0.3 && pz < 0.55) {
+        px *= 1.12; py -= 0.04;
+      }
+      var w = gyri(px, py, pz);
+      var nl = Math.sqrt(px * px + py * py + pz * pz) || 1;
+      px += (px / nl) * w; py += (py / nl) * w; pz += (pz / nl) * w;
+      px = px * 0.92 + side * 0.335;
+      if (Math.abs(px) < 0.045) continue;               // החריץ האורכי
       var k = i * 3;
-      brainPos[k] = px; brainPos[k + 1] = py; brainPos[k + 2] = pz;
+      positions[k] = px; positions[k + 1] = py; positions[k + 2] = pz;
       if (pz > 0.62 && py > -0.1) region[i] = 1;
       else if (pz < -0.66 && py > 0.02) region[i] = 2;
       else if (py > 0.5 && pz > -0.05 && pz < 0.4) region[i] = 6;
@@ -94,272 +126,84 @@
       else region[i] = 0;
       i++;
     }
-    var CB_END = Math.floor(N * 0.93);
+    // המוחון — מרקם פסים אופייני
+    var CB_END = Math.floor(N * 0.92);
     while (i < CB_END) {
       var s2 = i % 2 === 0 ? 1 : -1;
       var u2 = Math.random() * Math.PI * 2;
       var v2 = Math.acos(2 * Math.random() - 1);
-      var r2 = 0.85 + 0.15 * Math.pow(Math.random(), 0.4);
-      px = Math.sin(v2) * Math.cos(u2) * 0.30 * r2 + s2 * 0.20;
-      py = Math.cos(v2) * 0.22 * r2 - 0.58;
-      pz = Math.sin(v2) * Math.sin(u2) * 0.34 * r2 - 0.72;
+      var r2 = 0.88 + 0.12 * Math.pow(Math.random(), 0.3);
+      px = Math.sin(v2) * Math.cos(u2) * 0.31 * r2 + s2 * 0.21;
+      py = Math.cos(v2) * 0.23 * r2 - 0.60;
+      pz = Math.sin(v2) * Math.sin(u2) * 0.35 * r2 - 0.74;
+      // פסי המוחון האופקיים
+      py += 0.012 * Math.sin(py * 40);
       var k2 = i * 3;
-      brainPos[k2] = px; brainPos[k2 + 1] = py; brainPos[k2 + 2] = pz;
+      positions[k2] = px; positions[k2 + 1] = py; positions[k2 + 2] = pz;
       region[i] = 3;
       i++;
     }
+    // גזע המוח + הליבה הלימבית
     while (i < N) {
       var k3 = i * 3;
       if (i % 2 === 0) {
         var t = Math.random();
-        px = (Math.random() - 0.5) * 0.14;
-        py = -0.35 - t * 0.55;
-        pz = -0.25 - t * 0.22 + (Math.random() - 0.5) * 0.1;
+        px = (Math.random() - 0.5) * 0.15;
+        py = -0.38 - t * 0.55;
+        pz = -0.26 - t * 0.2 + (Math.random() - 0.5) * 0.1;
         region[i] = 4;
       } else {
         var u3 = Math.random() * Math.PI * 2;
         var v3 = Math.acos(2 * Math.random() - 1);
-        var r3 = 0.30 * Math.cbrt(Math.random());
+        var r3 = 0.32 * Math.cbrt(Math.random());
         px = Math.sin(v3) * Math.cos(u3) * r3 * 1.1;
         py = Math.cos(v3) * r3 * 0.7 - 0.08;
         pz = Math.sin(v3) * Math.sin(u3) * r3 * 1.2 + 0.05;
         region[i] = 5;
       }
-      brainPos[k3] = px; brainPos[k3 + 1] = py; brainPos[k3 + 2] = pz;
+      positions[k3] = px; positions[k3 + 1] = py; positions[k3 + 2] = pz;
       i++;
     }
+    // פיזור התחלתי
+    for (var s = 0; s < N; s++) {
+      var k4 = s * 3;
+      var rs = 2.6 + Math.random() * 2.4;
+      var us = Math.random() * Math.PI * 2;
+      var vs = Math.acos(2 * Math.random() - 1);
+      scatter[k4] = Math.sin(vs) * Math.cos(us) * rs;
+      scatter[k4 + 1] = Math.cos(vs) * rs * 0.7;
+      scatter[k4 + 2] = Math.sin(vs) * Math.sin(us) * rs;
+      live[k4] = scatter[k4]; live[k4 + 1] = scatter[k4 + 1]; live[k4 + 2] = scatter[k4 + 2];
+    }
   })();
 
-  /* ============================================================
-     צורות הגוף: ריאות, לב, DNA, גוף מלא, גרעין
-     כולן מנורמלות לרדיוס ~1.1 כדי שהתחנות ישמרו על קנה מידה
-     ============================================================ */
-  function alloc() { return new Float32Array(N * 3); }
-
-  // עזר: נקודה על קפסולה (קו עם רדיוס) בין שתי נקודות
-  function capsulePoint(out, k, ax, ay, az, bx, by, bz, r) {
-    var t = Math.random();
-    var ang = Math.random() * Math.PI * 2;
-    var rad = r * Math.sqrt(Math.random() * 0.4 + 0.6); // הטיה לקליפה
-    var cx = ax + (bx - ax) * t, cy = ay + (by - ay) * t, cz = az + (bz - az) * t;
-    // מסגרת ניצבת גסה לציר
-    var dx = bx - ax, dy = by - ay, dz = bz - az;
-    var len = Math.sqrt(dx * dx + dy * dy + dz * dz) || 1;
-    dx /= len; dy /= len; dz /= len;
-    var ux = -dy, uy = dx, uz = 0;
-    var ul = Math.sqrt(ux * ux + uy * uy) || 1; ux /= ul; uy /= ul;
-    var vx2 = dy * uz - dz * uy, vy2 = dz * ux - dx * uz, vz2 = dx * uy - dy * ux;
-    out[k] = cx + (ux * Math.cos(ang) + vx2 * Math.sin(ang)) * rad;
-    out[k + 1] = cy + (uy * Math.cos(ang) + vy2 * Math.sin(ang)) * rad;
-    out[k + 2] = cz + (uz * Math.cos(ang) + vz2 * Math.sin(ang)) * rad;
-  }
-
-  // הלב — משטח סתום של משוואת הלב הקלאסית
-  var heartPos = (function () {
-    var out = alloc(), i = 0, guard = 0;
-    while (i < N && guard < 400000) {
-      guard++;
-      var x = (Math.random() * 2 - 1) * 1.5;
-      var y = (Math.random() * 2 - 1) * 1.4;
-      var z = (Math.random() * 2 - 1) * 1.1;
-      // ציר Y למעלה: מחליפים תפקידים בנוסחה (x², 9/4·z², y²)
-      var a = x * x + 2.25 * z * z + y * y - 1;
-      var f = a * a * a - x * x * y * y * y - 0.1125 * z * z * y * y * y;
-      if (Math.abs(f) < 0.08) {
-        var k = i * 3;
-        out[k] = x * 0.78;
-        out[k + 1] = y * 0.82 + 0.05;
-        out[k + 2] = z * 0.9;
-        i++;
-      }
-    }
-    // אם הדגימה לא התמלאה (נדיר) — ממלאים בכפילויות עם רעש
-    for (; i < N; i++) {
-      var src = ((i * 7919) % Math.max(1, i)) * 3;
-      var k4 = i * 3;
-      out[k4] = out[src] + (Math.random() - 0.5) * 0.05;
-      out[k4 + 1] = out[src + 1] + (Math.random() - 0.5) * 0.05;
-      out[k4 + 2] = out[src + 2] + (Math.random() - 0.5) * 0.05;
-    }
-    return out;
-  })();
-
-  // הריאות — שתי אונות נושמות + קנה וסמפונות
-  var lungsPos = (function () {
-    var out = alloc();
-    var lungQ = Math.floor(N * 0.44);
-    var i = 0;
-    function lung(cx, count) {
-      var made = 0;
-      while (made < count) {
-        var u = Math.random() * Math.PI * 2;
-        var v = Math.acos(2 * Math.random() - 1);
-        var rr = 0.86 + 0.14 * Math.pow(Math.random(), 0.4);
-        var px = Math.sin(v) * Math.cos(u) * 0.36 * rr;
-        var py = Math.cos(v) * 0.62 * rr;
-        var pz = Math.sin(v) * Math.sin(u) * 0.30 * rr;
-        // פסגה מחודדת למעלה, בסיס רחב
-        px *= 1 - Math.max(0, py) * 0.45;
-        pz *= 1 - Math.max(0, py) * 0.35;
-        var k = i * 3;
-        out[k] = px + cx; out[k + 1] = py - 0.1; out[k + 2] = pz;
-        i++; made++;
-      }
-    }
-    lung(-0.46, lungQ);
-    lung(0.46, lungQ);
-    while (i < N) {
-      var k2 = i * 3;
-      var r = Math.random();
-      if (r < 0.5) { // קנה
-        capsulePoint(out, k2, 0, 1.0, 0, 0, 0.42, 0, 0.055);
-      } else if (r < 0.75) { // סמפון שמאל
-        capsulePoint(out, k2, 0, 0.42, 0, -0.42, 0.28, 0, 0.045);
-      } else { // סמפון ימין
-        capsulePoint(out, k2, 0, 0.42, 0, 0.42, 0.28, 0, 0.045);
-      }
-      i++;
-    }
-    return out;
-  })();
-
-  // DNA — סליל כפול עם שלבים
-  var helixPos = (function () {
-    var out = alloc();
-    var TURNS = 3.1, R = 0.46, H = 2.15;
-    var strandQ = Math.floor(N * 0.37);
-    var i = 0;
-    function strand(phase, count) {
-      for (var s = 0; s < count; s++, i++) {
-        var t = (s / count) * TURNS * Math.PI * 2;
-        var y = -H / 2 + (s / count) * H;
-        var k = i * 3;
-        out[k] = Math.cos(t + phase) * R + (Math.random() - 0.5) * 0.03;
-        out[k + 1] = y + (Math.random() - 0.5) * 0.02;
-        out[k + 2] = Math.sin(t + phase) * R + (Math.random() - 0.5) * 0.03;
-      }
-    }
-    strand(0, strandQ);
-    strand(Math.PI, strandQ);
-    var rungs = 16;
-    while (i < N) {
-      var ri = Math.floor(Math.random() * rungs);
-      var t2 = (ri / rungs) * TURNS * Math.PI * 2;
-      var y2 = -H / 2 + (ri / rungs) * H;
-      var m = Math.random();
-      var k2 = i * 3;
-      out[k2] = Math.cos(t2) * R * (1 - 2 * m) + (Math.random() - 0.5) * 0.02;
-      out[k2 + 1] = y2 + (Math.random() - 0.5) * 0.02;
-      out[k2 + 2] = Math.sin(t2) * R * (1 - 2 * m) + (Math.random() - 0.5) * 0.02;
-      i++;
-    }
-    return out;
-  })();
-
-  // הגוף המלא — צללית אנושית מסוגננת
-  var bodyPos = (function () {
-    var out = alloc();
-    var i = 0;
-    var quota = [
-      ['head', 0.09], ['torso', 0.30], ['pelvis', 0.09],
-      ['armL', 0.10], ['armR', 0.10], ['legL', 0.16], ['legR', 0.16]
-    ];
-    quota.forEach(function (q) {
-      var count = Math.floor(N * q[1]);
-      for (var s = 0; s < count && i < N; s++, i++) {
-        var k = i * 3;
-        switch (q[0]) {
-          case 'head': {
-            var u = Math.random() * Math.PI * 2, v = Math.acos(2 * Math.random() - 1);
-            var rr = 0.16 * (0.85 + 0.15 * Math.random());
-            out[k] = Math.sin(v) * Math.cos(u) * rr;
-            out[k + 1] = 0.92 + Math.cos(v) * rr * 1.1;
-            out[k + 2] = Math.sin(v) * Math.sin(u) * rr;
-            break;
-          }
-          case 'torso': capsulePoint(out, k, 0, 0.68, 0, 0, 0.16, 0, 0.27); break;
-          case 'pelvis': capsulePoint(out, k, -0.1, 0.1, 0, 0.1, 0.1, 0, 0.17); break;
-          case 'armL': capsulePoint(out, k, -0.3, 0.62, 0, -0.5, 0.02, 0.05, 0.065); break;
-          case 'armR': capsulePoint(out, k, 0.3, 0.62, 0, 0.5, 0.02, 0.05, 0.065); break;
-          case 'legL': capsulePoint(out, k, -0.13, 0.06, 0, -0.17, -1.0, 0.02, 0.085); break;
-          case 'legR': capsulePoint(out, k, 0.13, 0.06, 0, 0.17, -1.0, 0.02, 0.085); break;
+  /* ---------- סינפסות: על מדגם — טעינה מהירה גם ב-9K ---------- */
+  var linkIdx = [];
+  (function makeLinks() {
+    var STRIDE = MOBILE ? 3 : 4;
+    var MAXD2 = 0.2 * 0.2;
+    var cand = [];
+    for (var i = 0; i < N; i += STRIDE) cand.push(i);
+    var counts = new Uint8Array(N);
+    for (var a = 0; a < cand.length; a++) {
+      var ia = cand[a];
+      if (counts[ia] >= 2) continue;
+      var bi = ia * 3;
+      for (var b = a + 1; b < cand.length && counts[ia] < 2; b++) {
+        var ib = cand[b];
+        if (counts[ib] >= 2) continue;
+        var bj = ib * 3;
+        var dx = positions[bi] - positions[bj];
+        var dy = positions[bi + 1] - positions[bj + 1];
+        var dz = positions[bi + 2] - positions[bj + 2];
+        var d2 = dx * dx + dy * dy + dz * dz;
+        if (d2 < MAXD2 && d2 > 0.004) {
+          linkIdx.push(ia, ib);
+          counts[ia]++; counts[ib]++;
         }
       }
-    });
-    while (i < N) { // שאריות עיגול — לפלג הגוף העליון
-      capsulePoint(out, i * 3, 0, 0.6, 0, 0, 0.2, 0, 0.26);
-      i++;
     }
-    return out;
   })();
-
-  // הגרעין — ספירת אנרגיה (פיבונאצ'י) עם ליבה
-  var corePos = (function () {
-    var out = alloc();
-    var shell = Math.floor(N * 0.72);
-    var GA = Math.PI * (3 - Math.sqrt(5));
-    for (var s = 0; s < shell; s++) {
-      var y = 1 - (s / (shell - 1)) * 2;
-      var rad = Math.sqrt(1 - y * y);
-      var th = GA * s;
-      var k = s * 3;
-      out[k] = Math.cos(th) * rad * 0.95;
-      out[k + 1] = y * 0.95;
-      out[k + 2] = Math.sin(th) * rad * 0.95;
-    }
-    for (var i2 = shell; i2 < N; i2++) {
-      var u = Math.random() * Math.PI * 2, v = Math.acos(2 * Math.random() - 1);
-      var rr = 0.38 * Math.cbrt(Math.random());
-      var k2 = i2 * 3;
-      out[k2] = Math.sin(v) * Math.cos(u) * rr;
-      out[k2 + 1] = Math.cos(v) * rr;
-      out[k2 + 2] = Math.sin(v) * Math.sin(u) * rr;
-    }
-    return out;
-  })();
-
-  var SHAPES = { brain: brainPos, heart: heartPos, lungs: lungsPos, helix: helixPos, body: bodyPos, core: corePos };
-
-  /* ---------- מאגרי מורף ---------- */
-  var scatter = alloc();
-  var live = alloc();
-  var fromBuf = alloc();
-  var targetBuf = brainPos;
-  var currentShapeName = 'brain';
-  var colors = new Float32Array(N * 3);
-
-  for (var si = 0; si < N; si++) {
-    var k5 = si * 3;
-    var rs = 2.6 + Math.random() * 2.4;
-    var us = Math.random() * Math.PI * 2;
-    var vs = Math.acos(2 * Math.random() - 1);
-    scatter[k5] = Math.sin(vs) * Math.cos(us) * rs;
-    scatter[k5 + 1] = Math.cos(vs) * rs * 0.7;
-    scatter[k5 + 2] = Math.sin(vs) * Math.sin(us) * rs;
-    live[k5] = scatter[k5]; live[k5 + 1] = scatter[k5 + 1]; live[k5 + 2] = scatter[k5 + 2];
-    fromBuf[k5] = brainPos[k5]; fromBuf[k5 + 1] = brainPos[k5 + 1]; fromBuf[k5 + 2] = brainPos[k5 + 2];
-  }
-
-  /* ---------- חיבורים סינפטיים (למוח בלבד) ---------- */
-  var linkIdx = [];
-  var MAXD2 = 0.24 * 0.24;
-  var counts = new Uint8Array(N);
-  for (var li = 0; li < N; li++) {
-    if (counts[li] >= 2) continue;
-    var bi = li * 3;
-    for (var lj = li + 1; lj < N && counts[li] < 2; lj++) {
-      if (counts[lj] >= 2) continue;
-      var bj = lj * 3;
-      var ddx = brainPos[bi] - brainPos[bj];
-      var ddy = brainPos[bi + 1] - brainPos[bj + 1];
-      var ddz = brainPos[bi + 2] - brainPos[bj + 2];
-      var dd2 = ddx * ddx + ddy * ddy + ddz * ddz;
-      if (dd2 < MAXD2 && dd2 > 0.003) {
-        linkIdx.push(li, lj);
-        counts[li]++; counts[lj]++;
-      }
-    }
-  }
 
   /* ---------- סצנה ---------- */
   var scene = new THREE.Scene();
@@ -370,7 +214,9 @@
   geo.setAttribute('position', new THREE.BufferAttribute(live, 3));
   geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
   var ptsMat = new THREE.PointsMaterial({
-    size: 0.028, vertexColors: true, transparent: true, opacity: 0.95,
+    size: MOBILE ? 0.05 : 0.042,
+    map: dotTex,
+    vertexColors: true, transparent: true, opacity: 0.9,
     depthWrite: false, blending: THREE.AdditiveBlending, sizeAttenuation: true
   });
   var points = new THREE.Points(geo, ptsMat);
@@ -379,13 +225,21 @@
   var linePos = new Float32Array(linkIdx.length * 3);
   lineGeo.setAttribute('position', new THREE.BufferAttribute(linePos, 3));
   var lineMat = new THREE.LineBasicMaterial({
-    color: COL.skyBase, transparent: true, opacity: 0.22,
+    color: COL.skyBase, transparent: true, opacity: 0.1,
     depthWrite: false, blending: THREE.AdditiveBlending
   });
   var lines = new THREE.LineSegments(lineGeo, lineMat);
 
+  // הילה נושמת — המוח "חי" גם במנוחה
+  var haloMat = new THREE.SpriteMaterial({
+    map: haloTex, color: COL.skyGlow, transparent: true, opacity: 0.14,
+    depthWrite: false, blending: THREE.AdditiveBlending
+  });
+  var halo = new THREE.Sprite(haloMat);
+  halo.scale.set(3.4, 3.0, 1);
+
   var group = new THREE.Group();
-  group.add(points); group.add(lines);
+  group.add(halo); group.add(points); group.add(lines);
   scene.add(group);
 
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
@@ -403,37 +257,34 @@
   /* ---------- מצב חי ---------- */
   var state = {
     assembled: 0,
-    shapeMix: 1,           // 0 צורה קודמת → 1 צורת יעד
-    brainness: 1,          // כמה "מוח" מוצג (קווים/אזורים)
-    dive: 0,               // צלילה אל תוך המוח בהירו
+    dive: 0,
     activeRegion: -1,
     regionGlow: 0,
     lightMode: 0,
     sparkle: 0,
     pulse: 0,
     open: 0,
-    baseOpacity: 0.95,
+    baseOpacity: 0.9,
     rotY: 0.35, rotX: -0.06,
-    posX: 0, posY: -0.55, scale: 1.35,
+    posX: 0, posY: -0.15, scale: 1.2,
     leanX: 0, leanY: 0,
     hoverRegion: -1,
     hoverGlow: 0,
     interactive: false
   };
+  var currentKey = null;
 
   var tmpA = new THREE.Color(), tmpB = new THREE.Color();
 
   function paint(time) {
     var base = tmpA.copy(COL.skyBase).lerp(COL.navyBase, state.lightMode);
-    var glow = tmpB.copy(COL.skyGlow).lerp(COL.navyGlow, state.lightMode);
-    var brainF = state.brainness;
     for (var p = 0; p < N; p++) {
       var c = p * 3;
       var r = base.r, g = base.g, b = base.b;
       var depth = (live[c + 2] + 1.2) / 2.4;
-      var lum = 0.75 + depth * 0.45;
-      if (brainF > 0.05 && state.regionGlow > 0.01 && region[p] === state.activeRegion) {
-        var gl = state.regionGlow * brainF;
+      var lum = 0.6 + depth * 0.55;
+      if (state.regionGlow > 0.01 && region[p] === state.activeRegion) {
+        var gl = state.regionGlow;
         r += (COL.skyBright.r - r) * gl;
         g += (COL.skyBright.g - g) * gl;
         b += (COL.skyBright.b - b) * gl;
@@ -451,7 +302,7 @@
         wave = Math.max(0, wave); wave *= wave * state.pulse;
         lum += wave * 0.8;
       }
-      if (state.hoverGlow > 0.01 && brainF > 0.5) {
+      if (state.hoverGlow > 0.01) {
         if (region[p] === state.hoverRegion) {
           var hg = state.hoverGlow;
           r += (COL.skyBright.r - r) * hg;
@@ -469,16 +320,12 @@
 
   function morph() {
     var t = state.assembled, eA = t * t * (3 - 2 * t);
-    var m = state.shapeMix, eM = m * m * (3 - 2 * m);
     var openF = 1 + state.open * 0.55;
     for (var p = 0; p < N; p++) {
       var c = p * 3;
-      var bx = fromBuf[c] + (targetBuf[c] - fromBuf[c]) * eM;
-      var by = fromBuf[c + 1] + (targetBuf[c + 1] - fromBuf[c + 1]) * eM;
-      var bz = fromBuf[c + 2] + (targetBuf[c + 2] - fromBuf[c + 2]) * eM;
-      live[c] = (scatter[c] + (bx - scatter[c]) * eA) * openF;
-      live[c + 1] = (scatter[c + 1] + (by - scatter[c + 1]) * eA) * openF;
-      live[c + 2] = (scatter[c + 2] + (bz - scatter[c + 2]) * eA) * openF;
+      live[c] = (scatter[c] + (positions[c] - scatter[c]) * eA) * openF;
+      live[c + 1] = (scatter[c + 1] + (positions[c + 1] - scatter[c + 1]) * eA) * openF;
+      live[c + 2] = (scatter[c + 2] + (positions[c + 2] - scatter[c + 2]) * eA) * openF;
     }
     geo.attributes.position.needsUpdate = true;
     for (var l = 0; l < linkIdx.length; l++) {
@@ -486,30 +333,11 @@
       linePos[dst] = live[src]; linePos[dst + 1] = live[src + 1]; linePos[dst + 2] = live[src + 2];
     }
     lineGeo.attributes.position.needsUpdate = true;
-    lineMat.opacity = 0.22 * eA * state.brainness *
-      (1 - state.open * 0.7) * (1 - state.lightMode * 0.35) * (1 - state.dive * 0.9);
-  }
-
-  function setShape(name) {
-    if (!SHAPES[name] || name === currentShapeName) return;
-    // מקבעים את הצורה הנוכחית כנקודת מוצא — גם באמצע מורף
-    var m = state.shapeMix, eM = m * m * (3 - 2 * m);
-    for (var p = 0; p < N * 3; p++) {
-      fromBuf[p] = fromBuf[p] + (targetBuf[p] - fromBuf[p]) * eM;
-    }
-    targetBuf = SHAPES[name];
-    currentShapeName = name;
-    state.shapeMix = 0;
-    gsap.to(state, { shapeMix: 1, duration: 1.7, ease: 'power3.inOut', overwrite: 'auto' });
-    gsap.to(state, {
-      brainness: name === 'brain' ? 1 : 0,
-      duration: 0.5, ease: 'power2.out', overwrite: false
-    });
   }
 
   /* ---------- מגע במוח ---------- */
   var raycaster = new THREE.Raycaster();
-  raycaster.params.Points = { threshold: MOBILE ? 0.14 : 0.09 };
+  raycaster.params.Points = { threshold: MOBILE ? 0.12 : 0.06 };
   var pointerNDC = new THREE.Vector2(-2, -2);
   var pointerDirty = false;
   var cardName = document.getElementById('brainCardName');
@@ -543,51 +371,49 @@
     return hits.length ? region[hits[0].index] : -1;
   }
 
-  /* ---------- לולאת הפריימים ---------- */
+  function smoothstep(x) { x = Math.max(0, Math.min(1, x)); return x * x * (3 - 2 * x); }
+
+  /* ---------- לולאת פריימים ---------- */
   var running = false, lastMorphKey = -1;
   function frame(tMs) {
     if (!running) return;
     var time = tMs * 0.001;
 
-    // סיבוב — DNA מסתובב מהר יותר, בגוף מלא לאט
-    var spin = 0.05 + (currentShapeName === 'helix' ? 0.22 : 0) * state.shapeMix;
-    group.rotation.y = state.rotY + time * spin + state.leanX;
-    group.rotation.x = state.rotX + state.leanY;
-    group.position.set(state.posX, state.posY, 0);
-
-    // תנועת חיים לפי צורה: פעימת לב / נשימת ריאות
-    var s = state.scale;
-    var sy = s, sx = s;
-    if (currentShapeName === 'heart') {
-      var ph = time * 7.2;
-      var beat = Math.pow(Math.max(0, Math.sin(ph)), 10) * 0.6 +
-                 Math.pow(Math.max(0, Math.sin(ph - 0.5)), 22) * 0.4;
-      var bs = 1 + 0.055 * beat * state.shapeMix;
-      s *= bs; sy = s; sx = s;
-    } else if (currentShapeName === 'lungs') {
-      var br = Math.sin(time * 0.8) * state.shapeMix;
-      sy = s * (1 + 0.06 * br);
-      sx = s * (1 - 0.02 * br);
+    // ההירו: שלב 1 — נגרר למרכז; שלב 2 — המצלמה נכנסת פנימה
+    var dragT = 0, diveIn = 0;
+    if (currentKey === 'hero' || currentKey === null) {
+      dragT = smoothstep(state.dive / 0.38);
+      diveIn = smoothstep((state.dive - 0.35) / 0.65);
     }
-    group.scale.set(sx, sy, s);
+    var rx = state.posX * (1 - dragT);
+    var ry = state.posY * (1 - dragT * 0.6);
+    var rs = state.scale * (1 + dragT * 0.28);
 
-    // הצלילה אל תוך המוח: המצלמה נכנסת, הנקודות גדלות, הקווים נמוגים
-    camera.position.z = 4.2 - state.dive * 3.55;
-    ptsMat.size = 0.028 * (1 + state.dive * 1.6);
+    group.rotation.y = state.rotY + time * 0.05 + state.leanX + dragT * 0.5;
+    group.rotation.x = state.rotX + state.leanY;
+    group.position.set(rx, ry, 0);
+    // נשימה מיקרוסקופית — המוח חי גם במנוחה
+    var breathe = 1 + 0.006 * Math.sin(time * 1.05);
+    group.scale.setScalar(rs * breathe);
+
+    camera.position.z = 4.2 - diveIn * 3.55;
+    ptsMat.size = (MOBILE ? 0.05 : 0.042) * (1 + diveIn * 1.5);
     ptsMat.opacity = state.baseOpacity;
+    lineMat.opacity = 0.1 * state.assembled * (1 - state.open * 0.7) *
+      (1 - state.lightMode * 0.4) * (1 - diveIn * 0.95);
+    haloMat.opacity = (0.14 + 0.05 * Math.sin(time * 0.7)) *
+      state.assembled * state.baseOpacity * (1 - state.lightMode * 0.65) * (1 - diveIn);
 
-    var mKey = state.assembled * 1000 + state.shapeMix * 100 + state.open * 10 + state.dive;
+    var mKey = state.assembled * 100 + state.open;
     if (mKey !== lastMorphKey) { morph(); lastMorphKey = mKey; }
 
     if (state.interactive && pointerDirty) {
       pointerDirty = false;
-      if (currentShapeName === 'brain' && state.shapeMix > 0.7) {
-        group.updateMatrixWorld(true);
-        var hovered = raycastRegion();
-        if (hovered !== state.hoverRegion) {
-          state.hoverRegion = hovered;
-          updateCard(hovered);
-        }
+      group.updateMatrixWorld(true);
+      var hovered = raycastRegion();
+      if (hovered !== state.hoverRegion) {
+        state.hoverRegion = hovered;
+        updateCard(hovered);
       }
     }
     var hoverTarget = (state.interactive && state.hoverRegion >= 0) ? 1 : 0;
@@ -611,40 +437,37 @@
     leanToY((e.clientY / window.innerHeight - 0.5) * 0.12);
   });
 
-  /* ---------- תחנות המסע בגוף ----------
-     כל תחנה: מיקום בטוח שלא מכסה תוכן + צורת הגוף + נתון ביומטרי אמיתי.
-     RTL: posX חיובי = ימינה פיזית. */
+  /* ---------- תחנות המסע ----------
+     RTL: הטקסט בהירו מימין — המוח חי משמאל (posX שלילי). */
   var WAYPOINTS = {
-    hero:      { shape: 'brain', posX: 0,     posY: -0.15, scale: 1.2,  rotY: 0.35, region: -1, lightMode: 0, sparkle: 0,   pulse: 0,   open: 0,   baseOpacity: 0.95, label: '' },
-    statement: { shape: 'brain', posX: -2.05, posY: 0.05,  scale: 0.5,  rotY: 2.35, region: 2,  lightMode: 1, sparkle: 0,   pulse: 0,   open: 0,   baseOpacity: 0.45, label: 'האונה העורפית · כאן נבנית הפרשנות' },
-    world1:    { shape: 'brain', posX: 2.1,   posY: -0.6,  scale: 0.42, rotY: -0.9, region: 1,  lightMode: 1, sparkle: 0,   pulse: 0,   open: 0,   baseOpacity: 0.4,  label: 'המוח · ‎86 מיליארד נוירונים' },
-    world2:    { shape: 'lungs', posX: 2.1,   posY: -0.6,  scale: 0.48, rotY: 0.15, region: -1, lightMode: 1, sparkle: 0,   pulse: 0,   open: 0,   baseOpacity: 0.45, label: 'הריאות · ‎22,000 נשימות ביום' },
-    world3:    { shape: 'core',  posX: 2.1,   posY: -0.6,  scale: 0.45, rotY: 0.6,  region: -1, lightMode: 1, sparkle: 1,   pulse: 0,   open: 0,   baseOpacity: 0.45, label: 'הרשת · ‎כ-100 טריליון סינפסות' },
-    brainmap:  { shape: 'brain', posX: -0.85, posY: -0.05, scale: 1.55, rotY: 0.5,  region: -1, lightMode: 0, sparkle: 0,   pulse: 0,   open: 0,   baseOpacity: 1,    label: '' },
-    habits:    { shape: 'heart', posX: 0,     posY: 0,     scale: 1.15, rotY: 0.1,  region: -1, lightMode: 0, sparkle: 0,   pulse: 0.7, open: 0,   baseOpacity: 0.42, label: 'הלב · ‎100,000 פעימות ביום' },
-    story:     { shape: 'body',  posX: -2.55, posY: 0,     scale: 0.55, rotY: 0.35, region: -1, lightMode: 1, sparkle: 0,   pulse: 0,   open: 0,   baseOpacity: 0.5,  label: 'הגוף כולו · הבית של הסיפור' },
-    outcomes:  { shape: 'helix', posX: -1.8,  posY: 0.05,  scale: 0.5,  rotY: 0,    region: -1, lightMode: 1, sparkle: 0.3, pulse: 0,   open: 0,   baseOpacity: 0.45, label: 'DNA · אפיגנטיקה — ביטוי שאפשר לשנות' },
-    path:      { shape: 'body',  posX: -1.9,  posY: -1.15, scale: 0.42, rotY: -0.3, region: -1, lightMode: 1, sparkle: 0,   pulse: 0.6, open: 0,   baseOpacity: 0.35, label: 'מהמוח לשריר · מהחלטה לתנועה' },
-    cta:       { shape: 'core',  posX: 0,     posY: 0.05,  scale: 1.3,  rotY: -0.3, region: -1, lightMode: 0, sparkle: 0.5, pulse: 0,   open: 0.5, baseOpacity: 0.75, label: '' }
+    hero:      { posX: -1.15, posY: -0.05, scale: 1.05, rotY: 0.45,  region: -1, lightMode: 0, sparkle: 0,   pulse: 0,   open: 0,   baseOpacity: 0.95, label: '' },
+    statement: { posX: -2.05, posY: 0.05,  scale: 0.5,  rotY: 2.35,  region: 2,  lightMode: 1, sparkle: 0,   pulse: 0,   open: 0,   baseOpacity: 0.45, label: 'האונה העורפית · כאן נבנית הפרשנות' },
+    world1:    { posX: 2.1,   posY: -0.6,  scale: 0.42, rotY: -0.9,  region: 1,  lightMode: 1, sparkle: 0,   pulse: 0,   open: 0,   baseOpacity: 0.4,  label: 'הקליפה הקדם-מצחית · מודעות ובחירה' },
+    world2:    { posX: 2.1,   posY: -0.6,  scale: 0.42, rotY: 2.75,  region: 3,  lightMode: 1, sparkle: 0,   pulse: 0,   open: 0,   baseOpacity: 0.4,  label: 'המוחון וגזע המוח · חוכמת הגוף' },
+    world3:    { posX: 2.1,   posY: -0.6,  scale: 0.42, rotY: 0.6,   region: -1, lightMode: 1, sparkle: 1,   pulse: 0,   open: 0,   baseOpacity: 0.4,  label: 'הרשת כולה · ‎כ-100 טריליון סינפסות' },
+    brainmap:  { posX: -0.85, posY: -0.05, scale: 1.55, rotY: 0.5,   region: -1, lightMode: 0, sparkle: 0,   pulse: 0,   open: 0,   baseOpacity: 1,    label: '' },
+    habits:    { posX: 0,     posY: 0,     scale: 1.4,  rotY: 0.2,   region: -1, lightMode: 0, sparkle: 0,   pulse: 1,   open: 0,   baseOpacity: 0.3,  label: 'מסלולים עצביים · הרגל שמתחזק' },
+    story:     { posX: -2.6,  posY: 0,     scale: 0.45, rotY: 1.5,   region: 5,  lightMode: 1, sparkle: 0,   pulse: 0,   open: 0,   baseOpacity: 0.5,  label: 'המערכת הלימבית · הלב של הרגש' },
+    outcomes:  { posX: -1.8,  posY: 0.1,   scale: 0.5,  rotY: -2.2,  region: -1, lightMode: 1, sparkle: 0.4, pulse: 0,   open: 0,   baseOpacity: 0.42, label: 'סנכרון כלל-מוחי · תודעה חדשה' },
+    path:      { posX: -1.9,  posY: -1.15, scale: 0.4,  rotY: 0.9,   region: 6,  lightMode: 1, sparkle: 0,   pulse: 0.6, open: 0,   baseOpacity: 0.35, label: 'הקליפה המוטורית · מהחלטה לפעולה' },
+    cta:       { posX: 0,     posY: 0.05,  scale: 1.3,  rotY: -0.3,  region: -1, lightMode: 0, sparkle: 0.5, pulse: 0,   open: 0.5, baseOpacity: 0.75, label: '' }
   };
 
   if (MOBILE) {
-    WAYPOINTS.hero = Object.assign({}, WAYPOINTS.hero, { scale: 0.9, posY: -0.35, baseOpacity: 0.9 });
+    WAYPOINTS.hero = Object.assign({}, WAYPOINTS.hero, { posX: 0, posY: -0.35, scale: 0.85, baseOpacity: 0.9 });
     WAYPOINTS.brainmap = Object.assign({}, WAYPOINTS.brainmap, { posX: 0, posY: 0.5, scale: 0.55 });
-    WAYPOINTS.habits = Object.assign({}, WAYPOINTS.habits, { scale: 1.0, baseOpacity: 0.25 });
+    WAYPOINTS.habits = Object.assign({}, WAYPOINTS.habits, { scale: 1.0, baseOpacity: 0.22 });
     WAYPOINTS.cta = Object.assign({}, WAYPOINTS.cta, { scale: 1.0 });
     ['statement', 'world1', 'world2', 'world3', 'story', 'outcomes', 'path'].forEach(function (k) {
       WAYPOINTS[k] = Object.assign({}, WAYPOINTS[k], { baseOpacity: 0, scale: 0.5, label: '' });
     });
   }
 
-  var currentKey = null;
   function goTo(key) {
     var wp = WAYPOINTS[key];
     if (!wp) return;
-    // בכוונה אין דדופ על key זהה: קריאה חוזרת מרפאת מצב תקוע
+    // בכוונה אין דדופ: קריאה חוזרת מרפאת מצב תקוע אחרי גלילה מהירה
     currentKey = key;
-    setShape(wp.shape || 'brain');
     gsap.to(state, {
       posX: wp.posX, posY: wp.posY, scale: wp.scale, rotY: wp.rotY,
       lightMode: wp.lightMode, sparkle: wp.sparkle, pulse: wp.pulse,
@@ -690,12 +513,11 @@
     }
   }
 
-  // הצלילה אל תוך המוח (הירו): scrub מעדכן ישירות; יציאה — ריכוך חזרה
   function setDive(p, smooth) {
     if (smooth) {
       gsap.to(state, { dive: p, duration: 0.8, ease: 'power2.out', overwrite: 'auto' });
     } else {
-      gsap.killTweensOf(state, 'dive'); // ה-scrub תמיד גובר על ריכוך יציאה פעיל
+      gsap.killTweensOf(state, 'dive');
       state.dive = p;
     }
   }
@@ -707,9 +529,8 @@
     setInteractive: setInteractive, setDive: setDive,
     _qa: {
       frame: frame, state: state, region: region, count: N,
-      shape: function () { return currentShapeName; },
-      shapes: Object.keys(SHAPES),
-      buffers: SHAPES,
+      links: linkIdx.length / 2,
+      currentKey: function () { return currentKey; },
       forceRun: function () { running = true; }
     }
   };

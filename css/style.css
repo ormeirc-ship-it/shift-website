@@ -1016,3 +1016,28 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
   .brainmap-slot { min-height: 46vh; }
   .brain-card { min-height: 190px; }
 }
+
+/* ---------- הירו מפוצל: מלל מימין, המוח החי משמאל ---------- */
+@media (min-width: 900px) {
+  .hero-split {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    align-items: center;
+    gap: clamp(24px, 4vw, 64px);
+    width: min(100% - 48px, var(--container));
+    max-width: var(--container);
+    text-align: start;
+  }
+  .hero-split .hero-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .hero-split .hero-logo { width: min(300px, 30vw); margin-inline-start: -9%; }
+  .hero-split .hero-sub { margin-inline: 0; }
+  .hero-split .hero-ctas { justify-content: flex-start; }
+  .hero-visual { min-height: 60vh; }
+}
+@media (max-width: 899px) {
+  .hero-visual { display: none; }
+}
