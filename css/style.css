@@ -973,3 +973,228 @@ section:has(> .sec-num) { position: relative; }
   transition: border-color 0.3s ease;
 }
 .basket-card:hover .basket-card-link { border-color: var(--sky); }
+
+/* ---------- המסלול: 21 הימים ---------- */
+.program { padding: clamp(90px, 13vw, 150px) 0; }
+.program-layout {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: clamp(20px, 3vw, 44px);
+  align-items: stretch;
+}
+.program-spine {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+.program-spine-track {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.program-spine-fill {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 0%;
+  background: linear-gradient(180deg, var(--blue-mid), var(--sky));
+  border-radius: 2px;
+}
+.program-spine i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--navy-deep);
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  z-index: 1;
+  transition: background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+.program-spine i.on {
+  background: var(--sky);
+  border-color: var(--sky);
+  box-shadow: 0 0 10px rgba(92, 187, 240, 0.7);
+}
+.program-weeks { display: flex; flex-direction: column; gap: clamp(28px, 4vw, 48px); }
+.week-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius);
+  padding: clamp(26px, 4vw, 44px);
+}
+.week-tag {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--sky);
+}
+.week-head h3 { font-size: clamp(1.5rem, 3.4vw, 2.1rem); font-weight: 300; margin: 8px 0 14px; }
+.week-desc p { color: var(--white-soft); font-size: 1.02rem; margin-bottom: 10px; max-width: 640px; }
+.day-list {
+  list-style: none;
+  margin-top: 22px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+.day-item {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 16px;
+  align-items: baseline;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.day-no {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(92, 187, 240, 0.4);
+  color: var(--sky);
+  font-weight: 600;
+  font-size: 0.95rem;
+  align-self: center;
+}
+.day-body h4 { font-size: 1.05rem; font-weight: 600; color: #fff; margin-bottom: 2px; }
+.day-body p { font-size: 0.94rem; color: var(--white-faint); }
+.day-rest { padding: 26px 0; opacity: 0.75; }
+.day-rest .day-no { border-style: dashed; border-color: rgba(255, 255, 255, 0.3); color: var(--white-faint); }
+.day-rest .day-body h4 { font-weight: 300; letter-spacing: 0.06em; }
+.day-rest .day-body p { font-weight: 300; }
+
+/* ---------- טעימת הנשימה ---------- */
+.breath {
+  margin-top: clamp(48px, 7vw, 84px);
+  display: grid;
+  grid-template-columns: minmax(260px, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(28px, 5vw, 64px);
+  align-items: center;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius);
+  padding: clamp(26px, 4vw, 48px);
+}
+.breath-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 280px;
+}
+.breath-ring {
+  position: absolute;
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  border: 1px dashed rgba(92, 187, 240, 0.35);
+}
+.breath-circle {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  background: radial-gradient(circle at 38% 32%, rgba(154, 214, 248, 0.85), rgba(92, 187, 240, 0.55) 55%, rgba(58, 95, 138, 0.4));
+  box-shadow: 0 0 50px rgba(92, 187, 240, 0.4);
+  color: var(--navy-deep);
+  font-weight: 600;
+  font-size: 0.98rem;
+  padding: 18px;
+  will-change: transform;
+}
+.breath-info h3 { color: #fff; margin-bottom: 14px; }
+.breath-steps {
+  margin: 0 0 14px 0;
+  padding-inline-start: 20px;
+  color: var(--white-soft);
+}
+.breath-steps li { margin-bottom: 6px; }
+.breath-note { font-size: 0.9rem; color: var(--white-faint); margin-bottom: 20px; max-width: 480px; }
+.breath-actions { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+.breath-counter { color: var(--sky); font-weight: 600; font-size: 1.05rem; min-height: 1.5em; }
+.program-cta {
+  margin-top: clamp(40px, 6vw, 64px);
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ---------- אירועים ---------- */
+.events { position: relative; overflow: hidden; padding: clamp(90px, 13vw, 150px) 0; }
+.events-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 80% 20%, rgba(58, 95, 138, 0.25), transparent 65%),
+    radial-gradient(ellipse 60% 45% at 15% 85%, rgba(92, 187, 240, 0.12), transparent 60%);
+  pointer-events: none;
+}
+.events .container { position: relative; z-index: 1; }
+.event-cards { display: flex; flex-direction: column; gap: clamp(28px, 4vw, 52px); }
+.event-card {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(22px, 3.5vw, 48px);
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.event-media { position: relative; height: 100%; min-height: 240px; }
+.event-media img { width: 100%; height: 100%; object-fit: cover; }
+.event-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, rgba(18, 18, 52, 0) 55%, rgba(18, 18, 52, 0.55));
+}
+.event-body { padding: clamp(22px, 3vw, 40px); padding-inline-start: 0; }
+.event-kicker {
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--sky);
+}
+.event-body h3 { color: #fff; font-size: clamp(1.4rem, 3vw, 1.9rem); margin: 8px 0 10px; }
+.event-body p { color: var(--white-soft); max-width: 460px; }
+.event-link {
+  display: inline-block;
+  margin-top: 18px;
+  color: var(--sky);
+  text-decoration: none;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(92, 187, 240, 0.35);
+  padding-bottom: 3px;
+  transition: border-color 0.3s ease;
+}
+.event-link:hover { border-color: var(--sky); }
+/* פריסה מדורגת בדסקטופ */
+@media (min-width: 900px) {
+  .event-card:nth-child(2) { margin-inline-start: clamp(30px, 5vw, 90px); }
+  .event-card:nth-child(3) { margin-inline-end: clamp(30px, 5vw, 90px); }
+  .event-card:nth-child(even) .event-media { order: 2; }
+  .event-card:nth-child(even) .event-body { padding-inline-start: clamp(22px, 3vw, 40px); padding-inline-end: 0; }
+}
+
+/* ---------- תיקון קו המסלול: יחסי לצעדים בלבד ---------- */
+.steps-wrap { position: relative; }
+
+/* ---------- מובייל ---------- */
+@media (max-width: 899px) {
+  .program-layout { grid-template-columns: 1fr; }
+  .program-spine { display: none; }
+  .breath { grid-template-columns: 1fr; }
+  .breath-stage { min-height: 240px; }
+  .event-card { grid-template-columns: 1fr; }
+  .event-media { min-height: 190px; }
+  .event-body { padding: 22px; padding-top: 0; }
+}

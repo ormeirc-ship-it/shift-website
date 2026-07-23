@@ -39,9 +39,9 @@
       </a>
       <nav class="nav-links" aria-label="ניווט ראשי">
         <a href="#method">השיטה</a>
-        <a href="#habits">הרגלים</a>
+        <a href="#program">המסלול</a>
+        <a href="#events">אירועים</a>
         <a href="#story">הסיפור שלנו</a>
-        <a href="#path">המסלול</a>
       </nav>
       <a href="#contact" class="btn btn-primary btn-nav">בואו נדבר</a>
       <button class="nav-burger" id="navBurger" aria-label="פתיחת תפריט" aria-expanded="false" aria-controls="mobileMenu">
@@ -54,9 +54,9 @@
   <div class="mobile-menu" id="mobileMenu" hidden>
     <nav aria-label="ניווט מובייל">
       <a href="#method">השיטה</a>
-      <a href="#habits">הרגלים</a>
+      <a href="#program">המסלול</a>
+      <a href="#events">אירועים</a>
       <a href="#story">הסיפור שלנו</a>
-      <a href="#path">המסלול</a>
       <a href="#contact" class="btn btn-primary">בואו נדבר</a>
     </nav>
   </div>
@@ -65,11 +65,11 @@
   <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
   <nav class="dot-nav" id="dotNav" aria-label="ניווט פרקים">
     <a href="#top" data-label="פתיחה"></a>
+    <a href="#products" data-label="מה אנחנו עושים"></a>
     <a href="#method" data-label="השיטה"></a>
-    <a href="#habits" data-label="הרגלים"></a>
+    <a href="#program" data-label="המסלול"></a>
+    <a href="#events" data-label="אירועים"></a>
     <a href="#story" data-label="הסיפור"></a>
-    <a href="#outcomes" data-label="מה נפתח"></a>
-    <a href="#path" data-label="המסלול"></a>
     <a href="#contact" data-label="בואו נדבר"></a>
   </nav>
   <div class="grain" aria-hidden="true"></div>
@@ -153,6 +153,7 @@
 
   <!-- השיטה: שלושה עולמות -->
   <section class="worlds section-light" id="method">
+    <span class="sec-num" aria-hidden="true">02</span>
     <div class="container">
       <div class="section-head reveal">
         <p class="label">השיטה</p>
@@ -221,6 +222,7 @@
 
   <!-- הרגלים מעצבי תודעה -->
   <section class="habits section-dark" id="habits">
+    <span class="sec-num" aria-hidden="true">03</span>
     <div class="container">
       <div class="section-head reveal">
         <p class="label label-sky">הלב של התוכנית</p>
@@ -248,8 +250,253 @@
     </div>
   </section>
 
+
+  <!-- המסלול: 21 הימים -->
+  <section class="program section-dark" id="program">
+    <span class="sec-num" aria-hidden="true">05</span>
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="label label-sky">המוצר הדיגיטלי</p>
+        <h2>מסלול 21 הימים</h2>
+        <p class="section-intro">
+          שלושה שבועות. צעד יומי אחד. תהליך דיגיטלי מלווה שמתחיל בהיכרות עם המערכת —
+          ונגמר בתוכנית יצירה משלכם. הנה הוא, מבפנים.
+        </p>
+      </div>
+
+      <div class="program-layout">
+        <div class="program-spine" aria-hidden="true">
+          <span class="program-spine-track"><span class="program-spine-fill" id="spineFill"></span></span>
+        <i data-day="1"></i>
+        <i data-day="2"></i>
+        <i data-day="3"></i>
+        <i data-day="4"></i>
+        <i data-day="5"></i>
+        <i data-day="6"></i>
+        <i data-day="7"></i>
+        <i data-day="8"></i>
+        <i data-day="9"></i>
+        <i data-day="10"></i>
+        <i data-day="11"></i>
+        <i data-day="12"></i>
+        <i data-day="13"></i>
+        <i data-day="14"></i>
+        <i data-day="15"></i>
+        <i data-day="16"></i>
+        <i data-day="17"></i>
+        <i data-day="18"></i>
+        <i data-day="19"></i>
+        <i data-day="20"></i>
+        <i data-day="21"></i>
+        </div>
+        <div class="program-weeks" id="programWeeks">
+        <article class="week-card" data-week="1">
+          <header class="week-head">
+            <span class="week-tag">שבוע 1׳ מתוך 3</span>
+            <h3>שבוע ראשון — מודעות והיכרות עם המערכת</h3>
+          </header>
+          <div class="week-desc"><p>השבוע הראשון הוא הבסיס של הכל.</p><p>לפני שנשנה הרגלים, אמונות או דפוסים — כדאי להבין מה קורה בגוף. נראה כי חלק ניכר מהמנגנונים של מערכת העצבים התפתחו לאורך האבולוציה כדי לשמור עלינו בחיים — לא בהכרח כדי לגרום לנו להיות מאושרים.</p><p>השבוע נכיר את מערכת העצבים: את מצב ההשרדות ואת מצב היצירה, את ההורמונים שמשפיעים עלינו, את הדפוס האישי תחת לחץ, ונלמד כלי ויסות ראשון. זו המפה שממנה ייגזר כל שינוי בהמשך.</p></div>
+          <ol class="day-list">
+            <li class="day-item">
+              <span class="day-no">1</span>
+              <div class="day-body"><h4>להכיר את המערכת — ולדעת להרגיע אותה</h4><p>נראה כי המוח לא "עוצב" בראש ובראשונה לאושר, אלא לשרוד.</p></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">2</span>
+              <div class="day-body"><h4>מודל א.פ.ר.ת — מה באמת קורה בינינו לבין התגובה</h4><p>רובנו חיים בתחושה שאירועים "גורמים" לנו רגשות: הבוס אמר משהו — נעלבתי. נתקעתי בפקק — התעצבנתי.</p></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">3</span>
+              <div class="day-body"><h4>גלי המוח</h4><p>בכל רגע נתון המוח מייצר פעילות חשמלית קטנה שאפשר למדוד (במכשיר שנקרא EEG). הפעילות מופיעה ב"גלים" בתדרים שונים.</p></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">4</span>
+              <div class="day-body"><h4>ההורמונים שמנהלים אותנו</h4><p>מאחורי כל מחשבה, תחושה ותגובה עומדת גם כימיה. הורמונים ומוליכים עצביים הם מעין "שליחים" כימיים שמעבירים מסרים בגוף ובמוח,</p></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">5</span>
+              <div class="day-body"><h4>עיצוב סביבה</h4><p>כמעט כל מיומנות שיש לנו עברה דרך דומה. נהיגה, קריאה, קשירת שרוכים — כולן התחילו כמאמץ מודע ומאומץ, והפכו עם הזמן לאוטומטיות. תהליך דומה,</p></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">6</span>
+              <div class="day-body"><h4>ביולוגיה, לא כישלון — וסיכום שבוע ראשון</h4><p>לפני שנסכם את השבוע, נאמר משהו חשוב: אם במהלך הימים האלה חזרת לדפוס ישן, דילגת על תרגול, או חשבת "מה הטעם" — זה לא כישלון.</p></div>
+            </li>
+            <li class="day-item day-rest">
+              <span class="day-no">7</span>
+              <div class="day-body"><h4>יום מנוחה</h4><p>עצירה. בלי תוכן, בלי משימה — רק לתת לגוף להטמיע.</p></div>
+            </li>
+          </ol>
+        </article>
+        <article class="week-card" data-week="2">
+          <header class="week-head">
+            <span class="week-tag">שבוע 2׳ מתוך 3</span>
+            <h3>שבוע שני — שינוי המערכת</h3>
+          </header>
+          <div class="week-desc"><p>שבוע ראשון עסק בזיהוי. שבוע שני עוסק בשינוי.</p><p>המוח נחשב "פלסטי" — כלומר בעל יכולת להשתנות. מחקרים מצביעים על כך שדפוסים שנבנו בחזרתיות יכולים, ככל הנראה, גם להשתנות בחזרתיות.</p><p>השבוע נבין איך אמונות וסביבה עשויות להשפיע על הביולוגיה, מה תפקיד הדופמין בהשתוקקות ובהרגלים, למה כל כך קשה להשתנות — ואיך בכל זאת אפשר.</p></div>
+          <ol class="day-list">
+            <li class="day-item">
+              <span class="day-no">8</span>
+              <div class="day-body"><h4>נוירופלסטיות — והמוח שלא תמיד מבדיל בין מציאות לדמיון</h4><p>שבוע שני עוסק בשינוי. וכדי לשנות, כדאי להבין קודם שהמוח בכלל מסוגל להשתנות — ואיך.</p></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">9</span>
+              <div class="day-body"><h4>מעגל הזהות "I am" — והגנים שלנו הם לא גזר דין</h4><p>אתמול ראינו שהמוח בונה את מה שחוזר. היום נשאל: מי מחליט מה יחזור? התשובה קשורה עמוק לתפיסה של "מי אני".</p></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">10</span>
+              <div class="day-body"><h4>ממודע לתת-מודע — מי באמת מנהל את היום שלנו</h4><p>נעים לחשוב שאנחנו מחליטים במודע על כל מה שאנחנו עושים. אבל חלק גדול מהחיים שלנו רץ על "טייס אוטומטי" — מתחת לרדאר של המודעות.</p></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">11</span>
+              <div class="day-body"><h4>הסיוט והחלום</h4><p>היום נעשה תרגיל שיכול להישמע דרמטי, אבל יש מאחוריו היגיון פסיכולוגי מבוסס. נכתוב שני תרחישים — ובמלוא הפירוט.</p></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">12</span>
+              <div class="day-body"><h4>מדיטציה</h4><p>היום נעמיק בתרגול שמאחד הרבה ממה שלמדנו עד כה: מדיטציה. לא כרעיון מופשט, אלא כאימון מעשי של הקשב ושל היחס שלנו לרגעים שעולים בפנים.</p></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">13</span>
+              <div class="day-body"><h4>סיכום שבוע שני</h4><p>שבוע שני הסתיים.</p></div>
+            </li>
+            <li class="day-item day-rest">
+              <span class="day-no">14</span>
+              <div class="day-body"><h4>יום מנוחה</h4><p>עצירה. בלי תוכן, בלי משימה — רק לתת לגוף להטמיע.</p></div>
+            </li>
+          </ol>
+        </article>
+        <article class="week-card" data-week="3">
+          <header class="week-head">
+            <span class="week-tag">שבוע 3׳ מתוך 3</span>
+            <h3>שבוע שלישי — תרגול והטמעה</h3>
+          </header>
+          <div class="week-desc"><p>שבוע שלישי הוא יישום.</p><p>עד עכשיו הבנו את הביולוגיה והתחלנו לשנות. עכשיו נעמיק בתרגול — דמיון מודרך, מדיטציה, עבודת זהות, חשיפה הדרגתית וכלים גופניים.</p><p>בסוף השבוע תצא/י עם תכנית 90 יום ברורה — לא מטרות מתוך פחד, אלא כיוון מתוך מצב יצירה.</p></div>
+          <ol class="day-list">
+            <li class="day-item">
+              <span class="day-no">15</span>
+              <div class="day-body"><h4>4 דפוסי ההישרדות שלך</h4><p>כשמערכת העצבים מרגישה מאוימת, היא נוטה להגיב באופן אוטומטי — עוד לפני שהמחשבה מספיקה להתערב. מקובל לדבר על ארבעה דפוסי הישרדות,</p></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">16</span>
+              <div class="day-body"><h4>הסביבה החברתית שלך — מי מזין את מי</h4><p>עד עכשיו הסתכלנו פנימה — על הדפוסים, המחשבות והגוף שלך. היום נסתכל החוצה,</p></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">17</span>
+              <div class="day-body"><h4>דופמין — כימיה של הרצון</h4><p>הדופמין הוא מוליך עצבי (חומר שמעביר מסרים בין תאי עצב) שקשור קשר הדוק לרצון, למוטיבציה ולתחושת כיוון.</p></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">18</span>
+              <div class="day-body"><h4>עימות עם פחד אחד</h4><p>הימנעות מפחד נראית, בטווח הקצר, כמו הקלה — אבל ככל הנראה היא לא מחלישה את הפחד אלא דווקא משמרת ומחזקת אותו לאורך זמן.</p></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">19</span>
+              <div class="day-body"><h4>חמלה עצמית אחרי נפילה</h4><p>אנחנו כבר עמוק במסלול, וכמעט בטוח שכבר קרתה "נפילה" — יום שדילגת עליו, רגע שחזרת לדפוס ישן, פעם שהבטחת לעצמך ולא עמדת בזה.</p></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">20</span>
+              <div class="day-body"><h4>תכנון 90 יום — המדע של מטרות שמחזיקות</h4><p>21 יום בנו בסיס — אבל הטמעה עמוקה של שינוי לוקחת, ברוב המקרים, הרבה יותר מזה. מחקר מוכר מצא שזמן היווצרות הרגל נע בממוצע סביב חודשיים,</p></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">21</span>
+              <div class="day-body"><h4>21 יום — מבט אחורה, ומכאן קדימה</h4><p>הגעת ליום 21.</p></div>
+            </li>
+          </ol>
+        </article>
+        </div>
+      </div>
+
+      <!-- טעימה חיה: כפתור ההרגעה הפנימי מיום 1 -->
+      <div class="breath" id="breath">
+        <div class="breath-stage" aria-hidden="true">
+          <div class="breath-ring"></div>
+          <div class="breath-circle" id="breathCircle"><span id="breathPhase">נשימה אחת רגע</span></div>
+        </div>
+        <div class="breath-info">
+          <p class="label label-sky">טעימה מתוך יום 1</p>
+          <h3>"כפתור ההרגעה הפנימי" — אנחה כפולה</h3>
+          <ol class="breath-steps">
+            <li>שאיפה עמוקה דרך האף.</li>
+            <li>מיד אחריה, שאיפה קצרה נוספת דרך האף ("למלא עד הסוף").</li>
+            <li>נשיפה ארוכה ואיטית דרך הפה, עד שהאוויר יוצא כמעט לגמרי.</li>
+          </ol>
+          <p class="breath-note">
+            לרגיעה מהירה אפשר לעשות 1–3 סבבים; במחקר עצמו נבדק דווקא תרגול יומי של כ-5 דקות
+            (Balban ואחרים, 2023).
+          </p>
+          <div class="breath-actions">
+            <button class="btn btn-primary" id="breathStart" type="button">נסו רגע אחד מהמסלול</button>
+            <span class="breath-counter" id="breathCounter" aria-live="polite"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="program-cta reveal">
+        <a class="btn btn-primary" href="https://shift-21-day-course-ceos.web.app" target="_blank" rel="noopener">להצטרפות למסלול</a>
+        <a class="btn btn-ghost" href="#contact">דברו איתנו קודם</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- אירועים -->
+  <section class="events section-dark" id="events">
+    <span class="sec-num" aria-hidden="true">06</span>
+    <div class="events-bg" aria-hidden="true"></div>
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="label label-sky">אירועים</p>
+        <h2>המפגשים החיים</h2>
+        <p class="section-intro">
+          יש דברים שקורים רק כשנמצאים יחד בחדר אחד — הגוף נרגע אחרת, הלמידה מעמיקה אחרת.
+          שלושה פורמטים, עומק אחד.
+        </p>
+        <!-- TODO: תוכן מ-OC — משפט פתיחה מדויק לאירועים -->
+      </div>
+      <div class="event-cards">
+        <article class="event-card">
+          <figure class="event-media">
+            <img src="assets/img/story.jpg" alt="שקיעה כחולה מול ים שקט" loading="lazy">
+            <!-- TODO: תוכן מ-OC — תמונה אמיתית מריטריט -->
+          </figure>
+          <div class="event-body">
+            <span class="event-kicker">לילה אחד או יותר</span>
+            <h3>ריטריטים</h3>
+            <p>יציאה מהשגרה אל מרחב שקט — תרגול, לימוד ומנוחה עמוקה, בקבוצה קטנה.</p>
+            <!-- TODO: תוכן מ-OC — תיאור, מיקום, תאריכים, מחיר -->
+            <a class="event-link" href="#contact">דברו איתנו ←</a>
+          </div>
+        </article>
+        <article class="event-card">
+          <figure class="event-media">
+            <img src="assets/img/world-body.jpg" alt="דמות במדיטציה מול מים" loading="lazy">
+            <!-- TODO: תוכן מ-OC — תמונה אמיתית מסדנה -->
+          </figure>
+          <div class="event-body">
+            <span class="event-kicker">חצי יום</span>
+            <h3>סדנאות</h3>
+            <p>מפגש ממוקד של כמה שעות — נושא אחד מהשיטה, תרגול חי וכלים שנשארים איתכם.</p>
+            <!-- TODO: תוכן מ-OC — נושאים, תאריכים, מחיר -->
+            <a class="event-link" href="#contact">דברו איתנו ←</a>
+          </div>
+        </article>
+        <article class="event-card">
+          <figure class="event-media">
+            <img src="assets/img/hero-bg-a.jpg" alt="אופק מואר בזריחה" loading="lazy">
+            <!-- TODO: תוכן מ-OC — תמונה אמיתית מאירוע -->
+          </figure>
+          <div class="event-body">
+            <span class="event-kicker">יום שלם</span>
+            <h3>אירועי עומק</h3>
+            <p>יום מלא בתוך התהליך — מהבוקר עד הערב: גוף, מוח ותודעה, ברצף אחד שלם.</p>
+            <!-- TODO: תוכן מ-OC — מבנה היום, תאריכים, מחיר -->
+            <a class="event-link" href="#contact">דברו איתנו ←</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
   <!-- הסיפור שלנו -->
   <section class="story section-light" id="story">
+    <span class="sec-num" aria-hidden="true">07</span>
     <div class="container story-grid">
       <figure class="story-media reveal">
         <img src="assets/img/story.jpg" alt="דמות מביטה אל אופק מואר לפני זריחה" loading="lazy">
@@ -298,11 +545,13 @@
 
   <!-- המסלול -->
   <section class="path section-light" id="path">
+    <span class="sec-num" aria-hidden="true">04</span>
     <div class="container">
       <div class="section-head reveal">
         <p class="label">המסלול</p>
         <h2>איך עושים SHIFT</h2>
       </div>
+      <div class="steps-wrap">
       <div class="path-track" aria-hidden="true"><span class="path-line" id="pathLine"></span></div>
       <ol class="steps">
         <li class="step reveal">
@@ -356,7 +605,8 @@
         <a href="#method">השיטה</a>
         <a href="#habits">הרגלים</a>
         <a href="#story">הסיפור שלנו</a>
-        <a href="#path">המסלול</a>
+        <a href="#program">המסלול</a>
+        <a href="#events">אירועים</a>
         <a href="#contact">צרו קשר</a>
         <a href="https://www.instagram.com/shift_ecosystem/" target="_blank" rel="noopener">אינסטגרם</a>
       </nav>

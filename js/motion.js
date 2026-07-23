@@ -594,7 +594,7 @@
     var nav = document.getElementById('dotNav');
     if (!nav) return;
     var dots = nav.querySelectorAll('a');
-    var LIGHT = { '#method': 1, '#story': 1, '#outcomes': 1, '#path': 1 };
+    var LIGHT = { '#method': 1, '#story': 1 };
     dots.forEach(function (dot) {
       var hash = dot.getAttribute('href');
       var target = document.querySelector(hash);
