@@ -920,3 +920,56 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
 @media (hover: none), (max-width: 899px) { .cursor-dot { display: none; } }
 @media (prefers-reduced-motion: reduce) { .cursor-dot { display: none; } }
 
+
+/* ============================================================
+   שכבת האקוסיסטם — סקשנים חדשים (איזאנמי/אלת'יה DNA)
+   ============================================================ */
+
+/* מספור סקשנים בפינה + קו שיער עליון — חתימה עריכתית */
+.sec-num {
+  position: absolute;
+  top: 34px;
+  inset-inline-start: max(24px, calc((100% - var(--container)) / 2));
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--white-faint);
+  direction: ltr;
+  pointer-events: none;
+}
+.section-light .sec-num, .section-paper .sec-num { color: var(--ink-faint); }
+section:has(> .sec-num) { position: relative; }
+
+/* ---------- מה אנחנו עושים: סל המוצרים ---------- */
+.basket { padding: clamp(90px, 13vw, 150px) 0; }
+.basket-cards { margin-top: 8px; }
+.basket-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  padding-top: 40px;
+}
+.basket-card-num {
+  position: absolute;
+  top: 22px;
+  inset-inline-end: 24px;
+  font-size: 2.4rem;
+  font-weight: 200;
+  color: rgba(255, 255, 255, 0.14);
+  line-height: 1;
+}
+.basket-card h3 { color: var(--sky); margin-bottom: 12px; font-size: 1.35rem; }
+.basket-card p { color: var(--white-soft); font-size: 1rem; flex: 1; }
+.basket-card-link {
+  margin-top: 22px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--sky);
+  border-bottom: 1px solid rgba(92, 187, 240, 0.35);
+  padding-bottom: 3px;
+  transition: border-color 0.3s ease;
+}
+.basket-card:hover .basket-card-link { border-color: var(--sky); }
