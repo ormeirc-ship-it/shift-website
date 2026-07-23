@@ -28,6 +28,7 @@
 
   <!-- מסך פתיחה -->
   <div class="preloader" id="preloader" aria-hidden="true">
+    <p class="preloader-line" id="preloaderLine">מהישרדות ליצירה</p>
     <img src="assets/brand/logo-white.png" alt="">
   </div>
 
@@ -45,7 +46,8 @@
       </nav>
       <a href="#contact" class="btn btn-primary btn-nav">בואו נדבר</a>
       <button class="nav-burger" id="navBurger" aria-label="פתיחת תפריט" aria-expanded="false" aria-controls="mobileMenu">
-        <span></span><span></span>
+        <span class="nav-burger-word">תפריט</span>
+        <span class="nav-burger-lines"><span></span><span></span></span>
       </button>
     </div>
   </header>
@@ -96,7 +98,7 @@
         <a href="#method" class="btn btn-ghost">איך זה עובד</a>
       </div>
     </div>
-    <div class="hero-scroll" aria-hidden="true"><span></span></div>
+    <div class="hero-scroll" aria-hidden="true"><span></span><em>גללו לגלות</em></div>
   </section>
 
   <!-- הצהרה -->
@@ -254,6 +256,7 @@
   <!-- המסלול: 21 הימים -->
   <section class="program section-dark" id="program">
     <span class="sec-num" aria-hidden="true">05</span>
+    <span class="side-label" aria-hidden="true">המסלול</span>
     <div class="container">
       <div class="section-head reveal">
         <p class="label label-sky">המוצר הדיגיטלי</p>
@@ -264,6 +267,11 @@
         </p>
       </div>
 
+      <div class="program-chips" aria-hidden="true">
+        <span class="prog-chip float-slow">יום 8 · נוירופלסטיות</span>
+        <span class="prog-chip float-slow">יום 12 · מדיטציה</span>
+        <span class="prog-chip float-slow">יום 17 · דופמין — כימיה של הרצון</span>
+      </div>
       <div class="program-layout">
         <div class="program-spine" aria-hidden="true">
           <span class="program-spine-track"><span class="program-spine-fill" id="spineFill"></span></span>
@@ -439,6 +447,10 @@
   <!-- אירועים -->
   <section class="events section-dark" id="events">
     <span class="sec-num" aria-hidden="true">06</span>
+    <span class="side-label" aria-hidden="true">אירועים</span>
+    <video class="events-video" id="eventsVideo" muted loop playsinline preload="none"
+           data-src="assets/video/events-loop.mp4" aria-hidden="true"></video>
+    <!-- TODO: תוכן מ-OC — סרטון לופ אמיתי מאירועים (כרגע: סרטון תדמית קיים) -->
     <div class="events-bg" aria-hidden="true"></div>
     <div class="container">
       <div class="section-head reveal">

@@ -210,7 +210,16 @@
   } else {
     document.body.style.overflow = 'hidden';
     var plLogo = preloader.querySelector('img');
+    var plLine = document.getElementById('preloaderLine');
     var heroIntro = buildHeroIntro();
+
+    // המשפט מופיע מילה-מילה, הלוגו נבנה, והמסך נפתח אל ההירו
+    var plWords = [];
+    if (plLine) {
+      splitWords(plLine);
+      plWords = plLine.querySelectorAll('.w');
+      gsap.set(plLine, { opacity: 1 });
+    }
 
     var tl = gsap.timeline({
       onComplete: function () {
@@ -222,12 +231,16 @@
         });
       }
     });
+    if (plWords.length) {
+      tl.from(plWords, { autoAlpha: 0, y: 22, duration: 0.7, stagger: 0.22 }, 0);
+    }
     tl.fromTo(plLogo,
       { opacity: 0, scale: 0.94, filter: 'blur(6px)' },
-      { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 0.6 });
+      { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 0.6 }, plWords.length ? 0.85 : 0);
     tl.to(plLogo, { scale: 1.02, duration: 0.35, ease: 'power1.inOut' });
-    tl.to(plLogo, { y: -60, opacity: 0, duration: 0.7, ease: 'power3.inOut' }, 'open');
-    tl.to(preloader, { yPercent: -100, duration: 0.9, ease: 'power3.inOut' }, 'open+=0.1');
+    tl.to(plLine, { autoAlpha: 0, y: -30, duration: 0.5, ease: 'power2.in' }, 'open');
+    tl.to(plLogo, { y: -60, opacity: 0, duration: 0.7, ease: 'power3.inOut' }, 'open+=0.05');
+    tl.to(preloader, { yPercent: -100, duration: 0.9, ease: 'power3.inOut' }, 'open+=0.15');
   }
   setTimeout(finishReveal, 4000);
 
@@ -280,11 +293,11 @@
         if (mouse.active) {
           var mdx = a.x - mouse.x, mdy = a.y - mouse.y;
           var md2 = mdx * mdx + mdy * mdy;
-          if (md2 < 16900 && md2 > 1) {
+          if (md2 < 36100 && md2 > 400) {
             var md = Math.sqrt(md2);
-            var f = (130 - md) / 130 * 0.06;
-            a.vx += (mdx / md) * f;
-            a.vy += (mdy / md) * f;
+            var f = (190 - md) / 190 * 0.028;
+            a.vx -= (mdx / md) * f; // משיכה עדינה אל הסמן
+            a.vy -= (mdy / md) * f;
           }
         }
         // ריסון כדי שהשדה יישאר רגוע
@@ -384,10 +397,25 @@
     });
   })();
 
-  /* ---------- כניסות כלליות: כותרות סקשן ---------- */
+  /* ---------- כניסות כלליות: כותרת במסכה, השאר בפייד ---------- */
   gsap.utils.toArray('.section-head').forEach(function (head) {
-    gsap.from(head.children, {
-      autoAlpha: 0, y: 30, duration: 0.9, stagger: 0.12, clearProps: CLEAR,
+    var h2 = head.querySelector('h2');
+    if (h2 && !h2.querySelector('.mask-reveal')) {
+      var outer = document.createElement('span');
+      outer.className = 'mask-reveal';
+      var inner = document.createElement('span');
+      inner.innerHTML = h2.innerHTML;
+      outer.appendChild(inner);
+      h2.innerHTML = '';
+      h2.appendChild(outer);
+      gsap.from(inner, {
+        yPercent: 115, duration: 1.05, ease: 'power3.out',
+        scrollTrigger: { trigger: head, start: 'top 80%' }
+      });
+    }
+    var rest = Array.prototype.filter.call(head.children, function (c) { return c !== h2; });
+    gsap.from(rest, {
+      autoAlpha: 0, y: 26, duration: 0.9, stagger: 0.12, clearProps: CLEAR,
       scrollTrigger: { trigger: head, start: 'top 78%' }
     });
   });
@@ -485,10 +513,12 @@
     }
   });
 
-  /* ---------- הרגלים: קלפים בהדרגה ---------- */
-  gsap.from('.cards-3 .card', {
-    autoAlpha: 0, y: 44, duration: 0.9, stagger: 0.13, clearProps: CLEAR,
-    scrollTrigger: { trigger: '.cards-3', start: 'top 80%' }
+  /* ---------- רשתות קלפים (סל המוצרים + הרגלים) ---------- */
+  gsap.utils.toArray('.cards-3').forEach(function (grid) {
+    gsap.from(grid.children, {
+      autoAlpha: 0, y: 44, duration: 0.9, stagger: 0.13, clearProps: CLEAR,
+      scrollTrigger: { trigger: grid, start: 'top 80%' }
+    });
   });
 
   /* ---------- הסיפור: פרלקסה + הציטוט אחרון ---------- */
@@ -581,6 +611,106 @@
       scrollTrigger: { trigger: cta, start: 'top 70%' }
     });
   })();
+
+
+  /* ---------- המסלול: ציר, נקודות, רקע כהה→בהיר, ערימת שבועות ---------- */
+  (function initProgram() {
+    var prog = document.querySelector('.program');
+    if (!prog) return;
+    var fill = document.getElementById('spineFill');
+    var dots = prog.querySelectorAll('.program-spine i');
+    var weeksWrap = document.getElementById('programWeeks');
+
+    if (weeksWrap && (fill || dots.length)) {
+      ScrollTrigger.create({
+        trigger: weeksWrap, start: 'top 70%', end: 'bottom 45%', scrub: 0.4,
+        onUpdate: function (self) {
+          if (fill) fill.style.height = (self.progress * 100).toFixed(1) + '%';
+          var n = Math.round(self.progress * 21);
+          dots.forEach(function (d, i) { d.classList.toggle('on', i < n); });
+        }
+      });
+    }
+
+    // הרקע נוסע מהישרדות (כהה) ליצירה (בהיר) לאורך הסקשן
+    gsap.fromTo(prog, { backgroundColor: '#121234' }, {
+      backgroundColor: '#F6F5F2', ease: 'none',
+      scrollTrigger: { trigger: prog, start: 'top 30%', end: 'bottom 110%', scrub: true }
+    });
+    ScrollTrigger.create({
+      trigger: prog, start: '52% center', end: 'bottom -10%',
+      onToggle: function (self) { prog.classList.toggle('lit', self.isActive); }
+    });
+
+    // דסקטופ: שבוע חדש שנערם מעמעם את הקודם מאחור
+    if (DESKTOP.matches) {
+      var cards = gsap.utils.toArray('.week-card');
+      cards.forEach(function (card, i) {
+        if (i === 0) return;
+        gsap.to(cards[i - 1], {
+          scale: 0.96, autoAlpha: 0.45, ease: 'none',
+          scrollTrigger: { trigger: card, start: 'top 85%', end: 'top ' + (72 + 30 + i * 16) + 'px', scrub: true }
+        });
+      });
+    }
+
+    // שורות הימים נחשפות בהדרגה
+    gsap.utils.toArray('.day-item').forEach(function (row) {
+      gsap.from(row, {
+        autoAlpha: 0, y: 18, duration: 0.6, clearProps: CLEAR,
+        scrollTrigger: { trigger: row, start: 'top 90%' }
+      });
+    });
+
+    // צ'יפים צפים
+    gsap.from('.prog-chip', {
+      autoAlpha: 0, y: 20, duration: 0.8, stagger: 0.2,
+      scrollTrigger: { trigger: prog, start: 'top 70%' }
+    });
+  })();
+
+  /* ---------- אירועים: וידאו-לופ (דסקטופ) + כניסות + פרלקסת תמונות ---------- */
+  (function initEvents() {
+    var section = document.querySelector('.events');
+    if (!section) return;
+    var video = document.getElementById('eventsVideo');
+    if (video && DESKTOP.matches) {
+      ScrollTrigger.create({
+        trigger: section, start: 'top 90%', once: true,
+        onEnter: function () {
+          video.src = video.dataset.src;
+          video.play().catch(function () {});
+        }
+      });
+      ScrollTrigger.create({
+        trigger: section, start: 'top bottom', end: 'bottom top',
+        onToggle: function (self) {
+          if (!video.src) return;
+          if (self.isActive && !document.hidden) video.play().catch(function () {});
+          else video.pause();
+        }
+      });
+    }
+    gsap.utils.toArray('.event-card').forEach(function (card, i) {
+      gsap.from(card, {
+        autoAlpha: 0, y: 54, duration: 1.0, clearProps: CLEAR,
+        scrollTrigger: { trigger: card, start: 'top 85%' }
+      });
+      var img = card.querySelector('.event-media img');
+      if (img) {
+        gsap.fromTo(img, { yPercent: -7, scale: 1.15 }, {
+          yPercent: 7, scale: 1.15, ease: 'none',
+          scrollTrigger: { trigger: card, start: 'top bottom', end: 'bottom top', scrub: true }
+        });
+      }
+    });
+  })();
+
+  /* ---------- פרלקסה לכדור הצף של העולמות ---------- */
+  gsap.to('.worlds-sphere', {
+    yPercent: -22, ease: 'none',
+    scrollTrigger: { trigger: '.worlds', start: 'top bottom', end: 'bottom top', scrub: true }
+  });
 
   /* ---------- פס התקדמות עליון ---------- */
   gsap.set('#scrollProgress', { scaleX: 0 });

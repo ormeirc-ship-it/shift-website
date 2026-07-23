@@ -1198,3 +1198,213 @@ section:has(> .sec-num) { position: relative; }
   .event-media { min-height: 190px; }
   .event-body { padding: 22px; padding-top: 0; }
 }
+
+/* ============================================================
+   שכבת התנועה של האקוסיסטם (איזאנמי/אלת'יה)
+   ============================================================ */
+
+/* ---------- לודר פיוטי ---------- */
+.preloader { flex-direction: column; gap: 26px; }
+.preloader-line {
+  font-size: clamp(1.3rem, 3.4vw, 2rem);
+  font-weight: 200;
+  letter-spacing: 0.06em;
+  color: var(--white-soft);
+  opacity: 0;
+}
+.preloader-line .w { display: inline-block; }
+
+/* ---------- רמז גלילה ---------- */
+.hero-scroll { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.hero-scroll em {
+  font-style: normal;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  color: var(--white-faint);
+  animation: hintBlink 2.6s ease-in-out infinite;
+}
+@keyframes hintBlink { 0%,100% { opacity: 0.35; } 50% { opacity: 0.9; } }
+
+/* ---------- חשיפת כותרות במסכה ---------- */
+.mask-reveal { display: inline-block; overflow: hidden; vertical-align: bottom; }
+.mask-reveal > span { display: inline-block; will-change: transform; }
+
+/* ---------- תווית צד אנכית ---------- */
+.side-label {
+  position: absolute;
+  top: 50%;
+  inset-inline-end: 22px;
+  transform: translateY(-50%) rotate(90deg);
+  transform-origin: center;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.34em;
+  color: var(--white-faint);
+  pointer-events: none;
+  white-space: nowrap;
+}
+@media (max-width: 899px) { .side-label { display: none; } }
+
+/* ---------- איך עושים SHIFT: רשימה ממוספרת (אלת'יה) ---------- */
+.steps { display: block; counter-reset: none; border-top: 1px solid var(--line); }
+.step {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: clamp(16px, 3vw, 40px);
+  align-items: baseline;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  padding: clamp(24px, 4vw, 40px) 0;
+}
+.step:hover { transform: none; box-shadow: none; }
+.step-num {
+  width: auto;
+  height: auto;
+  background: none;
+  border-radius: 0;
+  color: var(--ink-faint);
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 200;
+  direction: ltr;
+  justify-content: flex-start;
+  margin-bottom: 0;
+  transition: color 0.5s ease, text-shadow 0.5s ease;
+}
+.step.lit .step-num {
+  background: none;
+  color: var(--sky);
+  box-shadow: none;
+  text-shadow: 0 0 22px rgba(92, 187, 240, 0.55);
+}
+.step h3 { display: inline; margin-inline-end: 14px; }
+.step p { display: inline; color: var(--ink-soft); font-size: 1.02rem; }
+.path-track { display: none; } /* הקו הישן — הוחלף בשפת הרשימה */
+
+/* ---------- קלפי השבועות נערמים (אלת'יה) ---------- */
+@media (min-width: 900px) {
+  .week-card {
+    position: sticky;
+    top: calc(var(--nav-h) + 28px);
+  }
+  .week-card[data-week="2"] { top: calc(var(--nav-h) + 44px); }
+  .week-card[data-week="3"] { top: calc(var(--nav-h) + 60px); }
+  .week-card { will-change: transform, filter; }
+}
+
+/* ---------- מעבר רקע כהה→בהיר במסלול ---------- */
+.program .section-head h2, .program .week-head h3 { transition: color 0.5s ease; }
+.program.lit { color: var(--ink); }
+.program.lit .section-head h2, .program.lit .week-head h3,
+.program.lit .day-body h4, .program.lit .breath-info h3 { color: var(--ink); }
+.program.lit .section-intro, .program.lit .week-desc p, .program.lit .breath-steps { color: var(--ink-soft); }
+.program.lit .day-body p, .program.lit .breath-note { color: var(--ink-faint); }
+.program.lit .week-card,
+.program.lit .breath {
+  background: rgba(24, 22, 59, 0.04);
+  border-color: var(--line);
+}
+.program.lit .day-list { border-top-color: var(--line); }
+.program.lit .day-item { border-bottom-color: var(--line); }
+.program.lit .sec-num, .program.lit .side-label { color: var(--ink-faint); }
+.program.lit .program-spine-track { background: rgba(24, 22, 59, 0.15); }
+.program.lit .program-spine i { background: var(--paper); border-color: rgba(24, 22, 59, 0.3); }
+.program.lit .program-spine i.on { background: var(--sky); border-color: var(--sky); }
+.program.lit .breath-circle { color: var(--navy-deep); }
+.program.lit .btn-ghost { color: var(--navy); border-color: rgba(24, 22, 59, 0.35); }
+.program.lit .btn-ghost:hover { border-color: var(--navy); background: rgba(24, 22, 59, 0.05); }
+
+/* ---------- צ'יפים צפים ---------- */
+.program-chips {
+  position: absolute;
+  inset: 120px 0 auto 0;
+  height: 0;
+  pointer-events: none;
+}
+.prog-chip {
+  position: absolute;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(92, 187, 240, 0.35);
+  color: var(--sky);
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.prog-chip:nth-child(1) { inset-inline-start: 4%; top: 30px; animation-delay: -3s; }
+.prog-chip:nth-child(2) { inset-inline-end: 6%; top: -10px; animation-delay: -8s; }
+.prog-chip:nth-child(3) { inset-inline-end: 18%; top: 90px; animation-delay: -11s; }
+.program.lit .prog-chip { background: rgba(24, 22, 59, 0.05); }
+@media (max-width: 899px) { .program-chips { display: none; } }
+
+/* ---------- וידאו האירועים ---------- */
+.events-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.22;
+  filter: saturate(0.7);
+}
+.events::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(18, 18, 52, 0.75), rgba(18, 18, 52, 0.55) 50%, rgba(18, 18, 52, 0.8));
+  z-index: 0;
+}
+.events .events-bg, .events .container { z-index: 1; }
+@media (max-width: 899px) { .events-video { display: none; } }
+
+/* ---------- תפריט מסך מלא (איזאנמי) ---------- */
+.nav-links, .nav .btn-nav { display: none; }
+.nav-burger {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  width: auto;
+  height: 44px;
+  margin-inline-start: auto;
+  cursor: pointer;
+}
+.nav-burger-word {
+  color: var(--white-soft);
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+}
+.nav-burger-lines { display: flex; flex-direction: column; gap: 7px; }
+.nav-burger-lines span {
+  display: block;
+  width: 26px;
+  height: 2px;
+  background: #fff;
+  border-radius: 2px;
+  transition: transform 0.3s ease;
+}
+.nav-burger[aria-expanded="true"] .nav-burger-lines span:first-child { transform: translateY(4.5px) rotate(45deg); }
+.nav-burger[aria-expanded="true"] .nav-burger-lines span:last-child { transform: translateY(-4.5px) rotate(-45deg); }
+.mobile-menu nav { gap: clamp(18px, 3.5vh, 34px); }
+.mobile-menu a {
+  font-size: clamp(2rem, 6vw, 3.4rem);
+  font-weight: 200;
+  letter-spacing: 0.01em;
+}
+.mobile-menu a.btn { font-size: 1.15rem; font-weight: 600; }
+
+/* ---------- reduced motion לשכבה החדשה ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .hero-scroll em { animation: none; }
+  .prog-chip { animation: none !important; }
+  .week-card { position: static !important; }
+  .events-video { display: none; }
+}
+
+/* המסלול: רקע אחיד שמאפשר את מעבר הצבע כהה→בהיר (בלי גרדיאנט הסקשן) */
+.program.section-dark { background-image: none; background-color: var(--navy-deep); }

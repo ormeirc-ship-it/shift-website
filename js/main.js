@@ -78,6 +78,14 @@ const setMenu = (open) => {
   menu.classList.toggle('open', open);
   burger.setAttribute('aria-expanded', String(open));
   document.body.style.overflow = open ? 'hidden' : '';
+  // פריטי הענק נכנסים בהדרגה (איזאנמי)
+  if (open && typeof gsap !== 'undefined' &&
+      !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    gsap.fromTo(menu.querySelectorAll('a'),
+      { autoAlpha: 0, y: 34 },
+      { autoAlpha: 1, y: 0, duration: 0.7, stagger: 0.07,
+        ease: 'power3.out', clearProps: 'transform,opacity,visibility', delay: 0.08 });
+  }
 };
 
 burger.addEventListener('click', () => {
@@ -87,3 +95,61 @@ burger.addEventListener('click', () => {
 menu.querySelectorAll('a').forEach((link) => {
   link.addEventListener('click', () => setMenu(false));
 });
+
+
+// ============================================================
+// טעימה מהמסלול: "כפתור ההרגעה הפנימי" — אנחה כפולה (יום 1)
+// שאיפה עמוקה מהאף → שאיפה קצרה נוספת → נשיפה ארוכה מהפה.
+// 1–3 סבבים לרגיעה מהירה (Balban ואחרים, 2023).
+// ============================================================
+(() => {
+  const btn = document.getElementById('breathStart');
+  const circle = document.getElementById('breathCircle');
+  const phase = document.getElementById('breathPhase');
+  const counter = document.getElementById('breathCounter');
+  if (!btn || !circle || !phase) return;
+
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hasGsap = typeof gsap !== 'undefined';
+  const TOTAL = 3;
+  let running = false;
+
+  const setPhase = (t) => { phase.textContent = t; };
+
+  const finish = () => {
+    setPhase('איך זה מרגיש עכשיו?');
+    counter.textContent = 'סיימתם ' + TOTAL + ' סבבים';
+    btn.disabled = false;
+    btn.textContent = 'עוד סיבוב';
+    running = false;
+  };
+
+  const runRound = (round) => {
+    counter.textContent = 'סבב ' + round + ' מתוך ' + TOTAL;
+    const next = () => (round < TOTAL ? runRound(round + 1) : finish());
+
+    if (hasGsap && !reduced) {
+      const tl = gsap.timeline({ onComplete: next });
+      tl.call(() => setPhase('שאיפה עמוקה מהאף'));
+      tl.to(circle, { scale: 1.3, duration: 1.9, ease: 'power2.inOut' });
+      tl.call(() => setPhase('ועוד שאיפה קצרה — למלא עד הסוף'));
+      tl.to(circle, { scale: 1.5, duration: 1.0, ease: 'power2.out' });
+      tl.call(() => setPhase('נשיפה ארוכה ואיטית מהפה…'));
+      tl.to(circle, { scale: 1, duration: 5.8, ease: 'power2.inOut' });
+    } else {
+      // גרסה שקטה: הנחיות מתחלפות בלי אנימציה
+      setPhase('שאיפה עמוקה מהאף');
+      setTimeout(() => setPhase('ועוד שאיפה קצרה'), 1900);
+      setTimeout(() => setPhase('נשיפה ארוכה ואיטית מהפה…'), 2900);
+      setTimeout(next, 8700);
+    }
+  };
+
+  btn.addEventListener('click', () => {
+    if (running) return;
+    running = true;
+    btn.disabled = true;
+    btn.textContent = 'נושמים…';
+    runRound(1);
+  });
+})();
