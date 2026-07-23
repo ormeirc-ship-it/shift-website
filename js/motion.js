@@ -236,8 +236,6 @@
   /* ---------- הירו: שדה נוירונים חי + מגיב לעכבר ---------- */
   (function initNeurons() {
     if (!DESKTOP.matches) return;
-    // כשהמוח התלת-ממדי פעיל — הוא מחליף את שדה הנוירונים הדו-ממדי
-    if (window.SHIFT_BRAIN && window.SHIFT_BRAIN.ready) return;
     var canvas = document.getElementById('heroNeurons');
     var hero = document.querySelector('.hero');
     if (!canvas || !hero) return;
@@ -365,18 +363,6 @@
     scrollTrigger: { trigger: '.hero', start: '5% top', end: '20% top', scrub: true }
   });
 
-  /* ---------- הירו: הצלילה אל תוך המוח ----------
-     הגלילה מזיזה את המצלמה פנימה — נכנסים לתוך הרשת */
-  if (window.SHIFT_BRAIN && window.SHIFT_BRAIN.setDive) {
-    ScrollTrigger.create({
-      trigger: '.hero',
-      start: 'top top',
-      end: 'bottom top',
-      scrub: true,
-      onUpdate: function (self) { window.SHIFT_BRAIN.setDive(self.progress); },
-      onLeave: function () { window.SHIFT_BRAIN.setDive(0, true); }
-    });
-  }
 
   /* ---------- נקודת עכבר זוהרת ---------- */
   (function initCursor() {
@@ -458,7 +444,6 @@
         gsap.set(row, { autoAlpha: i === 0 ? 1 : 0 });
       });
 
-      var brain = window.SHIFT_BRAIN;
       var tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
@@ -467,21 +452,9 @@
           pin: true,
           scrub: 0.6,
           anticipatePin: 1,
-          refreshPriority: 1,
-          onEnter: function () { if (brain) brain.goTo('world1'); },
-          onEnterBack: function () { if (brain) brain.goTo('world3'); }
+          refreshPriority: 1
         }
       });
-      // המוח עובר אזור יחד עם הפאנלים — רק כשהסקשן באמת נעוץ על המסך,
-      // אחרת ה-scrub שמשלים תנועה אחרי קפיצה היה "חוטף" את המסע
-      if (brain) {
-        tl.call(function () {
-          if (tl.scrollTrigger.isActive) brain.goTo(tl.scrollTrigger.direction > 0 ? 'world2' : 'world1');
-        }, null, 0.5);
-        tl.call(function () {
-          if (tl.scrollTrigger.isActive) brain.goTo(tl.scrollTrigger.direction > 0 ? 'world3' : 'world2');
-        }, null, 1.5);
-      }
 
       function swap(from, to, pos) {
         var toImg = rows[to].querySelector('.world-media img');
@@ -511,48 +484,6 @@
       });
     }
   });
-
-  /* ---------- המסע במוח: תחנות לאורך הדף ---------- */
-  (function initBrainJourney() {
-    var brain = window.SHIFT_BRAIN;
-    if (!brain || !brain.ready) return;
-    // ההתגבשות מתוזמנת לפתיחת המסך
-    if (docEl.classList.contains('preloader-done')) brain.assemble();
-    else window.addEventListener('shift:reveal', function () { brain.assemble(); }, { once: true });
-    brain.goTo('hero');
-
-    var stops = [
-      ['.hero', 'hero'],
-      ['.statement', 'statement'],
-      ['.brainmap', 'brainmap'],
-      ['.habits', 'habits'],
-      ['.story', 'story'],
-      ['.outcomes', 'outcomes'],
-      ['.path', 'path'],
-      ['.cta', 'cta']
-    ];
-    stops.forEach(function (pair) {
-      var el = document.querySelector(pair[0]);
-      if (!el) return;
-      ScrollTrigger.create({
-        trigger: el,
-        start: 'top 55%',
-        end: 'bottom 45%',
-        onToggle: function (self) { if (self.isActive) brain.goTo(pair[1]); }
-      });
-    });
-
-    // מפת המוח: מצב מגע פעיל רק כשהסקשן על המסך
-    var mapSection = document.querySelector('.brainmap');
-    if (mapSection && brain.setInteractive) {
-      ScrollTrigger.create({
-        trigger: mapSection,
-        start: 'top 70%',
-        end: 'bottom 30%',
-        onToggle: function (self) { brain.setInteractive(self.isActive); }
-      });
-    }
-  })();
 
   /* ---------- הרגלים: קלפים בהדרגה ---------- */
   gsap.from('.cards-3 .card', {
