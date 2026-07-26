@@ -309,6 +309,45 @@
   }
   setTimeout(finishReveal, 4000);
 
+  /* ---------- המעבר מהישרדות ליצירה, כמערכת לאורך העמוד ----------
+     הפלטה והטיפוגרפיה נעולות, ולכן ההבחנה בין שני המצבים נישאת ע"י הקצב
+     והמרחב בלבד. שלושה פרמטרים נעים יחד לאורך הגלילה, מ-0 (הישרדות)
+     ל-1 (יצירה) — לא כאפקטים מקומיים אלא כמערכת אחת:
+
+       רוחב העמודה   צר ודחוס  →  נפתח
+       מרווח אנכי    מכווץ     →  נדיב
+       משך הכניסות   0.6ש'     →  1.2ש'
+
+     ה-JS רק מסמן לכל סקשן את מיקומו בסולם (--j). כל השאר CSS, כך שגם
+     בלי מנוע התנועה (ובמצב מופחת-תנועה) המרחב והקצב עדיין מספרים את הסיפור. */
+  var JOURNEY = ['.statement', '#products', '#method', '#habits', '#path',
+                 '#program', '#events', '#story', '#outcomes', '.closing'];
+  (function initJourney() {
+    var els = [];
+    JOURNEY.forEach(function (sel) {
+      var el = document.querySelector(sel);
+      if (el) els.push(el);
+    });
+    els.forEach(function (el, i) {
+      el.style.setProperty('--j', (els.length < 2 ? 1 : i / (els.length - 1)).toFixed(3));
+    });
+    docEl.classList.add('journey-on');
+  })();
+
+  // משך הכניסה של אלמנט לפי מיקומו במסע: 0.6ש' למעלה, 1.2ש' למטה
+  function jOf(el) {
+    var node = el;
+    while (node && node !== document.body) {
+      var v = node.style && node.style.getPropertyValue('--j');
+      if (v) return parseFloat(v) || 0;
+      node = node.parentElement;
+    }
+    return 0;
+  }
+  function jDur(el, min, max) {
+    return (min || 0.6) + ((max || 1.2) - (min || 0.6)) * jOf(el);
+  }
+
   if (!FULL) return; // מכאן והלאה — רק כשמנוע התנועה המלא פעיל
 
   /* ---------- במת הכיסוי: ההגעה נסוגה בזמן שההצהרה מחליקה מעליה ----------
@@ -361,13 +400,13 @@
       h2.innerHTML = '';
       h2.appendChild(outer);
       gsap.from(inner, {
-        yPercent: 115, duration: 1.05, ease: 'power3.out',
+        yPercent: 115, duration: jDur(head, 0.75, 1.25), ease: 'power3.out',
         scrollTrigger: { trigger: head, start: 'top 80%' }
       });
     }
     var rest = Array.prototype.filter.call(head.children, function (c) { return c !== h2; });
     gsap.from(rest, {
-      autoAlpha: 0, y: 26, duration: 0.9, stagger: 0.12, clearProps: CLEAR,
+      autoAlpha: 0, y: 26, duration: jDur(head), stagger: 0.12, clearProps: CLEAR,
       scrollTrigger: { trigger: head, start: 'top 78%' }
     });
   });
@@ -468,7 +507,7 @@
   /* ---------- רשתות קלפים (סל המוצרים + הרגלים) ---------- */
   gsap.utils.toArray('.cards-3').forEach(function (grid) {
     gsap.from(grid.children, {
-      autoAlpha: 0, y: 44, duration: 0.9, stagger: 0.13, clearProps: CLEAR,
+      autoAlpha: 0, y: 44, duration: jDur(grid), stagger: 0.13, clearProps: CLEAR,
       scrollTrigger: { trigger: grid, start: 'top 80%' }
     });
   });

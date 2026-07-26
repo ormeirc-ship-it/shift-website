@@ -1733,3 +1733,34 @@ html.dive-live .dive-still { display: none; }
 /* המספור בסקשן "איך עושים SHIFT" נשאר — שם הוא רצף אמיתי בן 4 שלבים
    ולא קישוט. עכשיו כשהמספור בפינות הוסר, הוא יכול להיות נוכח יותר. */
 .step-num { font-size: clamp(2.4rem, 5.5vw, 3.8rem); }
+
+/* ============================================================
+   שלב 3 — המעבר מהישרדות ליצירה כמערכת (--j: 0 → 1)
+   ============================================================
+   הצבע והטיפוגרפיה נעולים, ולכן המרחב והקצב נושאים את ההבחנה לבדם.
+   --j נקבע ב-motion.js לפי מיקום הסקשן במסע. שני הפרמטרים כאן
+   (רוחב עמודה, מרווח אנכי) עובדים גם בלי מנוע התנועה. */
+
+html.journey-on [style*="--j"] {
+  /* מכווץ ודחוס למעלה, נדיב ונושם למטה */
+  padding-block: calc(74px + 76px * var(--j, 0));
+}
+html.journey-on [style*="--j"] .container {
+  /* צר ומרוכז למעלה, נפתח ככל שיורדים */
+  width: min(100% - 48px, calc(880px + 300px * var(--j, 0)));
+  transition: none;
+}
+/* ההצהרה והקריאה לפעולה מרוכזות בכוונה — לא נפתחות עם השאר */
+html.journey-on .statement .container.narrow,
+html.journey-on .closing .container.narrow { max-width: 820px; }
+
+/* גם המרווח בין הכותרת לתוכן נפתח בהדרגה */
+html.journey-on [style*="--j"] .section-head {
+  margin-bottom: calc(38px + 40px * var(--j, 0));
+}
+
+@media (max-width: 899px) {
+  /* במובייל הרוחב נקבע ע"י המסך; נשאר רק הקצב האנכי, מצומצם */
+  html.journey-on [style*="--j"] { padding-block: calc(62px + 44px * var(--j, 0)); }
+  html.journey-on [style*="--j"] .container { width: calc(100% - 40px); }
+}
