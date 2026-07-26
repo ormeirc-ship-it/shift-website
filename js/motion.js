@@ -11,6 +11,10 @@
 
 (function () {
   'use strict';
+  // כל גוף המנוע עטוף ב-try אחד: אם משהו קורס באתחול, ה-catch בתחתית
+  // הקובץ משחרר את מסך הפתיחה במקום להשאיר את המבקר מול מסך ריק.
+  // (הגוף נשאר בהזחה המקורית — העטיפה נוספה בדיעבד ובכוונה לא הוזח מחדש)
+  try {
 
   var docEl = document.documentElement;
   var REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -68,6 +72,11 @@
     e.preventDefault();
     requestAnimationFrame(function () { scrollToHash(hash); });
     if (history.pushState) history.pushState(null, '', hash);
+  });
+  // כפתור Back/Forward של הדפדפן מזיז באמת בין העוגנים —
+  // בלי זה pushState משנה URL אבל העמוד נשאר במקום
+  window.addEventListener('popstate', function () {
+    scrollToHash(location.hash || '#top');
   });
 
   /* ---------- עזרים: פיצול טקסט ---------- */
@@ -806,4 +815,16 @@
 
   /* ---------- רענון אחרי טעינת תמונות ---------- */
   window.addEventListener('load', function () { ScrollTrigger.refresh(); });
+
+  } catch (err) {
+    // המנוע קרס באתחול — משחררים את מסך הפתיחה כדי שהאתר יישאר שמיש
+    try {
+      document.documentElement.classList.add('preloader-done');
+      var deadPl = document.getElementById('preloader');
+      if (deadPl && deadPl.parentNode) deadPl.parentNode.removeChild(deadPl);
+      document.body.style.overflow = '';
+      window.dispatchEvent(new Event('shift:reveal'));
+    } catch (e2) { /* אין יותר מה לעשות */ }
+    if (window.console && console.error) console.error('SHIFT motion init failed:', err);
+  }
 })();

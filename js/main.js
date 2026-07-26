@@ -63,38 +63,68 @@ afterReveal(() => {
   }
 });
 
-// ניווט: רקע אטום אחרי גלילה
+// ניווט: רקע אטום אחרי גלילה (עם הגנת null — שינוי HTML לא יפיל את הקובץ)
 const nav = document.getElementById('nav');
-const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 24);
-onScroll();
-window.addEventListener('scroll', onScroll, { passive: true });
+if (nav) {
+  const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 24);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+}
 
-// תפריט מובייל
+// תפריט מסך מלא
 const burger = document.getElementById('navBurger');
 const menu = document.getElementById('mobileMenu');
-menu.hidden = false;
+if (burger && menu) {
+  menu.hidden = false;
 
-const setMenu = (open) => {
-  menu.classList.toggle('open', open);
-  burger.setAttribute('aria-expanded', String(open));
-  document.body.style.overflow = open ? 'hidden' : '';
-  // פריטי הענק נכנסים בהדרגה (איזאנמי)
-  if (open && typeof gsap !== 'undefined' &&
-      !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    gsap.fromTo(menu.querySelectorAll('a'),
-      { autoAlpha: 0, y: 34 },
-      { autoAlpha: 1, y: 0, duration: 0.7, stagger: 0.07,
-        ease: 'power3.out', clearProps: 'transform,opacity,visibility', delay: 0.08 });
-  }
-};
+  const setMenu = (open) => {
+    menu.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', String(open));
+    document.body.style.overflow = open ? 'hidden' : '';
+    // ניהול פוקוס: בפתיחה — לקישור הראשון; בסגירה — חזרה לכפתור התפריט
+    if (open) {
+      const first = menu.querySelector('a');
+      if (first) first.focus({ preventScroll: true });
+    } else if (document.activeElement && menu.contains(document.activeElement)) {
+      burger.focus({ preventScroll: true });
+    }
+    // פריטי הענק נכנסים בהדרגה (איזאנמי)
+    if (open && typeof gsap !== 'undefined' &&
+        !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      gsap.fromTo(menu.querySelectorAll('a'),
+        { autoAlpha: 0, y: 34 },
+        { autoAlpha: 1, y: 0, duration: 0.7, stagger: 0.07,
+          ease: 'power3.out', clearProps: 'transform,opacity,visibility', delay: 0.08 });
+    }
+  };
 
-burger.addEventListener('click', () => {
-  setMenu(!menu.classList.contains('open'));
-});
+  burger.addEventListener('click', () => {
+    setMenu(!menu.classList.contains('open'));
+  });
 
-menu.querySelectorAll('a').forEach((link) => {
-  link.addEventListener('click', () => setMenu(false));
-});
+  menu.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => setMenu(false));
+  });
+
+  // Escape סוגר את התפריט
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menu.classList.contains('open')) setMenu(false);
+  });
+
+  // לכידת פוקוס: Tab מסתובב בתוך התפריט הפתוח ולא בורח לעמוד שמאחוריו
+  menu.addEventListener('keydown', (e) => {
+    if (e.key !== 'Tab') return;
+    const links = menu.querySelectorAll('a');
+    if (!links.length) return;
+    const first = links[0];
+    const last = links[links.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault(); last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault(); first.focus();
+    }
+  });
+}
 
 
 // ============================================================

@@ -14,7 +14,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@200;300;400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+  <!-- פרמטר הגרסה שובר cache ישן אחרי כל פריסה — לעדכן בכל שינוי CSS/JS -->
+  <link rel="stylesheet" href="css/style.css?v=20260726b">
   <script>
     document.documentElement.classList.add('js');
     // מנוע התנועה מוכרז מראש כדי שחוקי ה-reveal של ה-CSS לא יידלקו לרגע;
@@ -22,6 +23,12 @@
     if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
       document.documentElement.classList.add('gsap-on');
     }
+    // רשת ביטחון עליונה: גם אם motion.js קורס לפני שהטיימר הפנימי שלו נרשם,
+    // מסך הפתיחה יורד אחרי 4 שניות והאתר לא ננעל על מסך ריק
+    setTimeout(function () {
+      document.documentElement.classList.add('preloader-done');
+      if (document.body) document.body.style.overflow = '';
+    }, 4000);
   </script>
 </head>
 <body>
@@ -454,7 +461,7 @@
       <div class="breath" id="breath">
         <div class="breath-stage" aria-hidden="true">
           <div class="breath-ring"></div>
-          <div class="breath-circle" id="breathCircle"><span id="breathPhase">נשימה אחת רגע</span></div>
+          <div class="breath-circle" id="breathCircle"><span id="breathPhase" aria-live="polite">נשימה אחת רגע</span></div>
         </div>
         <div class="breath-info">
           <p class="label label-sky">טעימה מתוך יום 1</p>
@@ -472,6 +479,9 @@
             <button class="btn btn-primary" id="breathStart" type="button">נסו רגע אחד מהמסלול</button>
             <span class="breath-counter" id="breathCounter" aria-live="polite"></span>
           </div>
+          <p class="breath-disclaimer">
+            אם את/ה בהיריון, עם מצב לב או נשימה, או אפילפסיה — התייעצ/י עם רופא/ה לפני תרגילי נשימה.
+          </p>
         </div>
       </div>
 
@@ -480,6 +490,9 @@
         <a class="btn btn-ghost" href="#contact">דברו איתנו קודם</a>
       </div>
     </div>
+    <!-- מקור התוכן: PROGRAM-SPEC.md (מחולל מ-data.js של האפליקציה החיה
+         באמצעות scripts/generate-program-spec.mjs) — לא לכתוב מחדש מהזיכרון.
+         אימות לפני commit: node scripts/verify-program.mjs -->
   </section>
 
   <!-- אירועים -->
@@ -604,8 +617,10 @@
       </p>
       <div class="hero-ctas reveal delay-2">
         <a href="https://www.instagram.com/shift_ecosystem/" target="_blank" rel="noopener" class="btn btn-primary">לאינסטגרם שלנו</a>
-        <!-- TODO: להחליף בכתובת מייל / וואטסאפ אמיתיים -->
-        <a href="mailto:hello@shift.co.il" class="btn btn-ghost">שיחת היכרות</a>
+        <!-- TODO: כתובת מייל/וואטסאפ אמיתיים מ-OC. כפתור "שיחת היכרות" מוסתר
+             עד שתגיע כתובת אמיתית — hello@shift.co.il הייתה placeholder שמוביל
+             לתיבה לא קיימת. להחזיר כך:
+             <a href="mailto:כתובת@אמיתית" class="btn btn-ghost">שיחת היכרות</a> -->
       </div>
     </div>
   </section>
@@ -638,7 +653,7 @@
   <script src="assets/vendor/gsap.min.js" defer></script>
   <script src="assets/vendor/ScrollTrigger.min.js" defer></script>
   <script src="assets/vendor/lenis.min.js" defer></script>
-  <script src="js/motion.js" defer></script>
-  <script src="js/main.js" defer></script>
+  <script src="js/motion.js?v=20260726b" defer></script>
+  <script src="js/main.js?v=20260726b" defer></script>
 </body>
 </html>

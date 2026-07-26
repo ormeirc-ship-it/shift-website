@@ -1493,3 +1493,36 @@ body { overflow-x: clip; }
   .hero { position: relative; }
   .statement { min-height: 0; }
 }
+
+/* ============================================================
+   נגישות: פוקוס מקלדת + סייג בריאותי לתרגיל הנשימה
+   ============================================================ */
+
+/* טבעת פוקוס ברורה לניווט מקלדת — על רקע כהה בתכלת, על בהיר בנייבי */
+:focus-visible {
+  outline: 2px solid var(--sky);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+.btn:focus-visible { border-radius: 999px; }
+.btn-primary:focus-visible { outline-color: var(--navy-deep); }
+.section-light :focus-visible,
+.section-paper :focus-visible,
+.program.lit :focus-visible {
+  outline-color: var(--navy);
+}
+.section-light .btn-primary:focus-visible,
+.section-paper .btn-primary:focus-visible,
+.program.lit .btn-primary:focus-visible {
+  outline-color: var(--navy-deep);
+}
+
+/* סייג בריאותי מתחת לכפתור תרגיל הנשימה */
+.breath-disclaimer {
+  margin-top: 16px;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: var(--white-faint);
+  max-width: 480px;
+}
+.program.lit .breath-disclaimer { color: var(--ink-faint); }
