@@ -222,7 +222,7 @@
     }
 
     var target = 0, eased = 0, hushOn = false, litOn = false, onScreen = true;
-    var skipTick = null;
+    var skipTick = null, lastP = -1;
 
     function render() {
       eased += (target - eased) * 0.14;
@@ -230,6 +230,11 @@
       var p = eased;
 
       draw(Math.min(COUNT - 1, Math.round(p * (COUNT - 1))));
+
+      // כתיבה רק כשהערך באמת השתנה. בלי זה כל פריים כותב סגנון לשישה
+      // אלמנטים גם כשהצלילה עומדת במקום, וכל כתיבה מזמינה recalc.
+      if (Math.abs(p - lastP) < 0.0008) return;
+      lastP = p;
 
       // שער הפתיחה נסוג פנימה
       var gOut = Math.min(p / 0.18, 1);

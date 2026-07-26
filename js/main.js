@@ -249,14 +249,21 @@ if (burger && menu) {
     io.observe(el);
   });
 
-  // המסלול מתחיל כהה ונגמר בהיר — עוקבים אחרי אותה מחלקה שמסמנת את המעבר
+  // המסלול מתחיל כהה ונגמר בהיר — צריך גם "הוא מתחת לסרגל" וגם "הוא כבר בהיר".
+  //
+  // הגרסה הראשונה כאן קראה getBoundingClientRect פעמיים בכל אירוע scroll —
+  // כלומר אילצה חישוב פריסה מסונכרן על כל גלילה. זה layout thrash קלאסי,
+  // והוא הופיע במדידה. עכשיו שני הדגלים מגיעים מתצפיתנים בלבד: IO לנוכחות
+  // (אותו פס דק) ו-MutationObserver למחלקה. אפס קריאות פריסה בזמן גלילה.
   const prog = document.querySelector('.program');
   if (prog && 'MutationObserver' in window) {
-    const sync = () => window.__navTone.set('#program',
-      prog.classList.contains('lit') && prog.getBoundingClientRect().top <= navH
-        && prog.getBoundingClientRect().bottom > navH);
-    new MutationObserver(sync).observe(prog, { attributes: true, attributeFilter: ['class'] });
-    addEventListener('scroll', sync, { passive: true });
-    sync();
+    let underNav = false;
+    let isLit = prog.classList.contains('lit');
+    const push = () => window.__navTone.set('#program', underNav && isLit);
+    prog.dataset.navKey = '#program-presence';
+    new IntersectionObserver(([e]) => { underNav = e.isIntersecting; push(); },
+      { rootMargin: `-${navH}px 0px -${Math.max(0, innerHeight - navH - 4)}px 0px` }).observe(prog);
+    new MutationObserver(() => { isLit = prog.classList.contains('lit'); push(); })
+      .observe(prog, { attributes: true, attributeFilter: ['class'] });
   }
 })();
