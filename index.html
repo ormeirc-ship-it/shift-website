@@ -80,6 +80,7 @@
     <a href="#top" data-label="פתיחה"></a>
     <a href="#products" data-label="מה אנחנו עושים"></a>
     <a href="#method" data-label="השיטה"></a>
+    <a href="#breathe" data-label="נשימה אחת"></a>
     <a href="#program" data-label="המסלול"></a>
     <a href="#events" data-label="אירועים"></a>
     <a href="#story" data-label="הסיפור"></a>
@@ -279,6 +280,46 @@
   </section>
 
 
+  <!-- טעימה חיה — הרגע היחיד שבו המבקר חווה את SHIFT במקום לקרוא עליו.
+       היה קבור בתחתית סקשן המסלול; קיבל במה משלו, מוקדם יותר בעמוד. -->
+  <section class="breathe section-paper" id="breathe">
+    <div class="container">
+      <div class="section-head reveal">
+        <h2>לפני שתקראו עוד משפט — קחו נשימה אחת</h2>
+        <p class="section-intro">
+          זה תרגיל אמיתי מתוך היום הראשון במסלול. הוא לוקח פחות מדקה,
+          והוא הדרך הקצרה ביותר להרגיש על מה כל זה מדבר.
+        </p>
+      </div>
+        <div class="breath" id="breath">
+          <div class="breath-stage" aria-hidden="true">
+            <div class="breath-ring"></div>
+            <div class="breath-circle" id="breathCircle"><span id="breathPhase" aria-live="polite">נשימה אחת רגע</span></div>
+          </div>
+          <div class="breath-info">
+            <p class="label label-sky">טעימה מתוך יום 1</p>
+            <h3>"כפתור ההרגעה הפנימי" — אנחה כפולה</h3>
+            <ol class="breath-steps">
+              <li>שאיפה עמוקה דרך האף.</li>
+              <li>מיד אחריה, שאיפה קצרה נוספת דרך האף ("למלא עד הסוף").</li>
+              <li>נשיפה ארוכה ואיטית דרך הפה, עד שהאוויר יוצא כמעט לגמרי.</li>
+            </ol>
+            <p class="breath-note">
+              לרגיעה מהירה אפשר לעשות 1–3 סבבים; במחקר עצמו נבדק דווקא תרגול יומי של כ-5 דקות
+              (Balban ואחרים, 2023).
+            </p>
+            <div class="breath-actions">
+              <button class="btn btn-primary" id="breathStart" type="button">נסו רגע אחד מהמסלול</button>
+              <span class="breath-counter" id="breathCounter" aria-live="polite"></span>
+            </div>
+            <p class="breath-disclaimer">
+              אם את/ה בהיריון, עם מצב לב או נשימה, או אפילפסיה — התייעצ/י עם רופא/ה לפני תרגילי נשימה.
+            </p>
+          </div>
+        </div>
+    </div>
+  </section>
+
   <!-- המסלול -->
   <section class="path section-light" id="path">
     <div class="container">
@@ -467,34 +508,6 @@
             </li>
           </ol>
         </article>
-        </div>
-      </div>
-
-      <!-- טעימה חיה: כפתור ההרגעה הפנימי מיום 1 -->
-      <div class="breath" id="breath">
-        <div class="breath-stage" aria-hidden="true">
-          <div class="breath-ring"></div>
-          <div class="breath-circle" id="breathCircle"><span id="breathPhase" aria-live="polite">נשימה אחת רגע</span></div>
-        </div>
-        <div class="breath-info">
-          <p class="label label-sky">טעימה מתוך יום 1</p>
-          <h3>"כפתור ההרגעה הפנימי" — אנחה כפולה</h3>
-          <ol class="breath-steps">
-            <li>שאיפה עמוקה דרך האף.</li>
-            <li>מיד אחריה, שאיפה קצרה נוספת דרך האף ("למלא עד הסוף").</li>
-            <li>נשיפה ארוכה ואיטית דרך הפה, עד שהאוויר יוצא כמעט לגמרי.</li>
-          </ol>
-          <p class="breath-note">
-            לרגיעה מהירה אפשר לעשות 1–3 סבבים; במחקר עצמו נבדק דווקא תרגול יומי של כ-5 דקות
-            (Balban ואחרים, 2023).
-          </p>
-          <div class="breath-actions">
-            <button class="btn btn-primary" id="breathStart" type="button">נסו רגע אחד מהמסלול</button>
-            <span class="breath-counter" id="breathCounter" aria-live="polite"></span>
-          </div>
-          <p class="breath-disclaimer">
-            אם את/ה בהיריון, עם מצב לב או נשימה, או אפילפסיה — התייעצ/י עם רופא/ה לפני תרגילי נשימה.
-          </p>
         </div>
       </div>
 

@@ -1764,3 +1764,22 @@ html.journey-on [style*="--j"] .section-head {
   html.journey-on [style*="--j"] { padding-block: calc(62px + 44px * var(--j, 0)); }
   html.journey-on [style*="--j"] .container { width: calc(100% - 40px); }
 }
+
+/* ============================================================
+   שלב 4 — תרגיל הנשימה כסקשן משלו
+   ============================================================
+   היה קבור בתחתית המסלול, על רקע כהה. עכשיו הוא סקשן עצמאי על רקע
+   בהיר — ולכן הצבעים שהותאמו לרקע הכהה צריכים היפוך. */
+.breathe .breath {
+  margin-top: 0;
+  background: #fff;
+  border-color: var(--line);
+  box-shadow: 0 24px 60px rgba(24, 22, 59, 0.07);
+}
+.breathe .breath-info h3 { color: var(--ink); }
+.breathe .breath-steps { color: var(--ink-soft); }
+.breathe .breath-note, .breathe .breath-disclaimer { color: var(--ink-faint); }
+.breathe .breath-ring { border-color: rgba(92, 187, 240, 0.45); }
+.breathe .label-sky { color: var(--blue-mid); }
+/* הכותרת רחבה מדי במסך אחד — מאזנים שורות */
+.breathe .section-head h2 { text-wrap: balance; }

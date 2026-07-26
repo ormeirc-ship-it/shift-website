@@ -320,7 +320,7 @@
 
      ה-JS רק מסמן לכל סקשן את מיקומו בסולם (--j). כל השאר CSS, כך שגם
      בלי מנוע התנועה (ובמצב מופחת-תנועה) המרחב והקצב עדיין מספרים את הסיפור. */
-  var JOURNEY = ['.statement', '#products', '#method', '#habits', '#path',
+  var JOURNEY = ['.statement', '#products', '#method', '#habits', '#breathe', '#path',
                  '#program', '#events', '#story', '#outcomes', '.closing'];
   (function initJourney() {
     var els = [];
@@ -733,7 +733,7 @@
     var nav = document.getElementById('dotNav');
     if (!nav) return;
     var dots = nav.querySelectorAll('a');
-    var LIGHT = { '#method': 1, '#story': 1 };
+    var LIGHT = { '#method': 1, '#story': 1, '#breathe': 1 };
     dots.forEach(function (dot) {
       var hash = dot.getAttribute('href');
       // '#top' הוא ההירו הדביק — עוקבים אחרי במת הכיסוי הסטטית במקומו
