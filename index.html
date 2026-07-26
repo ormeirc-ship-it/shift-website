@@ -33,11 +33,15 @@
 </head>
 <body>
 
-  <!-- מסך פתיחה -->
+  <!-- מסך פתיחה — נסגר ברגע שהפריים הראשון של הרצף מוכן, לא כשכולו נטען.
+       המשפט "מהישרדות ליצירה" עבר לרגע ההגעה אל האור, שם הוא הפואנטה. -->
   <div class="preloader" id="preloader" aria-hidden="true">
-    <p class="preloader-line" id="preloaderLine">מהישרדות ליצירה</p>
     <img src="assets/brand/logo-white.png" alt="">
+    <p class="preloader-line" id="preloaderLine">רגע, נכנסים פנימה…</p>
   </div>
+
+  <!-- דילוג על הצלילה — למקלדת ולקורא מסך -->
+  <a class="skip-dive" href="#products">דלגו לתוכן</a>
 
   <!-- ניווט -->
   <header class="nav" id="nav">
@@ -87,26 +91,44 @@
 
   <!-- פתיח + הצהרה: במת הכיסוי — ההצהרה מחליקה מעל ההירו -->
   <div class="cover-stage">
-  <section class="hero" id="top">
-    <div class="hero-bg" id="heroBg" aria-hidden="true"></div>
-    <div class="hero-aurora" aria-hidden="true"></div>
-    <canvas class="hero-neurons" id="heroNeurons" aria-hidden="true"></canvas>
-    <div class="hero-content">
-      <div class="hero-logo" id="heroLogo">
-        <img src="assets/brand/logo-white.png" alt="SHIFT">
+  <!-- הכניסה דרך המוח: הגלילה מניעה צלילה מהחושך אל האור.
+       הרצף הוא פריימים ולא וידאו — video.currentTime לא אמין בספארי במובייל,
+       ושם מגיע רוב הקהל. הפריימים גם קלים יותר (3.1MB מול 5.4MB). -->
+  <section class="dive" id="top">
+    <div class="dive-sticky">
+      <canvas class="dive-canvas" id="brainCanvas" aria-hidden="true"></canvas>
+      <img class="dive-still" id="brainStill" src="assets/brain-seq/d/f001.webp" alt="" aria-hidden="true">
+      <div class="dive-veil" id="diveVeil" aria-hidden="true"></div>
+
+      <!-- מילות המסע — חולפות תוך כדי הצלילה -->
+      <div class="passing" id="divePassing" aria-hidden="true">
+        <p data-at="0.30">כל מחשבה מניחה מסלול.</p>
+        <p data-at="0.52">מה שחוזר — נבנה.</p>
+        <p data-at="0.72">וגם מה שנבנה, יכול להשתנות.</p>
       </div>
-      <p class="hero-label reveal">תוכנית לפיתוח אישי · נוירוסיינס × גוף × AI</p>
-      <h1 class="reveal delay-1">מהישרדות <span class="grad-text">ליצירה</span></h1>
-      <p class="hero-sub reveal delay-2">
-        SHIFT היא תוכנית לפיתוח אישי שמחברת בין מדעי המוח, מודעות גופנית ובינה מלאכותית —
-        מסע מעשי מתגובתיות אוטומטית אל חיים של בחירה, יצירה וצמיחה.
-      </p>
-      <div class="hero-ctas reveal delay-3">
-        <a href="#contact" class="btn btn-primary">מתחילים SHIFT</a>
-        <a href="#method" class="btn btn-ghost">איך זה עובד</a>
+
+      <!-- שער הכניסה -->
+      <div class="gate" id="diveGate">
+        <div class="gate-logo"><img src="assets/brand/logo-white.png" alt="SHIFT"></div>
+        <p class="gate-line">תוכנית לפיתוח אישי · נוירוסיינס × גוף × AI</p>
+        <div class="gate-cue" aria-hidden="true"><i></i><span>גללו להיכנס</span></div>
+      </div>
+
+      <!-- ההגעה אל האור -->
+      <div class="arrival" id="diveArrival">
+        <div class="arrival-in">
+          <h1>מהישרדות <b>ליצירה</b></h1>
+          <p class="arrival-sub">
+            SHIFT היא תוכנית לפיתוח אישי שמחברת בין מדעי המוח, מודעות גופנית ובינה מלאכותית —
+            מסע מעשי מתגובתיות אוטומטית אל חיים של בחירה, יצירה וצמיחה.
+          </p>
+          <div class="arrival-ctas">
+            <a href="#contact" class="btn btn-arrival">מתחילים SHIFT</a>
+            <a href="#method" class="btn btn-arrival-ghost">איך זה עובד</a>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="hero-scroll" aria-hidden="true"><span></span><em>גללו לגלות</em></div>
   </section>
 
   <!-- הצהרה -->

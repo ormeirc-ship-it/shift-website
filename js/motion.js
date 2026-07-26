@@ -119,11 +119,9 @@
     return out;
   }
 
-  /* ---------- Preloader + כניסת הירו ---------- */
+  /* ---------- Preloader + הכניסה דרך המוח ---------- */
   var preloader = document.getElementById('preloader');
   var revealed = false;
-  var heroChars = [];
-  var heroGrad = null;
 
   function finishReveal() {
     if (revealed) return;
@@ -138,89 +136,146 @@
     }
   }
 
-  function buildHeroIntro() {
-    if (!FULL) return null;
-    var label = document.querySelector('.hero-label');
-    var h1 = document.querySelector('.hero h1');
-    var sub = document.querySelector('.hero-sub');
-    var ctas = document.querySelectorAll('.hero-ctas .btn');
-    var scrollHint = document.querySelector('.hero-scroll');
-    if (!h1) return null;
+  /* ---------- הכניסה דרך המוח ----------
+     הגלילה מניעה צלילה מהחושך אל האור. הקלט מגיע מ-ScrollTrigger (אין מאזין
+     scroll מקביל — Lenis כבר מנהל את הגלילה), אבל ההחלקה נשמרת מאב-הטיפוס:
+     `eased += (target - eased) * 0.14` על טיקר GSAP. זה מה שגורם לצלילה
+     להרגיש כמו נשימה במקום כמו קפיצות של גלגלת העכבר.
 
-    heroGrad = h1.querySelector('.grad-text');
-    Array.prototype.slice.call(h1.childNodes).forEach(function (node) {
-      if (node.nodeType === 3 && node.textContent.trim()) {
-        var span = document.createElement('span');
-        span.className = 'h1-word';
-        span.style.display = 'inline-block';
-        span.textContent = node.textContent.trim();
-        h1.insertBefore(span, node);
-        h1.removeChild(node);
-        h1.insertBefore(document.createTextNode(' '), span.nextSibling);
-        heroChars = splitChars(span);
+     המדידות נחשפות ל-window.__dive לצורכי דיווח ובדיקות. */
+  var dive = (function initBrainDive() {
+    var section = document.querySelector('.dive');
+    var canvas = document.getElementById('brainCanvas');
+    if (!section || !canvas) return null;
+
+    var MOBILE = !DESKTOP.matches;
+    var DIR = 'assets/brain-seq/' + (MOBILE ? 'm/' : 'd/');
+    var COUNT = MOBILE ? 65 : 97;
+    var ctx = canvas.getContext('2d', { alpha: false });
+    var frames = [];
+    var loaded = 0;
+    var current = -1;
+    var t0 = (window.performance && performance.now) ? performance.now() : 0;
+    var stats = { count: COUNT, dir: DIR, firstFrameMs: null, allFramesMs: null };
+    window.__dive = stats;
+
+    function pad(n) { return String(n).length >= 3 ? String(n) : ('00' + n).slice(-3); }
+
+    function fit() {
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      draw(current < 0 ? 0 : current, true);
+    }
+
+    // ציור בכיסוי מלא — שקול ל-object-fit: cover
+    function draw(i, force) {
+      if (i === current && !force) return;
+      var img = frames[i];
+      if (!img || !img.complete || !img.naturalWidth) return;
+      current = i;
+      var cw = canvas.width, ch = canvas.height;
+      var s = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
+      var w = img.naturalWidth * s, h = img.naturalHeight * s;
+      ctx.drawImage(img, (cw - w) / 2, (ch - h) / 2, w, h);
+    }
+
+    function onFirstFrame() {
+      stats.firstFrameMs = Math.round(((window.performance && performance.now) ? performance.now() : 0) - t0);
+      docEl.classList.add('dive-live'); // מסתיר את תמונת הגיבוי
+      fit();
+      window.dispatchEvent(new Event('shift:dive-first-frame'));
+    }
+
+    function preload() {
+      for (var i = 1; i <= COUNT; i++) {
+        (function (idx) {
+          var img = new Image();
+          img.decoding = 'async';
+          img.onload = img.onerror = function () {
+            loaded++;
+            if (idx === 1) onFirstFrame();
+            if (loaded >= COUNT) {
+              stats.allFramesMs = Math.round(((window.performance && performance.now) ? performance.now() : 0) - t0);
+              window.dispatchEvent(new Event('shift:dive-ready'));
+            }
+          };
+          img.src = DIR + 'f' + pad(idx) + '.webp';
+          frames[idx - 1] = img;
+        })(i);
       }
-    });
-
-    // הכנת הגרדיאנט להברקה: חלון רחב שנוכל להזיז לרוחבו
-    if (heroGrad) {
-      gsap.set(heroGrad, { backgroundSize: '250% 100%', backgroundPosition: '85% 50%' });
     }
 
-    var tl = gsap.timeline({
-      paused: true,
-      onComplete: function () {
-        // קיבוע מצב סופי נקי: גם אם tween בודד נהרג בסביבה חריגה,
-        // כל רכיבי ההירו מסיימים גלויים לפי הסטייל-שיט
-        gsap.set([label, sub, scrollHint], { clearProps: 'all' });
-        // הברקה חד-פעמית על "ליצירה" — מימין לשמאל, כמו כיוון הקריאה
-        if (heroGrad) {
-          gsap.to(heroGrad, {
-            backgroundPosition: '15% 50%', duration: 1.4, ease: 'power2.inOut'
-          });
-        }
-        initHeroScrollDrift();
+    var gate = document.getElementById('diveGate');
+    var passing = document.getElementById('divePassing');
+    var arrival = document.getElementById('diveArrival');
+    var veil = document.getElementById('diveVeil');
+    var lines = passing ? Array.prototype.slice.call(passing.querySelectorAll('p')) : [];
+
+    // מצב מופחת-תנועה: פריים מייצג אחד, הכותרת מיד, בלי צלילה
+    if (REDUCED || !FULL) {
+      var still = new Image();
+      still.onload = function () { frames[0] = still; onFirstFrame(); };
+      still.src = DIR + 'f' + pad(COUNT) + '.webp'; // הפריים המואר — שם הכותרת חיה
+      window.addEventListener('resize', fit, { passive: true });
+      return stats;
+    }
+
+    var target = 0, eased = 0;
+
+    function render() {
+      eased += (target - eased) * 0.14;
+      if (Math.abs(target - eased) < 0.0004) eased = target;
+      var p = eased;
+
+      draw(Math.min(COUNT - 1, Math.round(p * (COUNT - 1))));
+
+      // שער הפתיחה נסוג פנימה
+      var gOut = Math.min(p / 0.18, 1);
+      if (gate) {
+        gate.style.opacity = String(1 - gOut);
+        gate.style.transform = 'scale(' + (1 + gOut * 0.35) + ') translateZ(0)';
+        gate.style.pointerEvents = gOut > 0.9 ? 'none' : '';
       }
-    });
-    if (label) tl.from(label, { autoAlpha: 0, y: 18, duration: 0.6 }, 0);
-    if (heroChars.length) {
-      tl.from(heroChars, {
-        autoAlpha: 0,
-        y: '0.55em',
-        duration: 0.7,
-        stagger: { each: 0.045, from: 'start' } // RTL: לפי סדר הקריאה בעברית
-      }, 0.15);
-    }
-    if (heroGrad) {
-      tl.from(heroGrad, {
-        autoAlpha: 0, y: 36, scale: 0.96, filter: 'blur(8px)', duration: 0.9,
-        clearProps: 'filter'
-      }, 0.6);
-    }
-    if (sub) tl.from(sub, { autoAlpha: 0, y: 24, duration: 0.8 }, 0.95);
-    if (ctas.length) {
-      tl.from(ctas, { autoAlpha: 0, y: 20, duration: 0.6, stagger: 0.1, clearProps: CLEAR }, 1.15);
-    }
-    if (scrollHint) tl.from(scrollHint, { autoAlpha: 0, duration: 0.6 }, 1.4);
-    return tl;
-  }
 
-  // בגלילה החוצה מההירו: האותיות "נפרדות" — חצי מרחפות מעלה, חצי שוקעות.
-  // הטריגר הוא ההצהרה (סטטית) ולא ההירו — כי ההירו דביק ומדידותיו נודדות.
-  function initHeroScrollDrift() {
-    if (!heroChars.length) return;
-    gsap.to(heroChars, {
-      yPercent: function (i) { return i % 2 ? -70 : 45; },
-      autoAlpha: 0.12,
-      ease: 'none',
-      scrollTrigger: { trigger: '.statement', start: 'top bottom', end: 'top 30%', scrub: true }
-    });
-    if (heroGrad) {
-      gsap.to(heroGrad, {
-        yPercent: 30, autoAlpha: 0.2, ease: 'none',
-        scrollTrigger: { trigger: '.statement', start: 'top bottom', end: 'top 30%', scrub: true }
-      });
+      // מילות המסע — כל אחת נדלקת סביב הנקודה שלה
+      for (var i = 0; i < lines.length; i++) {
+        var el = lines[i];
+        var at = parseFloat(el.dataset.at);
+        var vis = Math.max(0, 1 - Math.abs(p - at) / 0.1);
+        el.style.opacity = String(vis);
+        el.style.transform = 'translateY(' + (-50 + (p - at) * 90) + '%) scale(' + (0.96 + vis * 0.06) + ')';
+      }
+
+      // ההגעה אל האור
+      var aIn = Math.max(0, Math.min((p - 0.86) / 0.14, 1));
+      if (arrival) {
+        arrival.style.opacity = String(aIn);
+        arrival.style.pointerEvents = aIn > 0.6 ? 'auto' : 'none';
+      }
+      if (veil) veil.style.opacity = String(1 - aIn);
     }
-  }
+
+    gsap.ticker.add(render);
+
+    ScrollTrigger.create({
+      trigger: section,
+      start: 'top top',
+      end: 'bottom bottom',
+      onUpdate: function (self) { target = self.progress; },
+      onRefresh: function (self) { target = eased = self.progress; render(); }
+    });
+
+    // חשוף לבדיקות אוטומטיות, כמו window.__lenis — בסביבת בדיקה ה-rAF
+    // קפוא ולכן צריך דרך להריץ את הפריים ידנית ולקרוא את המצב.
+    stats.render = render;
+    stats.state = function () { return { target: target, eased: eased, frame: current }; };
+
+    preload();
+    fit();
+    window.addEventListener('resize', fit, { passive: true });
+    return stats;
+  })();
 
   if (!preloader || !FULL) {
     finishReveal();
@@ -228,184 +283,47 @@
     document.body.style.overflow = 'hidden';
     var plLogo = preloader.querySelector('img');
     var plLine = document.getElementById('preloaderLine');
-    var heroIntro = buildHeroIntro();
 
-    // המשפט מופיע מילה-מילה, הלוגו נבנה, והמסך נפתח אל ההירו
-    var plWords = [];
-    if (plLine) {
-      splitWords(plLine);
-      plWords = plLine.querySelectorAll('.w');
-      gsap.set(plLine, { opacity: 1 });
-    }
-
-    var tl = gsap.timeline({
-      onComplete: function () {
-        finishReveal();
-        if (heroIntro) heroIntro.play();
-        // "צילום פתיחה": הרקע מתקרב לאט אל מנוחה
-        gsap.fromTo('.hero-bg', { scale: 1.14 }, {
-          scale: 1, duration: 8, ease: 'power2.out'
-        });
-      }
-    });
-    if (plWords.length) {
-      tl.from(plWords, { autoAlpha: 0, y: 22, duration: 0.7, stagger: 0.22 }, 0);
-    }
-    tl.fromTo(plLogo,
+    // הלוגו נבנה, והמסך נפתח ברגע שהפריים הראשון של המוח מוכן —
+    // לא כשכל 97 הפריימים טעונים. שאר הרצף ממשיך להיטען ברקע.
+    var openTl = gsap.timeline({ onComplete: finishReveal });
+    openTl.fromTo(plLogo,
       { opacity: 0, scale: 0.94, filter: 'blur(6px)' },
-      { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 0.6 }, plWords.length ? 0.85 : 0);
-    tl.to(plLogo, { scale: 1.02, duration: 0.35, ease: 'power1.inOut' });
-    tl.to(plLine, { autoAlpha: 0, y: -30, duration: 0.5, ease: 'power2.in' }, 'open');
-    tl.to(plLogo, { y: -60, opacity: 0, duration: 0.7, ease: 'power3.inOut' }, 'open+=0.05');
-    tl.to(preloader, { yPercent: -100, duration: 0.9, ease: 'power3.inOut' }, 'open+=0.15');
+      { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 0.7 }, 0);
+    if (plLine) openTl.fromTo(plLine, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5 }, 0.35);
+    openTl.addPause();
+
+    var opened = false;
+    function openCurtain() {
+      if (opened) return;
+      opened = true;
+      var out = gsap.timeline({ onComplete: finishReveal });
+      if (plLine) out.to(plLine, { autoAlpha: 0, y: -20, duration: 0.4, ease: 'power2.in' }, 0);
+      out.to(plLogo, { y: -50, opacity: 0, duration: 0.6, ease: 'power3.inOut' }, 0.05);
+      out.to(preloader, { yPercent: -100, duration: 0.9, ease: 'power3.inOut' }, 0.15);
+    }
+    // הפריים הראשון מוכן → נפתחים. רשת ביטחון: לא מחכים לו יותר מ-2.5 שניות.
+    if (dive && dive.firstFrameMs !== null) openCurtain();
+    else window.addEventListener('shift:dive-first-frame', openCurtain, { once: true });
+    setTimeout(openCurtain, 2500);
   }
   setTimeout(finishReveal, 4000);
 
   if (!FULL) return; // מכאן והלאה — רק כשמנוע התנועה המלא פעיל
 
-  /* ---------- הירו: שדה נוירונים חי + מגיב לעכבר ---------- */
-  (function initNeurons() {
-    if (!DESKTOP.matches) return;
-    var canvas = document.getElementById('heroNeurons');
-    var hero = document.querySelector('.hero');
-    if (!canvas || !hero) return;
-    var ctx = canvas.getContext('2d');
-    var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    var running = false, W, H, nodes = [];
-    var COUNT = 42, LINK = 150;
-    var mouse = { x: -9999, y: -9999, active: false };
-
-    function resize() {
-      W = hero.offsetWidth; H = hero.offsetHeight;
-      canvas.width = W * dpr; canvas.height = H * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    }
-    function seed() {
-      nodes = [];
-      for (var i = 0; i < COUNT; i++) {
-        nodes.push({
-          x: Math.random() * W, y: Math.random() * H,
-          vx: (Math.random() - 0.5) * 0.18, vy: (Math.random() - 0.5) * 0.18,
-          r: 1 + Math.random() * 1.4
-        });
-      }
-    }
-    function tick() {
-      if (!running) return;
-      ctx.clearRect(0, 0, W, H);
-      var i, j, a, b;
-
-      // הילת אור עדינה סביב הסמן — כמו סינפסה שמתעוררת
-      if (mouse.active) {
-        var g = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 200);
-        g.addColorStop(0, 'rgba(92, 187, 240, 0.10)');
-        g.addColorStop(1, 'rgba(92, 187, 240, 0)');
-        ctx.fillStyle = g;
-        ctx.fillRect(mouse.x - 200, mouse.y - 200, 400, 400);
-      }
-
-      for (i = 0; i < COUNT; i++) {
-        a = nodes[i];
-        // דחייה עדינה מהסמן — השדה "מפנה מקום"
-        if (mouse.active) {
-          var mdx = a.x - mouse.x, mdy = a.y - mouse.y;
-          var md2 = mdx * mdx + mdy * mdy;
-          if (md2 < 36100 && md2 > 400) {
-            var md = Math.sqrt(md2);
-            var f = (190 - md) / 190 * 0.028;
-            a.vx -= (mdx / md) * f; // משיכה עדינה אל הסמן
-            a.vy -= (mdy / md) * f;
-          }
-        }
-        // ריסון כדי שהשדה יישאר רגוע
-        a.vx *= 0.985; a.vy *= 0.985;
-        var sp = Math.abs(a.vx) + Math.abs(a.vy);
-        if (sp < 0.08) { a.vx += (Math.random() - 0.5) * 0.02; a.vy += (Math.random() - 0.5) * 0.02; }
-        a.x += a.vx; a.y += a.vy;
-        if (a.x < -20) a.x = W + 20; if (a.x > W + 20) a.x = -20;
-        if (a.y < -20) a.y = H + 20; if (a.y > H + 20) a.y = -20;
-      }
-      for (i = 0; i < COUNT; i++) {
-        a = nodes[i];
-        for (j = i + 1; j < COUNT; j++) {
-          b = nodes[j];
-          var dx = a.x - b.x, dy = a.y - b.y;
-          var d2 = dx * dx + dy * dy;
-          if (d2 < LINK * LINK) {
-            var alpha = (1 - Math.sqrt(d2) / LINK) * 0.16;
-            ctx.strokeStyle = 'rgba(92, 187, 240, ' + alpha.toFixed(3) + ')';
-            ctx.lineWidth = 1;
-            ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
-          }
-        }
-      }
-      for (i = 0; i < COUNT; i++) {
-        a = nodes[i];
-        ctx.fillStyle = 'rgba(154, 214, 248, 0.5)';
-        ctx.beginPath(); ctx.arc(a.x, a.y, a.r, 0, 6.2832); ctx.fill();
-      }
-      requestAnimationFrame(tick);
-    }
-    function setRunning(on) {
-      if (on && !running) { running = true; requestAnimationFrame(tick); }
-      else if (!on) running = false;
-    }
-    resize(); seed(); setRunning(true);
-    window.addEventListener('resize', resize);
-    hero.addEventListener('mousemove', function (e) {
-      var r = hero.getBoundingClientRect();
-      mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top; mouse.active = true;
-    });
-    hero.addEventListener('mouseleave', function () { mouse.active = false; });
-    // הבמה (הסטטית) במקום ההירו הדביק: הקנבס רץ עד שההצהרה מכסה אותו במלואו
-    ScrollTrigger.create({
-      trigger: '.cover-stage', start: 'top bottom', end: 'center top',
-      onToggle: function (self) { setRunning(self.isActive && !document.hidden); }
-    });
-    document.addEventListener('visibilitychange', function () {
-      setRunning(!document.hidden);
-    });
-  })();
-
-  /* ---------- הירו: פרלקסת עכבר תלת-שכבתית ---------- */
-  (function initHeroPointer() {
-    if (!DESKTOP.matches || !FINE_POINTER.matches) return;
-    var hero = document.querySelector('.hero');
-    var bg = document.getElementById('heroBg');
-    var content = document.querySelector('.hero-content');
-    if (!hero || !bg || !content) return;
-    var bx = gsap.quickTo(bg, 'x', { duration: 1.1, ease: 'power3.out' });
-    var by = gsap.quickTo(bg, 'y', { duration: 1.1, ease: 'power3.out' });
-    var cx = gsap.quickTo(content, 'x', { duration: 0.9, ease: 'power3.out' });
-    var cy = gsap.quickTo(content, 'y', { duration: 0.9, ease: 'power3.out' });
-    hero.addEventListener('mousemove', function (e) {
-      var r = hero.getBoundingClientRect();
-      var nx = (e.clientX - r.left) / r.width - 0.5;
-      var ny = (e.clientY - r.top) / r.height - 0.5;
-      bx(nx * 22); by(ny * 14);        // הרקע נע עם העכבר
-      cx(nx * -12); cy(ny * -8);       // התוכן נע הפוך — תחושת עומק
-    });
-    hero.addEventListener('mouseleave', function () { bx(0); by(0); cx(0); cy(0); });
-  })();
-
-  /* ---------- הירו: דעיכת אינדיקטור הגלילה ---------- */
-  gsap.to('.hero-scroll', {
-    autoAlpha: 0, ease: 'none',
-    scrollTrigger: { trigger: '.statement', start: 'top 95%', end: 'top 80%', scrub: true }
-  });
-
-  /* ---------- במת הכיסוי: ההירו נסוג בזמן שההצהרה מחליקה מעליו ---------- */
+  /* ---------- במת הכיסוי: ההגעה נסוגה בזמן שההצהרה מחליקה מעליה ----------
+     ההירו הישן (רקע, אורורה, שדה נוירונים, פרלקסת עכבר) הוסר יחד עם
+     המרקאפ שלו — הצלילה אל המוח תופסת את מקומו ועושה את אותה עבודה,
+     רק שהיא מונעת מהגלילה של המבקר ולא רצה מעצמה. */
   (function initCoverStage() {
     var statement = document.querySelector('.cover-stage .statement');
-    if (!statement) return;
-    // התוכן מתכווץ ומתעמעם — תחושת "יריעה" שנסגרת מעל הפרק הקודם
-    gsap.to('.hero-content', {
-      scale: 0.94, autoAlpha: 0.25, ease: 'none',
-      scrollTrigger: { trigger: statement, start: 'top bottom', end: 'top top', scrub: true }
-    });
-    // הרקע מחשיך בהדרגה (opacity בלבד — לא מתנגש עם זום הפתיחה שרץ על scale)
-    gsap.to('#heroBg', {
-      autoAlpha: 0.45, ease: 'none',
+    // חשוב: על .arrival עצמו רץ ה-opacity של הצלילה (render). שני כותבים
+    // לאותה תכונה נלחמים זה בזה — ובפועל הכותרת נעלמה לגמרי. לכן הנסיגה
+    // מוחלת על העטיפה הפנימית, וה-opacity של השתיים מוכפל בטבעיות.
+    var inner = document.querySelector('.arrival-in');
+    if (!statement || !inner) return;
+    gsap.to(inner, {
+      scale: 0.96, autoAlpha: 0.25, ease: 'none',
       scrollTrigger: { trigger: statement, start: 'top bottom', end: 'top top', scrub: true }
     });
   })();
