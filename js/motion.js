@@ -404,7 +404,10 @@
         scrollTrigger: { trigger: head, start: 'top 80%' }
       });
     }
+    // אחרי הסרת הלייבלים (שלב 2) יש סקשנים שבהם ה-head מכיל רק כותרת;
+    // tween על מערך ריק מייצר אזהרת GSAP ולא עושה כלום
     var rest = Array.prototype.filter.call(head.children, function (c) { return c !== h2; });
+    if (!rest.length) return;
     gsap.from(rest, {
       autoAlpha: 0, y: 26, duration: jDur(head), stagger: 0.12, clearProps: CLEAR,
       scrollTrigger: { trigger: head, start: 'top 78%' }

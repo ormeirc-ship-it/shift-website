@@ -14,34 +14,68 @@ const afterReveal = (fn) => {
   setTimeout(run, 4500);
 };
 
-// אנימציית הלוגו בהירו — שדרוג מלוגו סטטי לווידאו רק בדפדפנים
-// שמנגנים WebM עם שקיפות באופן אמין (דסקטופ כרום/פיירפוקס).
-// בספארי ובמובייל הווידאו עלול להתנגן על רקע שחור — נשארים עם הלוגו הסטטי.
-const heroLogo = document.getElementById('heroLogo');
-if (heroLogo) {
-  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-  const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
-  const canWebm = document.createElement('video')
-    .canPlayType('video/webm; codecs="vp9"') === 'probably';
-  if (canWebm && !isSafari && !isMobile) {
-    const video = document.createElement('video');
-    video.muted = true;
-    video.playsInline = true;
-    video.setAttribute('aria-label', 'אנימציית הלוגו של SHIFT');
-    const src = document.createElement('source');
-    src.src = 'assets/video/logo-anim-1.webm';
-    src.type = 'video/webm';
-    video.appendChild(src);
-    video.addEventListener('canplay', () => {
-      // מחכים שמסך הפתיחה ייפתח — ואז ציור הלוגו מתחיל מאפס
-      afterReveal(() => {
-        heroLogo.replaceChildren(video);
-        video.currentTime = 0;
-        video.play().catch(() => {});
+// ── אנימציית הלוגו בשער הכניסה ────────────────────────────────────────
+// עד היום הווידאו נחסם גורפית בכל ספארי ובכל מובייל — כלומר רוב הקהל
+// (תנועה מאינסטגרם) קיבל לוגו סטטי. החסימה נבעה מבאג אמיתי: HEVC עם
+// שקיפות התנגן שם על מלבן שחור.
+//
+// עכשיו שני מקורות — HEVC/MOV לספארי ו-WebM לכרום/פיירפוקס — אבל
+// **לא סומכים על זיהוי דפדפן**. אחרי שהווידאו נטען מציירים ממנו פריים
+// לקנבס ובודקים בפועל אם יש בו שקיפות אמיתית. אם הפריים אטום (כלומר
+// המלבן השחור חוזר) — הווידאו נזרק והלוגו הסטטי נשאר. בדיקה אמפירית
+// אחת מחליפה ניחוש על מחרוזות UA, ולא יכולה לשחזר את הרגרסיה.
+const gateLogo = document.querySelector('.gate-logo');
+if (gateLogo && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const video = document.createElement('video');
+  video.muted = true;
+  video.playsInline = true;
+  video.setAttribute('playsinline', '');
+  video.setAttribute('aria-hidden', 'true');
+  [['assets/video/logo-anim-1-hevc.mov', 'video/quicktime; codecs="hvc1"'],
+   ['assets/video/logo-anim-1.webm', 'video/webm; codecs="vp9"']].forEach(([src, type]) => {
+    const s = document.createElement('source');
+    s.src = src;
+    s.type = type;
+    video.appendChild(s);
+  });
+
+  // האם הפריים באמת שקוף? (בודקים את הפינות — שם אמור להיות "כלום")
+  const framePasses = () => {
+    try {
+      const c = document.createElement('canvas');
+      c.width = 32; c.height = 32;
+      const cx = c.getContext('2d', { willReadFrequently: true });
+      cx.drawImage(video, 0, 0, 32, 32);
+      const d = cx.getImageData(0, 0, 32, 32).data;
+      let opaque = 0, lit = 0;
+      for (let i = 0; i < d.length; i += 4) {
+        if (d[i + 3] > 24) opaque++;
+        if (d[i] + d[i + 1] + d[i + 2] > 90) lit++;
+      }
+      const px = 32 * 32;
+      // אטום כמעט לגמרי אבל חשוך = המלבן השחור. פוסלים.
+      return !(opaque / px > 0.92 && lit / px < 0.1);
+    } catch (e) {
+      return false; // לא הצלחנו לבדוק — לא מסתכנים
+    }
+  };
+
+  video.addEventListener('loadeddata', () => {
+    if (!framePasses()) { video.removeAttribute('src'); video.load(); return; }
+    afterReveal(() => {
+      const img = gateLogo.querySelector('img');
+      gateLogo.appendChild(video);
+      if (img) img.style.display = 'none';
+      video.currentTime = 0;
+      video.play().catch(() => {
+        // ניגון נחסם (חיסכון בסוללה וכו') — מחזירים את הלוגו הסטטי
+        video.remove();
+        if (img) img.style.display = '';
       });
-    }, { once: true });
-    video.load();
-  }
+    });
+  }, { once: true });
+  video.addEventListener('error', () => video.remove(), { once: true });
+  video.load();
 }
 
 // אנימציות הופעה בגלילה — מתחילות רק אחרי מסך הפתיחה,

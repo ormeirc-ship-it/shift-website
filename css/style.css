@@ -1786,3 +1786,9 @@ html.journey-on [style*="--j"] .section-head {
 .breathe .label-sky { color: var(--blue-mid); }
 /* הכותרת רחבה מדי במסך אחד — מאזנים שורות */
 .breathe .section-head h2 { text-wrap: balance; }
+
+/* אנימציית הלוגו בשער — תופסת בדיוק את מקום התמונה הסטטית */
+.gate-logo { width: min(300px, 60vw); }
+.gate-logo img, .gate-logo video { width: 100%; height: auto; display: block; }
+.gate-logo video { filter: drop-shadow(0 0 60px rgba(92, 187, 240, 0.45)); }
+@media (max-width: 899px) { .gate-logo { width: min(220px, 62vw); } }
