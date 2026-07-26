@@ -232,7 +232,8 @@ h3 {
   inset: -7%;
   background:
     linear-gradient(rgba(18, 18, 52, 0.25), rgba(18, 18, 52, 0.05) 55%, rgba(18, 18, 52, 0.4)),
-    url("../assets/img/hero-bg-b.jpg") center / cover no-repeat,
+    image-set(url("../assets/img/hero-bg-b.webp") type("image/webp"),
+              url("../assets/img/hero-bg-b.jpg") type("image/jpeg")) center / cover no-repeat,
     var(--navy-deep);
   will-change: transform;
 }
@@ -528,7 +529,8 @@ h3 {
   text-align: center;
   background:
     linear-gradient(rgba(18, 18, 52, 0.55), rgba(18, 18, 52, 0.35)),
-    url("../assets/img/hero-bg-a.jpg") center 70% / cover no-repeat,
+    image-set(url("../assets/img/hero-bg-a.webp") type("image/webp"),
+              url("../assets/img/hero-bg-a.jpg") type("image/jpeg")) center 70% / cover no-repeat,
     var(--navy-deep);
   color: #fff;
 }
@@ -1435,7 +1437,8 @@ body { overflow-x: clip; }
   flex-direction: column;
   background:
     linear-gradient(180deg, rgba(18, 18, 52, 0.55), rgba(18, 18, 52, 0.45) 45%, rgba(18, 18, 52, 0.9)),
-    url("../assets/img/hero-bg-a.jpg") center 70% / cover no-repeat,
+    image-set(url("../assets/img/hero-bg-a.webp") type("image/webp"),
+              url("../assets/img/hero-bg-a.jpg") type("image/jpeg")) center 70% / cover no-repeat,
     var(--navy-deep);
   color: #fff;
 }

@@ -13,7 +13,11 @@
   <link rel="icon" type="image/png" href="assets/brand/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@200;300;400;600;700&display=swap" rel="stylesheet">
+  <!-- הגופן נטען בלי לחסום רינדור: media="print" משחרר את הפרסר,
+       ו-onload מחזיר אותו ל-all ברגע שהגיע. <noscript> לגולשים בלי JS. -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Assistant:wght@200;300;400;600;700&display=swap">
+  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@200;300;400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all';this.onload=null">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Assistant:wght@200;300;400;600;700&display=swap" rel="stylesheet"></noscript>
   <!-- פרמטר הגרסה שובר cache ישן אחרי כל פריסה — לעדכן בכל שינוי CSS/JS -->
   <link rel="stylesheet" href="css/style.css?v=20260726b">
   <script>
@@ -36,7 +40,7 @@
   <!-- מסך פתיחה — נסגר ברגע שהפריים הראשון של הרצף מוכן, לא כשכולו נטען.
        המשפט "מהישרדות ליצירה" עבר לרגע ההגעה אל האור, שם הוא הפואנטה. -->
   <div class="preloader" id="preloader" aria-hidden="true">
-    <img src="assets/brand/logo-white.png" alt="">
+    <img src="assets/brand/logo-white.png" alt="" width="1531" height="940">
     <p class="preloader-line" id="preloaderLine">רגע, נכנסים פנימה…</p>
   </div>
 
@@ -47,7 +51,7 @@
   <header class="nav" id="nav">
     <div class="nav-inner">
       <a href="#top" class="nav-logo" aria-label="SHIFT — לראש העמוד">
-        <img src="assets/brand/logo-white.png" alt="SHIFT">
+        <img src="assets/brand/logo-white.png" alt="SHIFT" width="1531" height="940">
       </a>
       <nav class="nav-links" aria-label="ניווט ראשי">
         <a href="#method">השיטה</a>
@@ -98,7 +102,7 @@
   <section class="dive" id="top">
     <div class="dive-sticky">
       <canvas class="dive-canvas" id="brainCanvas" aria-hidden="true"></canvas>
-      <img class="dive-still" id="brainStill" src="assets/brain-seq/d/f001.webp" alt="" aria-hidden="true">
+      <img class="dive-still" id="brainStill" src="assets/brain-seq/d/f001.webp" alt="" aria-hidden="true" width="900" height="506">
       <div class="dive-veil" id="diveVeil" aria-hidden="true"></div>
 
       <!-- מילות המסע — חולפות תוך כדי הצלילה -->
@@ -110,7 +114,7 @@
 
       <!-- שער הכניסה -->
       <div class="gate" id="diveGate">
-        <div class="gate-logo"><img src="assets/brand/logo-white.png" alt="SHIFT"></div>
+        <div class="gate-logo"><img src="assets/brand/logo-white.png" alt="SHIFT" width="1531" height="940"></div>
         <p class="gate-line">תוכנית לפיתוח אישי · נוירוסיינס × גוף × AI</p>
         <div class="gate-cue" aria-hidden="true"><i></i><span>גללו להיכנס</span></div>
       </div>
@@ -211,7 +215,7 @@
             </p>
           </div>
           <figure class="world-media">
-            <img src="assets/img/world-neuro.jpg" alt="סינפסות זוהרות — רשת עצבית" loading="lazy">
+            <picture><source srcset="assets/img/world-neuro.webp" type="image/webp"><img src="assets/img/world-neuro.jpg" alt="סינפסות זוהרות — רשת עצבית" loading="lazy" width="1200" height="897"></picture>
           </figure>
         </div>
 
@@ -225,7 +229,7 @@
             </p>
           </div>
           <figure class="world-media">
-            <img src="assets/img/world-body.jpg" alt="דמות במדיטציה מול מים שקטים לפנות בוקר" loading="lazy">
+            <picture><source srcset="assets/img/world-body.webp" type="image/webp"><img src="assets/img/world-body.jpg" alt="דמות במדיטציה מול מים שקטים לפנות בוקר" loading="lazy" width="1200" height="897"></picture>
           </figure>
         </div>
 
@@ -239,12 +243,12 @@
             </p>
           </div>
           <figure class="world-media">
-            <img src="assets/img/world-ai.jpg" alt="שדה חלקיקים זוהר — דפוסי בינה" loading="lazy">
+            <picture><source srcset="assets/img/world-ai.webp" type="image/webp"><img src="assets/img/world-ai.jpg" alt="שדה חלקיקים זוהר — דפוסי בינה" loading="lazy" width="1200" height="897"></picture>
           </figure>
         </div>
       </div>
 
-      <img src="assets/brand/asset7.png" alt="" class="worlds-sphere float-slow" aria-hidden="true" loading="lazy">
+      <img src="assets/brand/asset7.png" alt="" class="worlds-sphere float-slow" aria-hidden="true" loading="lazy" width="957" height="851">
     </div>
   </section>
 
@@ -540,7 +544,7 @@
       <div class="event-cards">
         <article class="event-card">
           <figure class="event-media">
-            <img src="assets/img/story.jpg" alt="שקיעה כחולה מול ים שקט" loading="lazy">
+            <picture><source srcset="assets/img/story.webp" type="image/webp"><img src="assets/img/story.jpg" alt="שקיעה כחולה מול ים שקט" loading="lazy" width="1600" height="2068"></picture>
             <!-- TODO: תוכן מ-OC — תמונה אמיתית מריטריט -->
           </figure>
           <div class="event-body">
@@ -553,7 +557,7 @@
         </article>
         <article class="event-card">
           <figure class="event-media">
-            <img src="assets/img/world-body.jpg" alt="דמות במדיטציה מול מים" loading="lazy">
+            <picture><source srcset="assets/img/world-body.webp" type="image/webp"><img src="assets/img/world-body.jpg" alt="דמות במדיטציה מול מים" loading="lazy" width="1200" height="897"></picture>
             <!-- TODO: תוכן מ-OC — תמונה אמיתית מסדנה -->
           </figure>
           <div class="event-body">
@@ -566,7 +570,7 @@
         </article>
         <article class="event-card">
           <figure class="event-media">
-            <img src="assets/img/hero-bg-a.jpg" alt="אופק מואר בזריחה" loading="lazy">
+            <picture><source srcset="assets/img/hero-bg-a.webp" type="image/webp"><img src="assets/img/hero-bg-a.jpg" alt="אופק מואר בזריחה" loading="lazy" width="1600" height="916"></picture>
             <!-- TODO: תוכן מ-OC — תמונה אמיתית מאירוע -->
           </figure>
           <div class="event-body">
@@ -585,7 +589,7 @@
   <section class="story section-light" id="story">
     <div class="container story-grid">
       <figure class="story-media reveal">
-        <img src="assets/img/story.jpg" alt="דמות מביטה אל אופק מואר לפני זריחה" loading="lazy">
+        <picture><source srcset="assets/img/story.webp" type="image/webp"><img src="assets/img/story.jpg" alt="דמות מביטה אל אופק מואר לפני זריחה" loading="lazy" width="1600" height="2068"></picture>
       </figure>
       <div class="story-body">
         <h2 class="reveal delay-1">מתוך הכאב — נולדה פריצת דרך</h2>
@@ -652,7 +656,7 @@
   <footer class="footer">
     <div class="container footer-grid">
       <div class="footer-brand">
-        <img src="assets/brand/logo-white.png" alt="SHIFT" class="footer-logo">
+        <img src="assets/brand/logo-white.png" alt="SHIFT" class="footer-logo" width="1531" height="940">
         <p class="footer-tagline">מהישרדות ליצירה · Shift Your Perspective</p>
       </div>
       <nav class="footer-links" aria-label="ניווט תחתון">
