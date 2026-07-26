@@ -1792,3 +1792,20 @@ html.journey-on [style*="--j"] .section-head {
 .gate-logo img, .gate-logo video { width: 100%; height: auto; display: block; }
 .gate-logo video { filter: drop-shadow(0 0 60px rgba(92, 187, 240, 0.45)); }
 @media (max-width: 899px) { .gate-logo { width: min(220px, 62vw); } }
+
+/* ============================================================
+   שלב 8 — אורך שורה (פריט 10: הסולם צריך לעבוד קשה)
+   ============================================================
+   מדידה ב-768 וב-1440 הראתה עשרות פסקאות שחוצות 75 תווים לשורה.
+   העמודה נפתחת לאורך המסע (--j), אבל הטקסט עצמו לא אמור להתרחב איתה —
+   רק לקבל יותר אוויר סביבו. */
+p { max-width: 68ch; }
+/* מרכזי מטבעם — שומרים על המרכוז */
+.statement-text, .arrival-sub, .section-intro,
+.cta p, .breathe .section-intro { margin-inline: auto; }
+/* פסקאות בתוך רכיבים צרים ממילא — בלי הגבלה כפולה */
+.card p, .tri p, .basket-card p,
+.footer-tagline, .footer-bottom p { max-width: none; }
+/* שורות הימים הן הטקסט הרחב ביותר בעמוד (823px = 109 תווים) */
+.day-body p { max-width: 62ch; }
+.week-desc p { max-width: 60ch; }
