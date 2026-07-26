@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>אב-טיפוס — כניסה דרך המוח | SHIFT</title>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@200;300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#18163B; --navy-deep:#0B0B22; --sky:#5CBBF0;
+    --white-soft:rgba(255,255,255,.86); --white-faint:rgba(255,255,255,.5);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:auto}
+  body{
+    font-family:'Assistant',system-ui,sans-serif;
+    background:var(--navy-deep); color:#fff; overflow-x:hidden;
+  }
+
+  /* ── הבמה: גובה גלילה שמניע את הרצף ─────────────────────── */
+  .dive{ height:520vh; position:relative; }
+  .dive-sticky{
+    position:sticky; top:0; height:100vh; overflow:hidden;
+    display:grid; place-items:center;
+  }
+  #brainCanvas{
+    position:absolute; inset:0; width:100%; height:100%;
+    object-fit:cover; will-change:transform;
+  }
+  /* שכבת האפלה שנמסה ככל שנכנסים לאור */
+  .dive-veil{
+    position:absolute; inset:0; pointer-events:none;
+    background:radial-gradient(120% 90% at 50% 50%, transparent 35%, rgba(11,11,34,.55) 100%);
+  }
+
+  /* ── שכבה 1: המסך הפותח ─────────────────────────────────── */
+  .gate{
+    position:relative; z-index:3; text-align:center;
+    display:flex; flex-direction:column; align-items:center; gap:22px;
+    will-change:transform,opacity;
+  }
+  .gate-mark{
+    font-size:clamp(2.6rem,7vw,4.6rem); font-weight:200; letter-spacing:.16em;
+    text-shadow:0 0 60px rgba(92,187,240,.45);
+  }
+  .gate-line{ font-size:clamp(.95rem,2vw,1.15rem); font-weight:300; color:var(--white-faint); letter-spacing:.04em }
+  .gate-cue{
+    margin-top:14px; display:flex; flex-direction:column; align-items:center; gap:9px;
+    font-size:.8rem; color:var(--white-faint); letter-spacing:.1em;
+  }
+  .gate-cue i{
+    width:1px; height:44px; display:block;
+    background:linear-gradient(to bottom,transparent,var(--sky));
+    animation:drop 2.1s cubic-bezier(.6,0,.3,1) infinite;
+  }
+  @keyframes drop{0%{transform:scaleY(0);transform-origin:top}45%{transform:scaleY(1);transform-origin:top}
+    55%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+  /* ── שכבה 2: מילות המסע שעוברות תוך כדי הצלילה ──────────── */
+  .passing{ position:absolute; inset:0; z-index:2; pointer-events:none }
+  .passing p{
+    position:absolute; inset:auto 0 auto 0; top:50%; transform:translateY(-50%);
+    text-align:center; font-size:clamp(1.5rem,4.5vw,2.7rem); font-weight:200;
+    letter-spacing:.02em; opacity:0; will-change:opacity,transform;
+    text-shadow:0 0 40px rgba(11,11,34,.8);
+  }
+
+  /* ── שכבה 3: ההגעה אל האור ──────────────────────────────── */
+  .arrival{
+    position:absolute; inset:0; z-index:4; display:grid; place-items:center;
+    opacity:0; pointer-events:none; will-change:opacity;
+  }
+  .arrival-in{ text-align:center; padding:0 24px; max-width:760px }
+  .arrival h1{
+    font-size:clamp(2.6rem,9vw,5.6rem); font-weight:200; line-height:1.06;
+    color:var(--navy); letter-spacing:-.02em; text-wrap:balance;
+  }
+  .arrival h1 b{ font-weight:400; color:#1E6FA8 }
+  .arrival p{
+    margin-top:22px; font-size:clamp(1rem,2.2vw,1.2rem); font-weight:300;
+    color:rgba(24,22,59,.72); line-height:1.75; max-width:60ch; margin-inline:auto;
+  }
+  .arrival .ctas{ margin-top:34px; display:flex; gap:14px; justify-content:center; flex-wrap:wrap }
+  .btn{
+    padding:15px 34px; border-radius:999px; font:inherit; font-size:1rem; font-weight:400;
+    cursor:pointer; text-decoration:none; transition:transform .5s cubic-bezier(.22,1,.36,1), box-shadow .5s;
+  }
+  .btn-p{ background:var(--navy); color:#fff }
+  .btn-p:hover{ transform:translateY(-2px); box-shadow:0 14px 40px rgba(24,22,59,.3) }
+  .btn-g{ border:1px solid rgba(24,22,59,.28); color:var(--navy) }
+  .btn-g:hover{ transform:translateY(-2px); background:rgba(24,22,59,.05) }
+
+  /* ── אחרי הכניסה ─────────────────────────────────────────── */
+  .after{ background:#F2F7FB; color:var(--navy); padding:14vh 24px; text-align:center }
+  .after h2{ font-size:clamp(1.6rem,4vw,2.4rem); font-weight:250; margin-bottom:14px }
+  .after p{ color:rgba(24,22,59,.62); font-weight:300; max-width:62ch; margin-inline:auto; line-height:1.8 }
+
+  .loading{
+    position:fixed; inset:0; z-index:20; background:var(--navy-deep);
+    display:grid; place-items:center; transition:opacity .7s ease;
+  }
+  .loading span{ color:var(--white-faint); font-size:.85rem; letter-spacing:.12em }
+  .loading.gone{ opacity:0; pointer-events:none }
+
+  .note{
+    position:fixed; bottom:14px; inset-inline-start:14px; z-index:15;
+    font-size:.72rem; color:rgba(255,255,255,.4); background:rgba(0,0,0,.4);
+    padding:7px 12px; border-radius:8px; backdrop-filter:blur(6px);
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .dive{ height:100vh }
+    .gate-cue i{ animation:none }
+    .arrival{ opacity:1; position:relative; background:#EAF4FB }
+    .passing{ display:none }
+  }
+</style>
+</head>
+<body>
+
+<div class="loading" id="loading"><span>טוען את המוח…</span></div>
+
+<section class="dive" id="dive">
+  <div class="dive-sticky">
+    <canvas id="brainCanvas"></canvas>
+    <div class="dive-veil" id="veil"></div>
+
+    <div class="passing" id="passing">
+      <p data-at="0.30">כל מחשבה מניחה מסלול.</p>
+      <p data-at="0.52">מה שחוזר — נבנה.</p>
+      <p data-at="0.72">וגם מה שנבנה, יכול להשתנות.</p>
+    </div>
+
+    <div class="gate" id="gate">
+      <div class="gate-mark">SHIFT</div>
+      <div class="gate-line">נוירוסיינס · גוף · תודעה</div>
+      <div class="gate-cue"><i></i><span>גללו להיכנס</span></div>
+    </div>
+
+    <div class="arrival" id="arrival">
+      <div class="arrival-in">
+        <h1>מהישרדות <b>ליצירה</b></h1>
+        <p>המערכת שנבנתה כדי לשמור עליך בחיים היא לא בהכרח זו שתביא אותך לחיים שאתה רוצה. כאן לומדים להחליף אותה — צעד אחד ביום.</p>
+        <div class="ctas">
+          <a class="btn btn-p" href="#">מתחילים SHIFT</a>
+          <a class="btn btn-g" href="#">איך זה עובד</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="after">
+  <h2>מכאן העמוד ממשיך כרגיל</h2>
+  <p>הכניסה נגמרה — והמבקר כבר עבר חוויה גופנית של המעבר שהמותג מדבר עליו, לפני שקרא מילה אחת של שיווק.</p>
+</section>
+
+<div class="note">אב-טיפוס · 97 פריימים · 3.2MB</div>
+
+<script>
+(function(){
+  const isMobile = matchMedia('(max-width:899px)').matches;
+  const DIR   = isMobile ? 'assets/brain-seq/m/' : 'assets/brain-seq/d/';
+  const COUNT = isMobile ? 65 : 97;
+  const pad = n => String(n).padStart(3,'0');
+
+  const canvas  = document.getElementById('brainCanvas');
+  const ctx     = canvas.getContext('2d', { alpha:false });
+  const gate    = document.getElementById('gate');
+  const passing = document.getElementById('passing');
+  const arrival = document.getElementById('arrival');
+  const veil    = document.getElementById('veil');
+  const dive    = document.getElementById('dive');
+  const loading = document.getElementById('loading');
+  const lines   = [...passing.querySelectorAll('p')];
+  const reduced = matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  const frames = [];
+  let ready = 0, current = -1;
+
+  function fit(){
+    const dpr = Math.min(devicePixelRatio||1, 2);
+    canvas.width  = innerWidth  * dpr;
+    canvas.height = innerHeight * dpr;
+    draw(current < 0 ? 0 : current, true);
+  }
+
+  // ציור בכיסוי מלא (object-fit: cover) על הקנבס
+  function draw(i, force){
+    if (i === current && !force) return;
+    const img = frames[i];
+    if (!img || !img.complete || !img.naturalWidth) return;
+    current = i;
+    const cw = canvas.width, ch = canvas.height;
+    const s  = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
+    const w = img.naturalWidth * s, h = img.naturalHeight * s;
+    ctx.drawImage(img, (cw - w)/2, (ch - h)/2, w, h);
+  }
+
+  function preload(){
+    for (let i = 1; i <= COUNT; i++){
+      const img = new Image();
+      img.decoding = 'async';
+      img.onload = img.onerror = () => {
+        if (++ready === 1) { draw(0, true); }
+        if (ready >= COUNT) {
+          loading.classList.add('gone');
+          setTimeout(()=>loading.remove(), 800);
+        }
+      };
+      img.src = DIR + 'f' + pad(i) + '.webp';
+      frames.push(img);
+    }
+  }
+
+  // ── מיפוי הגלילה לפריים ולשכבות ──────────────────────────
+  let target = 0, eased = 0, raf = null;
+
+  function onScroll(){
+    const rect = dive.getBoundingClientRect();
+    const total = dive.offsetHeight - innerHeight;
+    target = Math.min(Math.max(-rect.top / total, 0), 1);
+    if (!raf) raf = requestAnimationFrame(tick);
+  }
+
+  function tick(){
+    // החלקה — הצלילה "נושמת" ולא קופצת עם גלגלת העכבר
+    eased += (target - eased) * 0.14;
+    if (Math.abs(target - eased) < 0.0004) eased = target;
+
+    const p = eased;
+    draw(Math.min(COUNT - 1, Math.round(p * (COUNT - 1))));
+
+    // שער הפתיחה נסוג פנימה
+    const gOut = Math.min(p / 0.18, 1);
+    gate.style.opacity   = String(1 - gOut);
+    gate.style.transform = `scale(${1 + gOut * 0.35}) translateZ(0)`;
+
+    // מילות המסע — כל אחת נדלקת סביב הנקודה שלה
+    lines.forEach(el => {
+      const at = parseFloat(el.dataset.at);
+      const d  = Math.abs(p - at);
+      const vis = Math.max(0, 1 - d / 0.1);
+      el.style.opacity   = String(vis);
+      el.style.transform = `translateY(${-50 + (p - at) * 90}%) scale(${0.96 + vis * 0.06})`;
+    });
+
+    // ההגעה אל האור
+    const aIn = Math.max(0, (p - 0.86) / 0.14);
+    arrival.style.opacity = String(aIn);
+    arrival.style.pointerEvents = aIn > 0.6 ? 'auto' : 'none';
+    veil.style.opacity = String(1 - aIn);
+
+    raf = (Math.abs(target - eased) > 0.0004) ? requestAnimationFrame(tick) : null;
+  }
+
+  if (reduced){
+    // גרסה שקטה: פריים אחד מייצג, בלי צלילה
+    const img = new Image();
+    img.onload = () => { frames[0] = img; fit(); loading.classList.add('gone'); };
+    img.src = DIR + 'f001.webp';
+    frames.push(img);
+    addEventListener('resize', fit);
+    return;
+  }
+
+  preload();
+  fit();
+  addEventListener('resize', fit, { passive:true });
+  addEventListener('scroll', onScroll, { passive:true });
+  onScroll();
+})();
+</script>
+</body>
+</html>

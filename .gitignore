@@ -7,3 +7,6 @@ assets/img/story-a.jpg
 assets/img/story-b.jpg
 _old-version/
 .DS_Store
+
+# מקור הרצף — 14MB, לא נדרש לאתר (הפריימים ב-assets/brain-seq/)
+assets/video/brain-intro-source.mp4

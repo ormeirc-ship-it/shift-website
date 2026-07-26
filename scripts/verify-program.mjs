@@ -2,10 +2,11 @@
 /**
  * verify-program.mjs — מוודא שסקשן "מסלול 21 הימים" באתר תואם למקור האמת.
  *
- * מקור האמת: data.js של האפליקציה (DEFAULT_DAYS + WEEK_INTROS).
- * ברירת המחדל היא עותק הריפו של הפלטפורמה — שאומת (md5, 26.7.2026) כזהה
- * בית-לבית ל-data.js שהאפליקציה החיה מגישה ב-shift-21-day-course-ceos.web.app.
- * העותק ב-Documents הוא סנפשוט ישן (7.7.2026) ומשמש fallback אחרון בלבד.
+ * מקור האמת: data.js של האפליקציה (DEFAULT_DAYS + WEEK_INTROS) בריפו הפלטפורמה,
+ * שאומת (md5, 26.7.2026) כזהה בית-לבית ל-data.js שהאפליקציה החיה מגישה.
+ *
+ * הסנפשוט הישן ב-Documents הוסר כ-fallback ב-26.7.2026 והועבר ל-_ארכיון-מיושן-7.7.
+ * אם הריפו לא נמצא — הסקריפט נכשל ברעש במקום לאמת מול מקור מת.
  *
  * שימוש:  node scripts/verify-program.mjs
  * יוצא עם קוד 1 אם יש אי-התאמה — אפשר לחבר ל-CI או להריץ לפני כל commit.
@@ -26,9 +27,8 @@ const CANDIDATES = [
   process.env.SHIFT_DATA_JS,
   // עותק הריפו — זהה ל-data.js הפרוס באפליקציה החיה (אומת md5 ב-26.7.2026)
   resolve(homedir(), 'Desktop/SHIFT/shift platform main /shift-platform/קבצי קוד/data.js'),
-  // סנפשוט ישן (7.7.2026) — fallback אחרון בלבד
-  resolve(homedir(), 'Documents/Claude/Projects/SHIFT/app/data.js'),
-  resolve(SITE, '../../../Documents/Claude/Projects/SHIFT/app/data.js'),
+  // אין fallback לסנפשוט הישן — הועבר ל-_ארכיון-מיושן-7.7 ב-26.7.2026.
+  // מוטב להיכשל ברעש מאשר לאמת מול מקור מת (זה בדיוק מה שקרה ב-26.7).
 ].filter(Boolean);
 
 const DATA_JS = CANDIDATES.find((p) => existsSync(p));

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>החלטות עיצוב — טיפוגרפיה וצבע | SHIFT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@200;300;400;600;700&family=Frank+Ruhl+Libre:wght@300;400;500;700&family=Bellefair&family=Suez+One&family=Heebo:wght@100;200;300;400;700;900&family=David+Libre:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#18163B; --navy-deep:#0B0B22; --sky:#5CBBF0;
+  --ui-bg:#101024; --ui-line:rgba(255,255,255,.12);
+  --body-font:'Assistant',system-ui,sans-serif;
+  --display-font:'Assistant',system-ui,sans-serif;
+  --display-weight:200;
+  --display-track:-0.02em;
+  /* צבע — נדרס ע"י ערכות */
+  --dark:#18163B; --light:#F6F5F2; --ink:#18163B; --accent:#5CBBF0;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--body-font);background:var(--ui-bg);color:#fff;padding-bottom:120px}
+
+/* ── סרגל הבקרה ─────────────────────────────── */
+.bar{position:sticky;top:0;z-index:50;background:rgba(10,10,26,.94);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--ui-line);padding:14px 20px}
+.bar-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;max-width:1200px;margin:0 auto}
+.bar-row + .bar-row{margin-top:10px}
+.bar-lbl{font-size:.74rem;color:rgba(255,255,255,.45);letter-spacing:.08em;min-width:78px}
+.chip{padding:8px 15px;border-radius:999px;border:1px solid var(--ui-line);background:transparent;
+  color:rgba(255,255,255,.72);font:inherit;font-size:.85rem;cursor:pointer;transition:.25s}
+.chip:hover{border-color:rgba(255,255,255,.32);color:#fff}
+.chip.on{background:var(--sky);border-color:var(--sky);color:#0B0B22;font-weight:600}
+.chip small{display:block;font-size:.68rem;opacity:.62;font-weight:400;margin-top:1px}
+
+/* ── כרטיס תצוגה ─────────────────────────────── */
+.stage{max-width:1200px;margin:34px auto;padding:0 20px}
+.card{border-radius:20px;overflow:hidden;border:1px solid var(--ui-line);margin-bottom:30px}
+.card-tag{padding:9px 18px;font-size:.72rem;letter-spacing:.1em;color:rgba(255,255,255,.42);
+  background:rgba(255,255,255,.03);border-bottom:1px solid var(--ui-line)}
+
+/* הירו */
+.demo-hero{background:var(--dark);padding:88px 44px;text-align:center;position:relative;overflow:hidden}
+.demo-hero::after{content:'';position:absolute;inset:auto -10% -60% -10%;height:70%;
+  background:radial-gradient(60% 100% at 50% 100%, color-mix(in oklab, var(--accent) 34%, transparent), transparent 72%)}
+.demo-hero > *{position:relative;z-index:1}
+.demo-hero h1{font-family:var(--display-font);font-weight:var(--display-weight);
+  letter-spacing:var(--display-track);font-size:clamp(2.6rem,7.5vw,5.2rem);line-height:1.05;
+  color:#fff;text-wrap:balance}
+.demo-hero h1 em{font-style:normal;color:var(--accent)}
+.demo-hero p{margin:24px auto 0;max-width:56ch;font-weight:300;line-height:1.8;
+  color:rgba(255,255,255,.72);font-size:clamp(.98rem,1.9vw,1.12rem)}
+
+/* סקשן בהיר */
+.demo-light{background:var(--light);padding:74px 44px;color:var(--ink)}
+.demo-light h2{font-family:var(--display-font);font-weight:var(--display-weight);
+  letter-spacing:var(--display-track);font-size:clamp(1.9rem,4.6vw,3.1rem);line-height:1.18;
+  max-width:22ch;text-wrap:balance}
+.demo-light h2 em{font-style:normal;border-bottom:2px solid var(--accent);padding-bottom:3px}
+.demo-light p{margin-top:22px;max-width:62ch;font-weight:300;line-height:1.85;
+  color:color-mix(in oklab, var(--ink) 74%, transparent);font-size:1.02rem}
+.demo-light .sub{margin-top:34px;font-family:var(--display-font);font-weight:var(--display-weight);
+  font-size:clamp(1.4rem,3vw,2rem);letter-spacing:var(--display-track)}
+
+/* מדדים */
+.meta{display:flex;gap:26px;flex-wrap:wrap;padding:14px 18px;font-size:.76rem;
+  color:rgba(255,255,255,.5);background:rgba(255,255,255,.02);border-top:1px solid var(--ui-line)}
+.meta b{color:rgba(255,255,255,.8);font-weight:600}
+.ok{color:#6ee7a8} .warn{color:#ffcc66} .bad{color:#ff7b7b}
+
+.note{max-width:1200px;margin:0 auto 30px;padding:18px 22px;border-radius:14px;
+  background:rgba(92,187,240,.07);border:1px solid rgba(92,187,240,.22);
+  font-size:.9rem;line-height:1.75;color:rgba(255,255,255,.78)}
+.note b{color:var(--sky)}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div class="bar-row">
+    <span class="bar-lbl">כותרות</span>
+    <button class="chip on" data-type="now">Assistant 200<small>מה שיש היום</small></button>
+    <button class="chip" data-type="frank">Frank Ruhl Libre<small>סריף עיתונאי</small></button>
+    <button class="chip" data-type="bellefair">Bellefair<small>סריף אוורירי</small></button>
+    <button class="chip" data-type="david">David Libre<small>סריף קלאסי</small></button>
+    <button class="chip" data-type="suez">Suez One<small>כבד ופוסטרי</small></button>
+    <button class="chip" data-type="heavy">Assistant 700<small>ניגוד משקל</small></button>
+  </div>
+  <div class="bar-row">
+    <span class="bar-lbl">צבע</span>
+    <button class="chip on" data-col="now">קיים<small>בז' #F6F5F2</small></button>
+    <button class="chip" data-col="committed">מחויבת<small>אוף-וייט נקי</small></button>
+    <button class="chip" data-col="tinted">מחויבת+<small>נוטה לתכלת</small></button>
+    <button class="chip" data-col="drenched">טבולה<small>בלי בהיר בכלל</small></button>
+  </div>
+</div>
+
+<div class="stage">
+  <div class="note">
+    <b>שתי החלטות שחוסמות את כל שאר העיצוב.</b> החלף בין האפשרויות למעלה וראה את אותם
+    טקסטים אמיתיים מהאתר. הטיפוגרפיה: כרגע כל האתר הוא משפחה אחת, וזה גורם לכל
+    הרגיסטרים להישמע זהה — סריף מול סאנס פותח ציר ניגוד אמיתי. הצבע: <b>#F6F5F2</b>
+    הוא בדיוק גוון הבז' שכל מחולל אתרים מייצר. שלוש החלופות מתחייבות לכיוון.
+  </div>
+
+  <div class="card">
+    <div class="card-tag">ההירו</div>
+    <div class="demo-hero">
+      <h1>מהישרדות <em>ליצירה</em></h1>
+      <p>SHIFT היא תוכנית לפיתוח אישי שמחברת בין מדעי המוח, מודעות גופנית ובינה מלאכותית — מסע מעשי מתגובתיות אוטומטית אל חיים של בחירה, יצירה וצמיחה.</p>
+    </div>
+    <div class="meta" id="metaHero"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-tag">ההצהרה — הסקשן הבהיר</div>
+    <div class="demo-light">
+      <h2>המציאות היא לא מה שאנחנו רואים — <em>אלא האופן שבו אנחנו מפרשים אותה.</em></h2>
+      <p>רובנו מפרשים את העולם מתוך פחד, לחץ ומצב פנימי הישרדותי. גם כשאנחנו מצליחים לגעת לרגע בחיים ה"מושלמים" שאנחנו מייחלים להם — בלי לשנות את דרך החשיבה, ההרגלים ורמת המודעות, הכול חוזר לאותו מקום.</p>
+      <div class="sub">שלושה עולמות. דרך אחת.</div>
+    </div>
+    <div class="meta" id="metaLight"></div>
+  </div>
+</div>
+
+<script>
+const TYPES = {
+  now:       { f:"'Assistant',sans-serif",         w:200, t:'-0.02em', name:'Assistant 200' },
+  frank:     { f:"'Frank Ruhl Libre',serif",       w:300, t:'-0.015em',name:'Frank Ruhl Libre 300' },
+  bellefair: { f:"'Bellefair',serif",              w:400, t:'0em',     name:'Bellefair 400' },
+  david:     { f:"'David Libre',serif",            w:400, t:'-0.01em', name:'David Libre 400' },
+  suez:      { f:"'Suez One',serif",               w:400, t:'-0.03em', name:'Suez One' },
+  heavy:     { f:"'Assistant',sans-serif",         w:700, t:'-0.035em',name:'Assistant 700' },
+};
+const COLS = {
+  now:       { dark:'#18163B', light:'#F6F5F2', ink:'#18163B', accent:'#5CBBF0', name:'קיים — בז׳ חם' },
+  committed: { dark:'#18163B', light:'#FCFCFC', ink:'#141232', accent:'#2E8FCB', name:'מחויבת — אוף-וייט נקי' },
+  tinted:    { dark:'#141232', light:'#EEF5FA', ink:'#10203A', accent:'#1E6FA8', name:'מחויבת+ — נוטה לתכלת' },
+  drenched:  { dark:'#0B0B22', light:'#1B2A4A', ink:'#EAF4FB', accent:'#5CBBF0', name:'טבולה — בלי בהיר' },
+};
+
+const root = document.documentElement.style;
+let curType = 'now', curCol = 'now';
+
+// יחס ניגודיות לפי WCAG
+function lum(hex){
+  const c = hex.replace('#','').match(/../g).map(x=>parseInt(x,16)/255)
+    .map(v => v <= .03928 ? v/12.92 : Math.pow((v+.055)/1.055, 2.4));
+  return .2126*c[0] + .7152*c[1] + .0722*c[2];
+}
+function ratio(a,b){ const l1=lum(a), l2=lum(b); const [hi,lo]=l1>l2?[l1,l2]:[l2,l1];
+  return (hi+.05)/(lo+.05); }
+function verdict(r, big){
+  const need = big ? 3 : 4.5;
+  const cls = r >= need ? 'ok' : (r >= need-1 ? 'warn' : 'bad');
+  const mark = r >= need ? '✓ עובר' : '✗ נכשל';
+  return `<span class="${cls}">${r.toFixed(2)}:1 ${mark}</span>`;
+}
+// טקסט גוף בשקיפות 74% מעל הרקע — מחשבים את הצבע האפקטיבי
+function blend(fg,bg,a){
+  const f=fg.replace('#','').match(/../g).map(x=>parseInt(x,16));
+  const b=bg.replace('#','').match(/../g).map(x=>parseInt(x,16));
+  return '#'+f.map((v,i)=>Math.round(v*a+b[i]*(1-a)).toString(16).padStart(2,'0')).join('');
+}
+
+function apply(){
+  const t = TYPES[curType], c = COLS[curCol];
+  root.setProperty('--display-font', t.f);
+  root.setProperty('--display-weight', t.w);
+  root.setProperty('--display-track', t.t);
+  root.setProperty('--dark', c.dark);
+  root.setProperty('--light', c.light);
+  root.setProperty('--ink', c.ink);
+  root.setProperty('--accent', c.accent);
+
+  const heroBody = blend('#ffffff', c.dark, .72);
+  document.getElementById('metaHero').innerHTML =
+    `<span><b>${t.name}</b> · ${c.name}</span>` +
+    `<span>כותרת על כהה: ${verdict(ratio('#ffffff', c.dark), true)}</span>` +
+    `<span>מילת ההדגשה: ${verdict(ratio(c.accent, c.dark), true)}</span>` +
+    `<span>טקסט גוף: ${verdict(ratio(heroBody, c.dark), false)}</span>`;
+
+  const lightBody = blend(c.ink, c.light, .74);
+  document.getElementById('metaLight').innerHTML =
+    `<span>כותרת על בהיר: ${verdict(ratio(c.ink, c.light), true)}</span>` +
+    `<span>טקסט גוף: ${verdict(ratio(lightBody, c.light), false)}</span>` +
+    `<span>קו ההדגשה: ${verdict(ratio(c.accent, c.light), true)}</span>`;
+}
+
+document.querySelectorAll('[data-type]').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('[data-type]').forEach(x => x.classList.remove('on'));
+  b.classList.add('on'); curType = b.dataset.type; apply();
+}));
+document.querySelectorAll('[data-col]').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('[data-col]').forEach(x => x.classList.remove('on'));
+  b.classList.add('on'); curCol = b.dataset.col; apply();
+}));
+apply();
+</script>
+</body>
+</html>

@@ -28,7 +28,6 @@ const CANDIDATES = [
   // (אומת ב-md5 מול https://shift-21-day-course-ceos.web.app/data.js ב-26.7.2026)
   resolve(homedir(), 'Desktop/SHIFT/shift platform main /shift-platform/קבצי קוד/data.js'),
   // עותק ישן (7.7.2026) — fallback אחרון בלבד
-  resolve(homedir(), 'Documents/Claude/Projects/SHIFT/app/data.js'),
 ].filter(Boolean);
 
 const DATA_JS = CANDIDATES.find((p) => existsSync(p));
