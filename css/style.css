@@ -94,14 +94,6 @@ h3 {
 }
 .label-sky { color: var(--sky); }
 
-.grad-text {
-  background: linear-gradient(105deg, var(--sky) 15%, #9AD6F8 85%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-  font-weight: 300;
-}
 
 /* ---------- כפתורים ---------- */
 .btn {
@@ -1705,3 +1697,39 @@ html.dive-live .dive-still { display: none; }
   .arrival { opacity: 1; pointer-events: auto; position: relative; z-index: 5; }
   .dive-veil { background: rgba(246, 245, 242, 0.72); }
 }
+
+/* ============================================================
+   שלב 2 — הסרת תבניות: טריפטיך במקום רשת קלפים שנייה
+   ============================================================ */
+
+/* סל המוצרים משתמש בקלפים כי הם יעדים ללחיצה. שלושת עקרונות ההרגלים
+   אינם קישורים — קו שיער וטיפוגרפיה נושאים אותם טוב יותר מקופסאות,
+   וגם מונעים שתי רשתות זהות באותו עמוד. */
+.triptych {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(28px, 5vw, 64px);
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  padding-top: clamp(28px, 4vw, 44px);
+}
+.tri h3 {
+  font-size: clamp(1.15rem, 2.4vw, 1.4rem);
+  font-weight: 400;
+  color: #fff;
+  margin-bottom: 12px;
+  text-wrap: balance;
+}
+.tri p {
+  color: var(--white-soft);
+  font-size: 1rem;
+  max-width: 42ch;
+}
+@media (max-width: 899px) {
+  .triptych { grid-template-columns: 1fr; gap: 0; }
+  .tri { padding: 26px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.12); }
+  .tri:last-child { border-bottom: none; }
+}
+
+/* המספור בסקשן "איך עושים SHIFT" נשאר — שם הוא רצף אמיתי בן 4 שלבים
+   ולא קישוט. עכשיו כשהמספור בפינות הוסר, הוא יכול להיות נוכח יותר. */
+.step-num { font-size: clamp(2.4rem, 5.5vw, 3.8rem); }
