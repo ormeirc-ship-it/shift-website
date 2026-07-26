@@ -217,3 +217,46 @@ if (burger && menu) {
     runRound(1);
   });
 })();
+
+// ── גוון הניווט לפי מה שיושב מתחתיו ─────────────────────────────────
+// סרגל נייבי אטום על רקע בהיר נראה כמו רכיב מדף שהודבק מעל חוויה.
+// מיושם ב-IntersectionObserver ולא ב-ScrollTrigger, כדי שיעבוד גם כשמנוע
+// התנועה כבוי (prefers-reduced-motion) — שם הבעיה זהה ולא פחות חמורה.
+//
+// rootMargin חותך את המסך לפס דק בדיוק מתחת לסרגל, כך שהתצפית עונה על
+// השאלה "מה נמצא *מאחורי* הניווט" ולא "מה במרכז המסך".
+//
+// מקורות בהירים יכולים לחפוף (ההגעה לאור וההצהרה מיד אחריה), ולכן
+// נספרים במפה ולא בדגל בוליאני.
+(() => {
+  const docEl = document.documentElement;
+  const active = Object.create(null);
+  const apply = () => docEl.classList.toggle('nav-light', Object.values(active).some(Boolean));
+  window.__navTone = { set: (key, on) => { active[key] = !!on; apply(); }, active };
+
+  const LIGHT = ['.statement', '#method', '#breathe', '#path', '#story', '#outcomes'];
+  const navH = parseInt(getComputedStyle(docEl).getPropertyValue('--nav-h'), 10) || 72;
+
+  if (!('IntersectionObserver' in window)) return;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => window.__navTone.set(e.target.dataset.navKey, e.isIntersecting));
+  }, { rootMargin: `-${navH}px 0px -${Math.max(0, window.innerHeight - navH - 4)}px 0px` });
+
+  LIGHT.forEach((sel) => {
+    const el = document.querySelector(sel);
+    if (!el) return;
+    el.dataset.navKey = sel;
+    io.observe(el);
+  });
+
+  // המסלול מתחיל כהה ונגמר בהיר — עוקבים אחרי אותה מחלקה שמסמנת את המעבר
+  const prog = document.querySelector('.program');
+  if (prog && 'MutationObserver' in window) {
+    const sync = () => window.__navTone.set('#program',
+      prog.classList.contains('lit') && prog.getBoundingClientRect().top <= navH
+        && prog.getBoundingClientRect().bottom > navH);
+    new MutationObserver(sync).observe(prog, { attributes: true, attributeFilter: ['class'] });
+    addEventListener('scroll', sync, { passive: true });
+    sync();
+  }
+})();

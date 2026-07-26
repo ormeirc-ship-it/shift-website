@@ -221,7 +221,7 @@
       return stats;
     }
 
-    var target = 0, eased = 0;
+    var target = 0, eased = 0, hushOn = false, litOn = false, onScreen = true;
 
     function render() {
       eased += (target - eased) * 0.14;
@@ -249,6 +249,15 @@
 
       // ההגעה אל האור
       var aIn = Math.max(0, Math.min((p - 0.86) / 0.14, 1));
+      // הסרגל לא חלק מהצלילה: נסוג אחרי שיוצאים מהשער, וחוזר עם האור.
+      // (ההשוואה מונעת כתיבה ל-classList בכל פריים)
+      // onScreen מגיע מה-ScrollTrigger. בלעדיו render — שרץ בכל פריים —
+      // היה מחזיר את מצב ה"בהיר" מיד אחרי שהצלילה יצאה מהמסך, כי target
+      // נשאר 1 לנצח אחרי סוף הסקשן.
+      var hush = onScreen && p > 0.06 && aIn < 0.35;
+      if (hush !== hushOn) { hushOn = hush; docEl.classList.toggle('dive-hush', hush); }
+      var lit = onScreen && aIn > 0.5;
+      if (lit !== litOn && window.__navTone) { litOn = lit; window.__navTone.set('dive', lit); }
       if (arrival) {
         arrival.style.opacity = String(aIn);
         arrival.style.pointerEvents = aIn > 0.6 ? 'auto' : 'none';
@@ -264,6 +273,19 @@
       end: 'bottom bottom',
       onUpdate: function (self) { target = self.progress; },
       onRefresh: function (self) { target = eased = self.progress; render(); }
+      // ברגע שההצהרה מכסה את הצלילה, היא כבר לא מה שיושב מאחורי הסרגל —
+      // בלי זה מצב ה"בהיר" של ההגעה נדבק והופך גם סקשנים כהים לבהירים
+
+    });
+
+    // טווח הנראוּת של הצלילה — רחב יותר מטווח ההתקדמות בכוונה.
+    // טריגר ההתקדמות מסתיים ב-'bottom bottom', ובדיוק בנקודה הזו ההגעה
+    // אל האור עדיין מלאה על המסך; שימוש ב-isActive שלו היה מכבה את
+    // הסרגל הבהיר בדיוק ברגע הזה. כאן הצלילה "על המסך" עד שתחתיתה
+    // עוברת את ראש החלון.
+    ScrollTrigger.create({
+      trigger: section, start: 'top top', end: 'bottom top',
+      onToggle: function (self) { onScreen = self.isActive; render(); }
     });
 
     // חשוף לבדיקות אוטומטיות, כמו window.__lenis — בסביבת בדיקה ה-rAF

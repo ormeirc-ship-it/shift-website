@@ -1674,3 +1674,47 @@ p { max-width: 68ch; }
 /* שורות הימים הן הטקסט הרחב ביותר בעמוד (823px = 109 תווים) */
 .day-body p { max-width: 62ch; }
 .week-desc p { max-width: 60ch; }
+
+/* ============================================================
+   סרגל ניווט שמשתנה עם מה שמאחוריו
+   ============================================================
+   הפס הנייבי האטום ישב על הרקע הבהיר וחתך את הרגע הכי פתוח באתר —
+   נראה כמו רכיב מדף שהודבק מעל חוויה. עכשיו הוא קורא את הסקשן שמתחתיו.
+   החלפת הלוגו נעשית בין שני נכסי מותג אמיתיים, בלי פילטר CSS. */
+.nav-logo { position: relative; display: block; }
+.nav-logo img { height: 30px; width: auto; transition: opacity 0.45s ease; }
+.nav-logo .logo-on-light { position: absolute; inset-inline-start: 0; top: 0; opacity: 0; }
+html.nav-light .nav-logo .logo-on-dark { opacity: 0; }
+html.nav-light .nav-logo .logo-on-light { opacity: 1; }
+
+html.nav-light .nav.scrolled {
+  background: rgba(246, 245, 242, 0.82);
+  box-shadow: 0 1px 0 rgba(24, 22, 59, 0.09);
+}
+html.nav-light .nav-burger-word { color: var(--ink-soft); }
+html.nav-light .nav-burger-lines span { background: var(--navy); }
+html.nav-light .nav-links a { color: var(--ink-soft); }
+html.nav-light .nav-links a:hover { color: var(--navy); }
+/* התפריט הפתוח תמיד כהה — הוא מסך מלא משלו */
+html.nav-light .mobile-menu.open ~ * .nav-burger-lines span,
+.mobile-menu.open ~ .nav .nav-burger-lines span { background: #fff; }
+
+/* בצלילה עצמה הסרגל נסוג — הוא לא חלק מהחוויה עד שנוחתים */
+html.dive-hush .nav {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-8px);
+}
+.nav { transition: background-color 0.35s ease, box-shadow 0.35s ease,
+                   opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+                   transform 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
+
+@media (prefers-reduced-motion: reduce) {
+  html.dive-hush .nav { opacity: 1; pointer-events: auto; transform: none; }
+  .nav, .nav-logo img { transition: none; }
+}
+
+/* כותרת סקשן הנשימה גלשה במובייל כך שהקו המפריד נפל בסוף השורה.
+   הניסוח שונה כך שהקו נמצא באמצע ולא בקצה, ו-balance מחלק את השורות. */
+.breathe .section-head h2 { text-wrap: balance; max-width: 18ch; }
+@media (max-width: 899px) { .breathe .section-head h2 { max-width: 15ch; } }
