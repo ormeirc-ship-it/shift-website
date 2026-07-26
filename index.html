@@ -78,7 +78,8 @@
   <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
 
 
-  <!-- פתיח -->
+  <!-- פתיח + הצהרה: במת הכיסוי — ההצהרה מחליקה מעל ההירו -->
+  <div class="cover-stage">
   <section class="hero" id="top">
     <div class="hero-bg" id="heroBg" aria-hidden="true"></div>
     <div class="hero-aurora" aria-hidden="true"></div>
@@ -117,6 +118,7 @@
       </p>
     </div>
   </section>
+  </div><!-- /cover-stage -->
 
   <!-- מה אנחנו עושים: סל המוצרים -->
   <section class="basket section-dark" id="products">
@@ -252,6 +254,42 @@
     </div>
   </section>
 
+
+  <!-- המסלול -->
+  <section class="path section-light" id="path">
+    <span class="sec-num" aria-hidden="true">04</span>
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="label">המסלול</p>
+        <h2>איך עושים SHIFT</h2>
+      </div>
+      <div class="steps-wrap">
+      <div class="path-track" aria-hidden="true"><span class="path-line" id="pathLine"></span></div>
+      <ol class="steps">
+        <li class="step reveal">
+          <span class="step-num">1</span>
+          <h3>עוצרים</h3>
+          <p>מזהים את האוטומטים — הרגעים שבהם פחד ולחץ מנהלים אותנו בלי שנשים לב.</p>
+        </li>
+        <li class="step reveal delay-1">
+          <span class="step-num">2</span>
+          <h3>מבינים</h3>
+          <p>לומדים את המדע שמאחורי התודעה — איך המוח, הגוף וההרגלים מעצבים את המציאות שלנו.</p>
+        </li>
+        <li class="step reveal delay-2">
+          <span class="step-num">3</span>
+          <h3>מתרגלים</h3>
+          <p>מטמיעים הרגלים מעצבי תודעה — תרגול יומי קצר שמחבר גוף, מוח ורגש.</p>
+        </li>
+        <li class="step reveal delay-3">
+          <span class="step-num">4</span>
+          <h3>יוצרים</h3>
+          <p>עוברים מהישרדות ליצירה — חיים של בחירה מודעת, צמיחה ואהבה.</p>
+        </li>
+      </ol>
+      </div>
+    </div>
+  </section>
 
   <!-- המסלול: 21 הימים -->
   <section class="program section-dark" id="program">
@@ -555,42 +593,8 @@
     </div>
   </section>
 
-  <!-- המסלול -->
-  <section class="path section-light" id="path">
-    <span class="sec-num" aria-hidden="true">04</span>
-    <div class="container">
-      <div class="section-head reveal">
-        <p class="label">המסלול</p>
-        <h2>איך עושים SHIFT</h2>
-      </div>
-      <div class="steps-wrap">
-      <div class="path-track" aria-hidden="true"><span class="path-line" id="pathLine"></span></div>
-      <ol class="steps">
-        <li class="step reveal">
-          <span class="step-num">1</span>
-          <h3>עוצרים</h3>
-          <p>מזהים את האוטומטים — הרגעים שבהם פחד ולחץ מנהלים אותנו בלי שנשים לב.</p>
-        </li>
-        <li class="step reveal delay-1">
-          <span class="step-num">2</span>
-          <h3>מבינים</h3>
-          <p>לומדים את המדע שמאחורי התודעה — איך המוח, הגוף וההרגלים מעצבים את המציאות שלנו.</p>
-        </li>
-        <li class="step reveal delay-2">
-          <span class="step-num">3</span>
-          <h3>מתרגלים</h3>
-          <p>מטמיעים הרגלים מעצבי תודעה — תרגול יומי קצר שמחבר גוף, מוח ורגש.</p>
-        </li>
-        <li class="step reveal delay-3">
-          <span class="step-num">4</span>
-          <h3>יוצרים</h3>
-          <p>עוברים מהישרדות ליצירה — חיים של בחירה מודעת, צמיחה ואהבה.</p>
-        </li>
-      </ol>
-    </div>
-  </section>
-
-  <!-- קריאה לפעולה -->
+  <!-- סצנת הסיום: קריאה לפעולה + פוטר — מסך סוגר אחד ענק -->
+  <div class="closing">
   <section class="cta section-dark" id="contact">
     <div class="container narrow cta-content">
       <h2 class="reveal">מוכנים לעשות SHIFT?</h2>
@@ -605,6 +609,8 @@
       </div>
     </div>
   </section>
+
+  <div class="closing-word" aria-hidden="true">SHIFT</div>
 
   <!-- פוטר -->
   <footer class="footer">
@@ -627,6 +633,7 @@
       <p>© 2026 SHIFT. כל הזכויות שמורות.</p>
     </div>
   </footer>
+  </div><!-- /closing -->
 
   <script src="assets/vendor/gsap.min.js" defer></script>
   <script src="assets/vendor/ScrollTrigger.min.js" defer></script>

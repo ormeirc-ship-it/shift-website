@@ -1408,3 +1408,88 @@ section:has(> .sec-num) { position: relative; }
 
 /* המסלול: רקע אחיד שמאפשר את מעבר הצבע כהה→בהיר (בלי גרדיאנט הסקשן) */
 .program.section-dark { background-image: none; background-color: var(--navy-deep); }
+
+/* ============================================================
+   מעברי-כיסוי בין פרקים + סצנת סיום ענקית (איזאנמי)
+   ============================================================ */
+
+/* clip לא הופך את ה-body למיכל גלילה — כך ש-position: sticky ממשיך לעבוד
+   (בדפדפנים בלי תמיכה נשאר ה-hidden שהוגדר למעלה) */
+body { overflow-x: clip; }
+
+/* --- במת הכיסוי: ההירו נעצר וההצהרה מחליקה מעליו כמו יריעה --- */
+.cover-stage { position: relative; }
+.hero {
+  position: sticky;
+  top: 0;
+}
+.statement {
+  position: relative;
+  z-index: 1;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 28px 28px 0 0;
+  box-shadow: 0 -26px 80px rgba(18, 18, 52, 0.45);
+}
+
+/* --- סצנת הסיום: CTA + מילת ענק + פוטר על רקע רציף אחד --- */
+.closing {
+  position: relative;
+  overflow: hidden;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  background:
+    linear-gradient(180deg, rgba(18, 18, 52, 0.55), rgba(18, 18, 52, 0.45) 45%, rgba(18, 18, 52, 0.9)),
+    url("../assets/img/hero-bg-a.jpg") center 70% / cover no-repeat,
+    var(--navy-deep);
+  color: #fff;
+}
+.closing::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 55% at 50% 72%, rgba(92, 187, 240, 0.3), transparent 65%);
+  opacity: var(--cta-glow, 0);
+  pointer-events: none;
+}
+.closing > * { position: relative; z-index: 1; }
+.closing .cta {
+  background: none;
+  overflow: visible;
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--nav-h) + 48px) 0 32px;
+}
+.closing-word {
+  align-self: center;
+  font-size: clamp(4rem, 16vw, 14rem);
+  font-weight: 200;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  text-align: center;
+  direction: ltr;
+  color: rgba(255, 255, 255, 0.04);
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.22);
+  white-space: nowrap;
+  user-select: none;
+  pointer-events: none;
+  margin-top: clamp(20px, 4vw, 48px);
+}
+.closing .footer {
+  background: transparent;
+  padding-top: 44px;
+}
+
+@media (max-width: 899px) {
+  .statement { border-radius: 22px 22px 0 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero { position: relative; }
+  .statement { min-height: 0; }
+}

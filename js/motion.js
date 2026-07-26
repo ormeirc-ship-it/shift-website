@@ -44,6 +44,13 @@
 
   /* ---------- ניווט עוגנים ---------- */
   function scrollToHash(hash) {
+    // ההירו דביק (cover-stage) — מיקומו על המסך לא משקף את מקומו במסמך,
+    // אז "לראש העמוד" הוא תמיד גלילה ל-0
+    if (hash === '#top') {
+      if (lenis) lenis.scrollTo(0, { duration: 1.2 });
+      else window.scrollTo({ top: 0, behavior: REDUCED ? 'auto' : 'smooth' });
+      return;
+    }
     var target = document.querySelector(hash);
     if (!target) return;
     if (lenis) {
@@ -188,19 +195,20 @@
     return tl;
   }
 
-  // בגלילה החוצה מההירו: האותיות "נפרדות" — חצי מרחפות מעלה, חצי שוקעות
+  // בגלילה החוצה מההירו: האותיות "נפרדות" — חצי מרחפות מעלה, חצי שוקעות.
+  // הטריגר הוא ההצהרה (סטטית) ולא ההירו — כי ההירו דביק ומדידותיו נודדות.
   function initHeroScrollDrift() {
     if (!heroChars.length) return;
     gsap.to(heroChars, {
       yPercent: function (i) { return i % 2 ? -70 : 45; },
       autoAlpha: 0.12,
       ease: 'none',
-      scrollTrigger: { trigger: '.hero', start: 'top top', end: '70% top', scrub: true }
+      scrollTrigger: { trigger: '.statement', start: 'top bottom', end: 'top 30%', scrub: true }
     });
     if (heroGrad) {
       gsap.to(heroGrad, {
         yPercent: 30, autoAlpha: 0.2, ease: 'none',
-        scrollTrigger: { trigger: '.hero', start: 'top top', end: '70% top', scrub: true }
+        scrollTrigger: { trigger: '.statement', start: 'top bottom', end: 'top 30%', scrub: true }
       });
     }
   }
@@ -340,8 +348,9 @@
       mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top; mouse.active = true;
     });
     hero.addEventListener('mouseleave', function () { mouse.active = false; });
+    // הבמה (הסטטית) במקום ההירו הדביק: הקנבס רץ עד שההצהרה מכסה אותו במלואו
     ScrollTrigger.create({
-      trigger: hero, start: 'top bottom', end: 'bottom top',
+      trigger: '.cover-stage', start: 'top bottom', end: 'center top',
       onToggle: function (self) { setRunning(self.isActive && !document.hidden); }
     });
     document.addEventListener('visibilitychange', function () {
@@ -373,8 +382,24 @@
   /* ---------- הירו: דעיכת אינדיקטור הגלילה ---------- */
   gsap.to('.hero-scroll', {
     autoAlpha: 0, ease: 'none',
-    scrollTrigger: { trigger: '.hero', start: '5% top', end: '20% top', scrub: true }
+    scrollTrigger: { trigger: '.statement', start: 'top 95%', end: 'top 80%', scrub: true }
   });
+
+  /* ---------- במת הכיסוי: ההירו נסוג בזמן שההצהרה מחליקה מעליו ---------- */
+  (function initCoverStage() {
+    var statement = document.querySelector('.cover-stage .statement');
+    if (!statement) return;
+    // התוכן מתכווץ ומתעמעם — תחושת "יריעה" שנסגרת מעל הפרק הקודם
+    gsap.to('.hero-content', {
+      scale: 0.94, autoAlpha: 0.25, ease: 'none',
+      scrollTrigger: { trigger: statement, start: 'top bottom', end: 'top top', scrub: true }
+    });
+    // הרקע מחשיך בהדרגה (opacity בלבד — לא מתנגש עם זום הפתיחה שרץ על scale)
+    gsap.to('#heroBg', {
+      autoAlpha: 0.45, ease: 'none',
+      scrollTrigger: { trigger: statement, start: 'top bottom', end: 'top top', scrub: true }
+    });
+  })();
 
 
   /* ---------- נקודת עכבר זוהרת ---------- */
@@ -598,18 +623,38 @@
     });
   })();
 
-  /* ---------- CTA: תחושת הגעה ---------- */
-  (function initCTA() {
+  /* ---------- סצנת הסיום: הגעה, זוהר, מילת הענק והפוטר ---------- */
+  (function initClosing() {
+    var closing = document.querySelector('.closing');
     var cta = document.querySelector('.cta');
-    if (!cta) return;
-    gsap.fromTo(cta, { '--cta-glow': 0 }, {
+    if (cta) {
+      gsap.from('.cta-content > *', {
+        autoAlpha: 0, y: 30, duration: 0.9, stagger: 0.15, clearProps: CLEAR,
+        scrollTrigger: { trigger: cta, start: 'top 70%' }
+      });
+    }
+    if (!closing) return;
+    // הזוהר עולה מהאופק ככל שמתקרבים לסוף
+    gsap.fromTo(closing, { '--cta-glow': 0 }, {
       '--cta-glow': 1, ease: 'none',
-      scrollTrigger: { trigger: cta, start: 'top 80%', end: 'center center', scrub: true }
+      scrollTrigger: { trigger: closing, start: 'top 80%', end: 'bottom bottom', scrub: true }
     });
-    gsap.from('.cta-content > *', {
-      autoAlpha: 0, y: 30, duration: 0.9, stagger: 0.15, clearProps: CLEAR,
-      scrollTrigger: { trigger: cta, start: 'top 70%' }
-    });
+    // מילת הענק SHIFT עולה מתחתית הסצנה — חתימה איזאנמית
+    var word = closing.querySelector('.closing-word');
+    if (word) {
+      gsap.fromTo(word, { yPercent: 60, autoAlpha: 0 }, {
+        yPercent: 0, autoAlpha: 1, ease: 'none',
+        scrollTrigger: { trigger: closing, start: 'top 70%', end: 'bottom bottom', scrub: true }
+      });
+    }
+    // הפוטר נכנס בעדינות אחרון
+    var footerBits = closing.querySelectorAll('.footer-grid > *, .footer-bottom');
+    if (footerBits.length) {
+      gsap.from(footerBits, {
+        autoAlpha: 0, y: 22, duration: 0.8, stagger: 0.1, clearProps: CLEAR,
+        scrollTrigger: { trigger: '.footer', start: 'top 96%' }
+      });
+    }
   })();
 
 
@@ -675,19 +720,17 @@
     if (!section) return;
     var video = document.getElementById('eventsVideo');
     if (video && DESKTOP.matches) {
+      // טעינה עצלה + נגן/עצור בטריגר אחד — עמיד גם בקפיצות עוגן שמדלגות
+      // על הטווח כולו (once:true נהרג בקפיצה כזו בלי לטעון כלל)
       ScrollTrigger.create({
-        trigger: section, start: 'top 90%', once: true,
-        onEnter: function () {
-          video.src = video.dataset.src;
-          video.play().catch(function () {});
-        }
-      });
-      ScrollTrigger.create({
-        trigger: section, start: 'top bottom', end: 'bottom top',
+        trigger: section, start: 'top 95%', end: 'bottom top',
         onToggle: function (self) {
-          if (!video.src) return;
-          if (self.isActive && !document.hidden) video.play().catch(function () {});
-          else video.pause();
+          if (self.isActive) {
+            if (!video.src) video.src = video.dataset.src;
+            if (!document.hidden) video.play().catch(function () {});
+          } else if (video.src) {
+            video.pause();
+          }
         }
       });
     }
@@ -727,7 +770,10 @@
     var LIGHT = { '#method': 1, '#story': 1 };
     dots.forEach(function (dot) {
       var hash = dot.getAttribute('href');
-      var target = document.querySelector(hash);
+      // '#top' הוא ההירו הדביק — עוקבים אחרי במת הכיסוי הסטטית במקומו
+      var target = hash === '#top'
+        ? document.querySelector('.cover-stage')
+        : document.querySelector(hash);
       if (!target) return;
       ScrollTrigger.create({
         trigger: target,
