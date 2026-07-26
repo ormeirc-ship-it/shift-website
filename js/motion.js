@@ -222,6 +222,7 @@
     }
 
     var target = 0, eased = 0, hushOn = false, litOn = false, onScreen = true;
+    var skipTick = null;
 
     function render() {
       eased += (target - eased) * 0.14;
@@ -263,6 +264,7 @@
         arrival.style.pointerEvents = aIn > 0.6 ? 'auto' : 'none';
       }
       if (veil) veil.style.opacity = String(1 - aIn);
+      if (skipTick) skipTick(p);
     }
 
     gsap.ticker.add(render);
@@ -277,6 +279,34 @@
       // בלי זה מצב ה"בהיר" של ההגעה נדבק והופך גם סקשנים כהים לבהירים
 
     });
+
+    // כפתור דילוג נראה — מופיע אחרי 2.5 שניות של שהות בצלילה, ונעלם
+    // ברגע שמתחילים להתקדם באמת או כשמגיעים לאור. המקלדת מקבלת את
+    // .skip-dive שקופץ בפוקוס; זה כאן בשביל עכבר ומגע.
+    (function initDiveSkip() {
+      var btn = document.getElementById('diveSkip');
+      if (!btn || REDUCED) return;
+      btn.hidden = false;
+      var shown = false;
+      var timer = setTimeout(function () {
+        if (eased > 0.25) return;      // כבר צולל — לא מפריעים
+        shown = true;
+        btn.classList.add('show');
+      }, 2500);
+      btn.addEventListener('click', function () {
+        clearTimeout(timer);
+        btn.classList.add('gone');
+        var target = document.getElementById('products');
+        if (!target) return;
+        if (lenis) lenis.scrollTo(target, { offset: NAV_OFFSET, duration: 1.4 });
+        else target.scrollIntoView({ behavior: 'smooth' });
+      });
+      skipTick = function (p) {
+        if (!shown) return;
+        // אחרי שההגעה מתחילה, או אחרי שיצאנו מהסקשן — אין מה לדלג עליו
+        btn.classList.toggle('gone', p > 0.8);
+      };
+    })();
 
     // טווח הנראוּת של הצלילה — רחב יותר מטווח ההתקדמות בכוונה.
     // טריגר ההתקדמות מסתיים ב-'bottom bottom', ובדיוק בנקודה הזו ההגעה
@@ -342,18 +372,25 @@
 
      ה-JS רק מסמן לכל סקשן את מיקומו בסולם (--j). כל השאר CSS, כך שגם
      בלי מנוע התנועה (ובמצב מופחת-תנועה) המרחב והקצב עדיין מספרים את הסיפור. */
-  var JOURNEY = ['.statement', '#products', '#method', '#habits', '#breathe', '#path',
-                 '#program', '#events', '#story', '#outcomes', '.closing'];
   (function initJourney() {
-    var els = [];
-    JOURNEY.forEach(function (sel) {
-      var el = document.querySelector(sel);
-      if (el) els.push(el);
-    });
+    // הסדר נגזר מה-DOM, לא מרשימה קשיחה: סקשן חדש שנוסף ל-HTML מקבל
+    // את מקומו בסולם אוטומטית. קודם הייתה כאן רשימת סלקטורים, ומי
+    // שהוסיף סקשן בלי לעדכן אותה קיבל מרווח ורוחב שבורים — בשקט.
+    //
+    // הכלל: כל <section> ישיר של body, פלוס הסקשנים שבתוך במת הכיסוי
+    // וסצנת הסיום (שם ה-<section> עטוף ב-div). הצלילה עצמה לא נכללת —
+    // היא לא נושאת תוכן זורם.
+    var els = Array.prototype.filter.call(
+      document.querySelectorAll('body > section, .cover-stage > section, .closing'),
+      function (el) { return !el.classList.contains('dive'); }
+    );
     els.forEach(function (el, i) {
       el.style.setProperty('--j', (els.length < 2 ? 1 : i / (els.length - 1)).toFixed(3));
     });
     docEl.classList.add('journey-on');
+    window.__journey = els.map(function (el) {
+      return { id: el.id || el.className.split(' ')[0], j: +el.style.getPropertyValue('--j') };
+    });
   })();
 
   // משך הכניסה של אלמנט לפי מיקומו במסע: 0.6ש' למעלה, 1.2ש' למטה

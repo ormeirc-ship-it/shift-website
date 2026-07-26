@@ -1718,3 +1718,34 @@ html.dive-hush .nav {
    הניסוח שונה כך שהקו נמצא באמצע ולא בקצה, ו-balance מחלק את השורות. */
 .breathe .section-head h2 { text-wrap: balance; max-width: 18ch; }
 @media (max-width: 899px) { .breathe .section-head h2 { max-width: 15ch; } }
+
+/* ---------- דילוג נראה על הצלילה ---------- */
+.dive-skip {
+  position: fixed;
+  bottom: 26px;
+  inset-inline-start: 50%;
+  transform: translate(50%, 12px);
+  z-index: 120;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(11, 11, 34, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--white-soft);
+  font-family: inherit;
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  padding: 9px 20px;
+  border-radius: 999px;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.3s ease, background-color 0.3s ease;
+}
+.dive-skip.show { opacity: 1; transform: translate(50%, 0); pointer-events: auto; }
+.dive-skip:hover { border-color: var(--sky); background: rgba(11, 11, 34, 0.62); }
+/* ברגע ההגעה לאור אין יותר מה לדלג עליו */
+.dive-skip.gone { opacity: 0; pointer-events: none; }
+@media (max-width: 899px) { .dive-skip { bottom: 18px; font-size: 0.78rem; } }
+/* בלי תנועה אין צלילה ארוכה — ולכן גם אין מה לדלג */
+@media (prefers-reduced-motion: reduce) { .dive-skip { display: none; } }

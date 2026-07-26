@@ -44,8 +44,11 @@
     <p class="preloader-line" id="preloaderLine">רגע, נכנסים פנימה…</p>
   </div>
 
-  <!-- דילוג על הצלילה — למקלדת ולקורא מסך -->
+  <!-- דילוג על הצלילה — למקלדת (קופץ בפוקוס) ולעכבר/מגע (מופיע אחרי כמה
+       שניות). 520vh זה כארבעה מסכי גלילה לפני משפט תוכן ראשון; מי שנכנס
+       רק לבדוק מה זה צריך דרך החוצה שלא דורשת ממנו להתמיד. -->
   <a class="skip-dive" href="#products">דלגו לתוכן</a>
+  <button class="dive-skip" id="diveSkip" type="button" hidden>דלגו לתוכן ↓</button>
 
   <!-- ניווט -->
   <header class="nav" id="nav">
