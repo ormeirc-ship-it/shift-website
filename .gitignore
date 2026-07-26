@@ -10,3 +10,13 @@ _old-version/
 
 # מקור הרצף — 14MB, לא נדרש לאתר (הפריימים ב-assets/brain-seq/)
 assets/video/brain-intro-source.mp4
+
+# נכסים שאינם בשימוש באתר (נשמרים מקומית, לא במאגר)
+assets/brand/asset9.png
+assets/brand/logo-symbol.png
+assets/brand/logo.png
+assets/brand/symbol.png
+assets/brand/symbol3.png
+assets/logo.png
+assets/video/logo-anim-2*
+assets/video/logo-anim-blue-*
