@@ -32,6 +32,22 @@ const afterReveal = (fn) => {
   setTimeout(run, 4500);
 };
 
+// ── גבולות כשל (פריט 36) ─────────────────────────────────────────────
+// כל פיצ'ר רץ בתא עצמאי: קריסה שלו נרשמת בקונסול ולא מפילה את השכנים.
+// window.__failFeature הוא וו-הזרקה לבדיקת העמידות (scripts/faults.mjs):
+// הבדיקה מפילה פיצ'ר אחד בתורו ומוודאת שהשאר חיים.
+const FEATURES = [];
+const safe = (name, fn) => {
+  FEATURES.push(name);
+  try {
+    if (window.__failFeature === name) throw new Error('הזרקת כשל: ' + name);
+    fn();
+  } catch (err) {
+    if (window.console && console.error) console.error('SHIFT feature "' + name + '" קרס:', err);
+  }
+};
+window.__features = FEATURES;
+
 // ── אנימציית הלוגו בשער הכניסה ────────────────────────────────────────
 // עד היום הווידאו נחסם גורפית בכל ספארי ובכל מובייל — כלומר רוב הקהל
 // (תנועה מאינסטגרם) קיבל לוגו סטטי. החסימה נבעה מבאג אמיתי: HEVC עם
@@ -42,6 +58,7 @@ const afterReveal = (fn) => {
 // לקנבס ובודקים בפועל אם יש בו שקיפות אמיתית. אם הפריים אטום (כלומר
 // המלבן השחור חוזר) — הווידאו נזרק והלוגו הסטטי נשאר. בדיקה אמפירית
 // אחת מחליפה ניחוש על מחרוזות UA, ולא יכולה לשחזר את הרגרסיה.
+safe('gate-logo', () => {
 const gateLogo = document.querySelector('.gate-logo');
 if (gateLogo && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
   const video = document.createElement('video');
@@ -95,9 +112,11 @@ if (gateLogo && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
   video.addEventListener('error', () => video.remove(), { once: true });
   video.load();
 }
+});
 
 // אנימציות הופעה בגלילה — מתחילות רק אחרי מסך הפתיחה,
 // כדי שחשיפת ההירו לא "תישרף" מאחוריו
+safe('reveals', () => {
 const reveals = document.querySelectorAll('.reveal');
 afterReveal(() => {
   if ('IntersectionObserver' in window) {
@@ -114,16 +133,20 @@ afterReveal(() => {
     reveals.forEach((el) => el.classList.add('visible'));
   }
 });
+});
 
 // ניווט: רקע אטום אחרי גלילה (עם הגנת null — שינוי HTML לא יפיל את הקובץ)
+safe('nav-scrolled', () => {
 const nav = document.getElementById('nav');
 if (nav) {
   const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 24);
   onScroll();
   window.addEventListener('scroll', onScroll, { passive: true });
 }
+});
 
 // תפריט מסך מלא
+safe('menu', () => {
 const burger = document.getElementById('navBurger');
 const menu = document.getElementById('mobileMenu');
 if (burger && menu) {
@@ -183,6 +206,7 @@ if (burger && menu) {
     }
   });
 }
+});
 
 
 // ============================================================
@@ -190,7 +214,7 @@ if (burger && menu) {
 // שאיפה עמוקה מהאף → שאיפה קצרה נוספת → נשיפה ארוכה מהפה.
 // 1–3 סבבים לרגיעה מהירה (Balban ואחרים, 2023).
 // ============================================================
-(() => {
+safe('breath', () => {
   const btn = document.getElementById('breathStart');
   const circle = document.getElementById('breathCircle');
   const phase = document.getElementById('breathPhase');
@@ -253,7 +277,7 @@ if (burger && menu) {
     btn.textContent = 'נושמים…';
     runRound(1);
   });
-})();
+});
 
 // ── גוון הניווט לפי מה שיושב מתחתיו ─────────────────────────────────
 // סרגל נייבי אטום על רקע בהיר נראה כמו רכיב מדף שהודבק מעל חוויה.
@@ -267,7 +291,7 @@ if (burger && menu) {
 //
 // מקורות בהירים יכולים לחפוף (ההגעה לאור וההצהרה מיד אחריה), ולכן
 // נספרים במפה ולא בדגל בוליאני.
-(() => {
+safe('nav-tone', () => {
   const docEl = document.documentElement;
   const active = Object.create(null);
   const apply = () => docEl.classList.toggle('nav-light', Object.values(active).some(Boolean));
@@ -326,4 +350,4 @@ if (burger && menu) {
     clearTimeout(t);
     t = setTimeout(build, 180);
   }, { passive: true });
-})();
+});

@@ -27,9 +27,11 @@
     "perf:diff": "node scripts/perf-diff.mjs",
     "hooks": "node scripts/install-hooks.mjs",
     "doctor": "node scripts/doctor.mjs",
+    "faults": "node scripts/faults.mjs",
     "e2e": "node scripts/e2e.mjs"
   },
   "devDependencies": {
-    "puppeteer-core": "^24.0.0"
+    "puppeteer-core": "^24.0.0",
+    "sharp": "^0.35.3"
   }
 }
