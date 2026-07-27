@@ -1904,11 +1904,16 @@ p, .statement-title, .section-intro { text-wrap: pretty; }
   html.ending-curtain .arrival-logo-dark { display: none; }
   html.ending-curtain .arrival-logo-light { display: block; width: min(180px, 40vw); margin: 0 auto 24px; }
 }
-html.ending-curtain .arrival-logo-dark {
-  display: block;
-  width: min(230px, 46vw);
-  margin: 0 auto clamp(22px, 4vh, 40px);
-  filter: drop-shadow(0 0 50px rgba(92, 187, 240, 0.35));
+/* מגודר ב-no-preference (0.5 סיבוב ב'): הכלל הזה מאוחר בקובץ מבלוק
+   ה-reduce שמעליו — בלי הגידור הוא היה גובר בקסקדה ומדליק את שני
+   הלוגואים יחד במופחת-תנועה. נתפס ע"י Cowork בסבב 00:05. */
+@media (prefers-reduced-motion: no-preference) {
+  html.ending-curtain .arrival-logo-dark {
+    display: block;
+    width: min(230px, 46vw);
+    margin: 0 auto clamp(22px, 4vh, 40px);
+    filter: drop-shadow(0 0 50px rgba(92, 187, 240, 0.35));
+  }
 }
 /* פריט 0.5: במופחת-תנועה אין וילון (הרקע בהיר) — צבעי הווילון היו
    נותנים לבן-על-בהיר. הם חיים רק כשיש תנועה, כלומר כשיש וילון. */

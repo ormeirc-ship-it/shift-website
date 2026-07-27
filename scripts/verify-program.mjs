@@ -25,6 +25,7 @@ const SITE = resolve(HERE, '..');
 const CANDIDATES = [
   process.argv[2],
   process.env.SHIFT_DATA_JS,
+  process.env.DATA_JS, // כינוי — הסנדבוקס של Cowork מזין את זה (REVIEW 00:05 🟡)
   // עותק הריפו — זהה ל-data.js הפרוס באפליקציה החיה (אומת md5 ב-26.7.2026)
   resolve(homedir(), 'Desktop/SHIFT/shift platform main /shift-platform/קבצי קוד/data.js'),
   // אין fallback לסנפשוט הישן — הועבר ל-_ארכיון-מיושן-7.7 ב-26.7.2026.

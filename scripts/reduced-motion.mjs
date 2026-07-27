@@ -67,6 +67,16 @@ const anim = await page.evaluate(() => {
   const running = document.getAnimations ? document.getAnimations().filter((a) => a.playState === 'running') : [];
   return { count: running.length, sample: running.slice(0, 3).map((a) => (a.effect && a.effect.target && a.effect.target.className) || '?') };
 });
+
+// לוגו ההגעה — בדיוק אחד גלוי, והוא הכהה (רגרסיית 0.5 סיבוב ב': סדר-קסקדה
+// הדליק את שניהם יחד. הבדיקה על ה-computed, לא על הקוד — תופסת כל גלגול עתידי)
+const logos = await page.evaluate(() => {
+  const vis = (el) => el && getComputedStyle(el).display !== 'none';
+  return {
+    dark: vis(document.querySelector('.arrival-logo-dark')),
+    light: vis(document.querySelector('.arrival-logo-light')),
+  };
+});
 await browser.close();
 await site.close();
 
@@ -76,5 +86,8 @@ console.log('─'.repeat(56));
 rows.forEach((r) => console.log(pad(r.label, 24) + pad(r.found, 8) + pad(r.visible, 8) +
   (r.found === 0 ? '✗ ' + (r.note || '') : r.visible === r.found ? '✓' : '✗ תוכן נסתר')));
 console.log(`\nאנימציות שרצות במצב שקט: ${anim.count}` + (anim.count ? ' — ' + anim.sample.join(', ') : ' ✓'));
-console.log('\n' + (bad.length ? `✗ ${bad.length} אפקטים משאירים תוכן נסתר` : '✓ כל התוכן נגיש במצב מופחת-תנועה'));
-process.exit(bad.length ? 1 : 0);
+const logoOk = !logos.dark && logos.light;
+console.log('לוגו ההגעה במצב שקט: ' + (logoOk ? '✓ רק הבהיר (הנייבי)' :
+  `✗ dark=${logos.dark} light=${logos.light} — חייב בדיוק אחד (הבהיר)`));
+console.log('\n' + (bad.length || !logoOk ? `✗ ${bad.length + (logoOk ? 0 : 1)} כשלים במצב מופחת-תנועה` : '✓ כל התוכן נגיש במצב מופחת-תנועה'));
+process.exit(bad.length || !logoOk ? 1 : 0);

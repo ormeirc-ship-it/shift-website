@@ -156,3 +156,24 @@ test('גיבויי תאימות במקומם: url() לפני image-set, ‏vh ל
     }
   }
 });
+
+test('לוגו ההגעה הכהה מגודר ב-no-preference — לקח סיבוב ב׳ של 0.5', () => {
+  // הרגרסיה: הכלל display:block ישב אחרי בלוק ה-reduce באותה ספציפיות
+  // וגבר בקסקדה — שני לוגואים יחד במצב שקט. כאן נאכף שכל display:block
+  // על arrival-logo-dark יושב בתוך no-preference.
+  const lines = css.split('\n');
+  let depth = 0;
+  const guards = [];
+  let inDarkRule = false, ruleGuarded = false;
+  lines.forEach((line, i) => {
+    if (/@media[^{]*no-preference/.test(line)) guards.push(depth);
+    depth += (line.match(/\{/g) || []).length - (line.match(/\}/g) || []).length;
+    while (guards.length && depth <= guards[guards.length - 1]) guards.pop();
+    if (/\.arrival-logo-dark[^{]*\{/.test(line)) { inDarkRule = true; ruleGuarded = guards.length > 0; }
+    if (inDarkRule && /display:\s*block/.test(line)) {
+      assert.ok(ruleGuarded,
+        `שורה ${i + 1}: ‏arrival-logo-dark מקבל display:block מחוץ ל-no-preference — ידליק שני לוגואים במצב שקט`);
+    }
+    if (inDarkRule && /\}/.test(line)) inDarkRule = false;
+  });
+});

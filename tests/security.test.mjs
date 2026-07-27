@@ -11,7 +11,7 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (p) => readFileSync(resolve(ROOT, p), 'utf8');
 const pages = { 'index.html': read('index.html'), '404.html': read('404.html') };
 
-test('אין סקריפטים חיצוniים — כולם מוגשים מהריפו (לכן אין צורך ב-SRI)', () => {
+test('אין סקריפטים חיצוניים — כולם מוגשים מהריפו (לכן אין צורך ב-SRI)', () => {
   for (const [name, html] of Object.entries(pages)) {
     for (const m of html.matchAll(/<script[^>]*\ssrc=["']([^"']+)["']/g)) {
       assert.ok(!/^(https?:)?\/\//i.test(m[1]),
@@ -31,9 +31,10 @@ test('כל קישור עם target=_blank נושא rel=noopener', () => {
 
 test('קישורים חיצוניים יוצאים רק ליעדים המוכרים', () => {
   // רשימה סגורה: אינסטגרם והאפליקציה. יעד חדש = החלטה מודעת, לא תוצר לוואי.
+  // ‏fonts.googleapis/gstatic הוסרו ב-28.7 (פריט 18 — self-host); חזרה שלהם
+  // לעמוד תיתפס כאן ותחייב החלטה מודעת
   const allowed = ['www.instagram.com', 'shift-21-day-course-ceos.web.app',
-    'fonts.googleapis.com', 'fonts.gstatic.com', 'schema.org',
-    'ormeirc-ship-it.github.io', 'www.sitemaps.org'];
+    'schema.org', 'ormeirc-ship-it.github.io', 'www.sitemaps.org'];
   for (const [name, html] of Object.entries(pages)) {
     for (const m of html.matchAll(/https?:\/\/([^/"'\s<>)]+)/g)) {
       assert.ok(allowed.includes(m[1]),
