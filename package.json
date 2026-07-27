@@ -12,6 +12,7 @@
     "verify": "node scripts/verify-program.mjs",
     "net": "node scripts/net.mjs",
     "drift": "node scripts/drift-check.mjs",
+    "a11y": "node scripts/a11y.mjs",
     "stress": "node scripts/stress.mjs",
     "console": "node scripts/console-check.mjs",
     "motion": "node scripts/reduced-motion.mjs",

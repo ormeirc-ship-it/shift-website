@@ -1646,7 +1646,7 @@ html.journey-on [style*="--j"] .section-head {
 }
 .breathe .breath-info h3 { color: var(--ink); }
 .breathe .breath-steps { color: var(--ink-soft); }
-.breathe .breath-note, .breathe .breath-disclaimer { color: var(--ink-faint); }
+/* הניגודיות של ink-faint על לבן היא 2.9:1 — מתחת לסף. ראה חוק הנגישות למטה. */
 .breathe .breath-ring { border-color: rgba(92, 187, 240, 0.45); }
 .breathe .label-sky { color: var(--blue-mid); }
 /* הכותרת רחבה מדי במסך אחד — מאזנים שורות */
@@ -1749,3 +1749,28 @@ html.dive-hush .nav {
 @media (max-width: 899px) { .dive-skip { bottom: 18px; font-size: 0.78rem; } }
 /* בלי תנועה אין צלילה ארוכה — ולכן גם אין מה לדלג */
 @media (prefers-reduced-motion: reduce) { .dive-skip { display: none; } }
+
+/* ============================================================
+   נגישות (פריט T7)
+   ============================================================ */
+
+/* יעד מגע: הנקודות עצמן 10px — קטנות מהמינימום של WCAG 2.2 (24×24).
+   שטח הלחיצה מורחב בלי לשנות את המראה. */
+.dot-nav a { position: relative; }
+.dot-nav a::before {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  width: 26px;
+  height: 26px;
+}
+
+/* הערת המחקר והסייג הבריאותי היו ב-ink-faint (יחס 2.9:1) — מתחת לסף.
+   הסייג הוא אזהרה רפואית; הוא חייב להיות קריא, לא "עדין". */
+.breathe .breath-note, .breath-note { color: var(--ink-soft); }
+.breathe .breath-disclaimer, .breath-disclaimer {
+  color: var(--ink-soft);
+  border-inline-start: 2px solid rgba(92, 187, 240, 0.5);
+  padding-inline-start: 12px;
+}
+.program .breath-note, .program .breath-disclaimer { color: var(--white-soft); }
