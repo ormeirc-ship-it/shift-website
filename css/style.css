@@ -16,6 +16,18 @@
   --radius: 22px;
   --container: 1140px;
   --nav-h: 72px;
+  /* טוקנים (פריט 34) — אותם ערכים בדיוק, בשם אחד. אפס שינוי ויזואלי
+     (מאומת ברגרסיה הוויזואלית). ערך חדש = שורה כאן, לא מספר בפנים. */
+  --pill: 999px;                              /* עיגול מלא — כפתורים וצ'יפים */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1); /* עקומת הבית לכניסות */
+  --t-fast: 0.25s;                            /* משוב מיידי — hover/פוקוס */
+  --t-med: 0.3s;                              /* מעברי רכיב */
+  --t-slow: 0.4s;                             /* מעברי משטח/רקע */
+  --sky-a35: rgba(92, 187, 240, 0.35);        /* תכלת שקופה — מסגרות */
+  --sky-a45: rgba(92, 187, 240, 0.45);
+  --sky-a50: rgba(92, 187, 240, 0.5);         /* זוהר כפתורים */
+  --sky-a55: rgba(92, 187, 240, 0.55);
+  --sky-a60: rgba(92, 187, 240, 0.6);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -119,12 +131,12 @@ h3 {
 .btn {
   display: inline-block;
   padding: 14px 32px;
-  border-radius: 999px;
+  border-radius: var(--pill);
   font-family: inherit;
   font-size: 1rem;
   font-weight: 600;
   text-decoration: none;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease, color 0.25s ease;
+  transition: transform var(--t-fast) ease, box-shadow var(--t-fast) ease, background-color var(--t-fast) ease, color var(--t-fast) ease;
   cursor: pointer;
 }
 @media (hover: hover) { .btn:hover { transform: translateY(-2px); } }.btn:active { transform: translateY(0); }
@@ -132,9 +144,9 @@ h3 {
 .btn-primary {
   background: var(--sky);
   color: var(--navy-deep);
-  box-shadow: 0 4px 24px rgba(92, 187, 240, 0.35);
+  box-shadow: 0 4px 24px var(--sky-a35);
 }
-@media (hover: hover) { .btn-primary:hover { box-shadow: 0 8px 32px rgba(92, 187, 240, 0.5); } }
+@media (hover: hover) { .btn-primary:hover { box-shadow: 0 8px 32px var(--sky-a50); } }
 .btn-ghost {
   color: #fff;
   border: 1px solid rgba(255, 255, 255, 0.35);
@@ -195,7 +207,7 @@ h3 {
   height: 2px;
   background: #fff;
   border-radius: 2px;
-  transition: transform 0.3s ease;
+  transition: transform var(--t-med) ease;
 }
 .nav-burger[aria-expanded="true"] span:first-child { transform: translateY(4.5px) rotate(45deg); }
 .nav-burger[aria-expanded="true"] span:last-child { transform: translateY(-4.5px) rotate(-45deg); }
@@ -212,7 +224,7 @@ h3 {
   justify-content: center;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.3s ease;
+  transition: opacity var(--t-med) ease;
 }
 .mobile-menu.open { opacity: 1; pointer-events: auto; }
 .mobile-menu nav {
@@ -339,11 +351,11 @@ h3 {
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: var(--radius);
   padding: 32px 28px;
-  transition: border-color 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
+  transition: border-color var(--t-med) ease, background-color var(--t-med) ease, transform var(--t-med) ease;
 }
 @media (hover: hover) {
   .card:hover {
-    border-color: rgba(92, 187, 240, 0.5);
+    border-color: var(--sky-a50);
     background: rgba(92, 187, 240, 0.07);
     transform: translateY(-4px);
   }
@@ -394,11 +406,11 @@ h3 {
 .chips li {
   padding: 12px 22px;
   border: 1px solid var(--line);
-  border-radius: 999px;
+  border-radius: var(--pill);
   background: #fff;
   font-size: 1rem;
   color: var(--ink);
-  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+  transition: border-color var(--t-fast) ease, box-shadow var(--t-fast) ease, transform var(--t-fast) ease;
 }
 @media (hover: hover) {
   .chips li:hover {
@@ -434,7 +446,7 @@ h3 {
   border-radius: var(--radius);
   padding: 30px 26px;
   position: relative;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform var(--t-med) ease, box-shadow var(--t-med) ease;
 }
 @media (hover: hover) {
   .step:hover {
@@ -520,7 +532,7 @@ h3 {
 html.js:not(.gsap-on) .reveal {
   opacity: 0;
   transform: translateY(26px);
-  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
 }
 html.js:not(.gsap-on) .reveal.visible { opacity: 1; transform: none; }
 .delay-1 { transition-delay: 0.12s; }
@@ -595,12 +607,12 @@ html.js:not(.gsap-on) .reveal.visible { opacity: 1; transform: none; }
   border-radius: 50%;
   border: 1.5px solid rgba(255, 255, 255, 0.45);
   background: transparent;
-  transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+  transition: background-color var(--t-med) ease, border-color var(--t-med) ease, transform var(--t-med) ease;
 }
 @media (hover: hover) { .dot-nav a:hover { border-color: var(--sky); transform: scale(1.25); } }.dot-nav a.active {
   background: var(--sky);
   border-color: var(--sky);
-  box-shadow: 0 0 12px rgba(92, 187, 240, 0.6);
+  box-shadow: 0 0 12px var(--sky-a60);
 }
 /* בסקשנים בהירים הנקודות מתכהות */
 .dot-nav.on-light a { border-color: rgba(24, 22, 59, 0.35); }
@@ -622,10 +634,10 @@ html.js:not(.gsap-on) .reveal.visible { opacity: 1; transform: none; }
   background: rgba(18, 18, 52, 0.85);
   color: #fff;
   padding: 4px 12px;
-  border-radius: 999px;
+  border-radius: var(--pill);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.25s ease;
+  transition: opacity var(--t-fast) ease;
 }
 @media (hover: hover) { .dot-nav a:hover::after { opacity: 1; } }@media (max-width: 899px) { .dot-nav { display: none; } }
 
@@ -743,12 +755,12 @@ html.worlds-pinned .world-body { max-width: 560px; }
 .steps { position: relative; }
 .step { position: relative; z-index: 1; }
 .step-num {
-  transition: background-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease;
+  transition: background-color var(--t-slow) ease, color var(--t-slow) ease, box-shadow var(--t-slow) ease;
 }
 .step.lit .step-num {
   background: var(--sky);
   color: var(--navy-deep);
-  box-shadow: 0 0 20px rgba(92, 187, 240, 0.55);
+  box-shadow: 0 0 20px var(--sky-a55);
 }
 @media (max-width: 899px) {
   .path-line {
@@ -774,7 +786,7 @@ html.worlds-pinned .world-body { max-width: 560px; }
 }
 @keyframes loveGlow {
   0% { text-shadow: 0 0 0 rgba(92, 187, 240, 0); }
-  35% { text-shadow: 0 0 26px rgba(92, 187, 240, 0.9), 0 0 60px rgba(92, 187, 240, 0.45); }
+  35% { text-shadow: 0 0 26px rgba(92, 187, 240, 0.9), 0 0 60px var(--sky-a45); }
   100% { text-shadow: 0 0 8px rgba(92, 187, 240, 0.25); }
 }
 
@@ -792,7 +804,7 @@ html.worlds-pinned .world-body { max-width: 560px; }
 
 /* ---------- כפתורים: ברק ומגנטיות ---------- */
 .btn { will-change: transform; }
-@media (hover: hover) { .btn-primary:hover { box-shadow: 0 10px 40px rgba(92, 187, 240, 0.6); } }
+@media (hover: hover) { .btn-primary:hover { box-shadow: 0 10px 40px var(--sky-a60); } }
 /* ---------- כיבוד reduced-motion לשכבת התנועה ---------- */
 @media (prefers-reduced-motion: reduce) {
   .grain { animation: none; }
@@ -832,7 +844,7 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
   height: 10px;
   border-radius: 50%;
   background: rgba(92, 187, 240, 0.95);
-  box-shadow: 0 0 18px rgba(92, 187, 240, 0.8), 0 0 46px rgba(92, 187, 240, 0.35);
+  box-shadow: 0 0 18px rgba(92, 187, 240, 0.8), 0 0 46px var(--sky-a35);
   pointer-events: none;
   z-index: 400;
   transform: translate(-50%, -50%);
@@ -869,9 +881,9 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
   font-size: 0.95rem;
   font-weight: 600;
   color: var(--sky);
-  border-bottom: 1px solid rgba(92, 187, 240, 0.35);
+  border-bottom: 1px solid var(--sky-a35);
   padding-bottom: 3px;
-  transition: border-color 0.3s ease;
+  transition: border-color var(--t-med) ease;
 }
 @media (hover: hover) { .basket-card:hover .basket-card-link { border-color: var(--sky); } }
 /* ---------- המסלול: 21 הימים ---------- */
@@ -914,7 +926,7 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
   background: var(--navy-deep);
   border: 1.5px solid rgba(255, 255, 255, 0.3);
   z-index: 1;
-  transition: background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+  transition: background-color var(--t-slow) ease, border-color var(--t-slow) ease, box-shadow var(--t-slow) ease;
 }
 .program-spine i.on {
   background: var(--sky);
@@ -996,7 +1008,7 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
   width: 240px;
   height: 240px;
   border-radius: 50%;
-  border: 1px dashed rgba(92, 187, 240, 0.35);
+  border: 1px dashed var(--sky-a35);
   /* ‏D3: הטבעת נושמת עם ההנחיה — העוגן שמחזיק את העין בנשיפה הארוכה
      (5.8ש' עם טקסט סטטי). המחלקות מוחלפות ב-main.js לפי השלב. */
   transition: transform 2.4s cubic-bezier(0.45, 0, 0.55, 1), opacity 2.4s ease;
@@ -1008,7 +1020,7 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
   font-size: 1rem;
   color: var(--ink-soft);
 }
-.breath-after a { color: var(--blue-mid); font-weight: 600; text-decoration-color: rgba(92, 187, 240, 0.6); }
+.breath-after a { color: var(--blue-mid); font-weight: 600; text-decoration-color: var(--sky-a60); }
 @media (prefers-reduced-motion: reduce) {
   .breath-ring { transition: none; }
   .breath.inhale .breath-ring, .breath.exhale .breath-ring { transform: none; opacity: 0.8; }
@@ -1020,7 +1032,7 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
   display: grid;
   place-items: center;
   text-align: center;
-  background: radial-gradient(circle at 38% 32%, rgba(154, 214, 248, 0.85), rgba(92, 187, 240, 0.55) 55%, rgba(58, 95, 138, 0.4));
+  background: radial-gradient(circle at 38% 32%, rgba(154, 214, 248, 0.85), var(--sky-a55) 55%, rgba(58, 95, 138, 0.4));
   box-shadow: 0 0 50px rgba(92, 187, 240, 0.4);
   color: var(--navy-deep);
   font-weight: 600;
@@ -1092,7 +1104,7 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
   margin-top: 16px;
   padding: 7px 14px;
   border: 1px dashed rgba(246, 245, 242, 0.35);
-  border-radius: 999px;
+  border-radius: var(--pill);
   font-size: 0.85rem;
   font-weight: 300;
   color: rgba(246, 245, 242, 0.6);
@@ -1103,9 +1115,9 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
   color: var(--sky);
   text-decoration: none;
   font-weight: 600;
-  border-bottom: 1px solid rgba(92, 187, 240, 0.35);
+  border-bottom: 1px solid var(--sky-a35);
   padding-bottom: 3px;
-  transition: border-color 0.3s ease;
+  transition: border-color var(--t-med) ease;
 }
 @media (hover: hover) { .event-link:hover { border-color: var(--sky); } }/* פריסה מדורגת בדסקטופ */
 @media (min-width: 900px) {
@@ -1197,7 +1209,7 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
   background: none;
   color: var(--sky);
   box-shadow: none;
-  text-shadow: 0 0 22px rgba(92, 187, 240, 0.55);
+  text-shadow: 0 0 22px var(--sky-a55);
 }
 .step h3 { display: inline; margin-inline-end: 14px; }
 .step p { display: inline; color: var(--ink-soft); font-size: 1.02rem; }
@@ -1272,9 +1284,9 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
 .prog-chip {
   position: absolute;
   padding: 8px 16px;
-  border-radius: 999px;
+  border-radius: var(--pill);
   background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(92, 187, 240, 0.35);
+  border: 1px solid var(--sky-a35);
   color: var(--sky);
   font-size: 0.82rem;
   font-weight: 600;
@@ -1333,7 +1345,7 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
   height: 2px;
   background: #fff;
   border-radius: 2px;
-  transition: transform 0.3s ease;
+  transition: transform var(--t-med) ease;
 }
 .nav-burger[aria-expanded="true"] .nav-burger-lines span:first-child { transform: translateY(4.5px) rotate(45deg); }
 .nav-burger[aria-expanded="true"] .nav-burger-lines span:last-child { transform: translateY(-4.5px) rotate(-45deg); }
@@ -1454,7 +1466,7 @@ body { overflow-x: clip; }
   outline-offset: 3px;
   border-radius: 3px;
 }
-.btn:focus-visible { border-radius: 999px; }
+.btn:focus-visible { border-radius: var(--pill); }
 .btn-primary:focus-visible { outline-color: var(--navy-deep); }
 .section-light :focus-visible,
 .section-paper :focus-visible,
@@ -1539,7 +1551,7 @@ html.dive-live .dive-still { display: none; }
   background: radial-gradient(60% 55% at 50% 55%, rgba(11, 11, 34, 0.72), transparent 72%);
   pointer-events: none;
 }
-.gate-logo img { width: min(300px, 60vw); filter: drop-shadow(0 0 60px rgba(92, 187, 240, 0.45)); }
+.gate-logo img { width: min(300px, 60vw); filter: drop-shadow(0 0 60px var(--sky-a45)); }
 .gate-line {
   font-size: clamp(0.85rem, 2vw, 1rem);
   font-weight: 300;
@@ -1636,9 +1648,9 @@ html.dive-live .dive-still { display: none; }
   font-weight: 600;
   font-size: 0.95rem;
   padding: 10px 22px;
-  border-radius: 999px;
+  border-radius: var(--pill);
   text-decoration: none;
-  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform var(--t-fast) var(--ease-out);
 }
 .skip-dive:focus-visible { transform: translate(50%, 0); }
 
@@ -1741,7 +1753,7 @@ html.journey-on [style*="--j"] .section-head {
 .breathe .breath-info h3 { color: var(--ink); }
 .breathe .breath-steps { color: var(--ink-soft); }
 /* הניגודיות של ink-faint על לבן היא 2.9:1 — מתחת לסף. ראה חוק הנגישות למטה. */
-.breathe .breath-ring { border-color: rgba(92, 187, 240, 0.45); }
+.breathe .breath-ring { border-color: var(--sky-a45); }
 .breathe .label-sky { color: var(--blue-mid); }
 /* הכותרת רחבה מדי במסך אחד — מאזנים שורות */
 .breathe .section-head h2 { text-wrap: balance; }
@@ -1749,7 +1761,7 @@ html.journey-on [style*="--j"] .section-head {
 /* אנימציית הלוגו בשער — תופסת בדיוק את מקום התמונה הסטטית */
 .gate-logo { width: min(300px, 60vw); }
 .gate-logo img, .gate-logo video { width: 100%; height: auto; display: block; }
-.gate-logo video { filter: drop-shadow(0 0 60px rgba(92, 187, 240, 0.45)); }
+.gate-logo video { filter: drop-shadow(0 0 60px var(--sky-a45)); }
 @media (max-width: 899px) { .gate-logo { width: min(220px, 62vw); } }
 
 /* ============================================================
@@ -1799,8 +1811,8 @@ html.dive-hush .nav {
   transform: translateY(-8px);
 }
 .nav { transition: background-color 0.35s ease, box-shadow 0.35s ease,
-                   opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-                   transform 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
+                   opacity 0.5s var(--ease-out),
+                   transform 0.5s var(--ease-out); }
 
 @media (prefers-reduced-motion: reduce) {
   html.dive-hush .nav { opacity: 1; pointer-events: auto; transform: none; }
@@ -1828,11 +1840,11 @@ html.dive-hush .nav {
   font-size: 0.82rem;
   letter-spacing: 0.06em;
   padding: 9px 20px;
-  border-radius: 999px;
+  border-radius: var(--pill);
   cursor: pointer;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+  transition: opacity 0.7s ease, transform 0.7s var(--ease-out),
               border-color 0.3s ease, background-color 0.3s ease;
 }
 .dive-skip.show { opacity: 1; transform: translate(50%, 0); pointer-events: auto; }
@@ -1862,7 +1874,7 @@ html.dive-hush .nav {
 .breathe .breath-note, .breath-note { color: var(--ink-soft); }
 .breathe .breath-disclaimer, .breath-disclaimer {
   color: var(--ink-soft);
-  border-inline-start: 2px solid rgba(92, 187, 240, 0.5);
+  border-inline-start: 2px solid var(--sky-a50);
   padding-inline-start: 12px;
 }
 .program .breath-note, .program .breath-disclaimer { color: var(--white-soft); }
@@ -1924,7 +1936,7 @@ p, .statement-title, .section-intro { text-wrap: pretty; }
     display: block;
     width: min(230px, 46vw);
     margin: 0 auto clamp(22px, 4vh, 40px);
-    filter: drop-shadow(0 0 50px rgba(92, 187, 240, 0.35));
+    filter: drop-shadow(0 0 50px var(--sky-a35));
   }
 }
 /* פריט 0.5: במופחת-תנועה אין וילון (הרקע בהיר) — צבעי הווילון היו
