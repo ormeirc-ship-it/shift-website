@@ -1899,17 +1899,25 @@ p, .statement-title, .section-intro { text-wrap: pretty; }
   /* במצב שקט ההגעה סטטית על רקע הנייבי של הצלילה — אין צורך בווילון */
   .dive-curtain { display: none; }
 }
+@media (prefers-reduced-motion: reduce) {
+  html.ending-curtain .arrival-logo-dark { display: none; }
+  html.ending-curtain .arrival-logo-light { display: block; width: min(180px, 40vw); margin: 0 auto 24px; }
+}
 html.ending-curtain .arrival-logo-dark {
   display: block;
   width: min(230px, 46vw);
   margin: 0 auto clamp(22px, 4vh, 40px);
   filter: drop-shadow(0 0 50px rgba(92, 187, 240, 0.35));
 }
-html.ending-curtain .arrival h1 { color: #fff; }
-html.ending-curtain .arrival h1 b { color: var(--sky); }
-html.ending-curtain .arrival-sub { color: rgba(255, 255, 255, 0.88); }
-html.ending-curtain .btn-arrival { background: var(--sky); color: var(--navy-deep); }
-html.ending-curtain .btn-arrival-ghost { border-color: rgba(255, 255, 255, 0.45); color: #fff; }
+/* פריט 0.5: במופחת-תנועה אין וילון (הרקע בהיר) — צבעי הווילון היו
+   נותנים לבן-על-בהיר. הם חיים רק כשיש תנועה, כלומר כשיש וילון. */
+@media (prefers-reduced-motion: no-preference) {
+  html.ending-curtain .arrival h1 { color: #fff; }
+  html.ending-curtain .arrival h1 b { color: var(--sky); }
+  html.ending-curtain .arrival-sub { color: rgba(255, 255, 255, 0.88); }
+  html.ending-curtain .btn-arrival { background: var(--sky); color: var(--navy-deep); }
+  html.ending-curtain .btn-arrival-ghost { border-color: rgba(255, 255, 255, 0.45); color: #fff; }
+}
 
 /* — גרסה ב: המשטח — האור נשאר, הטקסט יושב על קלף נייר אטום
      בשפת הקלפים של האתר. — */
