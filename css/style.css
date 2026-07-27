@@ -916,8 +916,12 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
   box-shadow: 0 0 10px rgba(92, 187, 240, 0.7);
 }
 .program-weeks { display: flex; flex-direction: column; gap: clamp(28px, 4vw, 48px); }
+/* B1: הרקע אטום בכוונה, לא זכוכית. rgba(255,255,255,.05) מעל הנייבי של
+   הסקשן שווה בדיוק ל-#1E1E3E — אותו פיקסל — אבל זכוכית נתנה לטקסט של
+   קלף מכוסה להיראות דרך הקלף שמעליו בערימה. motion.js מזיז את המשתנה
+   יחד עם רקע הסקשן (כהה→בהיר), כך שההרכבה נשארת זהה לאורך כל הגלילה. */
 .week-card {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--card-bg, #1E1E3E);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: var(--radius);
   padding: clamp(26px, 4vw, 44px);
@@ -1167,15 +1171,20 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
 .step p { display: inline; color: var(--ink-soft); font-size: 1.02rem; }
 .path-track { display: none; } /* הקו הישן — הוחלף בשפת הרשימה */
 
-/* ---------- קלפי השבועות נערמים (אלת'יה) ---------- */
+/* ---------- קלפי השבועות נערמים (אלת'יה) ----------
+   B1: הערימה מותנית ב-html.stack-on, ש-motion.js מוסיף רק אחרי שנמדד
+   שהקלף הגבוה ביותר נכנס במסך במלואו. קלף גבוה מהחלון שננעץ בראשו
+   משאיר את הימים התחתונים שלו בלתי-קריאים לנצח — נמדד ב-27.7: על
+   1440×900 ימים 4–7 לא קיבלו אף רגע קריא. עמידות לפני אפקט:
+   כשאין מדידה (אין JS) או כשלא נכנס — רשימה סטטית רגילה. */
 @media (min-width: 900px) {
-  .week-card {
+  html.stack-on .week-card {
     position: sticky;
     top: calc(var(--nav-h) + 28px);
+    will-change: transform, filter;
   }
-  .week-card[data-week="2"] { top: calc(var(--nav-h) + 44px); }
-  .week-card[data-week="3"] { top: calc(var(--nav-h) + 60px); }
-  .week-card { will-change: transform, filter; }
+  html.stack-on .week-card[data-week="2"] { top: calc(var(--nav-h) + 44px); }
+  html.stack-on .week-card[data-week="3"] { top: calc(var(--nav-h) + 60px); }
 }
 
 /* ---------- מעבר רקע כהה→בהיר במסלול ---------- */
@@ -1185,7 +1194,10 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
 .program.lit .day-body h4, .program.lit .breath-info h3 { color: var(--ink); }
 .program.lit .section-intro, .program.lit .week-desc p, .program.lit .breath-steps { color: var(--ink-soft); }
 .program.lit .day-body p, .program.lit .breath-note { color: var(--ink-faint); }
-.program.lit .week-card,
+/* --card-bg מונפש ע"י motion.js יחד עם רקע הסקשן; הערך כאן הוא רשת
+   ביטחון לרגע ההיפוך (ההרכבה של 4% נייבי מעל הנייר = #EDECEB, אטום). */
+.program.lit { --card-bg: #EDECEB; }
+.program.lit .week-card { border-color: var(--line); }
 .program.lit .breath {
   background: rgba(24, 22, 59, 0.04);
   border-color: var(--line);

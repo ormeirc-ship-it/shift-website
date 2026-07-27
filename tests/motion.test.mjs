@@ -101,3 +101,26 @@ test('R5: איש לא נועל גלילה לפני החשיפה, והיציאה 
   assert.ok(!/overflow\s*=\s*''/.test(html),
     'שחרור overflow עיוור חזר ל-index.html — הוא דורס את נעילת התפריט');
 });
+
+test('B1: ערימת הקלפים מותנית במדידה, והקלפים אטומים', () => {
+  const css = readFileSync(resolve(ROOT, 'css/style.css'), 'utf8')
+    .replace(/\/\*[\s\S]*?\*\//g, ''); // בלי הערות — שלא ייקראו כסלקטורים
+  // הבאג: סטיקי לפי רוחב בלבד. קלף גבוה מחלון נמוך ננעץ בראשו והימים
+  // התחתונים שלו לא קיבלו אף רגע קריא (על 1440×900 — ימים 4–7).
+  // הרגקס תופס בלוקים פנימיים בלבד (selector בלי סוגריים) — עמיד ל-@media.
+  const stickyRules = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
+    .filter((m) => /position:\s*sticky/.test(m[2]))
+    .map((m) => m[1])
+    .filter((sel) => sel.includes('.week-card'));
+  assert.ok(stickyRules.length > 0, 'הסטיקי של הקלפים נעלם מה-CSS');
+  for (const sel of stickyRules) {
+    assert.ok(sel.includes('html.stack-on'),
+      'סטיקי על .week-card בלי שער stack-on — הערימה תופעל גם כשקלף לא נכנס במסך: ' + sel.trim());
+  }
+  // הבאג השני: רקע זכוכית. קלף מכוסה נראה דרך הקלף שמעליו.
+  assert.match(css, /\.week-card\s*\{[^}]*background:\s*var\(--card-bg/,
+    'רקע הקלפים חזר להיות שקוף — טקסט של קלף מכוסה ייראה דרך הקלף שמעליו');
+  // והמדידה עצמה חייבת להתקיים ב-JS
+  assert.match(motion, /stackFits/, 'מדידת ההתאמה של הערימה נעלמה מ-motion.js');
+  assert.match(motion, /offsetHeight/, 'הגובה לא נמדד — השער יחליט בלי נתונים');
+});

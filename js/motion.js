@@ -748,9 +748,12 @@
       });
     }
 
-    // הרקע נוסע מהישרדות (כהה) ליצירה (בהיר) לאורך הסקשן
-    gsap.fromTo(prog, { backgroundColor: '#121234' }, {
-      backgroundColor: '#F6F5F2', ease: 'none',
+    // הרקע נוסע מהישרדות (כהה) ליצירה (בהיר) לאורך הסקשן.
+    // --card-bg נוסע איתו: זה הצבע האטום של הקלפים (B1) — ההרכבה של
+    // הזכוכית הישנה מעל הרקע הנוכחי — כך שהם נראים זכוכית אבל לא מגלים
+    // טקסט של קלף מכוסה.
+    gsap.fromTo(prog, { backgroundColor: '#121234', '--card-bg': '#1E1E3E' }, {
+      backgroundColor: '#F6F5F2', '--card-bg': '#EDECEB', ease: 'none',
       scrollTrigger: { trigger: prog, start: 'top 30%', end: 'bottom 110%', scrub: true }
     });
     ScrollTrigger.create({
@@ -758,17 +761,65 @@
       onToggle: function (self) { prog.classList.toggle('lit', self.isActive); }
     });
 
-    // דסקטופ: שבוע חדש שנערם מעמעם את הקודם מאחור
-    if (DESKTOP.matches) {
-      var cards = gsap.utils.toArray('.week-card');
-      cards.forEach(function (card, i) {
-        if (i === 0) return;
-        gsap.to(cards[i - 1], {
-          scale: 0.96, autoAlpha: 0.45, ease: 'none',
-          scrollTrigger: { trigger: card, start: 'top 85%', end: 'top ' + (72 + 30 + i * 16) + 'px', scrub: true }
-        });
-      });
+    // B1: הערימה (סטיקי + עמעום הקלף המכוסה) רצה רק כשנמדד שהקלף הגבוה
+    // ביותר נכנס במסך במלואו. בלי המדידה, קלף גבוה מהחלון ננעץ בראשו
+    // והימים התחתונים שלו לא מקבלים אף רגע קריא — נמדד ב-27.7: על
+    // 1440×900 ימים 4–7 עומעמו לפני שהספיקו להיראות; על 1280×600 רק
+    // 7 מ-21 ימים היו קריאים. עמידות לפני אפקט: לא נכנס — רשימה סטטית.
+    var cards = gsap.utils.toArray('.week-card');
+    var stackOn = false, dimTweens = [];
+    function stackFits() {
+      if (!DESKTOP.matches || !cards.length) return false;
+      var navH = parseFloat(getComputedStyle(docEl).getPropertyValue('--nav-h')) || 72;
+      var tallest = 0;
+      for (var i = 0; i < cards.length; i++) tallest = Math.max(tallest, cards[i].offsetHeight);
+      // 60 — היסט הסטיקי הגדול ביותר; 24 — נשימה מתחת לקלף
+      return tallest + navH + 60 + 24 <= window.innerHeight;
     }
+    function setStack(on) {
+      if (on === stackOn) return;
+      stackOn = on;
+      docEl.classList.toggle('stack-on', on);
+      if (on) {
+        cards.forEach(function (card, i) {
+          if (i === 0) return;
+          // העמעום על *תוכן* הקלף, לא על הקלף: opacity על הקלף עצמו
+          // הופך גם את הרקע האטום לשקוף, וברגע ששלושה קלפים חופפים
+          // (2 מכסה את 1 בזמן ש-3 מתקרב) הטקסט של המכוסה נראה דרך
+          // המכסה. נמדד ב-27.7 על 1440×1600 — קלף 2 עמד על 0.906
+          // כשהוא מעל קלף 1. הרקע חייב להישאר אטום תמיד.
+          var prev = cards[i - 1];
+          var tl = gsap.timeline({
+            scrollTrigger: { trigger: card, start: 'top 85%', end: 'top ' + (72 + 30 + i * 16) + 'px', scrub: true }
+          });
+          tl.to(prev, { scale: 0.96, ease: 'none' }, 0)
+            .to(gsap.utils.toArray(prev.children), { autoAlpha: 0.45, ease: 'none' }, 0);
+          dimTweens.push(tl);
+        });
+      } else {
+        dimTweens.forEach(function (t) {
+          if (t.scrollTrigger) t.scrollTrigger.kill();
+          t.kill();
+        });
+        dimTweens = [];
+        gsap.set(cards, { clearProps: 'transform' });
+        cards.forEach(function (card) {
+          gsap.set(gsap.utils.toArray(card.children), { clearProps: 'opacity,visibility' });
+        });
+      }
+      ScrollTrigger.refresh();
+    }
+    setStack(stackFits());
+    // גובה הקלפים משתנה כשהפונטים מגיעים וכשהחלון משתנה — מודדים שוב
+    window.addEventListener('load', function () { setStack(stackFits()); });
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(function () { setStack(stackFits()); });
+    }
+    var stackTimer;
+    window.addEventListener('resize', function () {
+      clearTimeout(stackTimer);
+      stackTimer = setTimeout(function () { setStack(stackFits()); }, 180);
+    }, { passive: true });
 
     // שורות הימים נחשפות בהדרגה
     gsap.utils.toArray('.day-item').forEach(function (row) {
