@@ -641,13 +641,15 @@
     if (body) {
       var parts = body.querySelectorAll('.label, h2, p');
       gsap.from(parts, {
-        autoAlpha: 0, y: 28, duration: 0.8, stagger: 0.12, clearProps: CLEAR,
+        // D2: משך הכניסה נמתח עם המסע (--j) — הישרדות נכנסת מהר,
+        // יצירה נושמת. זה הציר השלישי מהמפרט, שהיה חסר עד 27.7.
+        autoAlpha: 0, y: 28, duration: jDur(body, 0.7, 1.1), stagger: 0.12, clearProps: CLEAR,
         scrollTrigger: { trigger: body, start: 'top 75%' }
       });
       var quote = body.querySelector('blockquote');
       if (quote) {
         gsap.from(quote, {
-          autoAlpha: 0, y: 26, duration: 1.0, delay: 0.15, clearProps: CLEAR,
+          autoAlpha: 0, y: 26, duration: jDur(quote, 0.85, 1.25), delay: 0.15, clearProps: CLEAR,
           scrollTrigger: { trigger: quote, start: 'top 85%' }
         });
       }
@@ -656,7 +658,7 @@
 
   /* ---------- מה נפתח: פריט-פריט, ואז הרגע של אהבה ---------- */
   gsap.from('.chips li', {
-    autoAlpha: 0, y: 22, duration: 0.55, clearProps: CLEAR,
+    autoAlpha: 0, y: 22, duration: jDur(document.querySelector('.chips'), 0.5, 0.9), clearProps: CLEAR,
     stagger: { each: 0.05, from: 'start' },
     scrollTrigger: { trigger: '.chips', start: 'top 82%' }
   });
@@ -664,7 +666,7 @@
     var love = document.querySelector('.love-card');
     if (!love) return;
     gsap.from(love, {
-      autoAlpha: 0, y: 36, duration: 1.0, delay: 0.35, clearProps: CLEAR,
+      autoAlpha: 0, y: 36, duration: jDur(love, 0.9, 1.3), delay: 0.35, clearProps: CLEAR,
       scrollTrigger: {
         trigger: love, start: 'top 85%',
         onEnter: function () {
@@ -830,7 +832,7 @@
     // שורות הימים נחשפות בהדרגה
     gsap.utils.toArray('.day-item').forEach(function (row) {
       gsap.from(row, {
-        autoAlpha: 0, y: 18, duration: 0.6, clearProps: CLEAR,
+        autoAlpha: 0, y: 18, duration: jDur(row, 0.55, 0.95), clearProps: CLEAR,
         scrollTrigger: { trigger: row, start: 'top 90%' }
       });
     });
