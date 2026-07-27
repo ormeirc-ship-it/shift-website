@@ -180,12 +180,24 @@ if (burger && menu) {
 
   const setPhase = (t) => { phase.textContent = t; };
 
+  const breathEl = document.getElementById('breath');
+  const after = document.getElementById('breathAfter');
+  const setAir = (dir) => {
+    // הטבעת נושמת עם ההנחיה — משהו שמחזיק את העין גם בנשיפה הארוכה
+    if (!breathEl) return;
+    breathEl.classList.toggle('inhale', dir === 'in');
+    breathEl.classList.toggle('exhale', dir === 'out');
+  };
+
   const finish = () => {
     setPhase('איך זה מרגיש עכשיו?');
     counter.textContent = 'סיימתם ' + TOTAL + ' סבבים';
     btn.disabled = false;
     btn.textContent = 'עוד סיבוב';
     running = false;
+    setAir(null);
+    // הרגע שאחרי: החוויה הצביעה על משהו — נותנים לה לאן להוביל
+    if (after) after.hidden = false;
   };
 
   const runRound = (round) => {
@@ -194,11 +206,11 @@ if (burger && menu) {
 
     if (hasGsap && !reduced) {
       const tl = gsap.timeline({ onComplete: next });
-      tl.call(() => setPhase('שאיפה עמוקה מהאף'));
+      tl.call(() => { setPhase('שאיפה עמוקה מהאף'); setAir('in'); });
       tl.to(circle, { scale: 1.3, duration: 1.9, ease: 'power2.inOut' });
       tl.call(() => setPhase('ועוד שאיפה קצרה — למלא עד הסוף'));
       tl.to(circle, { scale: 1.5, duration: 1.0, ease: 'power2.out' });
-      tl.call(() => setPhase('נשיפה ארוכה ואיטית מהפה…'));
+      tl.call(() => { setPhase('נשיפה ארוכה ואיטית מהפה…'); setAir('out'); });
       tl.to(circle, { scale: 1, duration: 5.8, ease: 'power2.inOut' });
     } else {
       // גרסה שקטה: הנחיות מתחלפות בלי אנימציה

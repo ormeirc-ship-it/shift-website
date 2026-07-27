@@ -991,6 +991,21 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
   height: 240px;
   border-radius: 50%;
   border: 1px dashed rgba(92, 187, 240, 0.35);
+  /* ‏D3: הטבעת נושמת עם ההנחיה — העוגן שמחזיק את העין בנשיפה הארוכה
+     (5.8ש' עם טקסט סטטי). המחלקות מוחלפות ב-main.js לפי השלב. */
+  transition: transform 2.4s cubic-bezier(0.45, 0, 0.55, 1), opacity 2.4s ease;
+}
+.breath.inhale .breath-ring { transform: scale(1.14); opacity: 0.95; }
+.breath.exhale .breath-ring { transform: scale(0.9); opacity: 0.55; }
+.breath-after {
+  margin-top: 14px;
+  font-size: 1rem;
+  color: var(--ink-soft);
+}
+.breath-after a { color: var(--blue-mid); font-weight: 600; text-decoration-color: rgba(92, 187, 240, 0.6); }
+@media (prefers-reduced-motion: reduce) {
+  .breath-ring { transition: none; }
+  .breath.inhale .breath-ring, .breath.exhale .breath-ring { transform: none; opacity: 0.8; }
 }
 .breath-circle {
   width: 150px;
