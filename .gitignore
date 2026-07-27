@@ -12,9 +12,10 @@ _old-version/
 assets/video/brain-intro-source.mp4
 
 # נכסים שאינם בשימוש באתר (נשמרים מקומית, לא במאגר)
+# ‏logo.png הוסר מהרשימה ב-27.7 — הוא בשימוש (הלוגו על רקע בהיר בניווט)
+# והיה כאן מוקש: ניקוי cached עתידי היה מפיל אותו מהמאגר בשקט.
 assets/brand/asset9.png
 assets/brand/logo-symbol.png
-assets/brand/logo.png
 assets/brand/symbol.png
 assets/brand/symbol3.png
 assets/logo.png

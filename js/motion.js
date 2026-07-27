@@ -156,8 +156,10 @@
     if (!section || !canvas) return null;
 
     var MOBILE = !DESKTOP.matches;
+    // B2: הרצף דולל 97→60 (החלטת OC, 27.7) — פחות החלפות תמונה לצעד
+    // גלילה ופחות בייטים ברשת איטית. המקור המלא שמור ב-_build/brain-seq-d97.
     var DIR = 'assets/brain-seq/' + (MOBILE ? 'm/' : 'd/');
-    var COUNT = MOBILE ? 65 : 97;
+    var COUNT = MOBILE ? 65 : 60;
     var ctx = canvas.getContext('2d', { alpha: false });
     var frames = [];
     var loaded = 0;

@@ -3,7 +3,7 @@
 // כל בדיקה כאן מתעדת באג אמיתי שקרה, כדי שלא יחזור בשקט.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -43,13 +43,20 @@ test('R1: onScreen מגיע מ-IntersectionObserver ולא מ-onToggle של Scro
 
 test('הפריים הראשון נטען לבדו, לפני שאר הרצף', () => {
   assert.match(motion, /loadFrame\(1,\s*function/,
-    'הטעינה בשלבים בוטלה — 97 בקשות במקביל מרעיבות את הפריים הראשון ברשת איטית');
+    'הטעינה בשלבים בוטלה — כל הבקשות במקביל מרעיבות את הפריים הראשון ברשת איטית');
   assert.match(motion, /WINDOW\s*=\s*\d+/, 'חלון הבקשות המקבילות נעלם');
 });
 
-test('מובייל טוען את סט הפריימים שלו בלבד', () => {
+test('מובייל טוען את סט הפריימים שלו בלבד, והספירה תואמת לקבצים', () => {
   assert.match(motion, /MOBILE\s*\?\s*'m\/'\s*:\s*'d\/'/, 'ההפרדה בין סטי הפריימים נשברה');
-  assert.match(motion, /MOBILE\s*\?\s*65\s*:\s*97/, 'ספירת הפריימים השתנתה');
+  // B2 (27.7): הרצף דולל 97→60. הספירה בקוד חייבת לתאום את הקבצים בפועל —
+  // ספירה גבוהה מדי = draw על תמונות שלא קיימות; נמוכה מדי = הרצף נקטע.
+  const count = (dir) => readdirSync(resolve(ROOT, 'assets/brain-seq/' + dir))
+    .filter((f) => /^f\d{3}\.webp$/.test(f)).length;
+  const m = motion.match(/MOBILE\s*\?\s*(\d+)\s*:\s*(\d+)/);
+  assert.ok(m, 'הצהרת COUNT נעלמה מ-motion.js');
+  assert.equal(Number(m[1]), count('m'), 'ספירת המובייל בקוד לא תואמת את הקבצים');
+  assert.equal(Number(m[2]), count('d'), 'ספירת הדסקטופ בקוד לא תואמת את הקבצים');
 });
 
 test('סולם המסע נגזר מה-DOM ולא מרשימה קשיחה', () => {
