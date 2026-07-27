@@ -19,20 +19,31 @@
   <meta name="theme-color" content="#18163B">
   <link rel="canonical" href="https://ormeirc-ship-it.github.io/shift-website/">
   <link rel="icon" type="image/png" href="assets/brand/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/brand/icons/icon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/brand/icons/icon-16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="assets/brand/icons/apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
   <!-- הפריים הראשון של הצלילה הוא מה שהמבקר רואה ראשון. בלי ההנחיה הזו
        הוא ממתין בתור מאחורי חבילת התנועה (175KB) — וברשת איטית זה שניות. -->
   <link rel="preload" as="image" href="assets/brain-seq/m/f001.webp" type="image/webp"
         media="(max-width: 899px)" fetchpriority="high">
   <link rel="preload" as="image" href="assets/brain-seq/d/f001.webp" type="image/webp"
         media="(min-width: 900px)" fetchpriority="high">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- הגופן נטען בלי לחסום רינדור: media="print" משחרר את הפרסר,
-       ו-onload מחזיר אותו ל-all ברגע שהגיע. <noscript> לגולשים בלי JS. -->
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Assistant:wght@200;300;400;600;700&display=swap">
-  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@200;300;400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all';this.onload=null">
-  <noscript><link href="https://fonts.googleapis.com/css2?family=Assistant:wght@200;300;400;600;700&display=swap" rel="stylesheet"></noscript>
+  <!-- הגופן self-hosted (פריט 18): בלי preconnect כפול ובלי מקור חיצוני.
+       שתי ריצות מדידה (perf/) לימדו: (1) preload לגופנים דחק את פריים-המוח
+       ב-1–2ש'; (2) גם בלי preload, בהיותם same-origin הם מגיעים *מוקדם*
+       ומתחרים בשער על הצינור ב-Slow 4G (‏+1.1–1.6ש'). לכן הגופן משוחרר
+       רק כשהשער נסגר (shift:reveal / preloader-done, עם קיר 2.6ש') —
+       במסך הפתיחה ממילא לוגו-תמונה ושורה אחת; ‏swap מציג אותה במערכת. -->
+  <link id="fontsCss" href="css/fonts.css?v=20260728a" rel="stylesheet" media="print">
+  <script>
+    (function () {
+      var flip = function () { var l = document.getElementById('fontsCss'); if (l) l.media = 'all'; };
+      if (document.documentElement.classList.contains('preloader-done')) flip();
+      else { window.addEventListener('shift:reveal', flip, { once: true }); setTimeout(flip, 2600); }
+    })();
+  </script>
+  <noscript><link href="css/fonts.css?v=20260728a" rel="stylesheet"></noscript>
   <!-- נתונים מובנים — אך ורק עובדות שכבר כתובות בעמוד (שם, תיאור, אינסטגרם).
        בלי כתובת, טלפון או תאריכים — אין כאלה בעמוד. ה-URL-ים מתחלפים עם הדומיין. -->
   <script type="application/ld+json">
@@ -60,7 +71,7 @@
   }
   </script>
   <!-- פרמטר הגרסה שובר cache ישן אחרי כל פריסה — לעדכן בכל שינוי CSS/JS -->
-  <link rel="stylesheet" href="css/style.css?v=20260726b">
+  <link rel="stylesheet" href="css/style.css?v=20260728a">
   <script>
     document.documentElement.classList.add('js');
     // מנוע התנועה מוכרז מראש כדי שחוקי ה-reveal של ה-CSS לא יידלקו לרגע;
@@ -626,6 +637,7 @@
             <h3>ריטריטים</h3>
             <p>יציאה מהשגרה אל מרחב שקט — תרגול, לימוד ומנוחה עמוקה, בקבוצה קטנה.</p>
             <!-- TODO: תוכן מ-OC — תיאור, מיקום, תאריכים, מחיר -->
+            <span class="event-soon">תאריכים ופרטים יפורסמו כאן</span>
             <a class="event-link" href="#contact">דברו איתנו ←</a>
           </div>
         </article>
@@ -639,6 +651,7 @@
             <h3>סדנאות</h3>
             <p>מפגש ממוקד של כמה שעות — נושא אחד מהשיטה, תרגול חי וכלים שנשארים איתכם.</p>
             <!-- TODO: תוכן מ-OC — נושאים, תאריכים, מחיר -->
+            <span class="event-soon">נושאים ותאריכים יפורסמו כאן</span>
             <a class="event-link" href="#contact">דברו איתנו ←</a>
           </div>
         </article>
@@ -652,6 +665,7 @@
             <h3>אירועי עומק</h3>
             <p>יום מלא בתוך התהליך — מהבוקר עד הערב: גוף, מוח ותודעה, ברצף אחד שלם.</p>
             <!-- TODO: תוכן מ-OC — מבנה היום, תאריכים, מחיר -->
+            <span class="event-soon">מבנה היום ותאריכים יפורסמו כאן</span>
             <a class="event-link" href="#contact">דברו איתנו ←</a>
           </div>
         </article>
@@ -772,7 +786,7 @@
   <script src="assets/vendor/gsap.min.js" defer></script>
   <script src="assets/vendor/ScrollTrigger.min.js" defer></script>
   <script src="assets/vendor/lenis.min.js" defer></script>
-  <script src="js/motion.js?v=20260726b" defer></script>
-  <script src="js/main.js?v=20260726b" defer></script>
+  <script src="js/motion.js?v=20260728a" defer></script>
+  <script src="js/main.js?v=20260728a" defer></script>
 </body>
 </html>

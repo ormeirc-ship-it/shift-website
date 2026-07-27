@@ -21,6 +21,7 @@
 2. **`robots.txt`** — שורת ה-Sitemap.
 3. **`sitemap.xml`** — ה-`loc`.
 4. **`404.html`** — שלושת הנתיבים האבסולוטיים `/shift-website/` → `/`.
+4½. **`site.webmanifest`** — ‏`start_url`.
 5. חיפוש ביטחון: `grep -rn "ormeirc-ship-it.github.io" --include="*.html" --include="*.txt" --include="*.xml" .`
    חייב לחזור ריק (מחוץ ל-docs).
 6. ב-GitHub: ‏Settings → Pages → Custom domain (+ Enforce HTTPS).
