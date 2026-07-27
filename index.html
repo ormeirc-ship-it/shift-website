@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html dir="rtl" lang="he">
+<html dir="rtl" lang="he" class="ending-curtain">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -142,6 +142,12 @@
         <p class="gate-line">תוכנית לפיתוח אישי · נוירוסיינס × גוף × AI</p>
         <div class="gate-cue" aria-hidden="true"><i></i><span>גללו להיכנס</span></div>
       </div>
+
+      <!-- הווילון של הסיום (B3-א): עולה עם ההגעה, מוריד את הרעש של
+           הפריים המואר ומחזיר את חלון הפתיחה. הופעל 27.7 לפי הנחיית OC
+           ("שיחזור להיות דומה לחלון הפתיחה"); הגרסה החלופית (משטח)
+           נשארת רדומה ב-CSS — חזרה = החלפת מחלקה אחת על <html>. -->
+      <div class="dive-curtain" id="diveCurtain" aria-hidden="true"></div>
 
       <!-- ההגעה אל האור -->
       <div class="arrival" id="diveArrival">
@@ -647,17 +653,34 @@
       <div class="section-head reveal">
         <h2>מה נפתח כשעושים SHIFT</h2>
       </div>
-      <ul class="chips reveal delay-1">
-        <li>היכרות עמוקה עם עצמכם</li>
-        <li>אמונה באפשר</li>
-        <li>הגשמה עצמית</li>
-        <li>חיזוק תחושת האושר</li>
-        <li>ביטחון פנימי</li>
-        <li>יכולות אישיות וחברתיות גבוהות</li>
-        <li>שער ליצירתיות</li>
-        <li>חידוד הזיכרון</li>
-        <li>חיבור לאינטואיציה</li>
-      </ul>
+      <!-- D1 #6: עשר גלולות שוות-משקל נקראו כענן תגיות בלי עוגן.
+           קובצו לשלושה אשכולות; הטקסטים עצמם לא שונו. -->
+      <div class="chip-groups reveal delay-1">
+        <div class="chip-group">
+          <h3 class="chip-group-title">פְּנימה</h3>
+          <ul class="chips">
+            <li>היכרות עמוקה עם עצמכם</li>
+            <li>ביטחון פנימי</li>
+            <li>חיבור לאינטואיציה</li>
+          </ul>
+        </div>
+        <div class="chip-group">
+          <h3 class="chip-group-title">קדימה</h3>
+          <ul class="chips">
+            <li>אמונה באפשר</li>
+            <li>הגשמה עצמית</li>
+            <li>שער ליצירתיות</li>
+          </ul>
+        </div>
+        <div class="chip-group">
+          <h3 class="chip-group-title">ביומיום</h3>
+          <ul class="chips">
+            <li>חיזוק תחושת האושר</li>
+            <li>חידוד הזיכרון</li>
+            <li>יכולות אישיות וחברתיות גבוהות</li>
+          </ul>
+        </div>
+      </div>
       <div class="love-card reveal delay-2">
         <p>והיכרות עמוקה עם הרגש החשוב מכול — <strong>אהבה.</strong></p>
       </div>

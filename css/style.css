@@ -359,7 +359,9 @@ h3 {
   display: grid;
   grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
   gap: clamp(36px, 6vw, 72px);
-  align-items: center;
+  /* D1 #5: align center דחף את הטקסט אל אמצע הסקשן — המסך הראשון
+     היה ריק. יישור לראש מביא את הכותרת אל המפגש הראשון עם העין. */
+  align-items: start;
 }
 .story-media {
   border-radius: var(--radius);
@@ -530,6 +532,8 @@ html.js:not(.gsap-on) .reveal.visible { opacity: 1; transform: none; }
   .cards-3 { grid-template-columns: 1fr; }
   .steps { grid-template-columns: repeat(2, 1fr); }
   .story-grid { grid-template-columns: 1fr; }
+  /* D1 #5 מובייל: מילים לפני תמונה — הסקשן נפתח בכותרת, לא במסך גרדיאנט */
+  .story-body { order: -1; }
   .story-media { max-width: 440px; margin-inline: auto; }
 }
 
@@ -1202,6 +1206,25 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
   html.stack-on .week-card[data-week="3"] { top: calc(var(--nav-h) + 60px); }
 }
 
+/* ---------- מה נפתח: שלושת האשכולות (D1 #6) ---------- */
+.chip-groups {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(22px, 3.5vw, 44px);
+  margin-top: 10px;
+}
+.chip-group-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--blue-mid);
+  margin-bottom: 14px;
+}
+.chip-groups .chips { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+@media (max-width: 899px) {
+  .chip-groups { grid-template-columns: 1fr; gap: 26px; }
+}
+
 /* ---------- מעבר רקע כהה→בהיר במסלול ---------- */
 .program .section-head h2, .program .week-head h3 { transition: color 0.5s ease; }
 .program.lit { color: var(--ink); }
@@ -1861,23 +1884,32 @@ p, .statement-title, .section-intro { text-wrap: pretty; }
    ============================================================ */
 .arrival-logo { display: none; height: auto; }
 
-/* — גרסה א: הווילון — חזרה למסך הפתיחה. הרקע שוקע לנייבי,
-     הלוגו הלבן חוזר, וההצהרה עוברת ללבן. — */
-html.b3-curtain .dive-veil {
-  opacity: 1 !important;
+/* — גרסה א: הווילון — חיה מאז 27.7 (מחלקת ending-curtain על <html>).
+     שכבת הווילון נפרדת מה-veil ומונעת ע"י render() לפי התקדמות ההגעה. — */
+.dive-curtain {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
   background: rgba(18, 18, 52, 0.96);
+  opacity: 0;
+  pointer-events: none;
+  will-change: opacity;
 }
-html.b3-curtain .arrival-logo-dark {
+@media (prefers-reduced-motion: reduce) {
+  /* במצב שקט ההגעה סטטית על רקע הנייבי של הצלילה — אין צורך בווילון */
+  .dive-curtain { display: none; }
+}
+html.ending-curtain .arrival-logo-dark {
   display: block;
   width: min(230px, 46vw);
   margin: 0 auto clamp(22px, 4vh, 40px);
   filter: drop-shadow(0 0 50px rgba(92, 187, 240, 0.35));
 }
-html.b3-curtain .arrival h1 { color: #fff; }
-html.b3-curtain .arrival h1 b { color: var(--sky); }
-html.b3-curtain .arrival-sub { color: rgba(255, 255, 255, 0.88); }
-html.b3-curtain .btn-arrival { background: var(--sky); color: var(--navy-deep); }
-html.b3-curtain .btn-arrival-ghost { border-color: rgba(255, 255, 255, 0.45); color: #fff; }
+html.ending-curtain .arrival h1 { color: #fff; }
+html.ending-curtain .arrival h1 b { color: var(--sky); }
+html.ending-curtain .arrival-sub { color: rgba(255, 255, 255, 0.88); }
+html.ending-curtain .btn-arrival { background: var(--sky); color: var(--navy-deep); }
+html.ending-curtain .btn-arrival-ghost { border-color: rgba(255, 255, 255, 0.45); color: #fff; }
 
 /* — גרסה ב: המשטח — האור נשאר, הטקסט יושב על קלף נייר אטום
      בשפת הקלפים של האתר. — */

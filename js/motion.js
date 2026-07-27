@@ -241,6 +241,7 @@
     var passing = document.getElementById('divePassing');
     var arrival = document.getElementById('diveArrival');
     var veil = document.getElementById('diveVeil');
+    var curtain = document.getElementById('diveCurtain');
     var lines = passing ? Array.prototype.slice.call(passing.querySelectorAll('p')) : [];
 
     // מצב מופחת-תנועה: פריים מייצג אחד, הכותרת מיד, בלי צלילה
@@ -306,6 +307,8 @@
         arrival.style.pointerEvents = aIn > 0.6 ? 'auto' : 'none';
       }
       if (veil) veil.style.opacity = String(1 - aIn);
+      // הווילון של הסיום עולה עם ההגעה — חלון הפתיחה חוזר (B3-א)
+      if (curtain) curtain.style.opacity = String(aIn);
     }
 
     gsap.ticker.add(render);
