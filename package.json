@@ -25,7 +25,9 @@
     "vr": "node scripts/vr.mjs",
     "vr:accept": "node scripts/vr.mjs --accept",
     "perf:diff": "node scripts/perf-diff.mjs",
-    "hooks": "node scripts/install-hooks.mjs"
+    "hooks": "node scripts/install-hooks.mjs",
+    "doctor": "node scripts/doctor.mjs",
+    "e2e": "node scripts/e2e.mjs"
   },
   "devDependencies": {
     "puppeteer-core": "^24.0.0"
