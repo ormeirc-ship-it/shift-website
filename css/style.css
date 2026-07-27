@@ -38,10 +38,30 @@ html {
 }
 /* מוצג רק כש-JS פעיל — אחרת לעולם לא חוסם את הדף */
 html.js .preloader { display: flex; }
-html.preloader-done .preloader { display: none; }
+
+/* היציאה ב-CSS ולא ב-JS, בכוונה: המחלקה `preloader-done` נוספת ב-onload
+   של תמונת הגיבוי, לפני שחבילת התנועה (175KB) הספיקה להגיע. כשהיציאה
+   הייתה ב-GSAP היא פשוט לא רצתה — המסך נעלם ב-`display:none` והטקס
+   התנגן על אלמנט מוסתר. ב-CSS הוא מתנגן תמיד. */
+html.preloader-done .preloader {
+  pointer-events: none;
+  animation: plOut 0.55s cubic-bezier(0.76, 0, 0.24, 1) both;
+}
+@keyframes plOut {
+  from { transform: translateY(0);     opacity: 1; }
+  to   { transform: translateY(-100%); opacity: 0; }
+}
+
+/* הלוגו נכנס עם השהיה של 450ms — מי שהעמוד שלו מוכן מיד לא רואה טקס,
+   רק מעבר רך מנייבי לתמונה. הטקס שמור למי שבאמת מחכה. */
 .preloader img {
   width: min(320px, 58vw);
   opacity: 0;
+  animation: plIn 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) 0.45s both;
+}
+@keyframes plIn {
+  from { opacity: 0; transform: scale(0.94); filter: blur(6px); }
+  to   { opacity: 1; transform: scale(1);    filter: blur(0px); }
 }
 @media (prefers-reduced-motion: reduce) {
   .preloader { display: none !important; }
@@ -1085,6 +1105,7 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
   letter-spacing: 0.06em;
   color: var(--white-soft);
   opacity: 0;
+  animation: plIn 0.7s ease 0.8s both;
 }
 .preloader-line .w { display: inline-block; }
 @keyframes hintBlink { 0%,100% { opacity: 0.35; } 50% { opacity: 0.9; } }

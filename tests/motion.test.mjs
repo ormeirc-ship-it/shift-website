@@ -84,3 +84,20 @@ test('כל אפקט חדש חייב חלופה שקטה', () => {
   assert.ok(reducedInCss >= 8, `רק ${reducedInCss} בלוקי reduced-motion ב-CSS`);
   assert.match(motion, /REDUCED/, 'מנוע התנועה לא בודק reduced-motion');
 });
+
+test('R5: איש לא נועל גלילה לפני החשיפה, והיציאה של מסך הפתיחה ב-CSS', () => {
+  // הבאג: motion.js נעל overflow אחרי שה-onload של תמונת הגיבוי כבר סגר
+  // את מסך הפתיחה — עמוד גלוי לגמרי שהגלילה בו מתה ל-800ms בלי שום סימן.
+  // נמדד ב-27.7: 89–101 פריימים נעולים בכל מהירות רשת; ב-Slow 4G זה נחת
+  // בשנייה השביעית. מותר לנעול רק בתפריט (main.js) — לא במנוע התנועה.
+  assert.ok(!/overflow\s*=\s*'hidden'/.test(motion),
+    'motion.js חזר לנעול גלילה — מבקר שהתמונה הקדימה אצלו את ה-JS יקבל עמוד קפוא');
+  // והטקס עצמו חייב לשבת ב-CSS: כשהוא ישב ב-GSAP הוא רץ על אלמנט מוסתר,
+  // כי המחלקה preloader-done תמיד הקדימה את חבילת התנועה.
+  const css = readFileSync(resolve(ROOT, 'css/style.css'), 'utf8');
+  assert.match(css, /html\.preloader-done \.preloader\s*\{[^}]*animation/,
+    'יציאת מסך הפתיחה כבר לא ב-CSS — היא תחזור לרוץ בחושך על אלמנט display:none');
+  const html = readFileSync(resolve(ROOT, 'index.html'), 'utf8');
+  assert.ok(!/overflow\s*=\s*''/.test(html),
+    'שחרור overflow עיוור חזר ל-index.html — הוא דורס את נעילת התפריט');
+});

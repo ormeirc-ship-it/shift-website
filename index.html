@@ -34,13 +34,12 @@
       document.documentElement.classList.add('gsap-on');
     }
     // רשת ביטחון עליונה: גם אם motion.js קורס לפני שהטיימר הפנימי שלו נרשם,
-    // מסך הפתיחה יורד אחרי 4 שניות והאתר לא ננעל על מסך ריק
-    // ברשת איטית ה-HTML עצמו מגיע אחרי שניות, והטיימר הזה מתחיל רק אז —
-    // כלומר 4 שניות נוספות של מסך פתיחה. נמדד ב-Slow 4G: 8.4ש' עד שמשהו
-    // נראה. הורד ל-2.2ש'; מתחתיו כבר יש את תמונת הגיבוי של הצלילה.
+    // מסך הפתיחה יורד והאתר לא ננעל על מסך ריק. ברשת איטית ה-HTML מגיע
+    // אחרי שניות והטיימר מתחיל רק אז — לכן 2.2ש' ולא יותר.
+    // אין כאן שחרור overflow: מאז R5 אף אחד לא נועל גלילה לפני החשיפה,
+    // ושחרור עיוור היה דורס את הנעילה של התפריט אם נפתח מוקדם.
     setTimeout(function () {
       document.documentElement.classList.add('preloader-done');
-      if (document.body) document.body.style.overflow = '';
     }, 2200);
   </script>
 </head>
@@ -126,7 +125,7 @@
              (175KB) מגיעה שניות אחרי ה-HTML, ועד אז המבקר בהה במסך ריק. -->
         <img class="dive-still" id="brainStill" src="assets/brain-seq/d/f001.webp" alt="" aria-hidden="true"
              width="900" height="506" fetchpriority="high"
-             onload="document.documentElement.classList.add('preloader-done');if(document.body)document.body.style.overflow=''">
+             onload="document.documentElement.classList.add('preloader-done')">
       </picture>
       <div class="dive-veil" id="diveVeil" aria-hidden="true"></div>
 

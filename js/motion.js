@@ -123,12 +123,19 @@
   var preloader = document.getElementById('preloader');
   var revealed = false;
 
+  // מפעיל את יציאת מסך הפתיחה. היציאה עצמה ב-CSS, כדי שתתרחש גם כשחבילת
+  // התנועה עדיין בדרך — זה בדיוק המצב ברשת איטית.
+  function dismissPreloader() {
+    docEl.classList.add('preloader-done');
+    document.body.style.overflow = '';
+  }
+
+  // ניקוי אחרי שהיציאה הסתיימה: מוציא את האלמנט ומודיע לשאר האתר.
   function finishReveal() {
     if (revealed) return;
     revealed = true;
-    docEl.classList.add('preloader-done');
+    dismissPreloader();
     if (preloader && preloader.parentNode) preloader.parentNode.removeChild(preloader);
-    document.body.style.overflow = '';
     window.dispatchEvent(new Event('shift:reveal'));
     if (hasST) ScrollTrigger.refresh();
     if (location.hash && location.hash.length > 1 && document.querySelector(location.hash)) {
@@ -367,37 +374,35 @@
     return stats;
   })();
 
+  /* מסך הפתיחה — מי סוגר אותו, ולמה לא כאן.
+     היה כאן טקס של GSAP: הלוגו נכנס, ואז וילון עולה. מדידה ב-27.7 בשלוש
+     מהירויות רשת הראתה שהוא **לא הוצג מעולם** — ה-onload של תמונת הגיבוי
+     ב-HTML תמיד הקדים את חבילת התנועה (175KB), הוסיף `preloader-done`,
+     וה-CSS העלים את המסך. הטקס רץ על אלמנט מוסתר.
+     גרוע מזה: הנעילה `overflow:hidden` שישבה כאן הוחלה **אחרי** שהמסך כבר
+     נסגר — כלומר עמוד גלוי לגמרי שהגלילה בו מתה ל-800ms בלי שום סימן.
+     ב-Slow 4G זה נחת ב-7.3ש', אחרי שהמבקר כבר חיכה שבע שניות.
+     לכן: היציאה עברה ל-CSS (רצה גם בלי חבילת התנועה), ואין כאן נעילת
+     גלילה בכלל. הקוד הזה רק מנקה אחרי שהיציאה נגמרה. */
   if (!preloader || !FULL) {
     finishReveal();
   } else {
-    document.body.style.overflow = 'hidden';
-    var plLogo = preloader.querySelector('img');
-    var plLine = document.getElementById('preloaderLine');
-
-    // הלוגו נבנה, והמסך נפתח ברגע שהפריים הראשון של המוח מוכן —
-    // לא כשכל 97 הפריימים טעונים. שאר הרצף ממשיך להיטען ברקע.
-    var openTl = gsap.timeline({ onComplete: finishReveal });
-    openTl.fromTo(plLogo,
-      { opacity: 0, scale: 0.94, filter: 'blur(6px)' },
-      { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 0.7 }, 0);
-    if (plLine) openTl.fromTo(plLine, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5 }, 0.35);
-    openTl.addPause();
-
-    var opened = false;
-    function openCurtain() {
-      if (opened) return;
-      opened = true;
-      var out = gsap.timeline({ onComplete: finishReveal });
-      if (plLine) out.to(plLine, { autoAlpha: 0, y: -20, duration: 0.4, ease: 'power2.in' }, 0);
-      out.to(plLogo, { y: -50, opacity: 0, duration: 0.6, ease: 'power3.inOut' }, 0.05);
-      out.to(preloader, { yPercent: -100, duration: 0.9, ease: 'power3.inOut' }, 0.15);
+    var still = document.getElementById('brainStill');
+    var closing = false;
+    var closeNow = function () {
+      if (closing) return;
+      closing = true;
+      dismissPreloader();
+      setTimeout(finishReveal, 620);   // אורך אנימציית היציאה ב-CSS
+    };
+    if (docEl.classList.contains('preloader-done') || (still && still.complete)) closeNow();
+    else if (still) {
+      still.addEventListener('load', closeNow, { once: true });
+      still.addEventListener('error', closeNow, { once: true });
     }
-    // הפריים הראשון מוכן → נפתחים. רשת ביטחון: לא מחכים לו יותר מ-2.5 שניות.
-    if (dive && dive.firstFrameMs !== null) openCurtain();
-    else window.addEventListener('shift:dive-first-frame', openCurtain, { once: true });
-    setTimeout(openCurtain, 2000);
+    setTimeout(closeNow, 2200);        // רשת ביטחון אם התמונה לא מגיעה
   }
-  setTimeout(finishReveal, 2600);
+  setTimeout(finishReveal, 3000);
 
   /* ---------- המעבר מהישרדות ליצירה, כמערכת לאורך העמוד ----------
      הפלטה והטיפוגרפיה נעולות, ולכן ההבחנה בין שני המצבים נישאת ע"י הקצב
