@@ -54,6 +54,38 @@
 | ‏drift נכשל | רשת/Firestore או סחיפה אמיתית | לבדוק את הפלט: אם הרשת — לנסות שוב; אם תוכן — לתקן את האתר, לא את המקור |
 | פריסה עלתה אבל נכסים ישנים | cache של Pages | לוודא שפרמטר `?v=` עודכן בכל שינוי css/js |
 
+## CSP — טיוטה ליום שיש שליטה ב-headers (פריט 39)
+
+GitHub Pages לא מאפשר headers, ו-**Report-Only דרך meta אינו נתמך
+בדפדפנים** (חייב header) — לכן זו טיוטה מתועדת, לא meta חי: meta אוכף
+היה מסכן את האתר בלי דרך לנסות-קודם. כשעוברים לדומיין מאחורי
+Cloudflare/Netlify/Pages-proxy — להדביק כ-header, קודם ב-Report-Only.
+
+הרשימה נגזרה מהצרכים בפועל (אחרי self-host של הגופנים אין שום מקור חוץ):
+
+```
+Content-Security-Policy-Report-Only:
+  default-src 'none';
+  script-src 'self' 'unsafe-inline';
+  style-src 'self' 'unsafe-inline';
+  img-src 'self' data:;
+  font-src 'self';
+  media-src 'self';
+  connect-src 'self';
+  base-uri 'none';
+  form-action 'none';
+  frame-ancestors 'self';
+```
+
+הערות אכיפה:
+- `'unsafe-inline'` ל-script נדרש בגלל שני בלוקי ה-inline ב-head (שער
+  + שחרור גופן). חלופה קשוחה: hashes (‏sha256) — אבל כל עריכת בלוק
+  שוברת אותם; להחליט רק כשיש pipeline שמחשב אותם אוטומטית.
+- GSAP כותב סגנונות דרך CSSOM — זה *לא* נחסם ע"י CSP; ‏`'unsafe-inline'`
+  ל-style הוא בשביל מאפייני style ב-HTML (יש כמה).
+- `img-src data:` — לאייקוני ה-favicon בזמן פיתוח ולקנבס; אפשר לנסות
+  בלעדיו ב-Report-Only ולראות אם יש דיווחים.
+
 ## כלים (מפה מלאה ב-README)
 
 `npm run check` הוא השער; כל השאר ב-README כולל מתי מריצים מה.
