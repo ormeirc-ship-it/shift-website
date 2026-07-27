@@ -121,3 +121,38 @@ test('bfcache: אין unload/beforeunload, ויש שיקום ב-pageshow', () =>
   assert.match(motion, /pageshow/, 'motion.js בלי שיקום pageshow (רענון ScrollTrigger)');
   assert.match(main, /pageshow/, 'main.js בלי שיקום pageshow (סגירת תפריט + שחרור נעילה)');
 });
+
+test('כל אפקט hover מגודר ב-hover:hover — טאפ במגע לא משאיר אפקט תקוע', () => {
+  // פריט 15. בונה מפת עומק: כל שורת :hover חייבת לשבת בתוך @media (hover: hover),
+  // חוץ ממנטרלים מפורשים (transform: none).
+  const lines = css.split('\n');
+  let depth = 0;
+  const guardDepths = [];
+  lines.forEach((line, i) => {
+    if (/@media[^{]*hover:\s*hover/.test(line)) guardDepths.push(depth);
+    depth += (line.match(/\{/g) || []).length - (line.match(/\}/g) || []).length;
+    while (guardDepths.length && depth <= guardDepths[guardDepths.length - 1]) guardDepths.pop();
+    if (/:hover/.test(line) && !/@media/.test(line) && !/transform:\s*none/.test(line)) {
+      assert.ok(guardDepths.length > 0,
+        `שורה ${i + 1}: חוק :hover מחוץ ל-@media (hover: hover) — יתקע על מגע: ${line.trim().slice(0, 70)}`);
+    }
+  });
+});
+
+test('גיבויי תאימות במקומם: url() לפני image-set, ‏vh לפני svh', () => {
+  // פריט 16. שני המקרים שבהם הצהרה נפסלת בדפדפן ישן וגוררת מסך שבור —
+  // חייבים שורת גיבוי שקודמת להם באותו בלוק. הערות מוסרות קודם —
+  // אזכור הפיצ'ר בהערה אינו שימוש בו.
+  const bare = css.replace(/\/\*[\s\S]*?\*\//g, '');
+  for (const block of bare.split('}')) {
+    if (/image-set\(/.test(block)) {
+      const before = block.slice(0, block.indexOf('image-set'));
+      assert.match(before, /background:[\s\S]*url\(/,
+        'image-set בלי שורת גיבוי url() לפניו: ' + block.trim().slice(0, 60));
+    }
+    if (/100svh/.test(block)) {
+      assert.match(block, /100vh/,
+        'svh בלי גיבוי vh באותו בלוק: ' + block.trim().slice(0, 60));
+    }
+  }
+});

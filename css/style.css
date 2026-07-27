@@ -127,22 +127,19 @@ h3 {
   transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease, color 0.25s ease;
   cursor: pointer;
 }
-.btn:hover { transform: translateY(-2px); }
-.btn:active { transform: translateY(0); }
+@media (hover: hover) { .btn:hover { transform: translateY(-2px); } }.btn:active { transform: translateY(0); }
 
 .btn-primary {
   background: var(--sky);
   color: var(--navy-deep);
   box-shadow: 0 4px 24px rgba(92, 187, 240, 0.35);
 }
-.btn-primary:hover { box-shadow: 0 8px 32px rgba(92, 187, 240, 0.5); }
-
+@media (hover: hover) { .btn-primary:hover { box-shadow: 0 8px 32px rgba(92, 187, 240, 0.5); } }
 .btn-ghost {
   color: #fff;
   border: 1px solid rgba(255, 255, 255, 0.35);
 }
-.btn-ghost:hover { border-color: #fff; background: rgba(255, 255, 255, 0.08); }
-
+@media (hover: hover) { .btn-ghost:hover { border-color: #fff; background: rgba(255, 255, 255, 0.08); } }
 .btn-nav { padding: 10px 24px; font-size: 0.95rem; }
 
 /* ---------- ניווט ---------- */
@@ -180,8 +177,7 @@ h3 {
   font-weight: 400;
   transition: color 0.2s ease;
 }
-.nav-links a:hover { color: #fff; }
-
+@media (hover: hover) { .nav-links a:hover { color: #fff; } }
 .nav-burger {
   display: none;
   background: none;
@@ -345,10 +341,12 @@ h3 {
   padding: 32px 28px;
   transition: border-color 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
 }
-.card:hover {
-  border-color: rgba(92, 187, 240, 0.5);
-  background: rgba(92, 187, 240, 0.07);
-  transform: translateY(-4px);
+@media (hover: hover) {
+  .card:hover {
+    border-color: rgba(92, 187, 240, 0.5);
+    background: rgba(92, 187, 240, 0.07);
+    transform: translateY(-4px);
+  }
 }
 .card h3 { color: var(--sky); margin-bottom: 12px; font-size: 1.25rem; }
 .card p { color: var(--white-soft); font-size: 1rem; }
@@ -402,10 +400,12 @@ h3 {
   color: var(--ink);
   transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
 }
-.chips li:hover {
-  border-color: var(--sky);
-  box-shadow: 0 6px 20px rgba(92, 187, 240, 0.25);
-  transform: translateY(-2px);
+@media (hover: hover) {
+  .chips li:hover {
+    border-color: var(--sky);
+    box-shadow: 0 6px 20px rgba(92, 187, 240, 0.25);
+    transform: translateY(-2px);
+  }
 }
 .love-card {
   margin-top: 28px;
@@ -436,9 +436,11 @@ h3 {
   position: relative;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-.step:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 40px rgba(24, 22, 59, 0.1);
+@media (hover: hover) {
+  .step:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(24, 22, 59, 0.1);
+  }
 }
 .step-num {
   display: inline-flex;
@@ -461,6 +463,12 @@ h3 {
   position: relative;
   padding: clamp(110px, 16vw, 180px) 0;
   text-align: center;
+  /* שורת הגיבוי קודם: דפדפן בלי image-set(type()) פוסל את כל ההצהרה —
+     בלעדיה נשארים בלי רקע בכלל (טקסט לבן על נייר). jpg נתמך בכל מקום. */
+  background:
+    linear-gradient(rgba(18, 18, 52, 0.55), rgba(18, 18, 52, 0.35)),
+    url("../assets/img/hero-bg-a.jpg") center 70% / cover no-repeat,
+    var(--navy-deep);
   background:
     linear-gradient(rgba(18, 18, 52, 0.55), rgba(18, 18, 52, 0.35)),
     image-set(url("../assets/img/hero-bg-a.webp") type("image/webp"),
@@ -504,8 +512,7 @@ h3 {
   font-size: 0.98rem;
   transition: color 0.2s ease;
 }
-.footer-links a:hover { color: #fff; }
-.footer-bottom { padding-top: 24px; font-size: 0.85rem; }
+@media (hover: hover) { .footer-links a:hover { color: #fff; } }.footer-bottom { padding-top: 24px; font-size: 0.85rem; }
 
 /* ---------- אנימציות הופעה ----------
    מוסתר רק כש-JS פעיל — בלי JS הכול גלוי.
@@ -590,16 +597,14 @@ html.js:not(.gsap-on) .reveal.visible { opacity: 1; transform: none; }
   background: transparent;
   transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
 }
-.dot-nav a:hover { border-color: var(--sky); transform: scale(1.25); }
-.dot-nav a.active {
+@media (hover: hover) { .dot-nav a:hover { border-color: var(--sky); transform: scale(1.25); } }.dot-nav a.active {
   background: var(--sky);
   border-color: var(--sky);
   box-shadow: 0 0 12px rgba(92, 187, 240, 0.6);
 }
 /* בסקשנים בהירים הנקודות מתכהות */
 .dot-nav.on-light a { border-color: rgba(24, 22, 59, 0.35); }
-.dot-nav.on-light a:hover { border-color: var(--navy); }
-.dot-nav.on-light a.active {
+@media (hover: hover) { .dot-nav.on-light a:hover { border-color: var(--navy); } }.dot-nav.on-light a.active {
   background: var(--navy);
   border-color: var(--navy);
   box-shadow: 0 0 12px rgba(24, 22, 59, 0.35);
@@ -622,8 +627,7 @@ html.js:not(.gsap-on) .reveal.visible { opacity: 1; transform: none; }
   pointer-events: none;
   transition: opacity 0.25s ease;
 }
-.dot-nav a:hover::after { opacity: 1; }
-@media (max-width: 899px) { .dot-nav { display: none; } }
+@media (hover: hover) { .dot-nav a:hover::after { opacity: 1; } }@media (max-width: 899px) { .dot-nav { display: none; } }
 
 /* ---------- גרעין קולנועי עדין ---------- */
 .grain {
@@ -788,8 +792,7 @@ html.worlds-pinned .world-body { max-width: 560px; }
 
 /* ---------- כפתורים: ברק ומגנטיות ---------- */
 .btn { will-change: transform; }
-.btn-primary:hover { box-shadow: 0 10px 40px rgba(92, 187, 240, 0.6); }
-
+@media (hover: hover) { .btn-primary:hover { box-shadow: 0 10px 40px rgba(92, 187, 240, 0.6); } }
 /* ---------- כיבוד reduced-motion לשכבת התנועה ---------- */
 @media (prefers-reduced-motion: reduce) {
   .grain { animation: none; }
@@ -870,8 +873,7 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
   padding-bottom: 3px;
   transition: border-color 0.3s ease;
 }
-.basket-card:hover .basket-card-link { border-color: var(--sky); }
-
+@media (hover: hover) { .basket-card:hover .basket-card-link { border-color: var(--sky); } }
 /* ---------- המסלול: 21 הימים ---------- */
 .program { padding: clamp(90px, 13vw, 150px) 0; }
 .program-layout {
@@ -1093,8 +1095,7 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
   padding-bottom: 3px;
   transition: border-color 0.3s ease;
 }
-.event-link:hover { border-color: var(--sky); }
-/* פריסה מדורגת בדסקטופ */
+@media (hover: hover) { .event-link:hover { border-color: var(--sky); } }/* פריסה מדורגת בדסקטופ */
 @media (min-width: 900px) {
   .event-card:nth-child(2) { margin-inline-start: clamp(30px, 5vw, 90px); }
   .event-card:nth-child(3) { margin-inline-end: clamp(30px, 5vw, 90px); }
@@ -1248,8 +1249,7 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
 .program.lit .program-spine i.on { background: var(--sky); border-color: var(--sky); }
 .program.lit .breath-circle { color: var(--navy-deep); }
 .program.lit .btn-ghost { color: var(--navy); border-color: rgba(24, 22, 59, 0.35); }
-.program.lit .btn-ghost:hover { border-color: var(--navy); background: rgba(24, 22, 59, 0.05); }
-
+@media (hover: hover) { .program.lit .btn-ghost:hover { border-color: var(--navy); background: rgba(24, 22, 59, 0.05); } }
 /* ---------- צ'יפים צפים ---------- */
 .program-chips {
   position: absolute;
@@ -1374,6 +1374,11 @@ body { overflow-x: clip; }
   min-height: 100svh;
   display: flex;
   flex-direction: column;
+  /* שורת הגיבוי קודם — ראו ההערה ב-.cta */
+  background:
+    linear-gradient(180deg, rgba(18, 18, 52, 0.55), rgba(18, 18, 52, 0.45) 45%, rgba(18, 18, 52, 0.9)),
+    url("../assets/img/hero-bg-a.jpg") center 70% / cover no-repeat,
+    var(--navy-deep);
   background:
     linear-gradient(180deg, rgba(18, 18, 52, 0.55), rgba(18, 18, 52, 0.45) 45%, rgba(18, 18, 52, 0.9)),
     image-set(url("../assets/img/hero-bg-a.webp") type("image/webp"),
@@ -1605,10 +1610,8 @@ html.dive-live .dive-still { display: none; }
 }
 .arrival-ctas { margin-top: 32px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
 .btn-arrival { background: var(--navy); color: #fff; }
-.btn-arrival:hover { box-shadow: 0 14px 40px rgba(24, 22, 59, 0.3); }
-.btn-arrival-ghost { border: 1px solid rgba(24, 22, 59, 0.28); color: var(--navy); }
-.btn-arrival-ghost:hover { background: rgba(24, 22, 59, 0.05); border-color: var(--navy); }
-
+@media (hover: hover) { .btn-arrival:hover { box-shadow: 0 14px 40px rgba(24, 22, 59, 0.3); } }.btn-arrival-ghost { border: 1px solid rgba(24, 22, 59, 0.28); color: var(--navy); }
+@media (hover: hover) { .btn-arrival-ghost:hover { background: rgba(24, 22, 59, 0.05); border-color: var(--navy); } }
 /* ---------- דילוג על הצלילה ---------- */
 .skip-dive {
   position: fixed;
@@ -1773,8 +1776,7 @@ html.nav-light .nav.scrolled {
 html.nav-light .nav-burger-word { color: var(--ink-soft); }
 html.nav-light .nav-burger-lines span { background: var(--navy); }
 html.nav-light .nav-links a { color: var(--ink-soft); }
-html.nav-light .nav-links a:hover { color: var(--navy); }
-/* התפריט הפתוח תמיד כהה — הוא מסך מלא משלו */
+@media (hover: hover) { html.nav-light .nav-links a:hover { color: var(--navy); } }/* התפריט הפתוח תמיד כהה — הוא מסך מלא משלו */
 html.nav-light .mobile-menu.open ~ * .nav-burger-lines span,
 .mobile-menu.open ~ .nav .nav-burger-lines span { background: #fff; }
 
@@ -1822,8 +1824,7 @@ html.dive-hush .nav {
               border-color 0.3s ease, background-color 0.3s ease;
 }
 .dive-skip.show { opacity: 1; transform: translate(50%, 0); pointer-events: auto; }
-.dive-skip:hover { border-color: var(--sky); background: rgba(11, 11, 34, 0.62); }
-/* ברגע ההגעה לאור אין יותר מה לדלג עליו */
+@media (hover: hover) { .dive-skip:hover { border-color: var(--sky); background: rgba(11, 11, 34, 0.62); } }/* ברגע ההגעה לאור אין יותר מה לדלג עליו */
 .dive-skip.gone { opacity: 0; pointer-events: none; }
 @media (max-width: 899px) { .dive-skip { bottom: 18px; font-size: 0.78rem; } }
 /* בלי תנועה אין צלילה ארוכה — ולכן גם אין מה לדלג */
