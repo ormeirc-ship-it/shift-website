@@ -177,3 +177,32 @@ test('לוגו ההגעה הכהה מגודר ב-no-preference — לקח סיב
     if (inDarkRule && /\}/.test(line)) inDarkRule = false;
   });
 });
+
+test('היררכיית כותרות: h1 יחיד, בלי דילוגי-רמה כלפי מטה', () => {
+  // פריט 32. קורא-מסך מנווט לפי המדרגות; h2→h4 הוא בור.
+  const levels = [...html.matchAll(/<h([1-4])[\s>]/g)].map((m) => +m[1]);
+  assert.equal(levels.filter((l) => l === 1).length, 1, 'חייב בדיוק h1 אחד');
+  let prev = 0;
+  levels.forEach((l, i) => {
+    assert.ok(l <= prev + 1,
+      `כותרת #${i + 1}: קפיצה h${prev}→h${l} — רמה דולגה`);
+    prev = l;
+  });
+});
+
+test('RTL מוקשח: בלי מאפייני-כיוון פיזיים חדשים ב-CSS', () => {
+  // פריט 33. העמוד RTL; מאפיין פיזי חדש (margin-left וכו') כמעט תמיד
+  // באג-כיוון בהמתנה. הקיימים היחידים: left/top על נקודת העכבר —
+  // מרחב-מסך אמיתי (JS כותב קואורדינטות), לא זרימת טקסט.
+  const bare = css.replace(/\/\*[\s\S]*?\*\//g, '');
+  assert.equal((bare.match(/margin-(left|right)\s*:/g) || []).length, 0, 'margin פיזי נכנס — להשתמש ב-margin-inline-*');
+  assert.equal((bare.match(/padding-(left|right)\s*:/g) || []).length, 0, 'padding פיזי נכנס — להשתמש ב-padding-inline-*');
+  assert.equal((bare.match(/text-align:\s*(left|right)\b/g) || []).length, 0, 'text-align פיזי — להשתמש ב-start/end');
+  // left:/right: מיקום — מותר רק בבלוק נקודת העכבר
+  const blocks = bare.split('}');
+  for (const b of blocks) {
+    if (/(^|[^-])\b(left|right)\s*:/.test(b) && !/cursor-dot/.test(b)) {
+      assert.fail('מיקום פיזי מחוץ לנקודת העכבר: ' + b.trim().slice(0, 70));
+    }
+  }
+});
