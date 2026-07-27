@@ -1,5 +1,23 @@
 // SHIFT — אינטראקציות עדינות
 
+// ── מוכנות-אנליטיקס (פריט 22) ────────────────────────────────────────
+// שכבת אירועים פנימית: כותבת ל-dataLayer בלבד. שום דבר לא נשלח לשום
+// שרת — חיבור לכלי אמיתי הוא החלטת OC (שורה אחת: הכלי קורא מה-dataLayer).
+// הקונסול נשאר נקי (חוזה console-check); ?debug=track מדפיס בכל זאת.
+window.dataLayer = window.dataLayer || [];
+const track = (event, detail) => {
+  const rec = Object.assign({ event: 'shift:' + event, t: Math.round(performance.now()) }, detail);
+  window.dataLayer.push(rec);
+  if (location.search.indexOf('debug=track') > -1) console.log('[track]', rec);
+};
+window.__track = track; // ‏motion.js מדווח דרך זה (צימוד רופף, לא תלות)
+
+// יעדים יוצאים — אירוע אחד לכל הקלקה החוצה (אינסטגרם / הפלטפורמה)
+document.addEventListener('click', (e) => {
+  const a = e.target && e.target.closest ? e.target.closest('a[href^="http"]') : null;
+  if (a) track('outbound', { href: a.href });
+});
+
 // המתנה לסיום מסך הפתיחה (motion.js משדר shift:reveal).
 // אם motion.js לא נטען מסיבה כלשהי — ממשיכים אחרי גיבוי של 4.5 שניות.
 const afterReveal = (fn) => {
@@ -137,7 +155,9 @@ if (burger && menu) {
   window.addEventListener('pageshow', (ev) => { if (ev.persisted) setMenu(false); });
 
   burger.addEventListener('click', () => {
-    setMenu(!menu.classList.contains('open'));
+    const opening = !menu.classList.contains('open');
+    setMenu(opening);
+    if (opening) track('menu_open');
   });
 
   menu.querySelectorAll('a').forEach((link) => {
@@ -202,6 +222,7 @@ if (burger && menu) {
     setAir(null);
     // הרגע שאחרי: החוויה הצביעה על משהו — נותנים לה לאן להוביל
     if (after) after.hidden = false;
+    track('breath_done', { rounds: TOTAL });
   };
 
   const runRound = (round) => {

@@ -254,7 +254,7 @@
     }
 
     var target = 0, eased = 0, hushOn = false, litOn = false, onScreen = true;
-    var skipTick = null, lastP = -1;
+    var skipTick = null, lastP = -1, diveTracked = false;
 
     function render() {
       eased += (target - eased) * 0.14;
@@ -278,6 +278,11 @@
       var lit = onScreen && aIn > 0.5;
       if (lit !== litOn && window.__navTone) { litOn = lit; window.__navTone.set('dive', lit); }
       if (skipTick) skipTick(p);
+      // אנליטיקס-מוכנות: מי שהשלים את הצלילה עד האור — פעם אחת לביקור
+      if (!diveTracked && aIn > 0.9 && window.__track) {
+        diveTracked = true;
+        window.__track('dive_complete');
+      }
 
       // ── מכאן והלאה: כתיבות סגנון בלבד ───────────────────────────────
       // אלה תלויות אך ורק ב-p, ולכן בטוח לדלג עליהן כשהוא לא זז.
@@ -340,6 +345,7 @@
       btn.addEventListener('click', function () {
         clearTimeout(timer);
         btn.classList.add('gone');
+        if (window.__track) window.__track('dive_skip');
         var target = document.getElementById('products');
         if (!target) return;
         if (lenis) lenis.scrollTo(target, { offset: NAV_OFFSET, duration: 1.4 });
