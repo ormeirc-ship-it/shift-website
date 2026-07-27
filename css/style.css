@@ -1286,6 +1286,7 @@ body { overflow-x: clip; }
 .statement {
   position: relative;
   z-index: 1;
+  min-height: 100vh;   /* גיבוי לספארי <15.4 — svh נפסל שם וההצהרה נעלמת */
   min-height: 100svh;
   display: flex;
   flex-direction: column;
@@ -1298,6 +1299,7 @@ body { overflow-x: clip; }
 .closing {
   position: relative;
   overflow: hidden;
+  min-height: 100vh;   /* גיבוי לספארי <15.4 — svh נפסל שם וההצהרה נעלמת */
   min-height: 100svh;
   display: flex;
   flex-direction: column;
@@ -1397,6 +1399,7 @@ body { overflow-x: clip; }
 .dive-sticky {
   position: sticky;
   top: 0;
+  height: 100vh;   /* גיבוי לספארי <15.4 — svh נפסל שם וההצהרה נעלמת */
   height: 100svh;
   overflow: hidden;
   display: grid;
@@ -1558,7 +1561,8 @@ html.dive-live .dive-still { display: none; }
 /* ---------- ללא תנועה: פריים אחד, הכותרת מיד ---------- */
 @media (prefers-reduced-motion: reduce) {
   .dive { height: auto; }
-  .dive-sticky { position: relative; height: 100svh; }
+  .dive-sticky { position: relative; height: 100vh;   /* גיבוי לספארי <15.4 — svh נפסל שם וההצהרה נעלמת */
+ height: 100svh; }
   .gate-cue i { animation: none; }
   .passing { display: none; }
   .gate { display: none; }

@@ -19,7 +19,8 @@
     "motion": "node scripts/reduced-motion.mjs",
     "check": "npm test && npm run verify && npm run audit && npm run console && npm run motion && npm run budget",
     "budget": "node scripts/budget.mjs",
-    "type": "node scripts/type-audit.mjs"
+    "type": "node scripts/type-audit.mjs",
+    "compat": "node scripts/compat.mjs"
   },
   "devDependencies": {
     "puppeteer-core": "^24.0.0"
