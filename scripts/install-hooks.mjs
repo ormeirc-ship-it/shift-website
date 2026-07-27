@@ -18,9 +18,9 @@ if (!existsSync(hooksDir)) {
 }
 const hook = `#!/bin/sh
 # הותקן ע"י scripts/install-hooks.mjs — בדיקות מהירות בלבד (<10ש').
-# עקיפה מודעת: git commit --no-verify
-npm test --silent || exit 1
-npm run --silent verify || exit 1
+# שקט בהצלחה, זנב הפלט בכישלון. עקיפה מודעת: git commit --no-verify
+out=$(npm test --silent 2>&1) || { echo "$out" | tail -25; exit 1; }
+out=$(npm run --silent verify 2>&1) || { echo "$out" | tail -30; exit 1; }
 `;
 const path = join(hooksDir, 'pre-commit');
 writeFileSync(path, hook);
