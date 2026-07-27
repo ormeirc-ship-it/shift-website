@@ -13,10 +13,12 @@
     "net": "node scripts/net.mjs",
     "drift": "node scripts/drift-check.mjs",
     "a11y": "node scripts/a11y.mjs",
+    "test": "node --test tests/*.test.mjs",
     "stress": "node scripts/stress.mjs",
     "console": "node scripts/console-check.mjs",
     "motion": "node scripts/reduced-motion.mjs",
-    "check": "npm run verify && npm run audit && npm run console && npm run motion && npm run stress"
+    "check": "npm test && npm run verify && npm run audit && npm run console && npm run motion && npm run budget",
+    "budget": "node scripts/budget.mjs"
   },
   "devDependencies": {
     "puppeteer-core": "^24.0.0"
