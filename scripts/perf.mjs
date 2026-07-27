@@ -5,7 +5,9 @@
  * שימוש:  npm run perf   ·   node scripts/perf.mjs --json
  */
 import puppeteer from 'puppeteer-core';
-import { chromePath, serveRepo, ready, SCROLL_ALL, pad } from './lib/env.mjs';
+import { mkdirSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { ROOT, chromePath, serveRepo, ready, SCROLL_ALL, pad } from './lib/env.mjs';
 
 const JSON_OUT = process.argv.includes('--json');
 const CONFIGS = [
@@ -86,6 +88,15 @@ for (const cfg of CONFIGS) {
 
 await browser.close();
 await site.close();
+
+// כל ריצה נשמרת מתוארכת ל-perf/ — ההיסטוריה היא שמאפשרת perf:diff (פריט 8)
+{
+  const stamp = new Date().toISOString().slice(0, 16).replace(/[T:]/g, '-');
+  mkdirSync(join(ROOT, 'perf'), { recursive: true });
+  const file = join(ROOT, 'perf', `${stamp}-perf.json`);
+  writeFileSync(file, JSON.stringify(results, null, 1));
+  if (!JSON_OUT) console.error('נשמר: perf/' + file.split('/').pop());
+}
 
 if (JSON_OUT) { console.log(JSON.stringify(results, null, 1)); process.exit(0); }
 

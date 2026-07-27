@@ -18,10 +18,14 @@
     "console": "node scripts/console-check.mjs",
     "motion": "node scripts/reduced-motion.mjs",
     "overlap": "node scripts/overlap.mjs",
-    "check": "npm test && npm run verify && npm run audit && npm run console && npm run motion && npm run overlap && npm run budget",
+    "check": "node scripts/check.mjs",
     "budget": "node scripts/budget.mjs",
     "type": "node scripts/type-audit.mjs",
-    "compat": "node scripts/compat.mjs"
+    "compat": "node scripts/compat.mjs",
+    "vr": "node scripts/vr.mjs",
+    "vr:accept": "node scripts/vr.mjs --accept",
+    "perf:diff": "node scripts/perf-diff.mjs",
+    "hooks": "node scripts/install-hooks.mjs"
   },
   "devDependencies": {
     "puppeteer-core": "^24.0.0"

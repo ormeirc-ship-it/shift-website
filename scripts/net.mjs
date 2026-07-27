@@ -8,7 +8,9 @@
  * שימוש:  npm run net   ·   node scripts/net.mjs --json
  */
 import puppeteer from 'puppeteer-core';
-import { chromePath, serveRepo, pad } from './lib/env.mjs';
+import { mkdirSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { ROOT, chromePath, serveRepo, pad } from './lib/env.mjs';
 
 const JSON_OUT = process.argv.includes('--json');
 
@@ -65,6 +67,14 @@ for (const cfg of CONFIGS) {
 
 await browser.close();
 await site.close();
+
+// כל ריצה נשמרת מתוארכת ל-perf/ — ההיסטוריה היא שמאפשרת perf:diff (פריט 8)
+{
+  const stamp = new Date().toISOString().slice(0, 16).replace(/[T:]/g, '-');
+  mkdirSync(join(ROOT, 'perf'), { recursive: true });
+  writeFileSync(join(ROOT, 'perf', `${stamp}-net.json`), JSON.stringify(out, null, 1));
+  if (!JSON_OUT) console.error('נשמר: perf/' + stamp + '-net.json');
+}
 
 if (JSON_OUT) { console.log(JSON.stringify(out, null, 1)); process.exit(0); }
 console.log('\n' + pad('תצורה', 24) + pad('FCP', 9) + pad('מסך פתיחה נסגר', 17) + pad('כל הרצף', 11) + 'פריימים');
