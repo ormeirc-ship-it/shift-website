@@ -231,8 +231,21 @@
 
       draw(Math.min(COUNT - 1, Math.round(p * (COUNT - 1))));
 
-      // כתיבה רק כשהערך באמת השתנה. בלי זה כל פריים כותב סגנון לשישה
-      // אלמנטים גם כשהצלילה עומדת במקום, וכל כתיבה מזמינה recalc.
+      // ── מצב הסרגל — לפני כל early-return ────────────────────────────
+      // זה תלוי גם ב-onScreen, שמשתנה מבחוץ (טריגר הנראוּת) בלי שההתקדמות
+      // זזה. כשהיה מתחת לשער "כתיבה רק בשינוי", מבקר שנעצר רגע באור נעל
+      // את eased על 1, ואז יציאה מהסקשן לא עודכנה לעולם — סרגל בהיר מעל
+      // #products הכהה. אותו באג שכבר תוקן פעם וחזר דרך אופטימיזציית
+      // הכתיבות; הפעם הוא מעל הקו ולא מתחתיו.
+      var aIn = Math.max(0, Math.min((p - 0.86) / 0.14, 1));
+      var hush = onScreen && p > 0.06 && aIn < 0.35;
+      if (hush !== hushOn) { hushOn = hush; docEl.classList.toggle('dive-hush', hush); }
+      var lit = onScreen && aIn > 0.5;
+      if (lit !== litOn && window.__navTone) { litOn = lit; window.__navTone.set('dive', lit); }
+      if (skipTick) skipTick(p);
+
+      // ── מכאן והלאה: כתיבות סגנון בלבד ───────────────────────────────
+      // אלה תלויות אך ורק ב-p, ולכן בטוח לדלג עליהן כשהוא לא זז.
       if (Math.abs(p - lastP) < 0.0008) return;
       lastP = p;
 
@@ -253,23 +266,12 @@
         el.style.transform = 'translateY(' + (-50 + (p - at) * 90) + '%) scale(' + (0.96 + vis * 0.06) + ')';
       }
 
-      // ההגעה אל האור
-      var aIn = Math.max(0, Math.min((p - 0.86) / 0.14, 1));
-      // הסרגל לא חלק מהצלילה: נסוג אחרי שיוצאים מהשער, וחוזר עם האור.
-      // (ההשוואה מונעת כתיבה ל-classList בכל פריים)
-      // onScreen מגיע מה-ScrollTrigger. בלעדיו render — שרץ בכל פריים —
-      // היה מחזיר את מצב ה"בהיר" מיד אחרי שהצלילה יצאה מהמסך, כי target
-      // נשאר 1 לנצח אחרי סוף הסקשן.
-      var hush = onScreen && p > 0.06 && aIn < 0.35;
-      if (hush !== hushOn) { hushOn = hush; docEl.classList.toggle('dive-hush', hush); }
-      var lit = onScreen && aIn > 0.5;
-      if (lit !== litOn && window.__navTone) { litOn = lit; window.__navTone.set('dive', lit); }
+      // ההגעה אל האור (aIn חושב למעלה)
       if (arrival) {
         arrival.style.opacity = String(aIn);
         arrival.style.pointerEvents = aIn > 0.6 ? 'auto' : 'none';
       }
       if (veil) veil.style.opacity = String(1 - aIn);
-      if (skipTick) skipTick(p);
     }
 
     gsap.ticker.add(render);
@@ -313,15 +315,25 @@
       };
     })();
 
-    // טווח הנראוּת של הצלילה — רחב יותר מטווח ההתקדמות בכוונה.
-    // טריגר ההתקדמות מסתיים ב-'bottom bottom', ובדיוק בנקודה הזו ההגעה
-    // אל האור עדיין מלאה על המסך; שימוש ב-isActive שלו היה מכבה את
-    // הסרגל הבהיר בדיוק ברגע הזה. כאן הצלילה "על המסך" עד שתחתיתה
-    // עוברת את ראש החלון.
-    ScrollTrigger.create({
-      trigger: section, start: 'top top', end: 'bottom top',
-      onToggle: function (self) { onScreen = self.isActive; render(); }
-    });
+    // האם הצלילה על המסך בכלל — נמדד ב-IntersectionObserver ולא ב-ScrollTrigger.
+    //
+    // טריגר ההתקדמות מסתיים ב-'bottom bottom', ושם ההגעה אל האור עדיין
+    // מלאה על המסך, אז ה-isActive שלו לא מתאים. אבל גם טריגר נראוּת נפרד
+    // לא הספיק: בקפיצת עוגן (לחיצה על "מה אנחנו עושים", או טעינה עם #hash)
+    // הגלילה מדלגת על כל הטווח בבת אחת וה-onToggle לא נורה — כלומר
+    // הצלילה נשארה מסומנת "על המסך" ומצב האור נדבק על סקשן כהה.
+    // IO לא תלוי במעבר דרך טווח: הוא מדווח מצב, לא אירוע חצייה.
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        onScreen = entries[0].isIntersecting;
+        render();
+      }, { threshold: 0 }).observe(section);
+    } else {
+      ScrollTrigger.create({
+        trigger: section, start: 'top top', end: 'bottom top',
+        onToggle: function (self) { onScreen = self.isActive; render(); }
+      });
+    }
 
     // חשוף לבדיקות אוטומטיות, כמו window.__lenis — בסביבת בדיקה ה-rAF
     // קפוא ולכן צריך דרך להריץ את הפריים ידנית ולקרוא את המצב.

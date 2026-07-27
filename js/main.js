@@ -224,7 +224,9 @@ if (burger && menu) {
 // התנועה כבוי (prefers-reduced-motion) — שם הבעיה זהה ולא פחות חמורה.
 //
 // rootMargin חותך את המסך לפס דק בדיוק מתחת לסרגל, כך שהתצפית עונה על
-// השאלה "מה נמצא *מאחורי* הניווט" ולא "מה במרכז המסך".
+// השאלה "מה נמצא *מאחורי* הניווט" ולא "מה במרכז המסך". הפס תלוי בגובה
+// החלון, ולכן התצפיתנים נבנים מחדש בכל שינוי גודל — סיבוב מסך או קריסת
+// שורת ה-URL במובייל מזיזים אותו, ובלי בנייה מחדש הוא מצביע על מקום אחר.
 //
 // מקורות בהירים יכולים לחפוף (ההגעה לאור וההצהרה מיד אחריה), ולכן
 // נספרים במפה ולא בדגל בוליאני.
@@ -234,36 +236,57 @@ if (burger && menu) {
   const apply = () => docEl.classList.toggle('nav-light', Object.values(active).some(Boolean));
   window.__navTone = { set: (key, on) => { active[key] = !!on; apply(); }, active };
 
-  const LIGHT = ['.statement', '#method', '#breathe', '#path', '#story', '#outcomes'];
-  const navH = parseInt(getComputedStyle(docEl).getPropertyValue('--nav-h'), 10) || 72;
-
   if (!('IntersectionObserver' in window)) return;
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((e) => window.__navTone.set(e.target.dataset.navKey, e.isIntersecting));
-  }, { rootMargin: `-${navH}px 0px -${Math.max(0, window.innerHeight - navH - 4)}px 0px` });
-
-  LIGHT.forEach((sel) => {
-    const el = document.querySelector(sel);
-    if (!el) return;
-    el.dataset.navKey = sel;
-    io.observe(el);
-  });
-
-  // המסלול מתחיל כהה ונגמר בהיר — צריך גם "הוא מתחת לסרגל" וגם "הוא כבר בהיר".
-  //
-  // הגרסה הראשונה כאן קראה getBoundingClientRect פעמיים בכל אירוע scroll —
-  // כלומר אילצה חישוב פריסה מסונכרן על כל גלילה. זה layout thrash קלאסי,
-  // והוא הופיע במדידה. עכשיו שני הדגלים מגיעים מתצפיתנים בלבד: IO לנוכחות
-  // (אותו פס דק) ו-MutationObserver למחלקה. אפס קריאות פריסה בזמן גלילה.
+  const LIGHT = ['.statement', '#method', '#breathe', '#path', '#story', '#outcomes'];
   const prog = document.querySelector('.program');
+  let ios = [];
+
+  const band = () => {
+    const navH = parseInt(getComputedStyle(docEl).getPropertyValue('--nav-h'), 10) || 72;
+    return { navH, rootMargin: `-${navH}px 0px -${Math.max(0, innerHeight - navH - 4)}px 0px` };
+  };
+
+  // מצב המסלול מורכב משני דגלים: הוא מתחת לסרגל, והוא כבר עבר לבהיר
+  let progUnderNav = false;
+  let progLit = prog ? prog.classList.contains('lit') : false;
+  const pushProg = () => window.__navTone.set('#program', progUnderNav && progLit);
+
+  const build = () => {
+    ios.forEach((io) => io.disconnect());
+    ios = [];
+    const { rootMargin } = band();
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => window.__navTone.set(e.target.dataset.navKey, e.isIntersecting));
+    }, { rootMargin });
+    LIGHT.forEach((sel) => {
+      const el = document.querySelector(sel);
+      if (!el) return;
+      el.dataset.navKey = sel;
+      io.observe(el);
+    });
+    ios.push(io);
+
+    if (prog) {
+      const pio = new IntersectionObserver(([e]) => { progUnderNav = e.isIntersecting; pushProg(); },
+        { rootMargin });
+      pio.observe(prog);
+      ios.push(pio);
+    }
+  };
+
+  build();
+
+  // המחלקה .lit מסומנת ע"י מנוע התנועה — עוקבים אחריה בלי לגעת בפריסה
   if (prog && 'MutationObserver' in window) {
-    let underNav = false;
-    let isLit = prog.classList.contains('lit');
-    const push = () => window.__navTone.set('#program', underNav && isLit);
-    prog.dataset.navKey = '#program-presence';
-    new IntersectionObserver(([e]) => { underNav = e.isIntersecting; push(); },
-      { rootMargin: `-${navH}px 0px -${Math.max(0, innerHeight - navH - 4)}px 0px` }).observe(prog);
-    new MutationObserver(() => { isLit = prog.classList.contains('lit'); push(); })
+    new MutationObserver(() => { progLit = prog.classList.contains('lit'); pushProg(); })
       .observe(prog, { attributes: true, attributeFilter: ['class'] });
   }
+
+  // בנייה מחדש בשינוי גודל/סיבוב, עם השהיה קצרה כדי לא לבנות עשרות פעמים
+  let t = null;
+  addEventListener('resize', () => {
+    clearTimeout(t);
+    t = setTimeout(build, 180);
+  }, { passive: true });
 })();
