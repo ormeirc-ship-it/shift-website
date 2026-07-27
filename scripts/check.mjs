@@ -24,6 +24,8 @@ const STEPS = [
   { name: 'type', desc: 'טיפוגרפיה 5 רוחבים' },
   { name: 'overlap', desc: 'קריאוּת המסלול' },
   { name: 'vr', desc: 'רגרסיה ויזואלית' },
+  { name: 'faults', desc: 'גבולות כשל (פריט 36)' },
+  { name: 'e2e', desc: 'המסע המלא (פריט 27)' },
 ];
 
 const results = [];
