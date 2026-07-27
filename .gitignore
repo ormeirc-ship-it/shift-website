@@ -21,3 +21,6 @@ assets/brand/symbol3.png
 assets/logo.png
 assets/video/logo-anim-2*
 assets/video/logo-anim-blue-*
+
+# כלי הפיתוח — משוחזרים מ-package-lock.json, לא שייכים למאגר
+node_modules/
