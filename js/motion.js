@@ -125,9 +125,10 @@
 
   // מפעיל את יציאת מסך הפתיחה. היציאה עצמה ב-CSS, כדי שתתרחש גם כשחבילת
   // התנועה עדיין בדרך — זה בדיוק המצב ברשת איטית.
+  // T11: אין כאן נגיעה ב-overflow — מאז T9 היחיד שנועל גלילה הוא התפריט,
+  // ושחרור עיוור היה מוחק את הנעילה שלו מתחת לידיים.
   function dismissPreloader() {
     docEl.classList.add('preloader-done');
-    document.body.style.overflow = '';
   }
 
   // ניקוי אחרי שהיציאה הסתיימה: מוציא את האלמנט ומודיע לשאר האתר.
@@ -932,12 +933,12 @@
   window.addEventListener('load', function () { ScrollTrigger.refresh(); });
 
   } catch (err) {
-    // המנוע קרס באתחול — משחררים את מסך הפתיחה כדי שהאתר יישאר שמיש
+    // המנוע קרס באתחול — משחררים את מסך הפתיחה כדי שהאתר יישאר שמיש.
+    // T11: בלי לגעת ב-overflow — אף אחד לא נועל גלילה לפני החשיפה, ואין מה לשחרר.
     try {
       document.documentElement.classList.add('preloader-done');
       var deadPl = document.getElementById('preloader');
       if (deadPl && deadPl.parentNode) deadPl.parentNode.removeChild(deadPl);
-      document.body.style.overflow = '';
       window.dispatchEvent(new Event('shift:reveal'));
     } catch (e2) { /* אין יותר מה לעשות */ }
     if (window.console && console.error) console.error('SHIFT motion init failed:', err);

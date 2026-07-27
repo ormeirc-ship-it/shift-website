@@ -107,6 +107,10 @@ test('R5: איש לא נועל גלילה לפני החשיפה, והיציאה 
   const html = readFileSync(resolve(ROOT, 'index.html'), 'utf8');
   assert.ok(!/overflow\s*=\s*''/.test(html),
     'שחרור overflow עיוור חזר ל-index.html — הוא דורס את נעילת התפריט');
+  // T11/R6: גם שחרור עיוור אסור — מאז T9 רק התפריט נוגע ב-overflow,
+  // ושחרור "ליתר ביטחון" מוחק את הנעילה שלו מתחת לידיים.
+  assert.ok(!/body\.style\.overflow/.test(motion),
+    'motion.js חזר לגעת ב-overflow — הנגיעה היחידה המותרת היא בתפריט (main.js)');
 });
 
 test('B1: ערימת הקלפים מותנית במדידה, והקלפים אטומים', () => {
