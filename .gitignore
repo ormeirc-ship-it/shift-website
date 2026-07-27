@@ -24,3 +24,7 @@ assets/video/logo-anim-blue-*
 
 # כלי הפיתוח — משוחזרים מ-package-lock.json, לא שייכים למאגר
 node_modules/
+
+# צילומי הרגרסיה הוויזואלית הנוכחיים — ארעיים; ה-baseline המחייב
+# יושב ב-tests/vr-baseline/ ומעודכן רק ב-npm run vr:accept
+.vr/
