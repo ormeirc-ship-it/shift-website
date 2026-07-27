@@ -946,6 +946,16 @@
   /* ---------- רענון אחרי טעינת תמונות ---------- */
   window.addEventListener('load', function () { ScrollTrigger.refresh(); });
 
+  /* הגופנים משוחררים רק אחרי השער (פריט 18) — כלומר אחרי שהטריגרים כבר
+     חושבו על מטריקות של גופן-מערכת. ה-reflow מכווץ את העמוד (נמדד:
+     ‎-982px במובייל!) והטריגרים של הסיום זזים אל מעבר לקצה הגלילה.
+     ‏fonts.ready לא מתאים כאן — ברגע האתחול אין עדיין טעינות והוא
+     resolved מיד; ‏loadingdone יורה אחרי כל אצוות-טעינה אמיתית.
+     (נתפס ע"י הרגרסיה הוויזואלית — m-closing ריק.) */
+  if (document.fonts && document.fonts.addEventListener) {
+    document.fonts.addEventListener('loadingdone', function () { ScrollTrigger.refresh(); });
+  }
+
   /* ---------- bfcache ----------
      אין לנו unload/beforeunload (הם פוסלים את העמוד מה-cache), אז חזרה
      עם Back מחזירה עמוד חי. הרענון כאן מיישר את ScrollTrigger למיקום
