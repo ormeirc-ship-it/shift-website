@@ -40,12 +40,25 @@ for (const cfg of CONFIGS) {
   await client.send('Network.emulateNetworkConditions', { offline: false, ...NET[cfg.net] });
 
   const t0 = Date.now();
-  await page.goto(site.url, { waitUntil: 'domcontentloaded', timeout: 180000 });
-
-  // מתי הפתיח נסגר (= המבקר רואה משהו אמיתי)
-  await page.waitForFunction(() => document.documentElement.classList.contains('preloader-done'),
-    { timeout: 120000 }).catch(() => {});
-  const curtainMs = Date.now() - t0;
+  // ‏28.7, תיקון מדידה: קודם חיכינו ל-domcontentloaded לפני שהתחלנו לחפש
+  // את המחלקה — אבל DCL מחכה לכל סקריפטי ה-defer, ולכן "מסך פתיחה נסגר"
+  // מדד בפועל את הגעת ה-JS (‏8–10ש') ולא את מה שהמבקר רואה (~4.5ש').
+  // עכשיו: מאזין למחלקה מהרגע הראשון; DCL נרשם בנפרד כעמודה משלו.
+  // goto לא ממתין — מאזינים למחלקה במקביל לטעינה. הלקח (שתי ריצות
+  // שרופות): ‏waitForFunction שנרשם לפני שהקונטקסט האמיתי קיים נקשר
+  // ל-about:blank ומת בשקט תחת throttling. לכן דוגמים מצד Node —
+  // ‏evaluate פוגע תמיד בקונטקסט הנוכחי, ושגיאת-מעבר פשוט נדגמת שוב.
+  const nav = page.goto(site.url, { waitUntil: 'domcontentloaded', timeout: 180000 }).catch(() => {});
+  let curtainMs = null;
+  const deadline = Date.now() + 120000;
+  while (Date.now() < deadline) {
+    const has = await page.evaluate(
+      () => document.documentElement.classList.contains('preloader-done')).catch(() => false);
+    if (has) { curtainMs = Date.now() - t0; break; }
+    await new Promise((r) => setTimeout(r, 150));
+  }
+  if (curtainMs === null) curtainMs = Date.now() - t0;
+  await nav;
 
   // מתי כל הרצף מוכן
   await page.waitForFunction(() => window.__dive && window.__dive.allFramesMs !== null,
@@ -54,8 +67,10 @@ for (const cfg of CONFIGS) {
 
   const paint = await page.evaluate(() => {
     const fcp = performance.getEntriesByName('first-contentful-paint')[0];
+    const nav = performance.getEntriesByType('navigation')[0];
     return {
       fcp: fcp ? Math.round(fcp.startTime) : null,
+      dclMs: nav && nav.domContentLoadedEventEnd ? Math.round(nav.domContentLoadedEventEnd) : null,
       firstFrameMs: window.__dive ? window.__dive.firstFrameMs : null,
       frames: window.__dive ? window.__dive.count : null,
     };
@@ -77,11 +92,12 @@ await site.close();
 }
 
 if (JSON_OUT) { console.log(JSON.stringify(out, null, 1)); process.exit(0); }
-console.log('\n' + pad('תצורה', 24) + pad('FCP', 9) + pad('מסך פתיחה נסגר', 17) + pad('כל הרצף', 11) + 'פריימים');
-console.log('─'.repeat(70));
+console.log('\n' + pad('תצורה', 24) + pad('FCP', 9) + pad('מסך פתיחה נסגר', 17) + pad('JS מוכן (DCL)', 15) + pad('כל הרצף', 11) + 'פריימים');
+console.log('─'.repeat(84));
 for (const r of out) {
   console.log(pad(r.label, 24) + pad((r.fcp ?? '—') + 'ms', 9) +
-    pad(r.curtainMs + 'ms', 17) + pad((r.allMs / 1000).toFixed(1) + 'ש\'', 11) + r.frames);
+    pad(r.curtainMs + 'ms', 17) + pad((r.dclMs ?? '—') + 'ms', 15) +
+    pad((r.allMs / 1000).toFixed(1) + 'ש\'', 11) + r.frames);
 }
-console.log('\nהערה: "מסך פתיחה נסגר" = הרגע שבו המבקר רואה את המוח.');
-console.log('רשת ביטחון בקוד פותחת אותו אחרי 2.5ש\' גם אם הפריים לא הגיע.');
+console.log('\nהערה: "מסך פתיחה נסגר" = הרגע שבו המבקר רואה את המוח (המדד תוקן 28.7 —');
+console.log('קודם הוא כלל בטעות את המתנת ה-DCL). ‏"JS מוכן" = defer הסתיים, התנועה חיה.');

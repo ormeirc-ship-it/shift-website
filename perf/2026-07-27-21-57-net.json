@@ -1,0 +1,50 @@
+[
+ {
+  "label": "מובייל 390 · Slow 4G",
+  "w": 390,
+  "h": 844,
+  "net": "Slow 4G",
+  "curtainMs": 4406,
+  "allMs": 38157,
+  "fcp": 4444,
+  "dclMs": 9610,
+  "firstFrameMs": 1816,
+  "frames": 65
+ },
+ {
+  "label": "מובייל 390 · Fast 4G",
+  "w": 390,
+  "h": 844,
+  "net": "Fast 4G",
+  "curtainMs": 646,
+  "allMs": 4866,
+  "fcp": 668,
+  "dclMs": 1191,
+  "firstFrameMs": 234,
+  "frames": 65
+ },
+ {
+  "label": "דסקטופ 1440 · Slow 4G",
+  "w": 1440,
+  "h": 900,
+  "net": "Slow 4G",
+  "curtainMs": 4593,
+  "allMs": 50993,
+  "fcp": 4612,
+  "dclMs": 9798,
+  "firstFrameMs": 2282,
+  "frames": 60
+ },
+ {
+  "label": "מובייל 390 · Slow 3G",
+  "w": 390,
+  "h": 844,
+  "net": "Slow 3G",
+  "curtainMs": 6321,
+  "allMs": 49817,
+  "fcp": 6336,
+  "dclMs": 13622,
+  "firstFrameMs": 3095,
+  "frames": 65
+ }
+]
