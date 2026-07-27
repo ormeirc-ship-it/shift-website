@@ -1833,3 +1833,43 @@ h3 { text-wrap: balance; }
 /* יתומים: text-wrap: pretty מבקש מהדפדפן להימנע משורה אחרונה במילה
    בודדת. נתמך בכרום/ספארי עדכניים; בדפדפן שלא תומך זה פשוט מתעלם. */
 p, .statement-title, .section-intro { text-wrap: pretty; }
+
+/* ============================================================
+   B3 — שתי גרסאות לסיום הצלילה, להכרעת OC (27.7)
+   ברירת המחדל ללא שינוי. הגרסאות נדלקות רק במחלקה על <html>
+   (b3-curtain / b3-panel) לצורך צילומי ההדמיה ב-delivery/.
+   לא מיושם סופית בלי אישור OC — NEXT.md, סעיף B3.
+   ============================================================ */
+.arrival-logo { display: none; height: auto; }
+
+/* — גרסה א: הווילון — חזרה למסך הפתיחה. הרקע שוקע לנייבי,
+     הלוגו הלבן חוזר, וההצהרה עוברת ללבן. — */
+html.b3-curtain .dive-veil {
+  opacity: 1 !important;
+  background: rgba(18, 18, 52, 0.96);
+}
+html.b3-curtain .arrival-logo-dark {
+  display: block;
+  width: min(230px, 46vw);
+  margin: 0 auto clamp(22px, 4vh, 40px);
+  filter: drop-shadow(0 0 50px rgba(92, 187, 240, 0.35));
+}
+html.b3-curtain .arrival h1 { color: #fff; }
+html.b3-curtain .arrival h1 b { color: var(--sky); }
+html.b3-curtain .arrival-sub { color: rgba(255, 255, 255, 0.88); }
+html.b3-curtain .btn-arrival { background: var(--sky); color: var(--navy-deep); }
+html.b3-curtain .btn-arrival-ghost { border-color: rgba(255, 255, 255, 0.45); color: #fff; }
+
+/* — גרסה ב: המשטח — האור נשאר, הטקסט יושב על קלף נייר אטום
+     בשפת הקלפים של האתר. — */
+html.b3-panel .arrival-in {
+  background: var(--paper);
+  border-radius: var(--radius);
+  padding: clamp(34px, 6vh, 60px) clamp(26px, 5vw, 72px);
+  box-shadow: 0 34px 90px rgba(18, 18, 52, 0.38);
+}
+html.b3-panel .arrival-logo-light {
+  display: block;
+  width: min(180px, 40vw);
+  margin: 0 auto clamp(18px, 3vh, 30px);
+}
