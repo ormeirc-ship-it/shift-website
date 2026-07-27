@@ -1428,7 +1428,11 @@ body { overflow-x: clip; }
 
 /* גובה הבמה = אורך הצלילה. 520vh נבחר באב-הטיפוס: מספיק
    כדי שהתנועה תרגיש איטית ונשלטת, בלי להרגיש כמו עונש. */
-.dive { height: 520vh; position: relative; background: var(--navy-deep); }
+/* ‏REQUESTS 27.7: קוצר מ-520vh — ההשקעה שנדרשה מהמבקר לפני משפט תוכן
+   ראשון הייתה ארוכה מדי ביחס לסקשנים (ממצא D1 #3). ‏440 ולא 400:
+   שומר קצב של ~7.3vh לפריים על 60 הפריימים — עדיין שליש רגוע יותר
+   מהמקור, כדי לא להחזיר את תדירות ההחלפות שהדילול (B2) בא להוריד. */
+.dive { height: 440vh; position: relative; background: var(--navy-deep); }
 .dive-sticky {
   position: sticky;
   top: 0;

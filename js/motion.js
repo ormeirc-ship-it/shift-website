@@ -269,7 +269,10 @@
       // #products הכהה. אותו באג שכבר תוקן פעם וחזר דרך אופטימיזציית
       // הכתיבות; הפעם הוא מעל הקו ולא מתחתיו.
       var aIn = Math.max(0, Math.min((p - 0.86) / 0.14, 1));
-      var hush = onScreen && p > 0.06 && aIn < 0.35;
+      // הסרגל שקט לכל אורך הצלילה — כולל רגע האור. קודם הוא חזר עם
+      // ההגעה (aIn<0.35) ונקרא כפס אפרפר מעל התכלת, בשיא של העמוד;
+      // עכשיו הוא חוזר רק כשעוזבים את הצלילה, עם ההצהרה. (REQUESTS 27.7)
+      var hush = onScreen && p > 0.06;
       if (hush !== hushOn) { hushOn = hush; docEl.classList.toggle('dive-hush', hush); }
       var lit = onScreen && aIn > 0.5;
       if (lit !== litOn && window.__navTone) { litOn = lit; window.__navTone.set('dive', lit); }
