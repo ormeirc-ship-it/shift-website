@@ -940,6 +940,14 @@
   /* ---------- רענון אחרי טעינת תמונות ---------- */
   window.addEventListener('load', function () { ScrollTrigger.refresh(); });
 
+  /* ---------- bfcache ----------
+     אין לנו unload/beforeunload (הם פוסלים את העמוד מה-cache), אז חזרה
+     עם Back מחזירה עמוד חי. הרענון כאן מיישר את ScrollTrigger למיקום
+     הגלילה המשוחזר — בלעדיו הצלילה עלולה לצייר פריים לא-נכון רגע אחד. */
+  window.addEventListener('pageshow', function (ev) {
+    if (ev.persisted) ScrollTrigger.refresh();
+  });
+
   } catch (err) {
     // המנוע קרס באתחול — משחררים את מסך הפתיחה כדי שהאתר יישאר שמיש.
     // T11: בלי לגעת ב-overflow — אף אחד לא נועל גלילה לפני החשיפה, ואין מה לשחרר.

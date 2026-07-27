@@ -95,3 +95,29 @@ test('שני נכסי הלוגו קיימים בניווט (בלי פילטר CS
   assert.match(html, /logo-on-light/, 'הלוגו הכהה נעלם מהניווט');
   assert.ok(!/filter:\s*invert/i.test(css), 'הלוגו עבר פילטר CSS — אסור לפי חוקי המותג');
 });
+
+test('בלי JS העמוד שמיש: הפתיח מגודר, ה-reveal לא קובר תוכן, אביזרי-JS חבויים', () => {
+  // פריט 13. מסך הפתיחה מוצג רק תחת html.js — מבקר בלי JS לא ננעל מאחוריו
+  assert.match(css, /html\.js \.preloader \{ display: flex/,
+    'שער ה-no-JS של מסך הפתיחה נעלם');
+  // כל חוק שמסתיר .reveal חייב שער html.js — בלעדיו תוכן נקבר לתמיד בלי JS
+  for (const block of css.split('}')) {
+    if (/\.reveal[^{]*\{/.test(block) && /opacity:\s*0/.test(block)) {
+      assert.match(block, /html\.js/, '.reveal מוסתר בלי שער js: ' + block.trim().slice(0, 80));
+    }
+  }
+  // כפתור הדילוג של הצלילה נחשף רק ע"י JS — ב-HTML הוא חייב hidden
+  assert.match(html, /id="diveSkip"[^>]*\bhidden\b/, 'diveSkip גלוי בלי JS אבל מת בלי JS');
+});
+
+test('bfcache: אין unload/beforeunload, ויש שיקום ב-pageshow', () => {
+  // פריט 14. מאזין unload פוסל את העמוד מה-bfcache — חזרה עם Back תיטען מאפס
+  const motion = readFileSync(resolve(ROOT, 'js/motion.js'), 'utf8');
+  const main = readFileSync(resolve(ROOT, 'js/main.js'), 'utf8');
+  for (const [name, src] of [['motion.js', motion], ['main.js', main]]) {
+    assert.ok(!/addEventListener\(\s*['"](?:before)?unload['"]/.test(src),
+      name + ' רושם מאזין unload — פוסל את העמוד מ-bfcache');
+  }
+  assert.match(motion, /pageshow/, 'motion.js בלי שיקום pageshow (רענון ScrollTrigger)');
+  assert.match(main, /pageshow/, 'main.js בלי שיקום pageshow (סגירת תפריט + שחרור נעילה)');
+});

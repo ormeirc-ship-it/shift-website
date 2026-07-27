@@ -132,6 +132,10 @@ if (burger && menu) {
     }
   };
 
+  // bfcache: אם העמוד שוחזר מה-cache עם תפריט פתוח — לסגור ולשחרר את
+  // נעילת הגלילה, אחרת המבקר חוזר לעמוד קפוא בלי לדעת למה
+  window.addEventListener('pageshow', (ev) => { if (ev.persisted) setMenu(false); });
+
   burger.addEventListener('click', () => {
     setMenu(!menu.classList.contains('open'));
   });
