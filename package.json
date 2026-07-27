@@ -18,7 +18,8 @@
     "console": "node scripts/console-check.mjs",
     "motion": "node scripts/reduced-motion.mjs",
     "check": "npm test && npm run verify && npm run audit && npm run console && npm run motion && npm run budget",
-    "budget": "node scripts/budget.mjs"
+    "budget": "node scripts/budget.mjs",
+    "type": "node scripts/type-audit.mjs"
   },
   "devDependencies": {
     "puppeteer-core": "^24.0.0"
