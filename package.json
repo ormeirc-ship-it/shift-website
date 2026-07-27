@@ -1,0 +1,20 @@
+{
+  "name": "shift-website",
+  "version": "1.0.0",
+  "private": true,
+  "description": "אתר SHIFT — אתר סטטי. אין build; ה-npm כאן משמש לכלי מדידה ובדיקה בלבד.",
+  "type": "module",
+  "scripts": {
+    "perf": "node scripts/perf.mjs",
+    "weigh": "node scripts/weigh.mjs",
+    "audit": "node scripts/audit.mjs",
+    "shots": "node scripts/shots.mjs",
+    "verify": "node scripts/verify-program.mjs",
+    "net": "node scripts/net.mjs",
+    "drift": "node scripts/drift-check.mjs",
+    "check": "npm run verify && npm run audit"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^24.0.0"
+  }
+}

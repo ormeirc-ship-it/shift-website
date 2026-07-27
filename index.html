@@ -11,6 +11,12 @@
   <meta property="og:url" content="https://ormeirc-ship-it.github.io/shift-website/">
   <meta property="og:type" content="website">
   <link rel="icon" type="image/png" href="assets/brand/favicon.png">
+  <!-- הפריים הראשון של הצלילה הוא מה שהמבקר רואה ראשון. בלי ההנחיה הזו
+       הוא ממתין בתור מאחורי חבילת התנועה (175KB) — וברשת איטית זה שניות. -->
+  <link rel="preload" as="image" href="assets/brain-seq/m/f001.webp" type="image/webp"
+        media="(max-width: 899px)" fetchpriority="high">
+  <link rel="preload" as="image" href="assets/brain-seq/d/f001.webp" type="image/webp"
+        media="(min-width: 900px)" fetchpriority="high">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <!-- הגופן נטען בלי לחסום רינדור: media="print" משחרר את הפרסר,
@@ -29,10 +35,13 @@
     }
     // רשת ביטחון עליונה: גם אם motion.js קורס לפני שהטיימר הפנימי שלו נרשם,
     // מסך הפתיחה יורד אחרי 4 שניות והאתר לא ננעל על מסך ריק
+    // ברשת איטית ה-HTML עצמו מגיע אחרי שניות, והטיימר הזה מתחיל רק אז —
+    // כלומר 4 שניות נוספות של מסך פתיחה. נמדד ב-Slow 4G: 8.4ש' עד שמשהו
+    // נראה. הורד ל-2.2ש'; מתחתיו כבר יש את תמונת הגיבוי של הצלילה.
     setTimeout(function () {
       document.documentElement.classList.add('preloader-done');
       if (document.body) document.body.style.overflow = '';
-    }, 4000);
+    }, 2200);
   </script>
 </head>
 <body>
@@ -112,7 +121,12 @@
         <!-- בלי JS זו התמונה היחידה שנראית. אין סיבה שמובייל יוריד את
              הפריים הדסקטופי (15KB, 900px) במקום את שלו (9KB, 640px). -->
         <source srcset="assets/brain-seq/m/f001.webp" media="(max-width: 899px)" type="image/webp" width="640" height="360">
-        <img class="dive-still" id="brainStill" src="assets/brain-seq/d/f001.webp" alt="" aria-hidden="true" width="900" height="506">
+        <!-- ברגע שהתמונה הזו כאן — יש מה להראות, וממסך הפתיחה אין יותר
+             תועלת. הסרתו לא מחכה ל-JS בכלל: ב-Slow 4G חבילת התנועה
+             (175KB) מגיעה שניות אחרי ה-HTML, ועד אז המבקר בהה במסך ריק. -->
+        <img class="dive-still" id="brainStill" src="assets/brain-seq/d/f001.webp" alt="" aria-hidden="true"
+             width="900" height="506" fetchpriority="high"
+             onload="document.documentElement.classList.add('preloader-done');if(document.body)document.body.style.overflow=''">
       </picture>
       <div class="dive-veil" id="diveVeil" aria-hidden="true"></div>
 

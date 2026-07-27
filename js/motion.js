@@ -187,23 +187,44 @@
       window.dispatchEvent(new Event('shift:dive-first-frame'));
     }
 
+    // טעינה בשלבים, לא הכל בבת אחת.
+    //
+    // הגרסה הקודמת ירתה 97 בקשות במקביל. על localhost זה נראה מצוין
+    // (פריים ראשון תוך 30ms), אבל במדידה על Slow 4G התברר שהפריים הראשון
+    // מתחרה על רוחב הפס עם 96 אחרים — והמבקר מסתכל על מסך פתיחה שניות.
+    //
+    // עכשיו: הפריים הראשון לבדו, ורק כשהוא בפנים מתחילים את השאר —
+    // לפי הסדר, בחלון צר. הסדר חשוב כי המבקר גולל מלמעלה למטה, כלומר
+    // צורך את הפריימים בדיוק בסדר הזה.
+    var WINDOW = 6;
+    function loadFrame(idx, done) {
+      var img = new Image();
+      img.decoding = 'async';
+      img.onload = img.onerror = function () {
+        loaded++;
+        if (loaded >= COUNT) {
+          stats.allFramesMs = Math.round(((window.performance && performance.now) ? performance.now() : 0) - t0);
+          window.dispatchEvent(new Event('shift:dive-ready'));
+        }
+        if (done) done();
+      };
+      img.src = DIR + 'f' + pad(idx) + '.webp';
+      frames[idx - 1] = img;
+    }
+
     function preload() {
-      for (var i = 1; i <= COUNT; i++) {
-        (function (idx) {
-          var img = new Image();
-          img.decoding = 'async';
-          img.onload = img.onerror = function () {
-            loaded++;
-            if (idx === 1) onFirstFrame();
-            if (loaded >= COUNT) {
-              stats.allFramesMs = Math.round(((window.performance && performance.now) ? performance.now() : 0) - t0);
-              window.dispatchEvent(new Event('shift:dive-ready'));
-            }
-          };
-          img.src = DIR + 'f' + pad(idx) + '.webp';
-          frames[idx - 1] = img;
-        })(i);
+      var next = 2;
+      function pump() {
+        if (next > COUNT) return;
+        var idx = next++;
+        loadFrame(idx, pump);
       }
+      loadFrame(1, function () {
+        onFirstFrame();
+        // חלון צר של בקשות מקבילות: מספיק כדי לרוות את החיבור,
+        // מעט מספיק כדי שהסדר יישמר בפועל
+        for (var k = 0; k < WINDOW; k++) pump();
+      });
     }
 
     var gate = document.getElementById('diveGate');
@@ -374,9 +395,9 @@
     // הפריים הראשון מוכן → נפתחים. רשת ביטחון: לא מחכים לו יותר מ-2.5 שניות.
     if (dive && dive.firstFrameMs !== null) openCurtain();
     else window.addEventListener('shift:dive-first-frame', openCurtain, { once: true });
-    setTimeout(openCurtain, 2500);
+    setTimeout(openCurtain, 2000);
   }
-  setTimeout(finishReveal, 4000);
+  setTimeout(finishReveal, 2600);
 
   /* ---------- המעבר מהישרדות ליצירה, כמערכת לאורך העמוד ----------
      הפלטה והטיפוגרפיה נעולות, ולכן ההבחנה בין שני המצבים נישאת ע"י הקצב
