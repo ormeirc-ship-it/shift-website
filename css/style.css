@@ -1141,6 +1141,21 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
   .event-body { padding: 22px; padding-top: 0; }
 }
 
+/* מסכים נמוכים (SE, מובייל-לרוחב, לפטופ עם סרגלים): תרגיל הנשימה קומפקטי,
+   שהעיגול והכפתור ייכנסו יחד ל-viewport — נתפס במטריצת המכשירים (28/29) */
+@media (max-height: 700px) {
+  .breath { margin-top: 32px; padding: 20px; gap: 20px; }
+  .breath-stage { min-height: 170px; }
+  .breath-circle { width: 110px; height: 110px; font-size: 0.85rem; padding: 12px; }
+}
+
+/* מובייל-לרוחב (גובה ~390): ערימה אנכית לא נכנסת לשום גובה — העיגול
+   עובר לצד הפקדים גם מתחת לנקודת-השבירה של המובייל */
+@media (max-height: 480px) and (min-width: 640px) {
+  .breath { grid-template-columns: minmax(200px, 0.8fr) minmax(0, 1.2fr); }
+  .breath-stage { min-height: 130px; }
+}
+
 /* ============================================================
    שכבת התנועה של האקוסיסטם (איזאנמי/אלת'יה)
    ============================================================ */
