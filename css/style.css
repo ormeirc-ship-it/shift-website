@@ -1049,7 +1049,9 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
 .breath-steps li { margin-bottom: 6px; }
 .breath-note { font-size: 0.9rem; color: var(--white-faint); margin-bottom: 20px; max-width: 480px; }
 .breath-actions { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
-.breath-counter { color: var(--sky); font-weight: 600; font-size: 1.05rem; min-height: 1.5em; }
+/* ‏blue-mid ולא sky: תכלת על נייר = ‏2.14 — נכשל AA (נמדד, פריט 31);
+   האמצע של גרדיאנט-המותג נותן 6.7:1 ונשאר במשפחה */
+.breath-counter { color: var(--blue-mid); font-weight: 600; font-size: 1.05rem; min-height: 1.5em; }
 .program-cta {
   margin-top: clamp(40px, 6vw, 64px);
   display: flex;
