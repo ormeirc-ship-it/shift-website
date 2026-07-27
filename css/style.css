@@ -303,7 +303,7 @@ h3 {
   font-weight: 200;
   color: var(--blue-mid);
   direction: ltr;
-  text-align: right;
+  text-align: end; /* לוגי: תחת ltr זה ימין — צמוד לזרימת ה-RTL של העמוד */
   line-height: 1.1;
   padding-top: 6px;
 }
@@ -1085,6 +1085,18 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
 }
 .event-body h3 { color: #fff; font-size: clamp(1.4rem, 3vw, 1.9rem); margin: 8px 0 10px; }
 .event-body p { color: var(--white-soft); max-width: 460px; }
+/* משבצת-מקום גלויה לפרטים שממתינים ל-OC (D8) — מסומנת בכוונה כ"בדרך":
+   מסגרת מקווקוות = תוכן שהמקום שלו שמור, לא תוכן שחסר בטעות */
+.event-soon {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 7px 14px;
+  border: 1px dashed rgba(246, 245, 242, 0.35);
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: rgba(246, 245, 242, 0.6);
+}
 .event-link {
   display: inline-block;
   margin-top: 18px;
