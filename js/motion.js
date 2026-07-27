@@ -161,6 +161,16 @@
     // גלילה ופחות בייטים ברשת איטית. המקור המלא שמור ב-_build/brain-seq-d97.
     var DIR = 'assets/brain-seq/' + (MOBILE ? 'm/' : 'd/');
     var COUNT = MOBILE ? 65 : 60;
+    // פריט 40: מקבילות AVIF (חיסכון מדוד 16.5%). הפריים הראשון נשאר WebP —
+    // הוא כבר preloaded מה-head ומשומש מהמטמון; הרצף (2..N) נבחר לפי
+    // בדיקת-יכולת אמפירית (AVIF של פיקסל אחד), לא לפי זיהוי דפדפן.
+    var seqDir = DIR, seqExt = '.webp';
+    var avifProbe = new Promise(function (res) {
+      var t = new Image();
+      t.onload = function () { res(t.width === 1); };
+      t.onerror = function () { res(false); };
+      t.src = 'data:image/avif;base64,AAAAIGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZk1BMUIAAADybWV0YQAAAAAAAAAoaGRscgAAAAAAAAAAcGljdAAAAAAAAAAAAAAAAGxpYmF2aWYAAAAADnBpdG0AAAAAAAEAAAAeaWxvYwAAAABEAAABAAEAAAABAAABGgAAABcAAAAoaWluZgAAAAAAAQAAABppbmZlAgAAAAABAABhdjAxQ29sb3IAAAAAamlwcnAAAABLaXBjbwAAABRpc3BlAAAAAAAAAAEAAAABAAAAEHBpeGkAAAAAAwgICAAAAAxhdjFDgQ0MAAAAABNjb2xybmNseAACAAIABoAAAAAXaXBtYQAAAAAAAAABAAEEAQKDBAAAAB9tZGF0EgAKCBgABogQEAwgMg8f8D///8WfhwB8+ErK42A=';
+    });
     var ctx = canvas.getContext('2d', { alpha: false });
     var frames = [];
     var loaded = 0;
@@ -218,7 +228,8 @@
         }
         if (done) done();
       };
-      img.src = DIR + 'f' + pad(idx) + '.webp';
+      img.src = idx === 1 ? DIR + 'f' + pad(idx) + '.webp'
+                          : seqDir + 'f' + pad(idx) + seqExt;
       frames[idx - 1] = img;
     }
 
@@ -231,9 +242,13 @@
       }
       loadFrame(1, function () {
         onFirstFrame();
-        // חלון צר של בקשות מקבילות: מספיק כדי לרוות את החיבור,
-        // מעט מספיק כדי שהסדר יישמר בפועל
-        for (var k = 0; k < WINDOW; k++) pump();
+        // הרצף יוצא רק אחרי בדיקת ה-AVIF — היא data-URI (מילישניות),
+        // לא ממתינים לרשת. חלון צר של בקשות מקבילות: מספיק כדי לרוות
+        // את החיבור, מעט מספיק כדי שהסדר יישמר בפועל
+        avifProbe.then(function (ok) {
+          if (ok) { seqDir = DIR.slice(0, -1) + '-avif/'; seqExt = '.avif'; stats.dir = seqDir; }
+          for (var k = 0; k < WINDOW; k++) pump();
+        });
       });
     }
 

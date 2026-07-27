@@ -57,6 +57,12 @@ test('מובייל טוען את סט הפריימים שלו בלבד, והספ
   assert.ok(m, 'הצהרת COUNT נעלמה מ-motion.js');
   assert.equal(Number(m[1]), count('m'), 'ספירת המובייל בקוד לא תואמת את הקבצים');
   assert.equal(Number(m[2]), count('d'), 'ספירת הדסקטופ בקוד לא תואמת את הקבצים');
+  // פריט 40: סטי ה-AVIF חייבים להיות שלמים אחד-לאחד — פריים חסר שם
+  // יופיע כחור ברצף רק אצל מי שדפדפנו בחר AVIF, הבאג הקשה ביותר לשחזור
+  const countAvif = (dir) => readdirSync(resolve(ROOT, 'assets/brain-seq/' + dir))
+    .filter((f) => /^f\d{3}\.avif$/.test(f)).length;
+  assert.equal(countAvif('m-avif'), count('m'), 'סט ה-AVIF של המובייל חסר פריימים');
+  assert.equal(countAvif('d-avif'), count('d'), 'סט ה-AVIF של הדסקטופ חסר פריימים');
 });
 
 test('סולם המסע נגזר מה-DOM ולא מרשימה קשיחה', () => {
