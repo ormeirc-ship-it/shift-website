@@ -29,8 +29,11 @@ mkdirSync(CUR, { recursive: true });
 // הסט: לכל viewport — ראש העמוד + הסקשנים שמכסים את מרחב העיצוב
 // (כהה, מעבר כהה→בהיר, קלפים, סיפור, סגירה).
 const SETS = [
-  { tag: 'd', w: 1440, h: 900, targets: ['top', '.statement', '#method', '#program', '#story', '.closing'] },
-  { tag: 'm', w: 390, h: 844, mobile: true, targets: ['top', '#program', '#breathe', '.closing'] },
+  // ‏arrival = תחתית הצלילה (מצב הווילון החי של B3); ‏events = הכרטיסיות
+  // עם משבצות-המקום — שניהם נוספו בלולאת-הרקע של 28.7 אחרי שהתברר שהסט
+  // המקורי לא מכסה אותם
+  { tag: 'd', w: 1440, h: 900, targets: ['top', 'dive-end', '.statement', '#method', '#program', '#events', '#story', '.closing'] },
+  { tag: 'm', w: 390, h: 844, mobile: true, targets: ['top', '#program', '#breathe', '#events', '.closing'] },
 ];
 const THRESHOLD = 1.5;
 
@@ -56,7 +59,9 @@ for (const set of SETS) {
   for (const target of set.targets) {
     await page.evaluate(async (sel) => {
       const to = sel === 'top' ? 0
-        : (document.querySelector(sel)?.getBoundingClientRect().top ?? 0) + scrollY;
+        : sel === 'dive-end'
+          ? (() => { const d = document.querySelector('.dive'); return d.offsetTop + d.offsetHeight - innerHeight; })()
+          : (document.querySelector(sel)?.getBoundingClientRect().top ?? 0) + scrollY;
       // הדרגתי כדי שכל טריגר בדרך יירה; 120px לצעד = מהיר אבל לא קפיצה
       const from = scrollY, dist = to - from, steps = Math.max(1, Math.ceil(Math.abs(dist) / 120));
       for (let i = 1; i <= steps; i++) {
