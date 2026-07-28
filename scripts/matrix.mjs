@@ -27,6 +27,9 @@ const DEVICES = [
   { name: 'iPad-portrait', w: 810, h: 1080, mobile: true },
   { name: 'iPad-landscape', w: 1080, h: 810, mobile: true },
   { name: 'mobile-landscape', w: 844, h: 390, mobile: true },
+  // רצועת 900–1100 — הנקודה שבה וידאו-העיניים (‏40vw) פוגש את הכותרת;
+  // סומנה כשטח-עיוור ע"י Cowork ‏28.7 ‏12:05 ונכנסה למטריצה דרך-קבע
+  { name: 'narrow-desktop-1000', w: 1000, h: 800 },
   { name: 'laptop-short-600', w: 1280, h: 600 },
   { name: 'laptop-short-700', w: 1440, h: 700 },
   { name: 'desktop-1920', w: 1920, h: 1080 },
