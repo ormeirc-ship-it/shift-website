@@ -6,7 +6,7 @@
 // הקונסול נשאר נקי (חוזה console-check); ?debug=track מדפיס בכל זאת.
 window.dataLayer = window.dataLayer || [];
 const track = (event, detail) => {
-  const rec = Object.assign({ event: 'shift:' + event, t: Math.round(performance.now()) }, detail);
+  const rec = Object.assign({ event: 'shift:' + event, t: Math.round((window.performance && performance.now) ? performance.now() : 0) }, detail);
   window.dataLayer.push(rec);
   if (location.search.indexOf('debug=track') > -1) console.log('[track]', rec);
 };
