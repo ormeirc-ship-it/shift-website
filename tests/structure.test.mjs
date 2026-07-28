@@ -32,7 +32,10 @@ test('תגיות פתוחות וסגורות מאוזנות', () => {
 });
 
 test('כל תמונה עם alt ועם מידות', () => {
-  const imgs = html.match(/<img[^>]*>/g) || [];
+  // בלי הערות — ‏<img> בתוך הערת-תיעוד אינו תמונה (אותו שיעור כמו
+  // בבדיקת ה-image-set ב-compat: סורקים קוד חי, לא תיעוד)
+  const live = html.replace(/<!--[\s\S]*?-->/g, '');
+  const imgs = live.match(/<img[^>]*>/g) || [];
   assert.ok(imgs.length >= 10, 'פחות מדי תמונות — משהו נמחק?');
   for (const img of imgs) {
     assert.ok(/\salt=/.test(img), `תמונה בלי alt: ${img.slice(0, 70)}`);
