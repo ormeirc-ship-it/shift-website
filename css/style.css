@@ -1450,6 +1450,7 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
   .prog-chip { animation: none !important; }
   .week-card { position: static !important; }
   .events-video { display: none; }
+  .dive-tags { display: none; } /* רפרנס 3 — תנאי 14:05: בלי תוויות בשקט */
 }
 
 /* המסלול: רקע אחיד שמאפשר את מעבר הצבע כהה→בהיר (בלי גרדיאנט הסקשן) */
@@ -1675,6 +1676,32 @@ html.dive-live .dive-still { display: none; }
 
 /* ---------- מילות המסע ---------- */
 .passing { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+/* רפרנס 3: מיקרו-תוויות — שכבת "דאטה" שקטה בשולי הצלילה, נבדלת
+   מהשורות הפואטיות: זעירה, מרווחת-אותיות, עם תג-מדידה קטן בצד */
+.dive-tags { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+.dive-tags span {
+  position: absolute;
+  font-size: 0.72rem;
+  font-weight: 300;
+  letter-spacing: 0.14em;
+  color: var(--sky-a55);
+  opacity: 0;
+  white-space: nowrap;
+  will-change: opacity, transform;
+}
+.dive-tags span::before {
+  content: "";
+  display: inline-block;
+  width: 18px;
+  height: 1px;
+  background: var(--sky-a35);
+  vertical-align: middle;
+  margin-inline-end: 10px;
+}
+.dive-tags span:nth-child(1) { inset-inline-start: 8%; top: 36%; }
+.dive-tags span:nth-child(2) { inset-inline-end: 9%; top: 58%; }
+.dive-tags span:nth-child(3) { inset-inline-start: 11%; top: 44%; }
+@media (max-width: 899px) { .dive-tags { display: none; } }
 .passing p {
   position: absolute;
   inset: auto 0 auto 0;
