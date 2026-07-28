@@ -506,7 +506,30 @@ h3 {
 .footer {
   background: var(--navy-deep);
   color: var(--white-faint);
-  padding: 64px 0 32px;
+  /* צומצם 64→36 עם רפרנס 2 — מילת הענק והפוטר נקראים כרגע אחד */
+  padding: 36px 0 32px;
+}
+/* רפרנס 1 (איזאנמי, אושר 28.7): פרט חי בשוליים — נקודה שנושמת בקצב
+   תרגיל הנשימה של האתר עצמו (מחזור ‏8.7ש': שאיפה ‏1.9ש', השלמה עד
+   ‏2.9ש', נשיפה ארוכה עד הסוף). דופק קטן ליד ההבטחה שבשורת המותג. */
+.footer-pulse {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--sky);
+  margin-inline-end: 10px;
+  vertical-align: 1px;
+  animation: footerBreath 8.7s ease-in-out infinite;
+}
+@keyframes footerBreath {
+  0%   { transform: scale(0.72); opacity: 0.45; }
+  22%  { transform: scale(1.15); opacity: 0.95; }
+  33%  { transform: scale(1.25); opacity: 1; }
+  100% { transform: scale(0.72); opacity: 0.45; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .footer-pulse { animation: none; opacity: 0.8; }
 }
 .footer-grid {
   display: flex;
@@ -1494,18 +1517,22 @@ body { overflow-x: clip; }
 }
 .closing-word {
   align-self: center;
-  font-size: clamp(4rem, 16vw, 14rem);
+  /* רפרנס 2 (אלת'יה, אושר 28.7): המילה כרגע-מותג — גדלה עד כמעט מלוא
+     הרוחב, נוכחת מעט יותר, וצמודה לפוטר כך שהשניים נקראים כרגע אחד:
+     המילה סוגרת את המעגל שהשער פותח, ושורת הזכויות מתחתיה. */
+  font-size: clamp(4.5rem, 19vw, 17rem);
   font-weight: 200;
   line-height: 1;
   letter-spacing: 0.12em;
   text-align: center;
   direction: ltr;
-  color: rgba(255, 255, 255, 0.04);
-  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.22);
+  color: rgba(255, 255, 255, 0.05);
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.26);
   white-space: nowrap;
   user-select: none;
   pointer-events: none;
   margin-top: clamp(20px, 4vw, 48px);
+  margin-bottom: clamp(-8px, -0.6vw, -4px);
 }
 .closing .footer {
   background: transparent;
