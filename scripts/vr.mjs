@@ -75,6 +75,8 @@ for (const set of SETS) {
     // motion.js) — בלי קיבוע לפריים 0, כל צילום תופס פריים אקראי
     // (נמדד 28.7: ‏6.5% סטייה על d-events בלי שום שינוי קוד).
     await page.evaluate(async () => {
+      // ‏__videoFreeze מוודא שגם לולאת ה-scrub (T15) לא תזיז את הזמן
+      window.__videoFreeze = true;
       for (const v of document.querySelectorAll('video')) {
         try {
           v.pause();

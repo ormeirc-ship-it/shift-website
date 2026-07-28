@@ -868,22 +868,64 @@
     });
   })();
 
-  /* ---------- אירועים: וידאו-לופ (דסקטופ) + כניסות + פרלקסת תמונות ---------- */
+  /* ---------- אירועים: וידאו העיניים — scrub בגלילה + כניסות + פרלקסה ---------- */
   (function initEvents() {
     var section = document.querySelector('.events');
     if (!section) return;
     var video = document.getElementById('eventsVideo');
     if (video && DESKTOP.matches) {
-      // טעינה עצלה + נגן/עצור בטריגר אחד — עמיד גם בקפיצות עוגן שמדלגות
-      // על הטווח כולו (once:true נהרג בקפיצה כזו בלי לטעון כלל)
+      // ‏T15 (אושר 28.7): במקום לולאה עיוורת — הזמן של הסרטון נע עם
+      // הגלילה דרך הסקשן. בלי pin, בלי לצרוך גלילה, אפס נכסים חדשים.
+      // דגל הסרה: ‏data-scrub="off" על הווידאו מחזיר את הלולאה הישנה.
+      // הטעינה נשארת עצלה בטריגר אחד — עמיד גם בקפיצות עוגן שמדלגות
+      // על הטווח כולו (once:true נהרג בקפיצה כזו בלי לטעון כלל).
+      var scrub = video.dataset.scrub !== 'off';
+      var evTarget = 0, evEased = 0, evOn = false, evDur = 0;
+      // ‏getter דיבוג — כמו __dive; נקרא רק ידנית/מכלי המדידה
+      window.__eyes = function () {
+        return { target: evTarget, eased: evEased, on: evOn, dur: evDur };
+      };
+      var evTick = function () {
+        if (!evOn) return;
+        // הקפאת-VR (‏vr.mjs מציב __videoFreeze) גוברת — דטרמיניזם הצילום
+        if (!window.__videoFreeze && evDur && video.readyState >= 1) {
+          // מרחק גדול (קפיצת עוגן / היפוך חד) — seek יחיד במקום שובל
+          // seek-ים ביניים, שכל אחד מהם פענוח-מ-keyframe (נמדד: השובל
+          // עלה ‏~1.3ש' תקיעה; ה-snap מוריד אותה)
+          if (Math.abs(evTarget - evEased) > 0.5) evEased = evTarget;
+          else evEased += (evTarget - evEased) * 0.12;
+          if (Math.abs(evTarget - evEased) < 0.002) evEased = evTarget;
+          var t = evEased * evDur;
+          // סף פריים (~30fps) — בלי להציף seek-ים תת-פריימיים
+          if (Math.abs(video.currentTime - t) > 0.034) video.currentTime = t;
+        }
+        requestAnimationFrame(evTick);
+      };
       ScrollTrigger.create({
         trigger: section, start: 'top 95%', end: 'bottom top',
+        onUpdate: scrub ? function (self) { evTarget = self.progress; } : undefined,
         onToggle: function (self) {
           if (self.isActive) {
-            if (!video.src) video.src = video.dataset.src;
-            if (!document.hidden) video.play().catch(function () {});
+            if (!video.src) {
+              // ‏preload="none" בסימון — בלולאה הישנה play() משך את הקובץ;
+              // ‏scrub לא מנגן, אז בלי ההעלאה ל-auto שום בייט לא יגיע
+              // (נמדד: ‏readyState נשאר 0 לנצח והזמן קפוא)
+              video.preload = 'auto';
+              video.src = video.dataset.src;
+              video.load();
+              video.addEventListener('loadedmetadata', function () {
+                // שוליים קטנים מהסוף — seek לקצה המוחלט מחזיר לעיתים פריים שחור
+                evDur = Math.max(0, video.duration - 0.08);
+              }, { once: true });
+            }
+            if (scrub) {
+              if (!evOn) { evOn = true; evTick(); }
+            } else if (!document.hidden) {
+              video.play().catch(function () {});
+            }
           } else if (video.src) {
-            video.pause();
+            if (scrub) evOn = false;
+            else video.pause();
           }
         }
       });

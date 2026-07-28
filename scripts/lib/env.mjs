@@ -48,9 +48,32 @@ export async function serveRepo() {
       if (!file.startsWith(ROOT)) { res.writeHead(403).end(); return; }
       const s = await stat(file);
       if (!s.isFile()) { res.writeHead(404).end(); return; }
+      const type = MIME[extname(file).toLowerCase()] || 'application/octet-stream';
+      // ‏Range/206 — בלעדיו כרום לא מסוגל לבצע seek בווידאו (seekable ריק,
+      // ‏currentTime ננעל על 0 — נמדד ב-T15). ‏GitHub Pages ופייתון-4173
+      // תומכים; הרִיג חייב לשקף את הפרודקשן.
+      const range = /^bytes=(\d*)-(\d*)$/.exec(req.headers.range || '');
+      if (range && (range[1] || range[2])) {
+        const start = range[1] ? +range[1] : Math.max(0, s.size - +range[2]);
+        const end = range[1] && range[2] ? Math.min(+range[2], s.size - 1) : s.size - 1;
+        if (start >= s.size || start > end) {
+          res.writeHead(416, { 'Content-Range': `bytes */${s.size}` }).end();
+          return;
+        }
+        res.writeHead(206, {
+          'Content-Type': type,
+          'Content-Length': end - start + 1,
+          'Content-Range': `bytes ${start}-${end}/${s.size}`,
+          'Accept-Ranges': 'bytes',
+          'Cache-Control': 'no-store',
+        });
+        res.end((await readFile(file)).subarray(start, end + 1));
+        return;
+      }
       res.writeHead(200, {
-        'Content-Type': MIME[extname(file).toLowerCase()] || 'application/octet-stream',
+        'Content-Type': type,
         'Content-Length': s.size,
+        'Accept-Ranges': 'bytes',
         'Cache-Control': 'no-store',
       });
       res.end(await readFile(file));

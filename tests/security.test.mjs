@@ -44,6 +44,13 @@ test('קישורים חיצוניים יוצאים רק ליעדים המוכר�
   }
 });
 
+test('mailto יחיד בעמוד, ושווה בדיוק לכתובת ש-OC פתח', () => {
+  // ‏🟢 Cowork ‏28.7 ‏12:05 — הרשימה הסגורה תופסת רק http(s); זו ההשלמה.
+  const m = [...pages['index.html'].matchAll(/mailto:([^"'\s<>?]+)/g)].map((x) => x[1]);
+  assert.deepEqual(m, ['ormeirc@gmail.com'],
+    'כתובת mailto לא מוכרת/כפולה — ערוץ הקשר הוא החלטת OC, לא תוצר לוואי');
+});
+
 test('בלוק ה-JSON-LD הוא JSON תקין ומכיל רק את הישויות המוסכמות', () => {
   const m = pages['index.html'].match(
     /<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
