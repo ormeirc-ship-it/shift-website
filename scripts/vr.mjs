@@ -71,6 +71,24 @@ for (const set of SETS) {
       }
     }, target);
     await new Promise((r) => setTimeout(r, 1100));
+    // דטרמיניזם וידאו: המנוע מנגן את וידאו-האירועים כשהוא נגלה (IO in
+    // motion.js) — בלי קיבוע לפריים 0, כל צילום תופס פריים אקראי
+    // (נמדד 28.7: ‏6.5% סטייה על d-events בלי שום שינוי קוד).
+    await page.evaluate(async () => {
+      for (const v of document.querySelectorAll('video')) {
+        try {
+          v.pause();
+          if (v.readyState >= 1 && v.currentTime !== 0) {
+            await new Promise((res) => {
+              v.addEventListener('seeked', res, { once: true });
+              v.currentTime = 0;
+              setTimeout(res, 300);
+            });
+          }
+        } catch (e) { /* וידאו בלי מקור — לא מעניין */ }
+      }
+    });
+    await new Promise((r) => setTimeout(r, 150));
     const name = `${set.tag}-${target.replace(/[#.]/g, '')}.png`;
     await page.screenshot({ path: join(CUR, name) });
     shots.push(name);
