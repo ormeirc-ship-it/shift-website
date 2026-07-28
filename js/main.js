@@ -12,9 +12,11 @@ const track = (event, detail) => {
 };
 window.__track = track; // ‏motion.js מדווח דרך זה (צימוד רופף, לא תלות)
 
-// יעדים יוצאים — אירוע אחד לכל הקלקה החוצה (אינסטגרם / הפלטפורמה)
+// יעדים יוצאים — אירוע אחד לכל הקלקה החוצה (אינסטגרם / הפלטפורמה /
+// וואטסאפ / מייל). ‏mailto נוסף כשנפתחו ערוצי הקשר (T13, ‏28.7).
 document.addEventListener('click', (e) => {
-  const a = e.target && e.target.closest ? e.target.closest('a[href^="http"]') : null;
+  const a = e.target && e.target.closest
+    ? e.target.closest('a[href^="http"], a[href^="mailto:"]') : null;
   if (a) track('outbound', { href: a.href });
 });
 
