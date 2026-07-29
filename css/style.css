@@ -1554,7 +1554,6 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
   .prog-chip { animation: none !important; }
   .week-card { position: static !important; }
   .events-video { display: none; }
-  .dive-tags { display: none; } /* רפרנס 3 — תנאי 14:05: בלי תוויות בשקט */
 }
 
 /* המסלול: רקע אחיד שמאפשר את מעבר הצבע כהה→בהיר (בלי גרדיאנט הסקשן) */
@@ -1792,37 +1791,7 @@ html.dive-live .dive-still { display: none; }
 
 /* ---------- מילות המסע ---------- */
 .passing { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
-/* רפרנס 3: מיקרו-תוויות — שכבת "דאטה" שקטה בשולי הצלילה, נבדלת
-   מהשורות הפואטיות: זעירה, מרווחת-אותיות, עם תג-מדידה קטן בצד */
-.dive-tags { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
-.dive-tags span {
-  position: absolute;
-  font-size: 0.72rem;
-  font-weight: 300;
-  letter-spacing: 0.14em;
-  color: var(--sky);
-  opacity: 0;
-  white-space: nowrap;
-  will-change: opacity, transform;
-  /* כיול לקשת ה-4K (T14): מ-0.55 המוח ממלא את הפריים בבהיר — תכלת
-     מלאה + הילה כהה צמודה (כמו במילות-המסע) לקריאות בכל תחנה */
-  text-shadow: 0 0 18px rgba(11, 11, 34, 0.9), 0 0 6px rgba(11, 11, 34, 0.8);
-}
-.dive-tags span::before {
-  content: "";
-  display: inline-block;
-  width: 18px;
-  height: 1px;
-  background: var(--sky-a35);
-  vertical-align: middle;
-  margin-inline-end: 10px;
-}
-.dive-tags span:nth-child(1) { inset-inline-start: 8%; top: 36%; }
-.dive-tags span:nth-child(2) { inset-inline-end: 9%; top: 58%; }
-/* תחנה 3 עברה לפינה העליונה — האזור היחיד שנשאר כהה כשהמוח ממלא
-   את הפריים בקשת ה-4K (‏p≈0.64) */
-.dive-tags span:nth-child(3) { inset-inline-start: 11%; top: 13%; }
-@media (max-width: 899px) { .dive-tags { display: none; } }
+
 .passing p {
   position: absolute;
   inset: auto 0 auto 0;
@@ -1830,13 +1799,16 @@ html.dive-live .dive-still { display: none; }
   transform: translateY(-50%);
   text-align: center;
   padding: 0 24px;
-  font-size: clamp(1.4rem, 4.5vw, 2.6rem);
-  font-weight: 200;
+  /* הוראת OC 29.7: "הוא קצת נבלע" — מילות-המסע הן הקול היחיד בצלילה.
+     גודל ומשקל בעדינות + הילה כהה כפולה (רכה-רחבה + צמודה) לקריאות
+     על הפריימים הבהירים של קשת ה-4K. איפוק — זה המסך החשוב באתר. */
+  font-size: clamp(1.5rem, 4.8vw, 2.9rem);
+  font-weight: 300;
   line-height: 1.3;
   color: #fff;
   opacity: 0;
   will-change: opacity, transform;
-  text-shadow: 0 0 40px rgba(11, 11, 34, 0.8);
+  text-shadow: 0 0 44px rgba(11, 11, 34, 0.85), 0 0 14px rgba(11, 11, 34, 0.75);
 }
 
 /* ---------- ההגעה אל האור ----------

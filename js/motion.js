@@ -258,8 +258,6 @@
     var veil = document.getElementById('diveVeil');
     var curtain = document.getElementById('diveCurtain');
     var lines = passing ? Array.prototype.slice.call(passing.querySelectorAll('p')) : [];
-    var diveTags = document.getElementById('diveTags');
-    var tagEls = diveTags ? Array.prototype.slice.call(diveTags.children) : [];
 
     // מצב מופחת-תנועה: פריים מייצג אחד, הכותרת מיד, בלי צלילה
     if (REDUCED || !FULL) {
@@ -322,18 +320,6 @@
         el.style.opacity = String(vis);
         el.style.transform = 'translateY(' + (-50 + (p - at) * 90) + '%) scale(' + (0.96 + vis * 0.06) + ')';
       }
-
-      // רפרנס 3: מיקרו-תוויות — חלון צר יותר (±0.07), סחיפה אנכית קלה.
-      // פונקציה טהורה של p — דטרמיניסטי בעמדת צילום (תנאי ה-VR של 14:05);
-      // ‏d-dive-end (‏p=1) מחוץ לכל החלונות — הפריים נשאר נקי.
-      for (var g = 0; g < tagEls.length; g++) {
-        var tg = tagEls[g];
-        var tat = parseFloat(tg.dataset.at);
-        var tvis = Math.max(0, 1 - Math.abs(p - tat) / 0.07);
-        tg.style.opacity = String(tvis);
-        tg.style.transform = 'translateY(' + ((p - tat) * 60) + 'px)';
-      }
-
       // ההגעה אל האור (aIn חושב למעלה)
       if (arrival) {
         arrival.style.opacity = String(aIn);
