@@ -657,18 +657,10 @@
     });
   })();
 
-  /* ---------- המסלול: קו שמצייר את עצמו + שלבים נדלקים ---------- */
+  /* ---------- הגישה: שלבים נדלקים + הבמה החיה ----------
+     (ענף #pathLine של הקו הישן הוסר - קוד מת מאז D12) */
   (function initPath() {
-    var line = document.getElementById('pathLine');
     var steps = gsap.utils.toArray('.step');
-    if (line) {
-      var from = DESKTOP.matches ? { scaleX: 0 } : { scaleY: 0 };
-      var to = DESKTOP.matches ? { scaleX: 1 } : { scaleY: 1 };
-      gsap.fromTo(line, from, Object.assign({}, to, {
-        ease: 'none',
-        scrollTrigger: { trigger: '.steps', start: 'top 75%', end: 'bottom 60%', scrub: true }
-      }));
-    }
     // ‏D12: הבמה (ספרת-ענק + סיב) רוכבת על אותו סיגנל הדלקה - ‏data-step
     // על הסקשן, וה-CSS עושה את השאר. במצב שקט המנוע לא רץ → מצב-המנוחה
     // הסטטי של ה-CSS (ספרה 1 עמומה, סיב בסיסי) - בדיוק התנאי.

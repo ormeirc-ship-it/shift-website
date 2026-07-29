@@ -796,27 +796,9 @@ h1 .w { display: inline-block; }
   .world-media { max-width: 100%; }
 }
 
-/* ---------- המסלול: קו התקדמות ---------- */
+/* ---------- הגישה: צעדים נדלקים ----------
+   (‏.path-track/.path-line של הקו הישן הוסרו - קוד מת מאז D12) */
 .path .container { position: relative; }
-.path-track {
-  position: absolute;
-  top: 0;
-  inset-inline: 0;
-  height: 0;
-  pointer-events: none;
-}
-.path-line {
-  position: absolute;
-  display: block;
-  background: linear-gradient(270deg, var(--sky), var(--blue-mid));
-  border-radius: 2px;
-  /* דסקטופ: קו אופקי בגובה מספרי הצעדים */
-  top: 52px;
-  inset-inline: 26px;
-  height: 3px;
-  transform: scaleX(0);
-  transform-origin: right; /* RTL: נמתח מימין לשמאל */
-}
 .steps { position: relative; }
 .step { position: relative; z-index: 1; }
 .step-num {
@@ -827,19 +809,6 @@ h1 .w { display: inline-block; }
   color: var(--navy-deep);
   box-shadow: 0 0 20px var(--sky-a55);
 }
-@media (max-width: 899px) {
-  .path-line {
-    top: 0;
-    bottom: 0;
-    height: auto;
-    width: 3px;
-    inset-inline: auto;
-    inset-inline-start: 48px;
-    transform: scaleY(0);
-    transform-origin: top;
-  }
-}
-
 /* ---------- מה נפתח: הרגע של אהבה ---------- */
 .love-card { position: relative; }
 .love-card strong {
@@ -875,7 +844,6 @@ h1 .w { display: inline-block; }
   .grain { animation: none; }
   .scroll-progress, .dot-nav { display: none; }
   .hero-neurons { display: none; }
-  .path-line { transform: none; }
   .step .step-num { transition: none; }
 }
 
