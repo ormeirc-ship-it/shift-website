@@ -721,6 +721,12 @@ h1 .w { display: inline-block; }
   display: block;
 }
 .world-media img {
+  /* ‏width:100% חסר כאן מאז ומתמיד — בלעדיו התמונה מרונדרת בגובה
+     ה-attribute המלא (‏897 בישנות, ‏1456 בחדשה): הפאנלים "הגבוהים"
+     היו באג שקט, והמלל של הקלף נדחק אל מתחת לקו-המסך ברגע שהמסגור
+     החדש העלה את המספרים. ‏4:3 היה הכוונה הכתובה כל הזמן. */
+  width: 100%;
+  height: auto;
   border-radius: var(--radius);
   aspect-ratio: 4 / 3;
   object-fit: cover;
@@ -730,6 +736,9 @@ h1 .w { display: inline-block; }
 /* מובייל / ללא תנועה: התמונות נכנסות בתוך הזרימה */
 .world-row { grid-template-columns: 110px 1fr; }
 .world-media { margin-top: 20px; max-width: 440px; }
+/* ‏hero-bg-b בקלף חקר-הרוח: תמונת אופק רחבה במסגרת-פורטרט — בלי העוגן
+   הזה ה-cover חותך את פס-הזוהר (הפואנטה) ומשאיר שמיים חשוכים בלבד */
+.world-media .img-horizon { object-position: center 82%; }
 @media (max-width: 899px) {
   .world-media { max-width: 100%; }
 }

@@ -34,7 +34,9 @@ const SETS = [
   // המקורי לא מכסה אותם
   // ‏#past-events נוסף 28.7 (D10); ‏#path נוסף 29.7 (D12 — הסקשן מעולם
   // לא צולם, וכך הבאג של הפסקה-בטור-הצר חמק מתחת לרדאר)
-  { tag: 'd', w: 1440, h: 900, targets: ['top', 'dive-end', '.statement', '#method', '#path', '#program', '#events', '#past-events', '#story', '.closing'] },
+  // ‏method-end נוסף 29.7 (מסגור-מחדש): מצבי-הפנים של הבמה הנעוצה
+  // (קלפים 02/03) לא היו מכוסים — בדיוק סוג החור שהסתיר את באג #path
+  { tag: 'd', w: 1440, h: 900, targets: ['top', 'dive-end', '.statement', '#method', 'method-end', '#path', '#program', '#events', '#past-events', '#story', '.closing'] },
   { tag: 'm', w: 390, h: 844, mobile: true, targets: ['top', '#path', '#program', '#breathe', '#events', '#past-events', '.closing'] },
 ];
 const THRESHOLD = 1.5;
@@ -63,7 +65,17 @@ for (const set of SETS) {
       const to = sel === 'top' ? 0
         : sel === 'dive-end'
           ? (() => { const d = document.querySelector('.dive'); return d.offsetTop + d.offsetHeight - innerHeight; })()
-          : (document.querySelector(sel)?.getBoundingClientRect().top ?? 0) + scrollY;
+          : sel === 'method-end'
+            ? (() => {
+                // הבמה נעוצה — כשהיא fixed ה-offsetTop שלה ~0; מודדים את
+                // ה-pin-spacer שנשאר בזרימה ומחזיק את כל מסלול הנעיצה
+                const w = document.querySelector('.worlds');
+                const sp = w.closest('.pin-spacer') || w;
+                // רגע לפני נקודת-השחרור: מסלול-הנעיצה של ה-spacer פחות
+                // גובה הסקשן — שם ציר-הזמן ~0.98 והשורה השלישית מלאה
+                return sp.getBoundingClientRect().top + scrollY + (sp.offsetHeight - w.offsetHeight) - 40;
+              })()
+            : (document.querySelector(sel)?.getBoundingClientRect().top ?? 0) + scrollY;
       // הדרגתי כדי שכל טריגר בדרך יירה; 120px לצעד = מהיר אבל לא קפיצה
       const from = scrollY, dist = to - from, steps = Math.max(1, Math.ceil(Math.abs(dist) / 120));
       for (let i = 1; i <= steps; i++) {
