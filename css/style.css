@@ -201,16 +201,9 @@ h3 {
   align-items: center;
   gap: 7px;
 }
-.nav-burger span {
-  display: block;
-  width: 24px;
-  height: 2px;
-  background: #fff;
-  border-radius: 2px;
-  transition: transform var(--t-med) ease;
-}
-.nav-burger[aria-expanded="true"] span:first-child { transform: translateY(4.5px) rotate(45deg); }
-.nav-burger[aria-expanded="true"] span:last-child { transform: translateY(-4.5px) rotate(-45deg); }
+/* (חוקי ה-span הישירים של העידן הקדם-איזאנמי הוסרו - אחרי הסרת המילה
+   "תפריט" ה-span:first/last-child שלהם היה תופס את מכולת הקווים עצמה
+   ושובר את מורף ה-X; הקווים חיים ב-.nav-burger-lines בלבד) */
 
 .mobile-menu {
   position: fixed;
@@ -376,28 +369,8 @@ h3 {
 .worlds-dots button.on { background: var(--navy); transform: scale(1.2); }
 html:not(.js) .worlds-nav { display: none; }
 
-.worlds-sphere {
-  position: absolute;
-  /* עם המעבר לקרוסלה הסקשן התקצר מאוד - הכדור שישב מתחת לשלוש השורות
-     טיפס אל מאחורי מלל השקופיות (נמדד: ראשו 300px בתוך הסקשן). הוקטן
-     ועוגן אל רצועת הריפוד התחתונה - ראש רך מציץ מתחת לנקודות, נחתך
-     בקצה הסקשן (overflow:hidden). */
-  width: clamp(170px, 20vw, 300px);
-  /* אותה משפחת-באגים כמו world-media: ‏width ב-CSS בלי height:auto -
-     attribute ה-height (851) ניצח, והכדור רונדר כל הזמן כקפסולה מתוחה
-     288x851 במקום עיגול. עכשיו הוא סוף-סוף הצורה של הנכס. */
-  height: auto;
-  bottom: calc(clamp(170px, 20vw, 300px) * -0.3);
-  inset-inline-end: -60px;
-  opacity: 0.85;
-  pointer-events: none;
-  z-index: 0;
-}
-.float-slow { animation: floatSlow 14s ease-in-out infinite alternate; }
-@keyframes floatSlow {
-  from { transform: translateY(0) rotate(0deg); }
-  to { transform: translateY(-28px) rotate(4deg); }
-}
+/* הכדור הצף של העולמות הוסר בהוראת OC ‏29.7 - ואיתו float-slow
+   (הוא היה המשתמש האחרון אחרי ירידת הצ'יפים) */
 
 /* ---------- הרגלים ---------- */
 .habits { padding: clamp(80px, 12vw, 140px) 0; }
@@ -651,7 +624,7 @@ html.js:not(.gsap-on) .reveal.visible { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .reveal { opacity: 1; transform: none; transition: none; }
-  .float-slow, .hero-scroll span { animation: none; }
+  .hero-scroll span { animation: none; }
   .btn, .card, .step, .chips li { transition: none; }
 }
 
@@ -672,7 +645,6 @@ html.js:not(.gsap-on) .reveal.visible { opacity: 1; transform: none; }
 
   .steps { grid-template-columns: 1fr; }
   .world-slide { grid-template-columns: 1fr; gap: 18px; min-height: 0; }
-  .worlds-sphere { width: 170px; bottom: -51px; inset-inline-end: -50px; opacity: 0.7; }
 
   .hero-ctas { flex-direction: column; width: 100%; max-width: 320px; }
   .hero-ctas .btn { width: 100%; text-align: center; }
@@ -1509,23 +1481,20 @@ h1 .w { display: inline-block; }
   margin-inline-start: auto;
   cursor: pointer;
 }
-.nav-burger-word {
-  color: var(--white-soft);
-  font-size: 0.92rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-}
-.nav-burger-lines { display: flex; flex-direction: column; gap: 7px; }
+/* הוראת OC ‏29.7: המילה ירדה - אייקון שלושה קווים קלאסי. בפתיחה:
+   הקיצוניים נפגשים ל-X (מהלך = רוחב-קו+רווח = 8px), האמצעי נמוג */
+.nav-burger-lines { display: flex; flex-direction: column; gap: 6px; }
 .nav-burger-lines span {
   display: block;
   width: 26px;
   height: 2px;
   background: #fff;
   border-radius: 2px;
-  transition: transform var(--t-med) ease;
+  transition: transform var(--t-med) ease, opacity var(--t-med) ease;
 }
-.nav-burger[aria-expanded="true"] .nav-burger-lines span:first-child { transform: translateY(4.5px) rotate(45deg); }
-.nav-burger[aria-expanded="true"] .nav-burger-lines span:last-child { transform: translateY(-4.5px) rotate(-45deg); }
+.nav-burger[aria-expanded="true"] .nav-burger-lines span:first-child { transform: translateY(8px) rotate(45deg); }
+.nav-burger[aria-expanded="true"] .nav-burger-lines span:nth-child(2) { opacity: 0; }
+.nav-burger[aria-expanded="true"] .nav-burger-lines span:last-child { transform: translateY(-8px) rotate(-45deg); }
 .mobile-menu nav { gap: clamp(18px, 3.5vh, 34px); }
 .mobile-menu a {
   font-size: clamp(2rem, 6vw, 3.4rem);
@@ -2012,7 +1981,6 @@ html.nav-light .nav.scrolled {
   background: rgba(246, 245, 242, 0.82);
   box-shadow: 0 1px 0 rgba(24, 22, 59, 0.09);
 }
-html.nav-light .nav-burger-word { color: var(--ink-soft); }
 html.nav-light .nav-burger-lines span { background: var(--navy); }
 html.nav-light .nav-links a { color: var(--ink-soft); }
 @media (hover: hover) { html.nav-light .nav-links a:hover { color: var(--navy); } }/* התפריט הפתוח תמיד כהה - הוא מסך מלא משלו */

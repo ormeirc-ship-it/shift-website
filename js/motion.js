@@ -897,11 +897,7 @@
     });
   })();
 
-  /* ---------- פרלקסה לכדור הצף של העולמות ---------- */
-  gsap.to('.worlds-sphere', {
-    yPercent: -22, ease: 'none',
-    scrollTrigger: { trigger: '.worlds', start: 'top bottom', end: 'bottom top', scrub: true }
-  });
+  /* (פרלקסת הכדור הצף הוסרה יחד איתו - הוראת OC ‏29.7) */
 
   /* ---------- פס התקדמות עליון ---------- */
   gsap.set('#scrollProgress', { scaleX: 0 });
