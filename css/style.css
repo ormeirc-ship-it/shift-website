@@ -1718,7 +1718,15 @@ html.dive-live .dive-still { display: none; }
 
 /* ---------- שער הכניסה ---------- */
 .gate {
-  position: relative;
+  /* ‏OC ‏29.7: מרכוז-אמת בשני הצירים. ‏absolute+inset+margin:auto ולא
+     transform — כי מנוע התנועה כותב transform (scale) על השער בגלילה,
+     והמרכוז חייב לשרוד את זה. (הישן: ילד-בזרימה שני בגריד → שורה
+     משתמעת מתחת למרכז — נמדד ‏126px נמוך.) */
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: fit-content;
+  height: fit-content;
   z-index: 4;
   text-align: center;
   display: flex;
@@ -1738,12 +1746,15 @@ html.dive-live .dive-still { display: none; }
   background: radial-gradient(60% 55% at 50% 55%, rgba(11, 11, 34, 0.72), transparent 72%);
   pointer-events: none;
 }
-.gate-logo img { width: min(300px, 60vw); filter: drop-shadow(0 0 60px var(--sky-a45)); }
+/* הוראת OC ‏29.7 ‏12:15: הלוגו גדל משמעותית (‏300→420) וממורכז-אמת */
+.gate-logo img { width: min(420px, 70vw); filter: drop-shadow(0 0 60px var(--sky-a45)); }
 .gate-line {
-  font-size: clamp(0.85rem, 2vw, 1rem);
+  /* הוראת OC: השורה היא עכשיו התמצית ("מהישרדות ליצירה") — מעט יותר
+     נוכחת מהתיוג הישן, עדיין שקטה */
+  font-size: clamp(1rem, 2.2vw, 1.2rem);
   font-weight: 300;
   letter-spacing: 0.08em;
-  color: var(--white-faint);
+  color: var(--white-soft);
 }
 .gate-cue {
   margin-top: 10px;
@@ -1751,9 +1762,10 @@ html.dive-live .dive-still { display: none; }
   flex-direction: column;
   align-items: center;
   gap: 9px;
-  font-size: 0.78rem;
+  /* הוראת OC ‏29.7: קריא בבירור, לא צעקני — ‏0.78→0.95 + בהיר יותר */
+  font-size: 0.95rem;
   letter-spacing: 0.14em;
-  color: var(--white-faint);
+  color: var(--white-soft);
 }
 .gate-cue i {
   width: 1px;
@@ -1875,7 +1887,7 @@ html.dive-live .dive-still { display: none; }
 /* ---------- מובייל ---------- */
 @media (max-width: 899px) {
   .dive { height: 420vh; }
-  .gate-logo img { width: min(220px, 62vw); }
+  .gate-logo img { width: min(300px, 68vw); } /* ‏OC ‏29.7: ‏220→300 */
 }
 
 /* ---------- ללא תנועה: פריים אחד, הכותרת מיד ---------- */
@@ -1977,10 +1989,10 @@ html.journey-on [style*="--j"] .section-head {
 .breathe .section-head h2 { text-wrap: balance; }
 
 /* אנימציית הלוגו בשער — תופסת בדיוק את מקום התמונה הסטטית */
-.gate-logo { width: min(300px, 60vw); }
+.gate-logo { width: min(420px, 70vw); } /* ‏OC ‏29.7: ‏300→420, ממורכז-אמת */
 .gate-logo img, .gate-logo video { width: 100%; height: auto; display: block; }
 .gate-logo video { filter: drop-shadow(0 0 60px var(--sky-a45)); }
-@media (max-width: 899px) { .gate-logo { width: min(220px, 62vw); } }
+@media (max-width: 899px) { .gate-logo { width: min(300px, 68vw); } }
 
 /* ============================================================
    שלב 8 — אורך שורה (פריט 10: הסולם צריך לעבוד קשה)
