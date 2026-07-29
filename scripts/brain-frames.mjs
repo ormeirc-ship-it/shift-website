@@ -8,8 +8,10 @@
  * תהיה ברת-השוואה). דטרמיניסטי: אותם ארגומנטים = אותם פריימים בדיוק.
  *
  * שימוש:
- *   node scripts/brain-frames.mjs --count 60 --width 1920 --out <dir> [--avif] [--webp-q 75]
+ *   node scripts/brain-frames.mjs --count 60 --width 1920 --out <dir> [--avif] [--webp-q 75] [--src <path-in-repo>]
  *
+ * ‏--src ברירת-מחדל: המקור הישן; ל-T14 (29.7): ‏_build/brain-dive-4k.mp4
+ * (גרסה B שבחר OC — ‏3840×2160, מחוץ ל-git, קישור ההורדה ב-NEXT).
  * הסטים החיים היום (לשחזור בעת החלפה): ‏d ‏60×900 · ‏m ‏65×640.
  * מועמדי מלוא-המקור (T14): ‏d ‏60×1920 · ‏m ‏65×1280.
  */
@@ -29,6 +31,7 @@ const arg = (name, dflt) => {
 const COUNT = +arg('count', 60);
 const WIDTH = +arg('width', 1920);
 const OUT = arg('out', null);
+const SRC = arg('src', 'assets/video/brain-intro-source.mp4');
 const AVIF = process.argv.includes('--avif');
 const WEBP_Q = +arg('webp-q', 75);
 if (!OUT) { console.error('חסר --out'); process.exit(1); }
@@ -42,7 +45,7 @@ const browser = await puppeteer.launch({
   args: ['--disable-web-security'], // canvas.toDataURL על וידאו same-origin — ליתר ביטחון
 });
 const page = await browser.newPage();
-await page.goto(site.url + 'assets/video/brain-intro-source.mp4', { waitUntil: 'domcontentloaded' });
+await page.goto(site.url + SRC, { waitUntil: 'domcontentloaded' });
 const dur = await page.evaluate(() => new Promise((res) => {
   const v = document.querySelector('video');
   v.muted = true; v.pause();

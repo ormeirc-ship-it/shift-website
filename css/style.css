@@ -1698,10 +1698,13 @@ html.dive-live .dive-still { display: none; }
   font-size: 0.72rem;
   font-weight: 300;
   letter-spacing: 0.14em;
-  color: var(--sky-a55);
+  color: var(--sky);
   opacity: 0;
   white-space: nowrap;
   will-change: opacity, transform;
+  /* כיול לקשת ה-4K (T14): מ-0.55 המוח ממלא את הפריים בבהיר — תכלת
+     מלאה + הילה כהה צמודה (כמו במילות-המסע) לקריאות בכל תחנה */
+  text-shadow: 0 0 18px rgba(11, 11, 34, 0.9), 0 0 6px rgba(11, 11, 34, 0.8);
 }
 .dive-tags span::before {
   content: "";
@@ -1714,7 +1717,9 @@ html.dive-live .dive-still { display: none; }
 }
 .dive-tags span:nth-child(1) { inset-inline-start: 8%; top: 36%; }
 .dive-tags span:nth-child(2) { inset-inline-end: 9%; top: 58%; }
-.dive-tags span:nth-child(3) { inset-inline-start: 11%; top: 44%; }
+/* תחנה 3 עברה לפינה העליונה — האזור היחיד שנשאר כהה כשהמוח ממלא
+   את הפריים בקשת ה-4K (‏p≈0.64) */
+.dive-tags span:nth-child(3) { inset-inline-start: 11%; top: 13%; }
 @media (max-width: 899px) { .dive-tags { display: none; } }
 .passing p {
   position: absolute;
