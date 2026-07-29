@@ -300,36 +300,96 @@ h3 {
   padding: clamp(80px, 12vw, 140px) 0 clamp(180px, 24vw, 280px);
   overflow: hidden;
 }
-.world-rows { border-top: 1px solid var(--line); }
-.world-row {
+/* ‏3ג (OC ‏14:40): המבנה הפך לקרוסלת scroll-snap - המספרים והטיקר ירדו.
+   ‏RTL נטיבי מהדפדפן (שקופית 1 מימין, ההתקדמות שמאלה); ‏JS רק מוסיף
+   חצים/נקודות/גרירה/מקלדת (main.js). בלי JS הרצועה נגללת נטיבית. */
+.worlds-slider { position: relative; border-top: 1px solid var(--line); z-index: 1; }
+.worlds-track {
   display: grid;
-  grid-template-columns: 110px 1fr;
-  gap: 24px;
-  padding: clamp(32px, 5vw, 52px) 0;
-  border-bottom: 1px solid var(--line);
-  position: relative;
-  z-index: 1;
+  grid-auto-flow: column;
+  grid-auto-columns: 100%;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  outline-offset: 6px;
 }
-.world-num {
-  font-size: clamp(1.6rem, 4vw, 2.2rem);
-  font-weight: 200;
-  color: var(--blue-mid);
-  direction: ltr;
-  text-align: end; /* לוגי: תחת ltr זה ימין - צמוד לזרימת ה-RTL של העמוד */
-  line-height: 1.1;
-  padding-top: 6px;
+.worlds-track::-webkit-scrollbar { display: none; }
+@media (prefers-reduced-motion: no-preference) { .worlds-track { scroll-behavior: smooth; } }
+@media (hover: hover) and (pointer: fine) { .worlds-track { cursor: grab; } }
+/* בזמן גרירת עכבר ה-snap כבוי - כרום מצמיד כל כתיבת scrollLeft מיידית
+   והגרירה קופצת; עם השחרור ה-JS מעגן לשקופית הקרובה */
+.worlds-track.dragging { scroll-snap-type: none; cursor: grabbing; user-select: none; }
+.world-slide {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 420px);
+  gap: clamp(24px, 4vw, 64px);
+  align-items: center;
+  padding: clamp(28px, 4.5vw, 52px) 4px;
+  min-height: 340px;
+}
+.world-slide img { pointer-events: none; } /* גרירה מתחילה גם מעל התמונה, בלי ghost-drag */
+/* השקופית הרביעית - השילוב, הלב של הסקשן: טקסט ממורכז, בלי מדיה */
+.world-slide-heart { grid-template-columns: minmax(0, 1fr); text-align: center; }
+.world-slide-heart .world-body { max-width: 580px; margin-inline: auto; }
+.world-slide-heart h3::after {
+  content: "";
+  display: block;
+  width: 34px;
+  height: 1px;
+  margin: 14px auto 0;
+  background: linear-gradient(to left, transparent, var(--sky-a60), transparent);
 }
 .world-body { max-width: 640px; }
 .world-body h3 { margin-bottom: 10px; }
 .world-body p { color: var(--ink-soft); }
+.worlds-nav { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 6px; position: relative; z-index: 1; }
+.worlds-arrow {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(24, 22, 59, 0.25);
+  background: none;
+  color: var(--ink-soft);
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: border-color var(--t-fast) ease, color var(--t-fast) ease, opacity var(--t-fast) ease;
+}
+@media (hover: hover) { .worlds-arrow:not(:disabled):hover { border-color: var(--navy); color: var(--navy); } }
+.worlds-arrow:disabled { opacity: 0.3; cursor: default; }
+.worlds-dots { display: flex; gap: 8px; }
+.worlds-dots button {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  position: relative;
+  background: rgba(24, 22, 59, 0.22);
+  transition: background-color var(--t-fast) ease, transform var(--t-fast) ease;
+}
+/* יעד מגע 26px בלי לשנות את המראה (כמו נקודות-הניווט) */
+.worlds-dots button::before { content: ""; position: absolute; inset: -8px; }
+.worlds-dots button.on { background: var(--navy); transform: scale(1.2); }
+html:not(.js) .worlds-nav { display: none; }
 
 .worlds-sphere {
   position: absolute;
-  width: clamp(220px, 30vw, 420px);
-  /* מתחת לשורת התוכן האחרונה, נחתך בעדינות בתחתית הסקשן */
-  bottom: calc(clamp(220px, 30vw, 420px) * -0.89 - 12px);
+  /* עם המעבר לקרוסלה הסקשן התקצר מאוד - הכדור שישב מתחת לשלוש השורות
+     טיפס אל מאחורי מלל השקופיות (נמדד: ראשו 300px בתוך הסקשן). הוקטן
+     ועוגן אל רצועת הריפוד התחתונה - ראש רך מציץ מתחת לנקודות, נחתך
+     בקצה הסקשן (overflow:hidden). */
+  width: clamp(170px, 20vw, 300px);
+  /* אותה משפחת-באגים כמו world-media: ‏width ב-CSS בלי height:auto -
+     attribute ה-height (851) ניצח, והכדור רונדר כל הזמן כקפסולה מתוחה
+     288x851 במקום עיגול. עכשיו הוא סוף-סוף הצורה של הנכס. */
+  height: auto;
+  bottom: calc(clamp(170px, 20vw, 300px) * -0.3);
   inset-inline-end: -60px;
-  opacity: 0.9;
+  opacity: 0.85;
   pointer-events: none;
   z-index: 0;
 }
@@ -392,6 +452,35 @@ h3 {
   font-size: 1.15rem;
   font-weight: 600;
   color: var(--ink);
+}
+/* ‏3ד (OC ‏14:40): מייסדי המיזם - שקט ומכובד, קו דק וריווח אותיות.
+   דיוקנאות ושורת-תפקיד יגיעו מ-OC (TODO ב-HTML). */
+.founders {
+  margin-top: 34px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+.founders-label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  color: var(--ink-soft);
+  margin-bottom: 10px;
+}
+.founders-names {
+  display: flex;
+  gap: 12px 36px;
+  flex-wrap: wrap;
+}
+.founders-names span {
+  font-size: 1.18rem;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: 0.02em;
+}
+@media (max-width: 899px) {
+  .founders-names { flex-direction: column; }
 }
 
 /* ---------- מה נפתח ---------- */
@@ -582,9 +671,8 @@ html.js:not(.gsap-on) .reveal.visible { opacity: 1; transform: none; }
   .nav { background: rgba(18, 18, 52, 0.85); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
 
   .steps { grid-template-columns: 1fr; }
-  .world-row { grid-template-columns: 1fr; gap: 8px; }
-  .world-num { text-align: start; padding-top: 0; }
-  .worlds-sphere { width: 200px; bottom: -190px; inset-inline-end: -50px; opacity: 0.8; }
+  .world-slide { grid-template-columns: 1fr; gap: 18px; min-height: 0; }
+  .worlds-sphere { width: 170px; bottom: -51px; inset-inline-end: -50px; opacity: 0.7; }
 
   .hero-ctas { flex-direction: column; width: 100%; max-width: 320px; }
   .hero-ctas .btn { width: 100%; text-align: center; }
@@ -686,31 +774,7 @@ h1 .w { display: inline-block; }
 /* ---------- הצהרה: מילים ---------- */
 .statement-title .w { display: inline-block; }
 
-/* ---------- השיטה: במה נעוצה (דסקטופ) ---------- */
-.world-bignum {
-  position: absolute;
-  inset-inline-start: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  height: 34vh;
-  overflow: hidden;
-  pointer-events: none;
-  display: none;
-  z-index: 0;
-}
-.world-bignum-roll {
-  display: flex;
-  flex-direction: column;
-}
-.world-bignum-roll span {
-  font-size: 34vh;
-  line-height: 1;
-  font-weight: 200;
-  color: rgba(24, 22, 59, 0.07);
-  direction: ltr;
-  height: 34vh;
-  display: block;
-}
+/* הבמה הנעוצה (01-03 + טיקר) הוסרה עם המעבר לקרוסלה (3ג, OC ‏14:40) */
 .world-media img {
   /* ‏width:100% חסר כאן מאז ומתמיד - בלעדיו התמונה מרונדרת בגובה
      ה-attribute המלא (‏897 בישנות, ‏1456 בחדשה): הפאנלים "הגבוהים"
@@ -724,41 +788,13 @@ h1 .w { display: inline-block; }
   box-shadow: 0 24px 60px rgba(24, 22, 59, 0.22);
 }
 
-/* מובייל / ללא תנועה: התמונות נכנסות בתוך הזרימה */
-.world-row { grid-template-columns: 110px 1fr; }
-.world-media { margin-top: 20px; max-width: 440px; }
+.world-media { max-width: 440px; }
 /* ‏hero-bg-b בקלף חקר-הרוח: תמונת אופק רחבה במסגרת-פורטרט - בלי העוגן
    הזה ה-cover חותך את פס-הזוהר (הפואנטה) ומשאיר שמיים חשוכים בלבד */
 .world-media .img-horizon { object-position: center 82%; }
 @media (max-width: 899px) {
   .world-media { max-width: 100%; }
 }
-
-/* מצב במה נעוצה - מופעל רק ע"י מנוע התנועה בדסקטופ */
-html.worlds-pinned .worlds .section-head { margin-bottom: 0; }
-html.worlds-pinned .world-rows {
-  border-top: none;
-  position: relative;
-  min-height: 62vh;
-  display: grid;
-  align-items: center;
-}
-html.worlds-pinned .world-bignum { display: block; }
-html.worlds-pinned .world-row {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  grid-template-columns: 90px minmax(0, 1fr) minmax(280px, 400px);
-  gap: clamp(24px, 4vw, 56px);
-  align-items: center;
-  border-bottom: none;
-  padding: 0;
-  opacity: 0;
-  visibility: hidden;
-}
-html.worlds-pinned .world-bignum + .world-row { opacity: 1; visibility: visible; }
-html.worlds-pinned .world-media { margin-top: 0; max-width: none; }
-html.worlds-pinned .world-body { max-width: 560px; }
 
 /* ---------- המסלול: קו התקדמות ---------- */
 .path .container { position: relative; }
@@ -843,15 +879,6 @@ html.worlds-pinned .world-body { max-width: 560px; }
   .step .step-num { transition: none; }
 }
 
-/* ---------- השלמות למצב הבמה הנעוצה ---------- */
-html.worlds-pinned .worlds {
-  padding: calc(var(--nav-h) + 36px) 0 40px;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-}
-html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)); }
-
 /* ---------- קו הדגשה נמתח בהצהרה ---------- */
 .em-underline {
   background-image: linear-gradient(var(--sky), var(--sky));
@@ -884,6 +911,20 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
 
 /* ---------- מה אנחנו עושים: סל המוצרים ---------- */
 .basket { padding: clamp(90px, 13vw, 150px) 0; }
+/* ‏3ב (OC ‏14:40): ה-H2 הוא ה-wordmark - אותיות לטיניות, גדול ונושם;
+   המשפט שאחריו תת-כותרת אמיתית: יותר אוויר, מעט גדול וכבד מ-intro רגיל */
+.basket-wordmark {
+  font-size: clamp(3.2rem, 8vw, 5.4rem);
+  font-weight: 200;
+  letter-spacing: 0.16em;
+  line-height: 1;
+}
+.basket-sub {
+  font-size: 1.14rem;
+  font-weight: 400;
+  margin-top: 20px;
+  max-width: 44ch;
+}
 .basket-cards { margin-top: 8px; }
 .basket-card {
   display: flex;

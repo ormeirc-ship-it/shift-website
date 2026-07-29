@@ -114,6 +114,39 @@ const desktopJourney = async () => {
     await new Promise((r) => setTimeout(r, 1500));
   });
 
+  // קרוסלת השיטה (3ג): חצים, נקודות ומקלדת — כל מסלולי הניווט
+  await page.evaluate(async () => {
+    const tick = (ms) => new Promise((r) => setTimeout(r, ms));
+    document.getElementById('method')?.scrollIntoView();
+    await tick(400);
+    const track = document.getElementById('worldsTrack');
+    if (!track) return;
+    document.getElementById('worldsNext')?.click(); await tick(650);
+    document.getElementById('worldsNext')?.click(); await tick(650);
+    document.getElementById('worldsPrev')?.click(); await tick(650);
+    const dots = document.querySelectorAll('#worldsDots button');
+    if (dots.length) { dots[dots.length - 1].click(); await tick(700); }
+    track.focus();
+    for (const key of ['ArrowRight', 'ArrowLeft', 'Home', 'End']) {
+      track.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true }));
+      await tick(500);
+    }
+  });
+  // גרירת עכבר אמיתית על הרצועה — מסלול ה-pointer capture וה-snap-release
+  const trackBox = await page.evaluate(() => {
+    const t = document.getElementById('worldsTrack');
+    if (!t) return null;
+    const r = t.getBoundingClientRect();
+    return { x: r.left + r.width / 2, y: r.top + Math.min(120, r.height / 2) };
+  });
+  if (trackBox) {
+    await page.mouse.move(trackBox.x, trackBox.y);
+    await page.mouse.down();
+    await page.mouse.move(trackBox.x + 90, trackBox.y, { steps: 6 });
+    await page.mouse.up();
+    await new Promise((r) => setTimeout(r, 700));
+  }
+
   // נשימה בתנועה מלאה — בניית ה-timeline של הסבב (הסיום המלא רץ במובייל)
   await page.evaluate(async () => {
     document.getElementById('breathStart')?.click();

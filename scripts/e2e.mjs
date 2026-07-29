@@ -110,6 +110,35 @@ const step = (name, ok, note = '') => {
   });
   for (const a of anchors) step('עוגן ' + a.id, a.ok, a.note);
 
+  // קרוסלת השיטה (3ג): חץ מקדם, מקלדת מקדמת, נקודה קופצת לשקופית שלה
+  const carousel = await page.evaluate(async () => {
+    const tick = (ms) => new Promise((r) => setTimeout(r, ms));
+    const track = document.getElementById('worldsTrack');
+    if (!track) return null;
+    document.getElementById('method').scrollIntoView();
+    await tick(600);
+    const idx = () => Math.round(Math.abs(track.scrollLeft) / track.clientWidth);
+    const out = { start: idx() };
+    document.getElementById('worldsNext').click();
+    await tick(800);
+    out.afterNext = idx();
+    track.focus();
+    track.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true, cancelable: true }));
+    await tick(800);
+    out.afterKey = idx();
+    const dots = document.querySelectorAll('#worldsDots button');
+    out.dots = dots.length;
+    if (dots.length) { dots[dots.length - 1].click(); await tick(900); }
+    out.afterDot = idx();
+    out.nextDisabled = document.getElementById('worldsNext').disabled;
+    return out;
+  });
+  step('קרוסלת השיטה: חץ מקדם שקופית', !!carousel && carousel.afterNext === carousel.start + 1,
+    carousel ? `${carousel.start}→${carousel.afterNext}` : 'אין קרוסלה');
+  step('קרוסלת השיטה: מקלדת מקדמת', !!carousel && carousel.afterKey === carousel.afterNext + 1);
+  step('קרוסלת השיטה: נקודה אחרונה + חץ-הבא כבוי', !!carousel && carousel.dots === 4 &&
+    carousel.afterDot === 3 && carousel.nextDisabled, carousel ? `נקודות ${carousel.dots}` : '');
+
   // הדילוג: טעינה נקייה, מחכים שיופיע, לוחצים — מגיעים לתוכן
   await page.goto(site.url + '?e2e-skip', { waitUntil: 'networkidle2', timeout: 60000 });
   await ready(page);

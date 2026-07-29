@@ -246,8 +246,11 @@
   <section class="basket section-dark" id="products">
     <div class="container">
       <div class="section-head reveal">
-        <h2>מיזם אחד. שלושה נדבכים.</h2>
-        <p class="section-intro">
+        <!-- ‏3ב (OC ‏14:40): ה-wordmark הטיפוגרפי הוא הכותרת - אותיות
+             לטיניות, dir=ltr כדי שלא יישבר ב-RTL; המשפט שאחריו הפך
+             לתת-כותרת אמיתית עם אוויר - המלל עצמו לא שונה -->
+        <h2 class="basket-wordmark" dir="ltr">SHIFT</h2>
+        <p class="section-intro basket-sub">
           SHIFT הוא לא מוצר אחד - הוא דרך. אפשר לפגוש אותה באירוע חי,
           בתוכן היומיומי, או בתהליך ליווי מלא.
         </p>
@@ -275,74 +278,85 @@
     </div>
   </section>
 
-  <!-- השיטה: שלושה עולמות -->
+  <!-- השיטה: שילוב העולמות - קרוסלת שקופיות (3ג, הוראת OC ‏14:40) -->
   <section class="worlds section-light" id="method">
     <div class="container">
       <div class="section-head reveal">
-        <h2>שלושה עולמות. דרך אחת.</h2>
+        <!-- כותרת מ-OC, מילולית -->
+        <h2>שילוב עולמות המדעים הרוח וההתנהגות</h2>
         <p class="section-intro">
           הידע קיים כבר מאות ואלפי שנים. הכלים שנגישים לנו היום מאפשרים לקחת את התובנות
           של המדענים, אנשי הרוח וחוקרי הגוף והנפש - לרמות חדשות של התפתחות וריפוי.
         </p>
       </div>
 
-      <div class="world-rows" id="worldStage">
-        <div class="world-bignum" aria-hidden="true">
-          <div class="world-bignum-roll">
-            <span>01</span><span>02</span><span>03</span>
-          </div>
+      <!-- המספרים (01-03) והטיקר ירדו בהוראת OC; המבנה הפך לקרוסלת
+           scroll-snap (‏RTL נטיבי, כמו past-events) עם חצים, נקודות,
+           גרירה ומקלדת - בלי ספרייה (main.js, תא worlds-carousel).
+           נוסח ארבע השקופיות סופי (Cowork באישור OC); הרביעית -
+           השילוב - היא הלב של הסקשן. בלי JS: הרצועה נגללת נטיבית
+           וה-nav מוסתר. -->
+      <div class="worlds-slider reveal">
+        <div class="worlds-track" id="worldsTrack" tabindex="0" role="group"
+             aria-roledescription="קרוסלה" aria-label="עולמות השיטה - ארבע שקופיות">
+          <article class="world-slide">
+            <div class="world-body">
+              <h3>חקר הגוף</h3>
+              <p>
+                המוח והגוף הם מערכת אחת, והיא ניתנת לעיצוב בכל גיל.
+                נוירופלסטיות, אפיגנטיקה ומדעי ההתנהגות בשפה פשוטה: איך
+                נבנים האוטומטים של פחד ולחץ, ואיך מאמנים מערכת עצבים
+                לדפוסים חדשים של ביטחון, ריכוז ושקט.
+              </p>
+            </div>
+            <figure class="world-media">
+              <picture><source srcset="assets/img/world-neuro.webp" type="image/webp"><img src="assets/img/world-neuro.jpg" alt="סינפסות זוהרות - רשת עצבית" loading="lazy" width="1200" height="897"></picture>
+            </figure>
+          </article>
+          <article class="world-slide">
+            <div class="world-body">
+              <h3>חקר הנפש</h3>
+              <p>
+                מתחת לכל התנהגות יש סיפור שסיפרנו לעצמנו. כאן פוגשים את
+                הדפוסים הרגשיים שנוצרו כדי להגן עלינו, ולומדים לזהות מתי
+                הם כבר לא משרתים. לא ניתוח אינסופי של העבר, אלא עבודה
+                מדויקת עם מה שחי בהווה: רגש, פרשנות, ובחירה.
+              </p>
+            </div>
+            <figure class="world-media">
+              <picture><source srcset="assets/img/world-body.webp" type="image/webp"><img src="assets/img/world-body.jpg" alt="דמות במדיטציה מול מים שקטים לפנות בוקר" loading="lazy" width="1200" height="897"></picture>
+            </figure>
+          </article>
+          <article class="world-slide">
+            <div class="world-body">
+              <h3>חקר הרוח</h3>
+              <p>
+                מעבר למנגנון ולסיפור יש שאלה גדולה יותר: לשם מה. כאן
+                מגיע החיבור למשמעות, לערכים ולתחושת השייכות. מכאן נולד
+                הכוח להחזיק את השינוי גם כשקשה.
+              </p>
+            </div>
+            <figure class="world-media">
+              <!-- ‏hero-bg-b - נכס המותג (אופק זריחה מעל כוכב) -->
+              <picture><source srcset="assets/img/hero-bg-b.webp" type="image/webp"><img class="img-horizon" src="assets/img/hero-bg-b.jpg" alt="אופק כוכב בזריחה - אור עולה מעל החושך" loading="lazy" width="2544" height="1456"></picture>
+            </figure>
+          </article>
+          <article class="world-slide world-slide-heart">
+            <div class="world-body">
+              <h3>השילוב</h3>
+              <p>
+                אף אחד משלושת העולמות לא מספיק לבדו. מדע בלי תרגול נשאר
+                ידע; תרגול בלי הבנה נשאר טקס; ומשמעות בלי כלים נשארת
+                כמיהה. SHIFT מחבר את השלושה לדרך אחת: מבינים את
+                המנגנון, פוגשים את הרגש, ומחברים לכוונה.
+              </p>
+            </div>
+          </article>
         </div>
-
-        <!-- מסגור מחדש (הכרעת OC ‏29.7 ‏12:30, נוסח Cowork מאושר):
-             שלושה נשארים שלושה - חקר הגוף (כאן יושב המדע) · הנפש · הרוח. -->
-        <div class="world-row reveal">
-          <span class="world-num">01</span>
-          <div class="world-body">
-            <h3>חקר הגוף</h3>
-            <p>
-              המוח והגוף הם מערכת אחת, והיא ניתנת לעיצוב בכל גיל.
-              נוירופלסטיות, אפיגנטיקה ומדעי ההתנהגות - בשפה פשוטה: איך
-              נבנים האוטומטים של פחד ולחץ, ואיך מאמנים מערכת עצבים
-              לדפוסים חדשים של ביטחון, ריכוז ושקט. לומדים את המנגנון,
-              ואז מתרגלים אותו בגוף - נשימה, תנועה, הקשבה.
-            </p>
-          </div>
-          <figure class="world-media">
-            <picture><source srcset="assets/img/world-neuro.webp" type="image/webp"><img src="assets/img/world-neuro.jpg" alt="סינפסות זוהרות - רשת עצבית" loading="lazy" width="1200" height="897"></picture>
-          </figure>
-        </div>
-
-        <div class="world-row reveal">
-          <span class="world-num">02</span>
-          <div class="world-body">
-            <h3>חקר הנפש</h3>
-            <p>
-              מתחת לכל התנהגות יש סיפור שסיפרנו לעצמנו. כאן פוגשים את
-              הדפוסים הרגשיים שנוצרו כדי להגן עלינו - ולומדים לזהות מתי
-              הם כבר לא משרתים. לא ניתוח אינסופי של העבר, אלא עבודה
-              מדויקת עם מה שחי בהווה: רגש, פרשנות, ובחירה.
-            </p>
-          </div>
-          <figure class="world-media">
-            <picture><source srcset="assets/img/world-body.webp" type="image/webp"><img src="assets/img/world-body.jpg" alt="דמות במדיטציה מול מים שקטים לפנות בוקר" loading="lazy" width="1200" height="897"></picture>
-          </figure>
-        </div>
-
-        <div class="world-row reveal">
-          <span class="world-num">03</span>
-          <div class="world-body">
-            <h3>חקר הרוח</h3>
-            <p>
-              מעבר למנגנון ולסיפור יש שאלה גדולה יותר: לשם מה. חקר הרוח
-              הוא החיבור למשמעות - לערכים, לתחושת השייכות, ולחיים
-              שמרגישים שלנו. מכאן מגיע הכוח להחזיק את השינוי גם כשקשה.
-            </p>
-          </div>
-          <figure class="world-media">
-            <!-- ‏hero-bg-b - נכס מותג קיים שהיה יתום (אופק מואר בזריחה
-                 מעל כוכב): מקבל כאן חיים במקום הנכס שהוסר עם המסגור מחדש -->
-            <picture><source srcset="assets/img/hero-bg-b.webp" type="image/webp"><img class="img-horizon" src="assets/img/hero-bg-b.jpg" alt="אופק כוכב בזריחה - אור עולה מעל החושך" loading="lazy" width="2544" height="1456"></picture>
-          </figure>
+        <div class="worlds-nav">
+          <button class="worlds-arrow" id="worldsPrev" type="button" aria-label="לשקופית הקודמת">→</button>
+          <div class="worlds-dots" id="worldsDots" role="group" aria-label="מעבר בין שקופיות"></div>
+          <button class="worlds-arrow" id="worldsNext" type="button" aria-label="לשקופית הבאה">←</button>
         </div>
       </div>
 
@@ -759,6 +773,15 @@
         <blockquote class="reveal delay-3">
           אנחנו לא מלמדים ממקום של שלמות - אלא ממקום של דרך שעברנו בעצמנו.
         </blockquote>
+        <!-- ‏3ד (OC ‏14:40): "להוסיף אותי ואת איתי בתור מקימי המיזם" -->
+        <div class="founders reveal delay-3">
+          <span class="founders-label">מייסדי SHIFT</span>
+          <div class="founders-names">
+            <span>אור מאיר כהן</span>
+            <span>איתי ברמן</span>
+          </div>
+          <!-- TODO: תוכן מ-OC - דיוקנאות ושורת-תפקיד אישית לכל מייסד -->
+        </div>
       </div>
     </div>
   </section>

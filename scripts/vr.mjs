@@ -67,13 +67,10 @@ for (const set of SETS) {
           ? (() => { const d = document.querySelector('.dive'); return d.offsetTop + d.offsetHeight - innerHeight; })()
           : sel === 'method-end'
             ? (() => {
-                // הבמה נעוצה — כשהיא fixed ה-offsetTop שלה ~0; מודדים את
-                // ה-pin-spacer שנשאר בזרימה ומחזיק את כל מסלול הנעיצה
-                const w = document.querySelector('.worlds');
-                const sp = w.closest('.pin-spacer') || w;
-                // רגע לפני נקודת-השחרור: מסלול-הנעיצה של ה-spacer פחות
-                // גובה הסקשן — שם ציר-הזמן ~0.98 והשורה השלישית מלאה
-                return sp.getBoundingClientRect().top + scrollY + (sp.offsetHeight - w.offsetHeight) - 40;
+                // הנעיצה הוחלפה בקרוסלה (3ג) — "סוף השיטה" הוא עכשיו
+                // מצב-רוחב, לא מצב-גלילה: אותו מיקום אנכי כמו #method,
+                // והשקופית האחרונה (השילוב) נקבעת אחרי הגלילה, למטה
+                return (document.querySelector('#method')?.getBoundingClientRect().top ?? 0) + scrollY;
               })()
             : (document.querySelector(sel)?.getBoundingClientRect().top ?? 0) + scrollY;
       // הדרגתי כדי שכל טריגר בדרך יירה; 120px לצעד = מהיר אבל לא קפיצה
@@ -84,6 +81,18 @@ for (const set of SETS) {
         await new Promise((r) => requestAnimationFrame(r));
       }
     }, target);
+    // ‏method-end: מצבי-הפנים של הקרוסלה — מקבעים את השקופית האחרונה
+    // (השילוב) דטרמיניסטית; ‏behavior:auto = בלי תלות בזמני smooth
+    if (target === 'method-end') {
+      await page.evaluate(() => {
+        const track = document.getElementById('worldsTrack');
+        if (!track || !track.children.length) return;
+        // ‏'instant' ולא 'auto': על הרצועה יש scroll-behavior:smooth,
+        // ו-'auto' מכבד אותו - הצילום היה תופס אמצע-אנימציה
+        track.children[track.children.length - 1]
+          .scrollIntoView({ behavior: 'instant', inline: 'start', block: 'nearest' });
+      });
+    }
     await new Promise((r) => setTimeout(r, 1100));
     // דטרמיניזם וידאו: המנוע מנגן את וידאו-האירועים כשהוא נגלה (IO in
     // motion.js) — בלי קיבוע לפריים 0, כל צילום תופס פריים אקראי

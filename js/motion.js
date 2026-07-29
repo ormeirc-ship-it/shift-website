@@ -592,60 +592,9 @@
     }
   })();
 
-  /* ---------- השיטה: הבמה הנעוצה (האפקט המרכזי) ---------- */
-  ScrollTrigger.matchMedia({
-    '(min-width: 900px)': function () {
-      var section = document.querySelector('.worlds');
-      var stage = document.getElementById('worldStage');
-      if (!section || !stage) return;
-      docEl.classList.add('worlds-pinned');
-      var rows = gsap.utils.toArray('.world-row');
-      var roll = document.querySelector('.world-bignum-roll');
-
-      rows.forEach(function (row, i) {
-        gsap.set(row, { autoAlpha: i === 0 ? 1 : 0 });
-      });
-
-      var tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: section,
-          start: 'top top',
-          end: '+=220%',
-          pin: true,
-          scrub: 0.6,
-          anticipatePin: 1,
-          refreshPriority: 1
-        }
-      });
-
-      function swap(from, to, pos) {
-        var toImg = rows[to].querySelector('.world-media img');
-        tl.to(rows[from], { autoAlpha: 0, y: -46, duration: 0.45, ease: 'power2.in' }, pos);
-        tl.set(rows[from], { y: 0 });
-        tl.fromTo(rows[to],
-          { autoAlpha: 0, y: 60 },
-          { autoAlpha: 1, y: 0, duration: 0.55, ease: 'power3.out' }, pos + 0.45);
-        if (toImg) {
-          tl.fromTo(toImg, { scale: 1.08 }, { scale: 1, duration: 0.7, ease: 'power3.out' }, pos + 0.45);
-        }
-        if (roll) {
-          tl.to(roll, { yPercent: -33.334 * to, duration: 0.6, ease: 'power3.inOut' }, pos + 0.2);
-        }
-      }
-      swap(0, 1, 0);
-      swap(1, 2, 1);
-
-      return function () { docEl.classList.remove('worlds-pinned'); };
-    },
-    '(max-width: 899px)': function () {
-      gsap.utils.toArray('.world-row').forEach(function (row) {
-        gsap.from(row, {
-          autoAlpha: 0, y: 40, duration: 0.9, clearProps: CLEAR,
-          scrollTrigger: { trigger: row, start: 'top 80%' }
-        });
-      });
-    }
-  });
+  /* השיטה: הבמה הנעוצה הוסרה עם המעבר לקרוסלה (3ג, הוראת OC ‏29.7
+     ‏14:40) - הניווט בשקופיות הוא תוכן, לא קישוט, ולכן הוא חי ב-main.js
+     (תא worlds-carousel) ועובד גם בלי המנוע ובמופחת-תנועה. */
 
   /* ---------- רשתות קלפים (סל המוצרים + הרגלים) ---------- */
   gsap.utils.toArray('.cards-3').forEach(function (grid) {

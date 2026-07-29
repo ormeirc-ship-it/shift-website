@@ -211,6 +211,100 @@ if (burger && menu) {
 });
 
 
+// ── קרוסלת עולמות השיטה (3ג, הוראת OC ‏29.7 ‏14:40) ──────────────────
+// ‏scroll-snap נטיבי (RTL מהדפדפן); ה-JS רק מוסיף חצים, נקודות, גרירת
+// עכבר ומקלדת. ניווט בשקופיות הוא תוכן ולא קישוט - לכן הוא כאן ולא
+// במנוע התנועה: עובד גם בלי GSAP וגם במופחת-תנועה (שם המעבר מיידי).
+// בלי JS: הרצועה נגללת נטיבית וה-nav מוסתר ב-CSS.
+safe('worlds-carousel', () => {
+  const track = document.getElementById('worldsTrack');
+  const prev = document.getElementById('worldsPrev');
+  const next = document.getElementById('worldsNext');
+  const dotsWrap = document.getElementById('worldsDots');
+  if (!track || !prev || !next || !dotsWrap) return;
+  const slides = Array.from(track.children);
+  if (!slides.length) return;
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const clampI = (i) => Math.max(0, Math.min(slides.length - 1, i));
+  // ‏RTL: ‏scrollLeft שלילי בדפדפנים המודרניים - העומק הוא הערך המוחלט
+  const index = () => clampI(Math.round(Math.abs(track.scrollLeft) / track.clientWidth));
+  const go = (i) => {
+    slides[clampI(i)].scrollIntoView({
+      behavior: reduced ? 'auto' : 'smooth', inline: 'start', block: 'nearest',
+    });
+  };
+
+  const dots = slides.map((slide, i) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    const title = slide.querySelector('h3');
+    b.setAttribute('aria-label', 'שקופית ' + (i + 1) + (title ? ': ' + title.textContent : ''));
+    b.addEventListener('click', () => go(i));
+    dotsWrap.appendChild(b);
+    return b;
+  });
+
+  const paint = () => {
+    const i = index();
+    dots.forEach((d, k) => {
+      d.classList.toggle('on', k === i);
+      if (k === i) d.setAttribute('aria-current', 'true');
+      else d.removeAttribute('aria-current');
+    });
+    prev.disabled = i === 0;
+    next.disabled = i === slides.length - 1;
+  };
+  paint();
+  let raf = null;
+  track.addEventListener('scroll', () => {
+    if (raf) return;
+    raf = requestAnimationFrame(() => { raf = null; paint(); });
+  }, { passive: true });
+  addEventListener('resize', paint, { passive: true });
+
+  prev.addEventListener('click', () => go(index() - 1));
+  next.addEventListener('click', () => go(index() + 1));
+
+  // מקלדת על הרצועה: ב-RTL "הבא" הוא שמאלה
+  track.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') { e.preventDefault(); go(index() + 1); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); go(index() - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); go(0); }
+    else if (e.key === 'End') { e.preventDefault(); go(slides.length - 1); }
+  });
+
+  // גרירת עכבר (מגע גולל נטיבית). ‏snap כבוי בזמן הגרירה (CSS .dragging) -
+  // אחרת כרום מצמיד כל כתיבת scrollLeft מיידית והגרירה קופצת; בשחרור
+  // מעגנים לשקופית הקרובה. הנוסחה scrollLeft = start - dx נכונה גם
+  // ב-RTL: הציר לא מתהפך, רק הטווח (0 עד מינוס-מקסימום).
+  let downX = null, startLeft = 0, dragged = false;
+  track.addEventListener('pointerdown', (e) => {
+    if (e.pointerType !== 'mouse' || e.button !== 0) return;
+    downX = e.clientX; startLeft = track.scrollLeft; dragged = false;
+    track.classList.add('dragging');
+    try { track.setPointerCapture(e.pointerId); } catch (err) { /* לא קריטי */ }
+  });
+  track.addEventListener('pointermove', (e) => {
+    if (downX === null) return;
+    const dx = e.clientX - downX;
+    if (Math.abs(dx) > 4) dragged = true;
+    track.scrollLeft = startLeft - dx;
+  });
+  const release = () => {
+    if (downX === null) return;
+    downX = null;
+    track.classList.remove('dragging');
+    go(index());
+  };
+  track.addEventListener('pointerup', release);
+  track.addEventListener('pointercancel', release);
+  // גרירה לא תיקרא כקליק על מה שבתוך השקופית
+  track.addEventListener('click', (e) => {
+    if (dragged) { e.preventDefault(); e.stopPropagation(); dragged = false; }
+  }, true);
+});
+
 // ============================================================
 // טעימה מהמסלול: "כפתור ההרגעה הפנימי" - אנחה כפולה (יום 1)
 // שאיפה עמוקה מהאף → שאיפה קצרה נוספת → נשיפה ארוכה מהפה.

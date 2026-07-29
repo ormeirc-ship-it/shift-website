@@ -17,7 +17,7 @@ const EFFECTS = [
   ['טקסט ההצהרה', '.statement-text'],
   ['סל המוצרים', '#products .basket-card'],
   ['כותרות סקשנים', '#method .section-head h2'],
-  ['שלושת העולמות', '.world-row'],
+  ['שקופיות העולמות', '.world-slide'],
   ['טריפטיך ההרגלים', '.tri'],
   ['סקשן הנשימה', '#breathe .breath'],
   ['ארבעת הצעדים', '.step'],
