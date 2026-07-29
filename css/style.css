@@ -1090,7 +1090,11 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
 }
 
 /* ---------- אירועים ---------- */
-.events { position: relative; overflow: hidden; padding: clamp(90px, 13vw, 150px) 0; }
+/* ‏overflow: clip (עם hidden כגיבוי לדפדפנים ישנים) — ‏hidden הופך את
+   הסקשן לקופסת-גלילה ושובר sticky פנימי (T16 נמדד: הציור ברח למעלה);
+   ‏clip חותך ויזואלית בלי לשבור. בדפדפן ישן: hidden נשאר — הציור פשוט
+   חוזר לעוגן העליון (התנהגות טרום-T16, ניוון סביר). */
+.events { position: relative; overflow: hidden; overflow: clip; padding: clamp(90px, 13vw, 150px) 0; }
 .events-bg {
   position: absolute;
   inset: 0;
@@ -1379,15 +1383,25 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
 @media (max-width: 899px) { .program-chips { display: none; } }
 
 /* ---------- וידאו האירועים ---------- */
+/* ‏T16: מסילת ה-sticky של הציור — גובה אפס (לא דוחפת את הקלפים),
+   נדבקת מתחת לסרגל ומלווה את הגלילה עד קצה הסקשן; שם ה-scrub כבר
+   בסופו. ‏reduced-motion/מובייל: הווידאו עצמו מוסתר — המסילה ריקה. */
+.events-video-pin {
+  position: sticky;
+  top: clamp(64px, 8vh, 96px);
+  height: 0;
+  z-index: 0;
+  pointer-events: none;
+}
 .events-video {
   position: absolute;
   /* ריפריים (D9, הוראת OC ‏28.7): המקור 1080×1080 — ‏cover על סקשן רחב
      ניפח אותו עד שנשארו רק שברי קווים. עכשיו: הריבוע השלם (מיכל 1:1 =
      אפס חיתוך), מעוגן בצד הפנוי מול הכותרת, נמס בשוליים במסכה רדיאלית
-     כדי להיקרא כאיור-רקע ולא כקופסה מודבקת. העין המתגלגלת אל המוח —
-     הקונספט — סוף-סוף נקראת. */
+     כדי להיקרא כאיור-רקע ולא כקופסה מודבקת. ‏T16: העוגן הוא מסילת
+     ה-sticky — הציור נוסע עם הגולל. */
   inset-inline-end: 0;
-  top: clamp(0px, 1vw, 24px);
+  top: 0;
   width: min(40vw, 560px);
   aspect-ratio: 1 / 1;
   height: auto;
