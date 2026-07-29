@@ -255,20 +255,22 @@ safe('breath', () => {
     counter.textContent = 'סבב ' + round + ' מתוך ' + TOTAL;
     const next = () => (round < TOTAL ? runRound(round + 1) : finish());
 
+    // מספרים סופיים מ-OC ‏29.7 ‏14:40: שאיפה ‏4.0 · השלמה ‏1.5 · נשיפה ‏7.5
+    // (מחזור ‏13ש'). שני המסלולים - המונפש והשקט - חיים על אותם מספרים.
     if (hasGsap && !reduced) {
       const tl = gsap.timeline({ onComplete: next });
       tl.call(() => { setPhase('שאיפה עמוקה מהאף'); setAir('in'); });
-      tl.to(circle, { scale: 1.3, duration: 1.9, ease: 'power2.inOut' });
+      tl.to(circle, { scale: 1.3, duration: 4.0, ease: 'power2.inOut' });
       tl.call(() => setPhase('ועוד שאיפה קצרה - למלא עד הסוף'));
-      tl.to(circle, { scale: 1.5, duration: 1.0, ease: 'power2.out' });
+      tl.to(circle, { scale: 1.5, duration: 1.5, ease: 'power2.out' });
       tl.call(() => { setPhase('נשיפה ארוכה ואיטית מהפה…'); setAir('out'); });
-      tl.to(circle, { scale: 1, duration: 5.8, ease: 'power2.inOut' });
+      tl.to(circle, { scale: 1, duration: 7.5, ease: 'power2.inOut' });
     } else {
       // גרסה שקטה: הנחיות מתחלפות בלי אנימציה
       setPhase('שאיפה עמוקה מהאף');
-      setTimeout(() => setPhase('ועוד שאיפה קצרה'), 1900);
-      setTimeout(() => setPhase('נשיפה ארוכה ואיטית מהפה…'), 2900);
-      setTimeout(next, 8700);
+      setTimeout(() => setPhase('ועוד שאיפה קצרה'), 4000);
+      setTimeout(() => setPhase('נשיפה ארוכה ואיטית מהפה…'), 5500);
+      setTimeout(next, 13000);
     }
   };
 

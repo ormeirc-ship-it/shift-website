@@ -138,7 +138,7 @@ const step = (name, ok, note = '') => {
 {
   const page = await browser.newPage();
   await page.setViewport({ width: 390, height: 844, isMobile: true, hasTouch: true });
-  // מצב שקט: מסלול הנשימה הלא-מונפש דטרמיניסטי בזמן (8.7ש' לסבב)
+  // מצב שקט: מסלול הנשימה הלא-מונפש דטרמיניסטי בזמן (13ש' לסבב, מספרי OC)
   await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
   const consoleErrors = [];
   page.on('console', (m) => { if (m.type() === 'error') consoleErrors.push(m.text()); });
@@ -176,13 +176,13 @@ const step = (name, ok, note = '') => {
   step('menu_open נרשם', await page.evaluate(() =>
     (window.dataLayer || []).some((e) => e.event === 'shift:menu_open')));
 
-  // הנשימה — עד הסוף (3 סבבים במסלול השקט ≈ 26ש')
+  // הנשימה — עד הסוף (3 סבבים במסלול השקט ≈ 39ש', מחזור 13ש' של OC)
   await page.evaluate(() => document.getElementById('breathe').scrollIntoView());
   await new Promise((r) => setTimeout(r, 500));
   await page.evaluate(() => document.getElementById('breathStart').click());
   const breathDone = await page.waitForFunction(() =>
     (window.dataLayer || []).some((e) => e.event === 'shift:breath_done'),
-    { timeout: 40000 }).then(() => true).catch(() => false);
+    { timeout: 55000 }).then(() => true).catch(() => false);
   step('הנשימה רצה עד הסוף (3 סבבים)', breathDone);
   if (breathDone) {
     const after = await page.evaluate(() => {

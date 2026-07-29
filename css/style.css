@@ -1043,7 +1043,7 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
   border-radius: 50%;
   border: 1px dashed var(--sky-a35);
   /* ‏D3: הטבעת נושמת עם ההנחיה - העוגן שמחזיק את העין בנשיפה הארוכה
-     (5.8ש' עם טקסט סטטי). המחלקות מוחלפות ב-main.js לפי השלב. */
+     (7.5ש' עם טקסט סטטי, מספרי OC ‏29.7). המחלקות מוחלפות ב-main.js לפי השלב. */
   transition: transform 2.4s cubic-bezier(0.45, 0, 0.55, 1), opacity 2.4s ease;
 }
 .breath.inhale .breath-ring { transform: scale(1.14); opacity: 0.95; }
