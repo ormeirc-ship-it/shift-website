@@ -35,6 +35,10 @@
   // המחלקה הוכרזה אופטימית ב-head; מאשררים או מבטלים לפי מה שבאמת נטען
   if (FULL) docEl.classList.add('gsap-on');
   else docEl.classList.remove('gsap-on');
+  // ‏dive-hush הוצהר אופטימית ב-head (הסרגל שקט מהמסך הראשון). כשהמנוע
+  // לא ירוץ אין מי שיסיר אותה בהמשך - משחררים כאן. במצב מופחת-תנועה
+  // זה ליתר ביטחון (ה-CSS ממילא עוקף), בלי-GSAP זה קריטי.
+  if (!FULL) docEl.classList.remove('dive-hush');
 
   /* ---------- Lenis: גלילה חלקה ---------- */
   var lenis = null;
@@ -154,7 +158,9 @@
   var dive = (function initBrainDive() {
     var section = document.querySelector('.dive');
     var canvas = document.getElementById('brainCanvas');
-    if (!section || !canvas) return null;
+    // אין צלילה ב-DOM - אין מי שינהל את שקט-הסרגל; משחררים את ההצהרה
+    // האופטימית מה-head כדי שהסרגל לא יישאר נעול-נסתר
+    if (!section || !canvas) { docEl.classList.remove('dive-hush'); return null; }
 
     var MOBILE = !DESKTOP.matches;
     // B2: הרצף דולל 97→60 (החלטת OC, 27.7) - פחות החלפות תמונה לצעד
@@ -285,10 +291,13 @@
       // #products הכהה. אותו באג שכבר תוקן פעם וחזר דרך אופטימיזציית
       // הכתיבות; הפעם הוא מעל הקו ולא מתחתיו.
       var aIn = Math.max(0, Math.min((p - 0.86) / 0.14, 1));
-      // הסרגל שקט לכל אורך הצלילה - כולל רגע האור. קודם הוא חזר עם
-      // ההגעה (aIn<0.35) ונקרא כפס אפרפר מעל התכלת, בשיא של העמוד;
-      // עכשיו הוא חוזר רק כשעוזבים את הצלילה, עם ההצהרה. (REQUESTS 27.7)
-      var hush = onScreen && p > 0.06;
+      // הסרגל שקט מהפיקסל הראשון ועד עזיבת הצלילה (OC ‏29.7 ‏14:15:
+      // הרושם הראשון הוא הזמנה, לא ממשק). קודם היה כאן p>0.06 - כלומר
+      // הסרגל נראה על שער הכניסה ונעלם רק משהתחלת לצלול; עכשיו החלון
+      // מכסה גם את המסך הראשון, ונקודת ההופעה לא זזה: ההצהרה. מנגנון
+      // אחד - אותו טריגר נראוּת שאומת ב-29.7 (מופיע כשהפיקסל האחרון
+      // של הצלילה יוצא = המסך המלא הראשון של ההצהרה).
+      var hush = onScreen;
       if (hush !== hushOn) { hushOn = hush; docEl.classList.toggle('dive-hush', hush); }
       var lit = onScreen && aIn > 0.5;
       if (lit !== litOn && window.__navTone) { litOn = lit; window.__navTone.set('dive', lit); }
@@ -868,11 +877,6 @@
       });
     });
 
-    // צ'יפים צפים
-    gsap.from('.prog-chip', {
-      autoAlpha: 0, y: 20, duration: 0.8, stagger: 0.2,
-      scrollTrigger: { trigger: prog, start: 'top 70%' }
-    });
   })();
 
   /* ---------- אירועים: וידאו העיניים - scrub בגלילה + כניסות + פרלקסה ---------- */

@@ -916,7 +916,11 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
 }
 @media (hover: hover) { .basket-card:hover .basket-card-link { border-color: var(--sky); } }
 /* ---------- המסלול: 21 הימים ---------- */
-.program { padding: clamp(90px, 13vw, 150px) 0; }
+/* ‏position:relative - תיקון-שורש (OC ‏29.7 ‏14:15, צילום): בלי אב ממוקם,
+   ‏top:50% של ‏.side-label נפתר מול בלוק-ההכלה הראשוני = אמצע המסך
+   הראשון - "המסלול" צף על שער הכניסה. ‏.events/.past-events כבר יחסיים;
+   רק כאן זה חסר. (זה גם היה המקור האמיתי להתנגשות עם נקודות-הניווט.) */
+.program { position: relative; padding: clamp(90px, 13vw, 150px) 0; }
 .program-layout {
   display: grid;
   grid-template-columns: 44px minmax(0, 1fr);
@@ -1441,30 +1445,7 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
 .program.lit .btn-ghost { color: var(--navy); border-color: rgba(24, 22, 59, 0.35); }
 @media (hover: hover) { .program.lit .btn-ghost:hover { border-color: var(--navy); background: rgba(24, 22, 59, 0.05); } }
 /* ---------- צ'יפים צפים ---------- */
-.program-chips {
-  position: absolute;
-  inset: 120px 0 auto 0;
-  height: 0;
-  pointer-events: none;
-}
-.prog-chip {
-  position: absolute;
-  padding: 8px 16px;
-  border-radius: var(--pill);
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid var(--sky-a35);
-  color: var(--sky);
-  font-size: 0.82rem;
-  font-weight: 600;
-  white-space: nowrap;
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-}
-.prog-chip:nth-child(1) { inset-inline-start: 4%; top: 30px; animation-delay: -3s; }
-.prog-chip:nth-child(2) { inset-inline-end: 6%; top: -10px; animation-delay: -8s; }
-.prog-chip:nth-child(3) { inset-inline-end: 18%; top: 90px; animation-delay: -11s; }
-.program.lit .prog-chip { background: rgba(24, 22, 59, 0.05); }
-@media (max-width: 899px) { .program-chips { display: none; } }
+/* המלבנים המרחפים של המסלול הוסרו בהוראת OC ‏29.7 ‏13:40 */
 
 /* ---------- וידאו האירועים ---------- */
 /* ‏T16: מסילת ה-sticky של הציור - גובה אפס (לא דוחפת את הקלפים),
@@ -1545,7 +1526,6 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
 /* ---------- reduced motion לשכבה החדשה ---------- */
 @media (prefers-reduced-motion: reduce) {
   .hero-scroll em { animation: none; }
-  .prog-chip { animation: none !important; }
   .week-card { position: static !important; }
   .events-video { display: none; }
 }
@@ -1748,15 +1728,24 @@ html.dive-live .dive-still { display: none; }
   background: radial-gradient(60% 55% at 50% 55%, rgba(11, 11, 34, 0.72), transparent 72%);
   pointer-events: none;
 }
-/* הוראת OC ‏29.7 ‏12:15: הלוגו גדל משמעותית (‏300→420) וממורכז-אמת */
-.gate-logo img { width: min(420px, 70vw); filter: drop-shadow(0 0 60px var(--sky-a45)); }
+/* הוראת OC ‏29.7 ‏12:15: הלוגו גדל משמעותית (‏300→420) וממורכז-אמת.
+   ‏14:15: זוהר-התכלת מעט נוכח יותר (דרגה א' - העדינה; דרגה ב' למטה) */
+.gate-logo img { width: min(420px, 70vw); filter: drop-shadow(0 0 70px var(--sky-a50)); }
 .gate-line {
-  /* הוראת OC: השורה היא עכשיו התמצית ("מהישרדות ליצירה") - מעט יותר
-     נוכחת מהתיוג הישן, עדיין שקטה */
-  font-size: clamp(1rem, 2.2vw, 1.2rem);
+  /* ‏OC ‏14:15: "זו ההבטחה של המותג, לא כיתוב-משנה" - גדולה ונוכחת,
+     במרכאות עבריות (הנוסח הסופי מ-14:40). המבטא: קו-תכלת קצר מתחתיה */
+  font-size: clamp(1.3rem, 2.8vw, 1.7rem);
   font-weight: 300;
-  letter-spacing: 0.08em;
-  color: var(--white-soft);
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.94);
+}
+.gate-line::after {
+  content: "";
+  display: block;
+  width: 30px;
+  height: 1px;
+  margin: 14px auto 0;
+  background: linear-gradient(to left, transparent, var(--sky), transparent);
 }
 .gate-cue {
   margin-top: 10px;
@@ -1776,6 +1765,20 @@ html.dive-live .dive-still { display: none; }
   background: linear-gradient(to bottom, transparent, var(--sky));
   animation: diveDrop 2.1s cubic-bezier(0.6, 0, 0.3, 1) infinite;
 }
+/* דרגה ב' - "נוכח יותר": רדומה, כמו תבנית B3 - הפעלה = מחלקה אחת על
+   ‏<html>. ‏OC מכריע בעיניים בין שתי הדרגות (צילומים ב-HANDOFF);
+   הלא-נבחרת תימחק עם ההכרעה. תכלת כמבטא בלבד - אף פעם לא צבע-שטח. */
+html.gate-accent-b .gate-logo img,
+html.gate-accent-b .gate-logo video {
+  filter: drop-shadow(0 0 44px var(--sky-a60)) drop-shadow(0 0 120px var(--sky-a45));
+}
+html.gate-accent-b .gate-line { color: #fff; }
+html.gate-accent-b .gate-line::after {
+  width: 52px;
+  background: linear-gradient(to left, transparent, var(--sky) 30%, var(--sky) 70%, transparent);
+}
+html.gate-accent-b .gate-cue { color: var(--sky); }
+html.gate-accent-b .gate-cue i { width: 2px; }
 @keyframes diveDrop {
   0% { transform: scaleY(0); transform-origin: top; }
   45% { transform: scaleY(1); transform-origin: top; }
@@ -1966,7 +1969,7 @@ html.journey-on [style*="--j"] .section-head {
 /* אנימציית הלוגו בשער - תופסת בדיוק את מקום התמונה הסטטית */
 .gate-logo { width: min(420px, 70vw); } /* ‏OC ‏29.7: ‏300→420, ממורכז-אמת */
 .gate-logo img, .gate-logo video { width: 100%; height: auto; display: block; }
-.gate-logo video { filter: drop-shadow(0 0 60px var(--sky-a45)); }
+.gate-logo video { filter: drop-shadow(0 0 70px var(--sky-a50)); }
 @media (max-width: 899px) { .gate-logo { width: min(300px, 68vw); } }
 
 /* ============================================================
@@ -2009,18 +2012,29 @@ html.nav-light .nav-links a { color: var(--ink-soft); }
 html.nav-light .mobile-menu.open ~ * .nav-burger-lines span,
 .mobile-menu.open ~ .nav .nav-burger-lines span { background: #fff; }
 
-/* בצלילה עצמה הסרגל נסוג - הוא לא חלק מהחוויה עד שנוחתים */
+/* הסרגל שקט מהפיקסל הראשון ועד ההצהרה (OC ‏29.7 ‏14:15: מסך הפתיחה
+   מכיל ארבעה דברים בלבד). המחלקה מוצהרת אופטימית ב-head - בלי זה
+   הסרגל היה מהבהב עד שהמנוע עולה; ‏motion.js מסיר אותה כשהצלילה יוצאת
+   מהמסך (או כשהמנוע לא רץ). ‏visibility מוציא את הקישורים גם מסדר
+   המיקוד - סרגל שקוף-אך-נגיש-ל-Tab הוא מלכודת למקלדת. */
 html.dive-hush .nav {
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
   transform: translateY(-8px);
+  /* ההסתרה מחכה לסוף דהיית ה-opacity; בחזרה - הבסיס חשוף מיד */
+  transition: background-color 0.35s ease, box-shadow 0.35s ease,
+              opacity 0.5s var(--ease-out),
+              transform 0.5s var(--ease-out),
+              visibility 0s 0.5s;
 }
 .nav { transition: background-color 0.35s ease, box-shadow 0.35s ease,
                    opacity 0.5s var(--ease-out),
                    transform 0.5s var(--ease-out); }
 
 @media (prefers-reduced-motion: reduce) {
-  html.dive-hush .nav { opacity: 1; pointer-events: auto; transform: none; }
+  /* בשקט אין צלילה בכלל (מסך ההגעה מיד) - הסרגל נשאר זמין תמיד */
+  html.dive-hush .nav { opacity: 1; visibility: visible; pointer-events: auto; transform: none; }
   .nav, .nav-logo img { transition: none; }
 }
 

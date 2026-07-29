@@ -79,6 +79,10 @@
     if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
       document.documentElement.classList.add('gsap-on');
     }
+    // הסרגל שקט מהמסך הראשון (OC ‏29.7 ‏14:15) - מוצהר כאן כדי שלא יהבהב
+    // לפני שהמנוע עולה. ‏motion.js מסיר כשהצלילה יוצאת מהמסך; במצב
+    // מופחת-תנועה ה-CSS עוקף (אין שם צלילה); בלי JS המחלקה לא קיימת כלל.
+    document.documentElement.classList.add('dive-hush');
     // רשת ביטחון עליונה: גם אם motion.js קורס לפני שהטיימר הפנימי שלו נרשם,
     // מסך הפתיחה יורד והאתר לא ננעל על מסך ריק. ברשת איטית ה-HTML מגיע
     // אחרי שניות והטיימר מתחיל רק אז - לכן 2.2ש' ולא יותר.
@@ -188,8 +192,8 @@
       <!-- שער הכניסה -->
       <div class="gate" id="diveGate">
         <div class="gate-logo"><img src="assets/brand/logo-white.png" alt="SHIFT" width="1531" height="940"></div>
-        <!-- הוראת OC ‏29.7: התמצית במקום רשימת תחומים -->
-        <p class="gate-line">מהישרדות ליצירה</p>
+        <!-- הוראת OC ‏29.7: התמצית במקום רשימת תחומים; ‏14:40 - במרכאות עבריות -->
+        <p class="gate-line">״מהישרדות ליצירה״</p>
         <div class="gate-cue" aria-hidden="true"><i></i><span>גללו להיכנס</span></div>
       </div>
 
@@ -484,11 +488,9 @@
         </p>
       </div>
 
-      <div class="program-chips" aria-hidden="true">
-        <span class="prog-chip float-slow">יום 8 · נוירופלסטיות</span>
-        <span class="prog-chip float-slow">יום 12 · מדיטציה</span>
-        <span class="prog-chip float-slow">יום 17 · דופמין — כימיה של הרצון</span>
-      </div>
+      <!-- המלבנים המרחפים (program-chips) הוסרו בהוראת OC ‏29.7 ‏13:40 -
+           רכבו על המלל. אגב ההסרה התגלה שגם הם ישבו על באג בלוק-ההכלה
+           (ראה .side-label ב-CSS) - מיקומם "בתוך הסקשן" היה אשליה. -->
       <div class="program-layout">
         <div class="program-spine" aria-hidden="true">
           <span class="program-spine-track"><span class="program-spine-fill" id="spineFill"></span></span>

@@ -33,6 +33,27 @@ const step = (name, ok, note = '') => {
   step('השער נסגר מעצמו', await page.evaluate(() =>
     document.documentElement.classList.contains('preloader-done')));
 
+  // ‏OC ‏29.7 ‏14:15: המסך הראשון מכיל ארבעה דברים בלבד. הסרגל שקט עד
+  // ההצהרה, נקודות-הניווט כן נשארות, ואף תווית-צד לא דולפת לגלילה 0
+  // (באג בלוק-ההכלה: side-label בלי אב ממוקם צפה על השער - תוקן בשורש)
+  const gate0 = await page.evaluate(() => {
+    scrollTo(0, 0);
+    const navCs = getComputedStyle(document.getElementById('nav'));
+    const leaks = [...document.querySelectorAll('.side-label')].filter((el) => {
+      const r = el.getBoundingClientRect();
+      const cs = getComputedStyle(el);
+      return cs.display !== 'none' && +cs.opacity > 0 && r.bottom > 0 && r.top < innerHeight;
+    }).map((el) => (el.textContent || '').trim());
+    return {
+      navQuiet: navCs.visibility === 'hidden' || +navCs.opacity === 0,
+      leaks,
+      dots: getComputedStyle(document.getElementById('dotNav')).display !== 'none',
+    };
+  });
+  step('הסרגל שקט על המסך הראשון', gate0.navQuiet);
+  step('אף תווית-צד לא נראית בגלילה 0', gate0.leaks.length === 0, gate0.leaks.join(' '));
+  step('נקודות-הניווט נשארות על המסך הראשון', gate0.dots);
+
   // צלילה הדרגתית עד ההגעה — כמו גלגלת אמיתית
   await page.evaluate(async () => {
     if (window.__lenis) window.__lenis.stop();
@@ -59,6 +80,17 @@ const step = (name, ok, note = '') => {
     'אטימות ' + arrival.curtain);
   step('dive_complete נרשם ב-dataLayer', await page.evaluate(() =>
     (window.dataLayer || []).some((e) => e.event === 'shift:dive_complete')));
+
+  // קצה-המנגנון השני: ברגע שהצלילה יוצאת כולה מהמסך (המסך המלא הראשון
+  // של ההצהרה) הסרגל חוזר - נקודת ההופעה שאומתה ב-29.7 ולא זזה
+  const navBack = await page.evaluate(async () => {
+    const st = document.querySelector('.statement');
+    scrollTo(0, st.getBoundingClientRect().top + scrollY + 24);
+    await new Promise((r) => setTimeout(r, 450)); // ‏IO + תחילת הדהייה
+    const cs = getComputedStyle(document.getElementById('nav'));
+    return cs.visibility === 'visible' && +cs.opacity > 0.05;
+  });
+  step('הסרגל חוזר עם ההצהרה', navBack);
 
   // עוגנים: כל קישור בסרגל מביא את הסקשן אל מתחת לסרגל.
   // ‏Lenis הופעל מחדש — נעצר לצורך סקרוב-הצלילה, אבל העוגנים גוללים דרכו
