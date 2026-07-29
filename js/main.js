@@ -1,8 +1,8 @@
-// SHIFT — אינטראקציות עדינות
+// SHIFT - אינטראקציות עדינות
 
 // ── מוכנות-אנליטיקס (פריט 22) ────────────────────────────────────────
 // שכבת אירועים פנימית: כותבת ל-dataLayer בלבד. שום דבר לא נשלח לשום
-// שרת — חיבור לכלי אמיתי הוא החלטת OC (שורה אחת: הכלי קורא מה-dataLayer).
+// שרת - חיבור לכלי אמיתי הוא החלטת OC (שורה אחת: הכלי קורא מה-dataLayer).
 // הקונסול נשאר נקי (חוזה console-check); ?debug=track מדפיס בכל זאת.
 window.dataLayer = window.dataLayer || [];
 const track = (event, detail) => {
@@ -12,7 +12,7 @@ const track = (event, detail) => {
 };
 window.__track = track; // ‏motion.js מדווח דרך זה (צימוד רופף, לא תלות)
 
-// יעדים יוצאים — אירוע אחד לכל הקלקה החוצה (אינסטגרם / הפלטפורמה /
+// יעדים יוצאים - אירוע אחד לכל הקלקה החוצה (אינסטגרם / הפלטפורמה /
 // וואטסאפ / מייל). ‏mailto נוסף כשנפתחו ערוצי הקשר (T13, ‏28.7).
 document.addEventListener('click', (e) => {
   const a = e.target && e.target.closest
@@ -21,7 +21,7 @@ document.addEventListener('click', (e) => {
 });
 
 // המתנה לסיום מסך הפתיחה (motion.js משדר shift:reveal).
-// אם motion.js לא נטען מסיבה כלשהי — ממשיכים אחרי גיבוי של 4.5 שניות.
+// אם motion.js לא נטען מסיבה כלשהי - ממשיכים אחרי גיבוי של 4.5 שניות.
 const afterReveal = (fn) => {
   if (!document.documentElement.classList.contains('js') ||
       document.documentElement.classList.contains('preloader-done')) {
@@ -51,14 +51,14 @@ const safe = (name, fn) => {
 window.__features = FEATURES;
 
 // ── אנימציית הלוגו בשער הכניסה ────────────────────────────────────────
-// עד היום הווידאו נחסם גורפית בכל ספארי ובכל מובייל — כלומר רוב הקהל
+// עד היום הווידאו נחסם גורפית בכל ספארי ובכל מובייל - כלומר רוב הקהל
 // (תנועה מאינסטגרם) קיבל לוגו סטטי. החסימה נבעה מבאג אמיתי: HEVC עם
 // שקיפות התנגן שם על מלבן שחור.
 //
-// עכשיו שני מקורות — HEVC/MOV לספארי ו-WebM לכרום/פיירפוקס — אבל
+// עכשיו שני מקורות - HEVC/MOV לספארי ו-WebM לכרום/פיירפוקס - אבל
 // **לא סומכים על זיהוי דפדפן**. אחרי שהווידאו נטען מציירים ממנו פריים
 // לקנבס ובודקים בפועל אם יש בו שקיפות אמיתית. אם הפריים אטום (כלומר
-// המלבן השחור חוזר) — הווידאו נזרק והלוגו הסטטי נשאר. בדיקה אמפירית
+// המלבן השחור חוזר) - הווידאו נזרק והלוגו הסטטי נשאר. בדיקה אמפירית
 // אחת מחליפה ניחוש על מחרוזות UA, ולא יכולה לשחזר את הרגרסיה.
 safe('gate-logo', () => {
 const gateLogo = document.querySelector('.gate-logo');
@@ -76,7 +76,7 @@ if (gateLogo && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
     video.appendChild(s);
   });
 
-  // האם הפריים באמת שקוף? (בודקים את הפינות — שם אמור להיות "כלום")
+  // האם הפריים באמת שקוף? (בודקים את הפינות - שם אמור להיות "כלום")
   const framePasses = () => {
     try {
       const c = document.createElement('canvas');
@@ -93,7 +93,7 @@ if (gateLogo && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
       // אטום כמעט לגמרי אבל חשוך = המלבן השחור. פוסלים.
       return !(opaque / px > 0.92 && lit / px < 0.1);
     } catch (e) {
-      return false; // לא הצלחנו לבדוק — לא מסתכנים
+      return false; // לא הצלחנו לבדוק - לא מסתכנים
     }
   };
 
@@ -105,7 +105,7 @@ if (gateLogo && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
       if (img) img.style.display = 'none';
       video.currentTime = 0;
       video.play().catch(() => {
-        // ניגון נחסם (חיסכון בסוללה וכו') — מחזירים את הלוגו הסטטי
+        // ניגון נחסם (חיסכון בסוללה וכו') - מחזירים את הלוגו הסטטי
         video.remove();
         if (img) img.style.display = '';
       });
@@ -116,7 +116,7 @@ if (gateLogo && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
 }
 });
 
-// אנימציות הופעה בגלילה — מתחילות רק אחרי מסך הפתיחה,
+// אנימציות הופעה בגלילה - מתחילות רק אחרי מסך הפתיחה,
 // כדי שחשיפת ההירו לא "תישרף" מאחוריו
 safe('reveals', () => {
 const reveals = document.querySelectorAll('.reveal');
@@ -137,7 +137,7 @@ afterReveal(() => {
 });
 });
 
-// ניווט: רקע אטום אחרי גלילה (עם הגנת null — שינוי HTML לא יפיל את הקובץ)
+// ניווט: רקע אטום אחרי גלילה (עם הגנת null - שינוי HTML לא יפיל את הקובץ)
 safe('nav-scrolled', () => {
 const nav = document.getElementById('nav');
 if (nav) {
@@ -158,7 +158,7 @@ if (burger && menu) {
     menu.classList.toggle('open', open);
     burger.setAttribute('aria-expanded', String(open));
     document.body.style.overflow = open ? 'hidden' : '';
-    // ניהול פוקוס: בפתיחה — לקישור הראשון; בסגירה — חזרה לכפתור התפריט
+    // ניהול פוקוס: בפתיחה - לקישור הראשון; בסגירה - חזרה לכפתור התפריט
     if (open) {
       const first = menu.querySelector('a');
       if (first) first.focus({ preventScroll: true });
@@ -175,7 +175,7 @@ if (burger && menu) {
     }
   };
 
-  // bfcache: אם העמוד שוחזר מה-cache עם תפריט פתוח — לסגור ולשחרר את
+  // bfcache: אם העמוד שוחזר מה-cache עם תפריט פתוח - לסגור ולשחרר את
   // נעילת הגלילה, אחרת המבקר חוזר לעמוד קפוא בלי לדעת למה
   window.addEventListener('pageshow', (ev) => { if (ev.persisted) setMenu(false); });
 
@@ -212,7 +212,7 @@ if (burger && menu) {
 
 
 // ============================================================
-// טעימה מהמסלול: "כפתור ההרגעה הפנימי" — אנחה כפולה (יום 1)
+// טעימה מהמסלול: "כפתור ההרגעה הפנימי" - אנחה כפולה (יום 1)
 // שאיפה עמוקה מהאף → שאיפה קצרה נוספת → נשיפה ארוכה מהפה.
 // 1–3 סבבים לרגיעה מהירה (Balban ואחרים, 2023).
 // ============================================================
@@ -233,7 +233,7 @@ safe('breath', () => {
   const breathEl = document.getElementById('breath');
   const after = document.getElementById('breathAfter');
   const setAir = (dir) => {
-    // הטבעת נושמת עם ההנחיה — משהו שמחזיק את העין גם בנשיפה הארוכה
+    // הטבעת נושמת עם ההנחיה - משהו שמחזיק את העין גם בנשיפה הארוכה
     if (!breathEl) return;
     breathEl.classList.toggle('inhale', dir === 'in');
     breathEl.classList.toggle('exhale', dir === 'out');
@@ -246,7 +246,7 @@ safe('breath', () => {
     btn.textContent = 'עוד סיבוב';
     running = false;
     setAir(null);
-    // הרגע שאחרי: החוויה הצביעה על משהו — נותנים לה לאן להוביל
+    // הרגע שאחרי: החוויה הצביעה על משהו - נותנים לה לאן להוביל
     if (after) after.hidden = false;
     track('breath_done', { rounds: TOTAL });
   };
@@ -259,7 +259,7 @@ safe('breath', () => {
       const tl = gsap.timeline({ onComplete: next });
       tl.call(() => { setPhase('שאיפה עמוקה מהאף'); setAir('in'); });
       tl.to(circle, { scale: 1.3, duration: 1.9, ease: 'power2.inOut' });
-      tl.call(() => setPhase('ועוד שאיפה קצרה — למלא עד הסוף'));
+      tl.call(() => setPhase('ועוד שאיפה קצרה - למלא עד הסוף'));
       tl.to(circle, { scale: 1.5, duration: 1.0, ease: 'power2.out' });
       tl.call(() => { setPhase('נשיפה ארוכה ואיטית מהפה…'); setAir('out'); });
       tl.to(circle, { scale: 1, duration: 5.8, ease: 'power2.inOut' });
@@ -284,11 +284,11 @@ safe('breath', () => {
 // ── גוון הניווט לפי מה שיושב מתחתיו ─────────────────────────────────
 // סרגל נייבי אטום על רקע בהיר נראה כמו רכיב מדף שהודבק מעל חוויה.
 // מיושם ב-IntersectionObserver ולא ב-ScrollTrigger, כדי שיעבוד גם כשמנוע
-// התנועה כבוי (prefers-reduced-motion) — שם הבעיה זהה ולא פחות חמורה.
+// התנועה כבוי (prefers-reduced-motion) - שם הבעיה זהה ולא פחות חמורה.
 //
 // rootMargin חותך את המסך לפס דק בדיוק מתחת לסרגל, כך שהתצפית עונה על
 // השאלה "מה נמצא *מאחורי* הניווט" ולא "מה במרכז המסך". הפס תלוי בגובה
-// החלון, ולכן התצפיתנים נבנים מחדש בכל שינוי גודל — סיבוב מסך או קריסת
+// החלון, ולכן התצפיתנים נבנים מחדש בכל שינוי גודל - סיבוב מסך או קריסת
 // שורת ה-URL במובייל מזיזים אותו, ובלי בנייה מחדש הוא מצביע על מקום אחר.
 //
 // מקורות בהירים יכולים לחפוף (ההגעה לאור וההצהרה מיד אחריה), ולכן
@@ -340,7 +340,7 @@ safe('nav-tone', () => {
 
   build();
 
-  // המחלקה .lit מסומנת ע"י מנוע התנועה — עוקבים אחריה בלי לגעת בפריסה
+  // המחלקה .lit מסומנת ע"י מנוע התנועה - עוקבים אחריה בלי לגעת בפריסה
   if (prog && 'MutationObserver' in window) {
     new MutationObserver(() => { progLit = prog.classList.contains('lit'); pushProg(); })
       .observe(prog, { attributes: true, attributeFilter: ['class'] });

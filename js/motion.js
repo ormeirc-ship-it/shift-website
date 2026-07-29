@@ -1,5 +1,5 @@
 /* ============================================================
-   SHIFT — motion.js
+   SHIFT - motion.js
    חוקי בית לתנועה:
    - easing אחיד: power3.out (מעברי מסך: power3.inOut)
    - משכים: 0.6s–1.2s (פידבק מיידי קצר יותר)
@@ -13,7 +13,7 @@
   'use strict';
   // כל גוף המנוע עטוף ב-try אחד: אם משהו קורס באתחול, ה-catch בתחתית
   // הקובץ משחרר את מסך הפתיחה במקום להשאיר את המבקר מול מסך ריק.
-  // (הגוף נשאר בהזחה המקורית — העטיפה נוספה בדיעבד ובכוונה לא הוזח מחדש)
+  // (הגוף נשאר בהזחה המקורית - העטיפה נוספה בדיעבד ובכוונה לא הוזח מחדש)
   try {
 
   var docEl = document.documentElement;
@@ -48,7 +48,7 @@
 
   /* ---------- ניווט עוגנים ---------- */
   function scrollToHash(hash) {
-    // ההירו דביק (cover-stage) — מיקומו על המסך לא משקף את מקומו במסמך,
+    // ההירו דביק (cover-stage) - מיקומו על המסך לא משקף את מקומו במסמך,
     // אז "לראש העמוד" הוא תמיד גלילה ל-0
     if (hash === '#top') {
       if (lenis) lenis.scrollTo(0, { duration: 1.2 });
@@ -73,7 +73,7 @@
     requestAnimationFrame(function () { scrollToHash(hash); });
     if (history.pushState) history.pushState(null, '', hash);
   });
-  // כפתור Back/Forward של הדפדפן מזיז באמת בין העוגנים —
+  // כפתור Back/Forward של הדפדפן מזיז באמת בין העוגנים -
   // בלי זה pushState משנה URL אבל העמוד נשאר במקום
   window.addEventListener('popstate', function () {
     scrollToHash(location.hash || '#top');
@@ -124,8 +124,8 @@
   var revealed = false;
 
   // מפעיל את יציאת מסך הפתיחה. היציאה עצמה ב-CSS, כדי שתתרחש גם כשחבילת
-  // התנועה עדיין בדרך — זה בדיוק המצב ברשת איטית.
-  // T11: אין כאן נגיעה ב-overflow — מאז T9 היחיד שנועל גלילה הוא התפריט,
+  // התנועה עדיין בדרך - זה בדיוק המצב ברשת איטית.
+  // T11: אין כאן נגיעה ב-overflow - מאז T9 היחיד שנועל גלילה הוא התפריט,
   // ושחרור עיוור היה מוחק את הנעילה שלו מתחת לידיים.
   function dismissPreloader() {
     docEl.classList.add('preloader-done');
@@ -146,7 +146,7 @@
 
   /* ---------- הכניסה דרך המוח ----------
      הגלילה מניעה צלילה מהחושך אל האור. הקלט מגיע מ-ScrollTrigger (אין מאזין
-     scroll מקביל — Lenis כבר מנהל את הגלילה), אבל ההחלקה נשמרת מאב-הטיפוס:
+     scroll מקביל - Lenis כבר מנהל את הגלילה), אבל ההחלקה נשמרת מאב-הטיפוס:
      `eased += (target - eased) * 0.14` על טיקר GSAP. זה מה שגורם לצלילה
      להרגיש כמו נשימה במקום כמו קפיצות של גלגלת העכבר.
 
@@ -157,11 +157,11 @@
     if (!section || !canvas) return null;
 
     var MOBILE = !DESKTOP.matches;
-    // B2: הרצף דולל 97→60 (החלטת OC, 27.7) — פחות החלפות תמונה לצעד
+    // B2: הרצף דולל 97→60 (החלטת OC, 27.7) - פחות החלפות תמונה לצעד
     // גלילה ופחות בייטים ברשת איטית. המקור המלא שמור ב-_build/brain-seq-d97.
     var DIR = 'assets/brain-seq/' + (MOBILE ? 'm/' : 'd/');
     var COUNT = MOBILE ? 65 : 60;
-    // פריט 40: מקבילות AVIF (חיסכון מדוד 16.5%). הפריים הראשון נשאר WebP —
+    // פריט 40: מקבילות AVIF (חיסכון מדוד 16.5%). הפריים הראשון נשאר WebP -
     // הוא כבר preloaded מה-head ומשומש מהמטמון; הרצף (2..N) נבחר לפי
     // בדיקת-יכולת אמפירית (AVIF של פיקסל אחד), לא לפי זיהוי דפדפן.
     var seqDir = DIR, seqExt = '.webp';
@@ -188,7 +188,7 @@
       draw(current < 0 ? 0 : current, true);
     }
 
-    // ציור בכיסוי מלא — שקול ל-object-fit: cover
+    // ציור בכיסוי מלא - שקול ל-object-fit: cover
     function draw(i, force) {
       if (i === current && !force) return;
       var img = frames[i];
@@ -211,9 +211,9 @@
     //
     // הגרסה הקודמת ירתה 97 בקשות במקביל. על localhost זה נראה מצוין
     // (פריים ראשון תוך 30ms), אבל במדידה על Slow 4G התברר שהפריים הראשון
-    // מתחרה על רוחב הפס עם 96 אחרים — והמבקר מסתכל על מסך פתיחה שניות.
+    // מתחרה על רוחב הפס עם 96 אחרים - והמבקר מסתכל על מסך פתיחה שניות.
     //
-    // עכשיו: הפריים הראשון לבדו, ורק כשהוא בפנים מתחילים את השאר —
+    // עכשיו: הפריים הראשון לבדו, ורק כשהוא בפנים מתחילים את השאר -
     // לפי הסדר, בחלון צר. הסדר חשוב כי המבקר גולל מלמעלה למטה, כלומר
     // צורך את הפריימים בדיוק בסדר הזה.
     var WINDOW = 6;
@@ -242,7 +242,7 @@
       }
       loadFrame(1, function () {
         onFirstFrame();
-        // הרצף יוצא רק אחרי בדיקת ה-AVIF — היא data-URI (מילישניות),
+        // הרצף יוצא רק אחרי בדיקת ה-AVIF - היא data-URI (מילישניות),
         // לא ממתינים לרשת. חלון צר של בקשות מקבילות: מספיק כדי לרוות
         // את החיבור, מעט מספיק כדי שהסדר יישמר בפועל
         avifProbe.then(function (ok) {
@@ -263,7 +263,7 @@
     if (REDUCED || !FULL) {
       var still = new Image();
       still.onload = function () { frames[0] = still; onFirstFrame(); };
-      still.src = DIR + 'f' + pad(COUNT) + '.webp'; // הפריים המואר — שם הכותרת חיה
+      still.src = DIR + 'f' + pad(COUNT) + '.webp'; // הפריים המואר - שם הכותרת חיה
       window.addEventListener('resize', fit, { passive: true });
       return stats;
     }
@@ -278,14 +278,14 @@
 
       draw(Math.min(COUNT - 1, Math.round(p * (COUNT - 1))));
 
-      // ── מצב הסרגל — לפני כל early-return ────────────────────────────
+      // ── מצב הסרגל - לפני כל early-return ────────────────────────────
       // זה תלוי גם ב-onScreen, שמשתנה מבחוץ (טריגר הנראוּת) בלי שההתקדמות
       // זזה. כשהיה מתחת לשער "כתיבה רק בשינוי", מבקר שנעצר רגע באור נעל
-      // את eased על 1, ואז יציאה מהסקשן לא עודכנה לעולם — סרגל בהיר מעל
+      // את eased על 1, ואז יציאה מהסקשן לא עודכנה לעולם - סרגל בהיר מעל
       // #products הכהה. אותו באג שכבר תוקן פעם וחזר דרך אופטימיזציית
       // הכתיבות; הפעם הוא מעל הקו ולא מתחתיו.
       var aIn = Math.max(0, Math.min((p - 0.86) / 0.14, 1));
-      // הסרגל שקט לכל אורך הצלילה — כולל רגע האור. קודם הוא חזר עם
+      // הסרגל שקט לכל אורך הצלילה - כולל רגע האור. קודם הוא חזר עם
       // ההגעה (aIn<0.35) ונקרא כפס אפרפר מעל התכלת, בשיא של העמוד;
       // עכשיו הוא חוזר רק כשעוזבים את הצלילה, עם ההצהרה. (REQUESTS 27.7)
       var hush = onScreen && p > 0.06;
@@ -293,7 +293,7 @@
       var lit = onScreen && aIn > 0.5;
       if (lit !== litOn && window.__navTone) { litOn = lit; window.__navTone.set('dive', lit); }
       if (skipTick) skipTick(p);
-      // אנליטיקס-מוכנות: מי שהשלים את הצלילה עד האור — פעם אחת לביקור
+      // אנליטיקס-מוכנות: מי שהשלים את הצלילה עד האור - פעם אחת לביקור
       if (!diveTracked && aIn > 0.9 && window.__track) {
         diveTracked = true;
         window.__track('dive_complete');
@@ -312,7 +312,7 @@
         gate.style.pointerEvents = gOut > 0.9 ? 'none' : '';
       }
 
-      // מילות המסע — כל אחת נדלקת סביב הנקודה שלה
+      // מילות המסע - כל אחת נדלקת סביב הנקודה שלה
       for (var i = 0; i < lines.length; i++) {
         var el = lines[i];
         var at = parseFloat(el.dataset.at);
@@ -326,7 +326,7 @@
         arrival.style.pointerEvents = aIn > 0.6 ? 'auto' : 'none';
       }
       if (veil) veil.style.opacity = String(1 - aIn);
-      // הווילון של הסיום עולה עם ההגעה — חלון הפתיחה חוזר (B3-א)
+      // הווילון של הסיום עולה עם ההגעה - חלון הפתיחה חוזר (B3-א)
       if (curtain) curtain.style.opacity = String(aIn);
     }
 
@@ -338,12 +338,12 @@
       end: 'bottom bottom',
       onUpdate: function (self) { target = self.progress; },
       onRefresh: function (self) { target = eased = self.progress; render(); }
-      // ברגע שההצהרה מכסה את הצלילה, היא כבר לא מה שיושב מאחורי הסרגל —
+      // ברגע שההצהרה מכסה את הצלילה, היא כבר לא מה שיושב מאחורי הסרגל -
       // בלי זה מצב ה"בהיר" של ההגעה נדבק והופך גם סקשנים כהים לבהירים
 
     });
 
-    // כפתור דילוג נראה — מופיע אחרי 2.5 שניות של שהות בצלילה, ונעלם
+    // כפתור דילוג נראה - מופיע אחרי 2.5 שניות של שהות בצלילה, ונעלם
     // ברגע שמתחילים להתקדם באמת או כשמגיעים לאור. המקלדת מקבלת את
     // .skip-dive שקופץ בפוקוס; זה כאן בשביל עכבר ומגע.
     (function initDiveSkip() {
@@ -352,7 +352,7 @@
       btn.hidden = false;
       var shown = false;
       var timer = setTimeout(function () {
-        if (eased > 0.25) return;      // כבר צולל — לא מפריעים
+        if (eased > 0.25) return;      // כבר צולל - לא מפריעים
         shown = true;
         btn.classList.add('show');
       }, 2500);
@@ -367,17 +367,17 @@
       });
       skipTick = function (p) {
         if (!shown) return;
-        // אחרי שההגעה מתחילה, או אחרי שיצאנו מהסקשן — אין מה לדלג עליו
+        // אחרי שההגעה מתחילה, או אחרי שיצאנו מהסקשן - אין מה לדלג עליו
         btn.classList.toggle('gone', p > 0.8);
       };
     })();
 
-    // האם הצלילה על המסך בכלל — נמדד ב-IntersectionObserver ולא ב-ScrollTrigger.
+    // האם הצלילה על המסך בכלל - נמדד ב-IntersectionObserver ולא ב-ScrollTrigger.
     //
     // טריגר ההתקדמות מסתיים ב-'bottom bottom', ושם ההגעה אל האור עדיין
     // מלאה על המסך, אז ה-isActive שלו לא מתאים. אבל גם טריגר נראוּת נפרד
     // לא הספיק: בקפיצת עוגן (לחיצה על "מה אנחנו עושים", או טעינה עם #hash)
-    // הגלילה מדלגת על כל הטווח בבת אחת וה-onToggle לא נורה — כלומר
+    // הגלילה מדלגת על כל הטווח בבת אחת וה-onToggle לא נורה - כלומר
     // הצלילה נשארה מסומנת "על המסך" ומצב האור נדבק על סקשן כהה.
     // IO לא תלוי במעבר דרך טווח: הוא מדווח מצב, לא אירוע חצייה.
     if ('IntersectionObserver' in window) {
@@ -392,7 +392,7 @@
       });
     }
 
-    // חשוף לבדיקות אוטומטיות, כמו window.__lenis — בסביבת בדיקה ה-rAF
+    // חשוף לבדיקות אוטומטיות, כמו window.__lenis - בסביבת בדיקה ה-rAF
     // קפוא ולכן צריך דרך להריץ את הפריים ידנית ולקרוא את המצב.
     stats.render = render;
     stats.state = function () { return { target: target, eased: eased, frame: current }; };
@@ -403,13 +403,13 @@
     return stats;
   })();
 
-  /* מסך הפתיחה — מי סוגר אותו, ולמה לא כאן.
+  /* מסך הפתיחה - מי סוגר אותו, ולמה לא כאן.
      היה כאן טקס של GSAP: הלוגו נכנס, ואז וילון עולה. מדידה ב-27.7 בשלוש
-     מהירויות רשת הראתה שהוא **לא הוצג מעולם** — ה-onload של תמונת הגיבוי
+     מהירויות רשת הראתה שהוא **לא הוצג מעולם** - ה-onload של תמונת הגיבוי
      ב-HTML תמיד הקדים את חבילת התנועה (175KB), הוסיף `preloader-done`,
      וה-CSS העלים את המסך. הטקס רץ על אלמנט מוסתר.
      גרוע מזה: הנעילה `overflow:hidden` שישבה כאן הוחלה **אחרי** שהמסך כבר
-     נסגר — כלומר עמוד גלוי לגמרי שהגלילה בו מתה ל-800ms בלי שום סימן.
+     נסגר - כלומר עמוד גלוי לגמרי שהגלילה בו מתה ל-800ms בלי שום סימן.
      ב-Slow 4G זה נחת ב-7.3ש', אחרי שהמבקר כבר חיכה שבע שניות.
      לכן: היציאה עברה ל-CSS (רצה גם בלי חבילת התנועה), ואין כאן נעילת
      גלילה בכלל. הקוד הזה רק מנקה אחרי שהיציאה נגמרה. */
@@ -436,7 +436,7 @@
   /* ---------- המעבר מהישרדות ליצירה, כמערכת לאורך העמוד ----------
      הפלטה והטיפוגרפיה נעולות, ולכן ההבחנה בין שני המצבים נישאת ע"י הקצב
      והמרחב בלבד. שלושה פרמטרים נעים יחד לאורך הגלילה, מ-0 (הישרדות)
-     ל-1 (יצירה) — לא כאפקטים מקומיים אלא כמערכת אחת:
+     ל-1 (יצירה) - לא כאפקטים מקומיים אלא כמערכת אחת:
 
        רוחב העמודה   צר ודחוס  →  נפתח
        מרווח אנכי    מכווץ     →  נדיב
@@ -447,10 +447,10 @@
   (function initJourney() {
     // הסדר נגזר מה-DOM, לא מרשימה קשיחה: סקשן חדש שנוסף ל-HTML מקבל
     // את מקומו בסולם אוטומטית. קודם הייתה כאן רשימת סלקטורים, ומי
-    // שהוסיף סקשן בלי לעדכן אותה קיבל מרווח ורוחב שבורים — בשקט.
+    // שהוסיף סקשן בלי לעדכן אותה קיבל מרווח ורוחב שבורים - בשקט.
     //
     // הכלל: כל <section> ישיר של body, פלוס הסקשנים שבתוך במת הכיסוי
-    // וסצנת הסיום (שם ה-<section> עטוף ב-div). הצלילה עצמה לא נכללת —
+    // וסצנת הסיום (שם ה-<section> עטוף ב-div). הצלילה עצמה לא נכללת -
     // היא לא נושאת תוכן זורם.
     var els = Array.prototype.filter.call(
       document.querySelectorAll('body > section, .cover-stage > section, .closing'),
@@ -479,16 +479,16 @@
     return (min || 0.6) + ((max || 1.2) - (min || 0.6)) * jOf(el);
   }
 
-  if (!FULL) return; // מכאן והלאה — רק כשמנוע התנועה המלא פעיל
+  if (!FULL) return; // מכאן והלאה - רק כשמנוע התנועה המלא פעיל
 
   /* ---------- במת הכיסוי: ההגעה נסוגה בזמן שההצהרה מחליקה מעליה ----------
      ההירו הישן (רקע, אורורה, שדה נוירונים, פרלקסת עכבר) הוסר יחד עם
-     המרקאפ שלו — הצלילה אל המוח תופסת את מקומו ועושה את אותה עבודה,
+     המרקאפ שלו - הצלילה אל המוח תופסת את מקומו ועושה את אותה עבודה,
      רק שהיא מונעת מהגלילה של המבקר ולא רצה מעצמה. */
   (function initCoverStage() {
     var statement = document.querySelector('.cover-stage .statement');
     // חשוב: על .arrival עצמו רץ ה-opacity של הצלילה (render). שני כותבים
-    // לאותה תכונה נלחמים זה בזה — ובפועל הכותרת נעלמה לגמרי. לכן הנסיגה
+    // לאותה תכונה נלחמים זה בזה - ובפועל הכותרת נעלמה לגמרי. לכן הנסיגה
     // מוחלת על העטיפה הפנימית, וה-opacity של השתיים מוכפל בטבעיות.
     var inner = document.querySelector('.arrival-in');
     if (!statement || !inner) return;
@@ -568,7 +568,7 @@
     });
     tl.from(words, {
       autoAlpha: 0, y: 22, duration: 0.7, clearProps: CLEAR,
-      stagger: { each: 0.05, from: 'start' } // כמו הקראה — לפי סדר הקריאה
+      stagger: { each: 0.05, from: 'start' } // כמו הקראה - לפי סדר הקריאה
     });
     if (em && emWords.length) {
       em.classList.add('em-underline');
@@ -664,7 +664,7 @@
     if (body) {
       var parts = body.querySelectorAll('.label, h2, p');
       gsap.from(parts, {
-        // D2: משך הכניסה נמתח עם המסע (--j) — הישרדות נכנסת מהר,
+        // D2: משך הכניסה נמתח עם המסע (--j) - הישרדות נכנסת מהר,
         // יצירה נושמת. זה הציר השלישי מהמפרט, שהיה חסר עד 27.7.
         autoAlpha: 0, y: 28, duration: jDur(body, 0.7, 1.1), stagger: 0.12, clearProps: CLEAR,
         scrollTrigger: { trigger: body, start: 'top 75%' }
@@ -711,9 +711,9 @@
         scrollTrigger: { trigger: '.steps', start: 'top 75%', end: 'bottom 60%', scrub: true }
       }));
     }
-    // ‏D12: הבמה (ספרת-ענק + סיב) רוכבת על אותו סיגנל הדלקה — ‏data-step
+    // ‏D12: הבמה (ספרת-ענק + סיב) רוכבת על אותו סיגנל הדלקה - ‏data-step
     // על הסקשן, וה-CSS עושה את השאר. במצב שקט המנוע לא רץ → מצב-המנוחה
-    // הסטטי של ה-CSS (ספרה 1 עמומה, סיב בסיסי) — בדיוק התנאי.
+    // הסטטי של ה-CSS (ספרה 1 עמומה, סיב בסיסי) - בדיוק התנאי.
     var pathSec = document.querySelector('.path');
     steps.forEach(function (step, i) {
       gsap.from(step, {
@@ -749,7 +749,7 @@
       '--cta-glow': 1, ease: 'none',
       scrollTrigger: { trigger: closing, start: 'top 80%', end: 'bottom bottom', scrub: true }
     });
-    // מילת הענק SHIFT עולה מתחתית הסצנה — חתימה איזאנמית
+    // מילת הענק SHIFT עולה מתחתית הסצנה - חתימה איזאנמית
     var word = closing.querySelector('.closing-word');
     if (word) {
       gsap.fromTo(word, { yPercent: 60, autoAlpha: 0 }, {
@@ -788,8 +788,8 @@
     }
 
     // הרקע נוסע מהישרדות (כהה) ליצירה (בהיר) לאורך הסקשן.
-    // --card-bg נוסע איתו: זה הצבע האטום של הקלפים (B1) — ההרכבה של
-    // הזכוכית הישנה מעל הרקע הנוכחי — כך שהם נראים זכוכית אבל לא מגלים
+    // --card-bg נוסע איתו: זה הצבע האטום של הקלפים (B1) - ההרכבה של
+    // הזכוכית הישנה מעל הרקע הנוכחי - כך שהם נראים זכוכית אבל לא מגלים
     // טקסט של קלף מכוסה.
     gsap.fromTo(prog, { backgroundColor: '#121234', '--card-bg': '#1E1E3E' }, {
       backgroundColor: '#F6F5F2', '--card-bg': '#EDECEB', ease: 'none',
@@ -802,9 +802,9 @@
 
     // B1: הערימה (סטיקי + עמעום הקלף המכוסה) רצה רק כשנמדד שהקלף הגבוה
     // ביותר נכנס במסך במלואו. בלי המדידה, קלף גבוה מהחלון ננעץ בראשו
-    // והימים התחתונים שלו לא מקבלים אף רגע קריא — נמדד ב-27.7: על
+    // והימים התחתונים שלו לא מקבלים אף רגע קריא - נמדד ב-27.7: על
     // 1440×900 ימים 4–7 עומעמו לפני שהספיקו להיראות; על 1280×600 רק
-    // 7 מ-21 ימים היו קריאים. עמידות לפני אפקט: לא נכנס — רשימה סטטית.
+    // 7 מ-21 ימים היו קריאים. עמידות לפני אפקט: לא נכנס - רשימה סטטית.
     var cards = gsap.utils.toArray('.week-card');
     var stackOn = false, dimTweens = [];
     function stackFits() {
@@ -812,7 +812,7 @@
       var navH = parseFloat(getComputedStyle(docEl).getPropertyValue('--nav-h')) || 72;
       var tallest = 0;
       for (var i = 0; i < cards.length; i++) tallest = Math.max(tallest, cards[i].offsetHeight);
-      // 60 — היסט הסטיקי הגדול ביותר; 24 — נשימה מתחת לקלף
+      // 60 - היסט הסטיקי הגדול ביותר; 24 - נשימה מתחת לקלף
       return tallest + navH + 60 + 24 <= window.innerHeight;
     }
     function setStack(on) {
@@ -825,7 +825,7 @@
           // העמעום על *תוכן* הקלף, לא על הקלף: opacity על הקלף עצמו
           // הופך גם את הרקע האטום לשקוף, וברגע ששלושה קלפים חופפים
           // (2 מכסה את 1 בזמן ש-3 מתקרב) הטקסט של המכוסה נראה דרך
-          // המכסה. נמדד ב-27.7 על 1440×1600 — קלף 2 עמד על 0.906
+          // המכסה. נמדד ב-27.7 על 1440×1600 - קלף 2 עמד על 0.906
           // כשהוא מעל קלף 1. הרקע חייב להישאר אטום תמיד.
           var prev = cards[i - 1];
           var tl = gsap.timeline({
@@ -849,7 +849,7 @@
       ScrollTrigger.refresh();
     }
     setStack(stackFits());
-    // גובה הקלפים משתנה כשהפונטים מגיעים וכשהחלון משתנה — מודדים שוב
+    // גובה הקלפים משתנה כשהפונטים מגיעים וכשהחלון משתנה - מודדים שוב
     window.addEventListener('load', function () { setStack(stackFits()); });
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(function () { setStack(stackFits()); });
@@ -875,35 +875,35 @@
     });
   })();
 
-  /* ---------- אירועים: וידאו העיניים — scrub בגלילה + כניסות + פרלקסה ---------- */
+  /* ---------- אירועים: וידאו העיניים - scrub בגלילה + כניסות + פרלקסה ---------- */
   (function initEvents() {
     var section = document.querySelector('.events');
     if (!section) return;
     var video = document.getElementById('eventsVideo');
     if (video && DESKTOP.matches) {
-      // ‏T15 (אושר 28.7): במקום לולאה עיוורת — הזמן של הסרטון נע עם
+      // ‏T15 (אושר 28.7): במקום לולאה עיוורת - הזמן של הסרטון נע עם
       // הגלילה דרך הסקשן. בלי pin, בלי לצרוך גלילה, אפס נכסים חדשים.
       // דגל הסרה: ‏data-scrub="off" על הווידאו מחזיר את הלולאה הישנה.
-      // הטעינה נשארת עצלה בטריגר אחד — עמיד גם בקפיצות עוגן שמדלגות
+      // הטעינה נשארת עצלה בטריגר אחד - עמיד גם בקפיצות עוגן שמדלגות
       // על הטווח כולו (once:true נהרג בקפיצה כזו בלי לטעון כלל).
       var scrub = video.dataset.scrub !== 'off';
       var evTarget = 0, evEased = 0, evOn = false, evDur = 0;
-      // ‏getter דיבוג — כמו __dive; נקרא רק ידנית/מכלי המדידה
+      // ‏getter דיבוג - כמו __dive; נקרא רק ידנית/מכלי המדידה
       window.__eyes = function () {
         return { target: evTarget, eased: evEased, on: evOn, dur: evDur };
       };
       var evTick = function () {
         if (!evOn) return;
-        // הקפאת-VR (‏vr.mjs מציב __videoFreeze) גוברת — דטרמיניזם הצילום
+        // הקפאת-VR (‏vr.mjs מציב __videoFreeze) גוברת - דטרמיניזם הצילום
         if (!window.__videoFreeze && evDur && video.readyState >= 1) {
-          // מרחק גדול (קפיצת עוגן / היפוך חד) — seek יחיד במקום שובל
+          // מרחק גדול (קפיצת עוגן / היפוך חד) - seek יחיד במקום שובל
           // seek-ים ביניים, שכל אחד מהם פענוח-מ-keyframe (נמדד: השובל
           // עלה ‏~1.3ש' תקיעה; ה-snap מוריד אותה)
           if (Math.abs(evTarget - evEased) > 0.5) evEased = evTarget;
           else evEased += (evTarget - evEased) * 0.12;
           if (Math.abs(evTarget - evEased) < 0.002) evEased = evTarget;
           var t = evEased * evDur;
-          // סף פריים (~30fps) — בלי להציף seek-ים תת-פריימיים
+          // סף פריים (~30fps) - בלי להציף seek-ים תת-פריימיים
           if (Math.abs(video.currentTime - t) > 0.034) video.currentTime = t;
         }
         requestAnimationFrame(evTick);
@@ -914,14 +914,14 @@
         onToggle: function (self) {
           if (self.isActive) {
             if (!video.src) {
-              // ‏preload="none" בסימון — בלולאה הישנה play() משך את הקובץ;
+              // ‏preload="none" בסימון - בלולאה הישנה play() משך את הקובץ;
               // ‏scrub לא מנגן, אז בלי ההעלאה ל-auto שום בייט לא יגיע
               // (נמדד: ‏readyState נשאר 0 לנצח והזמן קפוא)
               video.preload = 'auto';
               video.src = video.dataset.src;
               video.load();
               video.addEventListener('loadedmetadata', function () {
-                // שוליים קטנים מהסוף — seek לקצה המוחלט מחזיר לעיתים פריים שחור
+                // שוליים קטנים מהסוף - seek לקצה המוחלט מחזיר לעיתים פריים שחור
                 evDur = Math.max(0, video.duration - 0.08);
               }, { once: true });
             }
@@ -973,7 +973,7 @@
     var LIGHT = { '#method': 1, '#story': 1, '#breathe': 1 };
     dots.forEach(function (dot) {
       var hash = dot.getAttribute('href');
-      // '#top' הוא ההירו הדביק — עוקבים אחרי במת הכיסוי הסטטית במקומו
+      // '#top' הוא ההירו הדביק - עוקבים אחרי במת הכיסוי הסטטית במקומו
       var target = hash === '#top'
         ? document.querySelector('.cover-stage')
         : document.querySelector(hash);
@@ -1010,12 +1010,12 @@
   /* ---------- רענון אחרי טעינת תמונות ---------- */
   window.addEventListener('load', function () { ScrollTrigger.refresh(); });
 
-  /* הגופנים משוחררים רק אחרי השער (פריט 18) — כלומר אחרי שהטריגרים כבר
+  /* הגופנים משוחררים רק אחרי השער (פריט 18) - כלומר אחרי שהטריגרים כבר
      חושבו על מטריקות של גופן-מערכת. ה-reflow מכווץ את העמוד (נמדד:
      ‎-982px במובייל!) והטריגרים של הסיום זזים אל מעבר לקצה הגלילה.
-     ‏fonts.ready לא מתאים כאן — ברגע האתחול אין עדיין טעינות והוא
+     ‏fonts.ready לא מתאים כאן - ברגע האתחול אין עדיין טעינות והוא
      resolved מיד; ‏loadingdone יורה אחרי כל אצוות-טעינה אמיתית.
-     (נתפס ע"י הרגרסיה הוויזואלית — m-closing ריק.) */
+     (נתפס ע"י הרגרסיה הוויזואלית - m-closing ריק.) */
   if (document.fonts && document.fonts.addEventListener) {
     document.fonts.addEventListener('loadingdone', function () { ScrollTrigger.refresh(); });
   }
@@ -1023,14 +1023,14 @@
   /* ---------- bfcache ----------
      אין לנו unload/beforeunload (הם פוסלים את העמוד מה-cache), אז חזרה
      עם Back מחזירה עמוד חי. הרענון כאן מיישר את ScrollTrigger למיקום
-     הגלילה המשוחזר — בלעדיו הצלילה עלולה לצייר פריים לא-נכון רגע אחד. */
+     הגלילה המשוחזר - בלעדיו הצלילה עלולה לצייר פריים לא-נכון רגע אחד. */
   window.addEventListener('pageshow', function (ev) {
     if (ev.persisted) ScrollTrigger.refresh();
   });
 
   } catch (err) {
-    // המנוע קרס באתחול — משחררים את מסך הפתיחה כדי שהאתר יישאר שמיש.
-    // T11: בלי לגעת ב-overflow — אף אחד לא נועל גלילה לפני החשיפה, ואין מה לשחרר.
+    // המנוע קרס באתחול - משחררים את מסך הפתיחה כדי שהאתר יישאר שמיש.
+    // T11: בלי לגעת ב-overflow - אף אחד לא נועל גלילה לפני החשיפה, ואין מה לשחרר.
     try {
       document.documentElement.classList.add('preloader-done');
       var deadPl = document.getElementById('preloader');

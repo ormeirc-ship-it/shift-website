@@ -1,5 +1,5 @@
-// חוזי אבטחת-אספקה על ה-HTML — בלי דפדפן.
-// פריט 7: אין לנו סקריפטים מ-CDN (הכול vendored) ולכן SRI לא רלוונטי —
+// חוזי אבטחת-אספקה על ה-HTML - בלי דפדפן.
+// פריט 7: אין לנו סקריפטים מ-CDN (הכול vendored) ולכן SRI לא רלוונטי -
 // הבדיקה כאן היא שהמצב הזה *נשאר* כך, ושכל target=_blank מוגן.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -11,11 +11,11 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (p) => readFileSync(resolve(ROOT, p), 'utf8');
 const pages = { 'index.html': read('index.html'), '404.html': read('404.html') };
 
-test('אין סקריפטים חיצוניים — כולם מוגשים מהריפו (לכן אין צורך ב-SRI)', () => {
+test('אין סקריפטים חיצוניים - כולם מוגשים מהריפו (לכן אין צורך ב-SRI)', () => {
   for (const [name, html] of Object.entries(pages)) {
     for (const m of html.matchAll(/<script[^>]*\ssrc=["']([^"']+)["']/g)) {
       assert.ok(!/^(https?:)?\/\//i.test(m[1]),
-        `${name}: סקריפט חיצוני נכנס (${m[1]}) — או לארח אותו ב-assets/vendor או להוסיף integrity+crossorigin`);
+        `${name}: סקריפט חיצוני נכנס (${m[1]}) - או לארח אותו ב-assets/vendor או להוסיף integrity+crossorigin`);
     }
   }
 });
@@ -24,31 +24,31 @@ test('כל קישור עם target=_blank נושא rel=noopener', () => {
   for (const [name, html] of Object.entries(pages)) {
     for (const m of html.matchAll(/<a\b[^>]*target=["']?_blank["']?[^>]*>/g)) {
       assert.match(m[0], /rel=["'][^"']*noopener/,
-        `${name}: קישור _blank בלי noopener — ${m[0].slice(0, 90)}`);
+        `${name}: קישור _blank בלי noopener - ${m[0].slice(0, 90)}`);
     }
   }
 });
 
 test('קישורים חיצוניים יוצאים רק ליעדים המוכרים', () => {
   // רשימה סגורה: אינסטגרם והאפליקציה. יעד חדש = החלטה מודעת, לא תוצר לוואי.
-  // ‏fonts.googleapis/gstatic הוסרו ב-28.7 (פריט 18 — self-host); חזרה שלהם
+  // ‏fonts.googleapis/gstatic הוסרו ב-28.7 (פריט 18 - self-host); חזרה שלהם
   // לעמוד תיתפס כאן ותחייב החלטה מודעת
-  // ‏wa.me נוסף 28.7 (T13) — החלטה מודעת: OC פתח את ערוץ הוואטסאפ
+  // ‏wa.me נוסף 28.7 (T13) - החלטה מודעת: OC פתח את ערוץ הוואטסאפ
   const allowed = ['www.instagram.com', 'shift-21-day-course-ceos.web.app',
     'schema.org', 'ormeirc-ship-it.github.io', 'www.sitemaps.org', 'wa.me'];
   for (const [name, html] of Object.entries(pages)) {
     for (const m of html.matchAll(/https?:\/\/([^/"'\s<>)]+)/g)) {
       assert.ok(allowed.includes(m[1]),
-        `${name}: יעד חיצוני לא מוכר — ${m[1]}. אם מכוון, להוסיף לרשימה בבדיקה`);
+        `${name}: יעד חיצוני לא מוכר - ${m[1]}. אם מכוון, להוסיף לרשימה בבדיקה`);
     }
   }
 });
 
 test('mailto יחיד בעמוד, ושווה בדיוק לכתובת ש-OC פתח', () => {
-  // ‏🟢 Cowork ‏28.7 ‏12:05 — הרשימה הסגורה תופסת רק http(s); זו ההשלמה.
+  // ‏🟢 Cowork ‏28.7 ‏12:05 - הרשימה הסגורה תופסת רק http(s); זו ההשלמה.
   const m = [...pages['index.html'].matchAll(/mailto:([^"'\s<>?]+)/g)].map((x) => x[1]);
   assert.deepEqual(m, ['ormeirc@gmail.com'],
-    'כתובת mailto לא מוכרת/כפולה — ערוץ הקשר הוא החלטת OC, לא תוצר לוואי');
+    'כתובת mailto לא מוכרת/כפולה - ערוץ הקשר הוא החלטת OC, לא תוצר לוואי');
 });
 
 test('בלוק ה-JSON-LD הוא JSON תקין ומכיל רק את הישויות המוסכמות', () => {

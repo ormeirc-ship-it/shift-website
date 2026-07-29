@@ -1,6 +1,6 @@
-/* Assistant — self-host (פריט 18). מחולל ע"י scripts/fonts-fetch.mjs —
+/* Assistant - self-host (פריט 18). מחולל ע"י scripts/fonts-fetch.mjs -
    לא לערוך ביד. ‏unicode-range נשמר מהמקור: הדפדפן מוריד רק subset שבשימוש.
-   font-display: swap — טקסט במערכת עד שהגופן מגיע, בלי מסך ריק. */
+   font-display: swap - טקסט במערכת עד שהגופן מגיע, בלי מסך ריק. */
 @font-face {
   font-family: 'Assistant';
   font-style: normal;

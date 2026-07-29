@@ -1,7 +1,7 @@
-/* ============ SHIFT — מהישרדות ליצירה ============ */
+/* ============ SHIFT - מהישרדות ליצירה ============ */
 /* פלטת מותג: נלקחה מקבצי המיתוג המקוריים */
 :root {
-  --navy: #18163B;        /* כחול-לילה — צבע הלוגו */
+  --navy: #18163B;        /* כחול-לילה - צבע הלוגו */
   --navy-deep: #121234;   /* הצד הכהה של הספרה */
   --blue-mid: #3A5F8A;    /* אמצע הגרדיאנט */
   --sky: #5CBBF0;         /* התכלת המואר */
@@ -16,14 +16,14 @@
   --radius: 22px;
   --container: 1140px;
   --nav-h: 72px;
-  /* טוקנים (פריט 34) — אותם ערכים בדיוק, בשם אחד. אפס שינוי ויזואלי
+  /* טוקנים (פריט 34) - אותם ערכים בדיוק, בשם אחד. אפס שינוי ויזואלי
      (מאומת ברגרסיה הוויזואלית). ערך חדש = שורה כאן, לא מספר בפנים. */
-  --pill: 999px;                              /* עיגול מלא — כפתורים וצ'יפים */
+  --pill: 999px;                              /* עיגול מלא - כפתורים וצ'יפים */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1); /* עקומת הבית לכניסות */
-  --t-fast: 0.25s;                            /* משוב מיידי — hover/פוקוס */
+  --t-fast: 0.25s;                            /* משוב מיידי - hover/פוקוס */
   --t-med: 0.3s;                              /* מעברי רכיב */
   --t-slow: 0.4s;                             /* מעברי משטח/רקע */
-  --sky-a35: rgba(92, 187, 240, 0.35);        /* תכלת שקופה — מסגרות */
+  --sky-a35: rgba(92, 187, 240, 0.35);        /* תכלת שקופה - מסגרות */
   --sky-a45: rgba(92, 187, 240, 0.45);
   --sky-a50: rgba(92, 187, 240, 0.5);         /* זוהר כפתורים */
   --sky-a55: rgba(92, 187, 240, 0.55);
@@ -48,12 +48,12 @@ html {
   justify-content: center;
   will-change: transform;
 }
-/* מוצג רק כש-JS פעיל — אחרת לעולם לא חוסם את הדף */
+/* מוצג רק כש-JS פעיל - אחרת לעולם לא חוסם את הדף */
 html.js .preloader { display: flex; }
 
 /* היציאה ב-CSS ולא ב-JS, בכוונה: המחלקה `preloader-done` נוספת ב-onload
    של תמונת הגיבוי, לפני שחבילת התנועה (175KB) הספיקה להגיע. כשהיציאה
-   הייתה ב-GSAP היא פשוט לא רצתה — המסך נעלם ב-`display:none` והטקס
+   הייתה ב-GSAP היא פשוט לא רצתה - המסך נעלם ב-`display:none` והטקס
    התנגן על אלמנט מוסתר. ב-CSS הוא מתנגן תמיד. */
 html.preloader-done .preloader {
   pointer-events: none;
@@ -64,7 +64,7 @@ html.preloader-done .preloader {
   to   { transform: translateY(-100%); opacity: 0; }
 }
 
-/* הלוגו נכנס עם השהיה של 450ms — מי שהעמוד שלו מוכן מיד לא רואה טקס,
+/* הלוגו נכנס עם השהיה של 450ms - מי שהעמוד שלו מוכן מיד לא רואה טקס,
    רק מעבר רך מנייבי לתמונה. הטקס שמור למי שבאמת מחכה. */
 .preloader img {
   width: min(320px, 58vw);
@@ -315,7 +315,7 @@ h3 {
   font-weight: 200;
   color: var(--blue-mid);
   direction: ltr;
-  text-align: end; /* לוגי: תחת ltr זה ימין — צמוד לזרימת ה-RTL של העמוד */
+  text-align: end; /* לוגי: תחת ltr זה ימין - צמוד לזרימת ה-RTL של העמוד */
   line-height: 1.1;
   padding-top: 6px;
 }
@@ -369,7 +369,7 @@ h3 {
   display: grid;
   grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
   gap: clamp(36px, 6vw, 72px);
-  /* D1 #5: align center דחף את הטקסט אל אמצע הסקשן — המסך הראשון
+  /* D1 #5: align center דחף את הטקסט אל אמצע הסקשן - המסך הראשון
      היה ריק. יישור לראש מביא את הכותרת אל המפגש הראשון עם העין. */
   align-items: start;
 }
@@ -475,7 +475,7 @@ h3 {
   position: relative;
   padding: clamp(110px, 16vw, 180px) 0;
   text-align: center;
-  /* שורת הגיבוי קודם: דפדפן בלי image-set(type()) פוסל את כל ההצהרה —
+  /* שורת הגיבוי קודם: דפדפן בלי image-set(type()) פוסל את כל ההצהרה -
      בלעדיה נשארים בלי רקע בכלל (טקסט לבן על נייר). jpg נתמך בכל מקום. */
   background:
     linear-gradient(rgba(18, 18, 52, 0.55), rgba(18, 18, 52, 0.35)),
@@ -495,7 +495,7 @@ h3 {
   color: var(--white-soft);
   font-size: 1.1rem;
 }
-/* קישור המייל בתוך משפט ה-CTA — ערוץ שקט לצד שני הכפתורים */
+/* קישור המייל בתוך משפט ה-CTA - ערוץ שקט לצד שני הכפתורים */
 .cta p .cta-mail {
   color: var(--sky);
   text-decoration: underline;
@@ -506,12 +506,12 @@ h3 {
 .footer {
   background: var(--navy-deep);
   color: var(--white-faint);
-  /* צומצם 64→36 עם רפרנס 2 — מילת הענק והפוטר נקראים כרגע אחד */
+  /* צומצם 64→36 עם רפרנס 2 - מילת הענק והפוטר נקראים כרגע אחד */
   padding: 36px 0 32px;
 }
-/* רפרנס 1 (איזאנמי, אושר 28.7): פרט חי בשוליים — נקודה שנושמת בקצב
-   תרגיל הנשימה של האתר עצמו (מחזור ‏8.7ש': שאיפה ‏1.9ש', השלמה עד
-   ‏2.9ש', נשיפה ארוכה עד הסוף). דופק קטן ליד ההבטחה שבשורת המותג. */
+/* הכרעת OC ‏29.7 ‏13:00: הנשימה יורדת, הנקודה נשארת - נקודת תכלת
+   סטטית ושקטה ליד שורת המותג (מצב ה-reduced-motion הפך לברירת המחדל;
+   איזאנמי הוסר מהרפרנסים - BRAND-DESIGN §5). */
 .footer-pulse {
   display: inline-block;
   width: 8px;
@@ -520,16 +520,7 @@ h3 {
   background: var(--sky);
   margin-inline-end: 10px;
   vertical-align: 1px;
-  animation: footerBreath 8.7s ease-in-out infinite;
-}
-@keyframes footerBreath {
-  0%   { transform: scale(0.72); opacity: 0.45; }
-  22%  { transform: scale(1.15); opacity: 0.95; }
-  33%  { transform: scale(1.25); opacity: 1; }
-  100% { transform: scale(0.72); opacity: 0.45; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .footer-pulse { animation: none; opacity: 0.8; }
+  opacity: 0.8;
 }
 .footer-grid {
   display: flex;
@@ -556,7 +547,7 @@ h3 {
 @media (hover: hover) { .footer-links a:hover { color: #fff; } }.footer-bottom { padding-top: 24px; font-size: 0.85rem; }
 
 /* ---------- אנימציות הופעה ----------
-   מוסתר רק כש-JS פעיל — בלי JS הכול גלוי.
+   מוסתר רק כש-JS פעיל - בלי JS הכול גלוי.
    כשמנוע התנועה פעיל (html.gsap-on) GSAP מנהל את הכניסות במקום מערכת ה-IO. */
 html.js:not(.gsap-on) .reveal {
   opacity: 0;
@@ -580,7 +571,7 @@ html.js:not(.gsap-on) .reveal.visible { opacity: 1; transform: none; }
   .cards-3 { grid-template-columns: 1fr; }
   .steps { grid-template-columns: repeat(2, 1fr); }
   .story-grid { grid-template-columns: 1fr; }
-  /* D1 #5 מובייל: מילים לפני תמונה — הסקשן נפתח בכותרת, לא במסך גרדיאנט */
+  /* D1 #5 מובייל: מילים לפני תמונה - הסקשן נפתח בכותרת, לא במסך גרדיאנט */
   .story-body { order: -1; }
   .story-media { max-width: 440px; margin-inline: auto; }
 }
@@ -602,7 +593,7 @@ html.js:not(.gsap-on) .reveal.visible { opacity: 1; transform: none; }
 }
 
 /* ============================================================
-   שכבת התנועה (motion layer) — נטענת מעל העיצוב הקיים
+   שכבת התנועה (motion layer) - נטענת מעל העיצוב הקיים
    ============================================================ */
 
 /* ---------- פס התקדמות עליון ---------- */
@@ -621,7 +612,7 @@ html.js:not(.gsap-on) .reveal.visible { opacity: 1; transform: none; }
 /* ---------- ניווט נקודות צף (דסקטופ) ---------- */
 .dot-nav {
   position: fixed;
-  inset-inline-end: 28px; /* RTL: צד שמאל פיזית? לא — inline-end ב-RTL הוא שמאל */
+  inset-inline-end: 28px; /* RTL: צד שמאל פיזית? לא - inline-end ב-RTL הוא שמאל */
   top: 50%;
   transform: translateY(-50%);
   z-index: 140;
@@ -721,7 +712,7 @@ h1 .w { display: inline-block; }
   display: block;
 }
 .world-media img {
-  /* ‏width:100% חסר כאן מאז ומתמיד — בלעדיו התמונה מרונדרת בגובה
+  /* ‏width:100% חסר כאן מאז ומתמיד - בלעדיו התמונה מרונדרת בגובה
      ה-attribute המלא (‏897 בישנות, ‏1456 בחדשה): הפאנלים "הגבוהים"
      היו באג שקט, והמלל של הקלף נדחק אל מתחת לקו-המסך ברגע שהמסגור
      החדש העלה את המספרים. ‏4:3 היה הכוונה הכתובה כל הזמן. */
@@ -736,14 +727,14 @@ h1 .w { display: inline-block; }
 /* מובייל / ללא תנועה: התמונות נכנסות בתוך הזרימה */
 .world-row { grid-template-columns: 110px 1fr; }
 .world-media { margin-top: 20px; max-width: 440px; }
-/* ‏hero-bg-b בקלף חקר-הרוח: תמונת אופק רחבה במסגרת-פורטרט — בלי העוגן
+/* ‏hero-bg-b בקלף חקר-הרוח: תמונת אופק רחבה במסגרת-פורטרט - בלי העוגן
    הזה ה-cover חותך את פס-הזוהר (הפואנטה) ומשאיר שמיים חשוכים בלבד */
 .world-media .img-horizon { object-position: center 82%; }
 @media (max-width: 899px) {
   .world-media { max-width: 100%; }
 }
 
-/* מצב במה נעוצה — מופעל רק ע"י מנוע התנועה בדסקטופ */
+/* מצב במה נעוצה - מופעל רק ע"י מנוע התנועה בדסקטופ */
 html.worlds-pinned .worlds .section-head { margin-bottom: 0; }
 html.worlds-pinned .world-rows {
   border-top: none;
@@ -973,7 +964,7 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
 }
 .program-weeks { display: flex; flex-direction: column; gap: clamp(28px, 4vw, 48px); }
 /* B1: הרקע אטום בכוונה, לא זכוכית. rgba(255,255,255,.05) מעל הנייבי של
-   הסקשן שווה בדיוק ל-#1E1E3E — אותו פיקסל — אבל זכוכית נתנה לטקסט של
+   הסקשן שווה בדיוק ל-#1E1E3E - אותו פיקסל - אבל זכוכית נתנה לטקסט של
    קלף מכוסה להיראות דרך הקלף שמעליו בערימה. motion.js מזיז את המשתנה
    יחד עם רקע הסקשן (כהה→בהיר), כך שההרכבה נשארת זהה לאורך כל הגלילה. */
 .week-card {
@@ -1047,7 +1038,7 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
   height: 240px;
   border-radius: 50%;
   border: 1px dashed var(--sky-a35);
-  /* ‏D3: הטבעת נושמת עם ההנחיה — העוגן שמחזיק את העין בנשיפה הארוכה
+  /* ‏D3: הטבעת נושמת עם ההנחיה - העוגן שמחזיק את העין בנשיפה הארוכה
      (5.8ש' עם טקסט סטטי). המחלקות מוחלפות ב-main.js לפי השלב. */
   transition: transform 2.4s cubic-bezier(0.45, 0, 0.55, 1), opacity 2.4s ease;
 }
@@ -1087,7 +1078,7 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
 .breath-steps li { margin-bottom: 6px; }
 .breath-note { font-size: 0.9rem; color: var(--white-faint); margin-bottom: 20px; max-width: 480px; }
 .breath-actions { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
-/* ‏blue-mid ולא sky: תכלת על נייר = ‏2.14 — נכשל AA (נמדד, פריט 31);
+/* ‏blue-mid ולא sky: תכלת על נייר = ‏2.14 - נכשל AA (נמדד, פריט 31);
    האמצע של גרדיאנט-המותג נותן 6.7:1 ונשאר במשפחה */
 .breath-counter { color: var(--blue-mid); font-weight: 600; font-size: 1.05rem; min-height: 1.5em; }
 .program-cta {
@@ -1099,9 +1090,9 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
 }
 
 /* ---------- אירועים ---------- */
-/* ‏overflow: clip (עם hidden כגיבוי לדפדפנים ישנים) — ‏hidden הופך את
+/* ‏overflow: clip (עם hidden כגיבוי לדפדפנים ישנים) - ‏hidden הופך את
    הסקשן לקופסת-גלילה ושובר sticky פנימי (T16 נמדד: הציור ברח למעלה);
-   ‏clip חותך ויזואלית בלי לשבור. בדפדפן ישן: hidden נשאר — הציור פשוט
+   ‏clip חותך ויזואלית בלי לשבור. בדפדפן ישן: hidden נשאר - הציור פשוט
    חוזר לעוגן העליון (התנהגות טרום-T16, ניוון סביר). */
 .events { position: relative; overflow: hidden; overflow: clip; padding: clamp(90px, 13vw, 150px) 0; }
 .events-bg {
@@ -1141,7 +1132,7 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
 }
 .event-body h3 { color: #fff; font-size: clamp(1.4rem, 3vw, 1.9rem); margin: 8px 0 10px; }
 .event-body p { color: var(--white-soft); max-width: 460px; }
-/* משבצת-מקום גלויה לפרטים שממתינים ל-OC (D8) — מסומנת בכוונה כ"בדרך":
+/* משבצת-מקום גלויה לפרטים שממתינים ל-OC (D8) - מסומנת בכוונה כ"בדרך":
    מסגרת מקווקוות = תוכן שהמקום שלו שמור, לא תוכן שחסר בטעות */
 .event-soon {
   display: inline-block;
@@ -1185,7 +1176,7 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
   .event-body { padding: 22px; padding-top: 0; }
 }
 
-/* ---------- אירועים קודמים (D10) — מבנה; המדיה תגיע מ-OC ---------- */
+/* ---------- אירועים קודמים (D10) - מבנה; המדיה תגיע מ-OC ---------- */
 .past-events { position: relative; padding: clamp(70px, 10vw, 120px) 0; }
 .past-grid {
   display: grid;
@@ -1204,7 +1195,7 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
   border-radius: var(--radius);
 }
 .past-slot .event-soon { margin-top: 0; }
-/* מובייל: קרוסלת scroll-snap — CSS בלבד; RTL מגיע נכון מהדפדפן */
+/* מובייל: קרוסלת scroll-snap - CSS בלבד; RTL מגיע נכון מהדפדפן */
 @media (max-width: 720px) {
   .past-grid {
     display: flex;
@@ -1218,14 +1209,14 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
 }
 
 /* מסכים נמוכים (SE, מובייל-לרוחב, לפטופ עם סרגלים): תרגיל הנשימה קומפקטי,
-   שהעיגול והכפתור ייכנסו יחד ל-viewport — נתפס במטריצת המכשירים (28/29) */
+   שהעיגול והכפתור ייכנסו יחד ל-viewport - נתפס במטריצת המכשירים (28/29) */
 @media (max-height: 700px) {
   .breath { margin-top: 32px; padding: 20px; gap: 20px; }
   .breath-stage { min-height: 170px; }
   .breath-circle { width: 110px; height: 110px; font-size: 0.85rem; padding: 12px; }
 }
 
-/* מובייל-לרוחב (גובה ~390): ערימה אנכית לא נכנסת לשום גובה — העיגול
+/* מובייל-לרוחב (גובה ~390): ערימה אנכית לא נכנסת לשום גובה - העיגול
    עובר לצד הפקדים גם מתחת לנקודת-השבירה של המובייל */
 @media (max-height: 480px) and (min-width: 640px) {
   .breath { grid-template-columns: minmax(200px, 0.8fr) minmax(0, 1.2fr); }
@@ -1257,7 +1248,10 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
 .side-label {
   position: absolute;
   top: 50%;
-  inset-inline-end: 22px;
+  /* 🔴 OC ‏29.7: התווית רכבה על נקודות-הניווט (‏22px מול ‏28px - אותו צד).
+     ‏68px מפנה את רצועת הנקודות; מתחת ל-1344 אין שוליים שמכילים את
+     שניהם בלי לגעת בתוכן - הדקורציה מפנה את מקומה לניווט הפונקציונלי. */
+  inset-inline-end: 68px;
   transform: translateY(-50%) rotate(90deg);
   transform-origin: center;
   font-size: 0.78rem;
@@ -1267,12 +1261,12 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
   pointer-events: none;
   white-space: nowrap;
 }
-@media (max-width: 899px) { .side-label { display: none; } }
+@media (max-width: 1343px) { .side-label { display: none; } }
 
 /* ---------- איך עושים SHIFT: רשימה + במה חיה (אלת'יה · D12) ----------
-   התיקון: הפסקה ישבה בטור ה-96px של המספר (auto-placement — שלושה
+   התיקון: הפסקה ישבה בטור ה-96px של המספר (auto-placement - שלושה
    ילדים בגריד של שתי עמודות; ‏display:inline על ילד-גריד מתבטל).
-   עכשיו step-body עוטף כותרת+פסקה, הטיפוגרפיה גדלה, ובחצי שהיה ריק —
+   עכשיו step-body עוטף כותרת+פסקה, הטיפוגרפיה גדלה, ובחצי שהיה ריק -
    במה דבוקה: ספרת-ענק מתחלפת + סיב שמתארך צעד-אחר-צעד (data-step
    שמנוע התנועה מציב; מצב-המנוחה סטטי ומכובד גם בלי JS/בשקט). */
 .path-grid {
@@ -1325,7 +1319,7 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
   font-size: clamp(1rem, 1.2vw, 1.12rem);
   max-width: 44ch;
 }
-/* הבמה — דבוקה בזמן שהרשימה נגללת */
+/* הבמה - דבוקה בזמן שהרשימה נגללת */
 .path-stage {
   position: sticky;
   top: calc(var(--nav-h) + 90px);
@@ -1372,7 +1366,7 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
   background: linear-gradient(90deg, var(--sky), var(--blue-mid));
   box-shadow: 0 0 12px var(--sky-a55);
   transform: scaleX(0.12);
-  transform-origin: 100% 50%; /* ‏RTL — הסיב מתארך מימין */
+  transform-origin: 100% 50%; /* ‏RTL - הסיב מתארך מימין */
   transition: transform 0.7s var(--ease-out);
 }
 .path[data-step="1"] .path-fiber i { transform: scaleX(0.25); }
@@ -1381,18 +1375,18 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
 .path[data-step="4"] .path-fiber i { transform: scaleX(1); }
 @media (max-width: 899px) {
   .path-grid { grid-template-columns: 1fr; }
-  .path-stage { display: none; } /* מובייל: הרשימה לבדה — הבעיה הייתה דסקטופית */
+  .path-stage { display: none; } /* מובייל: הרשימה לבדה - הבעיה הייתה דסקטופית */
 }
 @media (prefers-reduced-motion: reduce) {
-  .path-big span, .path-fiber i { transition: none; } /* ‏D12 — סטטי, לא מונפש */
+  .path-big span, .path-fiber i { transition: none; } /* ‏D12 - סטטי, לא מונפש */
 }
 
 /* ---------- קלפי השבועות נערמים (אלת'יה) ----------
    B1: הערימה מותנית ב-html.stack-on, ש-motion.js מוסיף רק אחרי שנמדד
    שהקלף הגבוה ביותר נכנס במסך במלואו. קלף גבוה מהחלון שננעץ בראשו
-   משאיר את הימים התחתונים שלו בלתי-קריאים לנצח — נמדד ב-27.7: על
+   משאיר את הימים התחתונים שלו בלתי-קריאים לנצח - נמדד ב-27.7: על
    1440×900 ימים 4–7 לא קיבלו אף רגע קריא. עמידות לפני אפקט:
-   כשאין מדידה (אין JS) או כשלא נכנס — רשימה סטטית רגילה. */
+   כשאין מדידה (אין JS) או כשלא נכנס - רשימה סטטית רגילה. */
 @media (min-width: 900px) {
   html.stack-on .week-card {
     position: sticky;
@@ -1473,9 +1467,9 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
 @media (max-width: 899px) { .program-chips { display: none; } }
 
 /* ---------- וידאו האירועים ---------- */
-/* ‏T16: מסילת ה-sticky של הציור — גובה אפס (לא דוחפת את הקלפים),
+/* ‏T16: מסילת ה-sticky של הציור - גובה אפס (לא דוחפת את הקלפים),
    נדבקת מתחת לסרגל ומלווה את הגלילה עד קצה הסקשן; שם ה-scrub כבר
-   בסופו. ‏reduced-motion/מובייל: הווידאו עצמו מוסתר — המסילה ריקה. */
+   בסופו. ‏reduced-motion/מובייל: הווידאו עצמו מוסתר - המסילה ריקה. */
 .events-video-pin {
   position: sticky;
   top: clamp(64px, 8vh, 96px);
@@ -1485,11 +1479,11 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
 }
 .events-video {
   position: absolute;
-  /* ריפריים (D9, הוראת OC ‏28.7): המקור 1080×1080 — ‏cover על סקשן רחב
+  /* ריפריים (D9, הוראת OC ‏28.7): המקור 1080×1080 - ‏cover על סקשן רחב
      ניפח אותו עד שנשארו רק שברי קווים. עכשיו: הריבוע השלם (מיכל 1:1 =
      אפס חיתוך), מעוגן בצד הפנוי מול הכותרת, נמס בשוליים במסכה רדיאלית
      כדי להיקרא כאיור-רקע ולא כקופסה מודבקת. ‏T16: העוגן הוא מסילת
-     ה-sticky — הציור נוסע עם הגולל. */
+     ה-sticky - הציור נוסע עם הגולל. */
   inset-inline-end: 0;
   top: 0;
   width: min(40vw, 560px);
@@ -1563,7 +1557,7 @@ html.worlds-pinned .worlds .container { width: min(100% - 48px, var(--container)
    מעברי-כיסוי בין פרקים + סצנת סיום ענקית (איזאנמי)
    ============================================================ */
 
-/* clip לא הופך את ה-body למיכל גלילה — כך ש-position: sticky ממשיך לעבוד
+/* clip לא הופך את ה-body למיכל גלילה - כך ש-position: sticky ממשיך לעבוד
    (בדפדפנים בלי תמיכה נשאר ה-hidden שהוגדר למעלה) */
 body { overflow-x: clip; }
 
@@ -1572,7 +1566,7 @@ body { overflow-x: clip; }
 .statement {
   position: relative;
   z-index: 1;
-  min-height: 100vh;   /* גיבוי לספארי <15.4 — svh נפסל שם וההצהרה נעלמת */
+  min-height: 100vh;   /* גיבוי לספארי <15.4 - svh נפסל שם וההצהרה נעלמת */
   min-height: 100svh;
   display: flex;
   flex-direction: column;
@@ -1585,11 +1579,11 @@ body { overflow-x: clip; }
 .closing {
   position: relative;
   overflow: hidden;
-  min-height: 100vh;   /* גיבוי לספארי <15.4 — svh נפסל שם וההצהרה נעלמת */
+  min-height: 100vh;   /* גיבוי לספארי <15.4 - svh נפסל שם וההצהרה נעלמת */
   min-height: 100svh;
   display: flex;
   flex-direction: column;
-  /* שורת הגיבוי קודם — ראו ההערה ב-.cta */
+  /* שורת הגיבוי קודם - ראו ההערה ב-.cta */
   background:
     linear-gradient(180deg, rgba(18, 18, 52, 0.55), rgba(18, 18, 52, 0.45) 45%, rgba(18, 18, 52, 0.9)),
     url("../assets/img/hero-bg-a.jpg") center 70% / cover no-repeat,
@@ -1621,7 +1615,7 @@ body { overflow-x: clip; }
 }
 .closing-word {
   align-self: center;
-  /* רפרנס 2 (אלת'יה, אושר 28.7): המילה כרגע-מותג — גדלה עד כמעט מלוא
+  /* רפרנס 2 (אלת'יה, אושר 28.7): המילה כרגע-מותג - גדלה עד כמעט מלוא
      הרוחב, נוכחת מעט יותר, וצמודה לפוטר כך שהשניים נקראים כרגע אחד:
      המילה סוגרת את המעגל שהשער פותח, ושורת הזכויות מתחתיה. */
   font-size: clamp(4.5rem, 19vw, 17rem);
@@ -1655,7 +1649,7 @@ body { overflow-x: clip; }
    נגישות: פוקוס מקלדת + סייג בריאותי לתרגיל הנשימה
    ============================================================ */
 
-/* טבעת פוקוס ברורה לניווט מקלדת — על רקע כהה בתכלת, על בהיר בנייבי */
+/* טבעת פוקוס ברורה לניווט מקלדת - על רקע כהה בתכלת, על בהיר בנייבי */
 :focus-visible {
   outline: 2px solid var(--sky);
   outline-offset: 3px;
@@ -1685,20 +1679,20 @@ body { overflow-x: clip; }
 .program.lit .breath-disclaimer { color: var(--ink-faint); }
 
 /* ============================================================
-   הכניסה דרך המוח — הגלילה מניעה צלילה מהחושך אל האור
+   הכניסה דרך המוח - הגלילה מניעה צלילה מהחושך אל האור
    ============================================================ */
 
 /* גובה הבמה = אורך הצלילה. 520vh נבחר באב-הטיפוס: מספיק
    כדי שהתנועה תרגיש איטית ונשלטת, בלי להרגיש כמו עונש. */
-/* ‏REQUESTS 27.7: קוצר מ-520vh — ההשקעה שנדרשה מהמבקר לפני משפט תוכן
+/* ‏REQUESTS 27.7: קוצר מ-520vh - ההשקעה שנדרשה מהמבקר לפני משפט תוכן
    ראשון הייתה ארוכה מדי ביחס לסקשנים (ממצא D1 #3). ‏440 ולא 400:
-   שומר קצב של ~7.3vh לפריים על 60 הפריימים — עדיין שליש רגוע יותר
+   שומר קצב של ~7.3vh לפריים על 60 הפריימים - עדיין שליש רגוע יותר
    מהמקור, כדי לא להחזיר את תדירות ההחלפות שהדילול (B2) בא להוריד. */
 .dive { height: 440vh; position: relative; background: var(--navy-deep); }
 .dive-sticky {
   position: sticky;
   top: 0;
-  height: 100vh;   /* גיבוי לספארי <15.4 — svh נפסל שם וההצהרה נעלמת */
+  height: 100vh;   /* גיבוי לספארי <15.4 - svh נפסל שם וההצהרה נעלמת */
   height: 100svh;
   overflow: hidden;
   display: grid;
@@ -1727,9 +1721,9 @@ html.dive-live .dive-still { display: none; }
 /* ---------- שער הכניסה ---------- */
 .gate {
   /* ‏OC ‏29.7: מרכוז-אמת בשני הצירים. ‏absolute+inset+margin:auto ולא
-     transform — כי מנוע התנועה כותב transform (scale) על השער בגלילה,
+     transform - כי מנוע התנועה כותב transform (scale) על השער בגלילה,
      והמרכוז חייב לשרוד את זה. (הישן: ילד-בזרימה שני בגריד → שורה
-     משתמעת מתחת למרכז — נמדד ‏126px נמוך.) */
+     משתמעת מתחת למרכז - נמדד ‏126px נמוך.) */
   position: absolute;
   inset: 0;
   margin: auto;
@@ -1745,7 +1739,7 @@ html.dive-live .dive-still { display: none; }
   will-change: transform, opacity;
 }
 /* הפריים הראשון בהיר במרכזו (המוח הזוהר) והטקסט נבלע בו.
-   צעיף רך מאחורי השער בלבד — מחזיר קריאוּת בלי להחשיך את התמונה. */
+   צעיף רך מאחורי השער בלבד - מחזיר קריאוּת בלי להחשיך את התמונה. */
 .gate::before {
   content: "";
   position: absolute;
@@ -1757,7 +1751,7 @@ html.dive-live .dive-still { display: none; }
 /* הוראת OC ‏29.7 ‏12:15: הלוגו גדל משמעותית (‏300→420) וממורכז-אמת */
 .gate-logo img { width: min(420px, 70vw); filter: drop-shadow(0 0 60px var(--sky-a45)); }
 .gate-line {
-  /* הוראת OC: השורה היא עכשיו התמצית ("מהישרדות ליצירה") — מעט יותר
+  /* הוראת OC: השורה היא עכשיו התמצית ("מהישרדות ליצירה") - מעט יותר
      נוכחת מהתיוג הישן, עדיין שקטה */
   font-size: clamp(1rem, 2.2vw, 1.2rem);
   font-weight: 300;
@@ -1770,7 +1764,7 @@ html.dive-live .dive-still { display: none; }
   flex-direction: column;
   align-items: center;
   gap: 9px;
-  /* הוראת OC ‏29.7: קריא בבירור, לא צעקני — ‏0.78→0.95 + בהיר יותר */
+  /* הוראת OC ‏29.7: קריא בבירור, לא צעקני - ‏0.78→0.95 + בהיר יותר */
   font-size: 0.95rem;
   letter-spacing: 0.14em;
   color: var(--white-soft);
@@ -1799,9 +1793,9 @@ html.dive-live .dive-still { display: none; }
   transform: translateY(-50%);
   text-align: center;
   padding: 0 24px;
-  /* הוראת OC 29.7: "הוא קצת נבלע" — מילות-המסע הן הקול היחיד בצלילה.
+  /* הוראת OC 29.7: "הוא קצת נבלע" - מילות-המסע הן הקול היחיד בצלילה.
      גודל ומשקל בעדינות + הילה כהה כפולה (רכה-רחבה + צמודה) לקריאות
-     על הפריימים הבהירים של קשת ה-4K. איפוק — זה המסך החשוב באתר. */
+     על הפריימים הבהירים של קשת ה-4K. איפוק - זה המסך החשוב באתר. */
   font-size: clamp(1.5rem, 4.8vw, 2.9rem);
   font-weight: 300;
   line-height: 1.3;
@@ -1812,7 +1806,7 @@ html.dive-live .dive-still { display: none; }
 }
 
 /* ---------- ההגעה אל האור ----------
-   הפריימים האחרונים בהירים, ולכן הטקסט כאן כהה — לא לבן. */
+   הפריימים האחרונים בהירים, ולכן הטקסט כאן כהה - לא לבן. */
 .arrival {
   position: absolute;
   inset: 0;
@@ -1874,7 +1868,7 @@ html.dive-live .dive-still { display: none; }
 /* ---------- ללא תנועה: פריים אחד, הכותרת מיד ---------- */
 @media (prefers-reduced-motion: reduce) {
   .dive { height: auto; }
-  .dive-sticky { position: relative; height: 100vh;   /* גיבוי לספארי <15.4 — svh נפסל שם וההצהרה נעלמת */
+  .dive-sticky { position: relative; height: 100vh;   /* גיבוי לספארי <15.4 - svh נפסל שם וההצהרה נעלמת */
  height: 100svh; }
   .gate-cue i { animation: none; }
   .passing { display: none; }
@@ -1884,11 +1878,11 @@ html.dive-live .dive-still { display: none; }
 }
 
 /* ============================================================
-   שלב 2 — הסרת תבניות: טריפטיך במקום רשת קלפים שנייה
+   שלב 2 - הסרת תבניות: טריפטיך במקום רשת קלפים שנייה
    ============================================================ */
 
 /* סל המוצרים משתמש בקלפים כי הם יעדים ללחיצה. שלושת עקרונות ההרגלים
-   אינם קישורים — קו שיער וטיפוגרפיה נושאים אותם טוב יותר מקופסאות,
+   אינם קישורים - קו שיער וטיפוגרפיה נושאים אותם טוב יותר מקופסאות,
    וגם מונעים שתי רשתות זהות באותו עמוד. */
 .triptych {
   display: grid;
@@ -1915,12 +1909,12 @@ html.dive-live .dive-still { display: none; }
   .tri:last-child { border-bottom: none; }
 }
 
-/* המספור בסקשן "איך עושים SHIFT" נשאר — שם הוא רצף אמיתי בן 4 שלבים
+/* המספור בסקשן "איך עושים SHIFT" נשאר - שם הוא רצף אמיתי בן 4 שלבים
    ולא קישוט. עכשיו כשהמספור בפינות הוסר, הוא יכול להיות נוכח יותר. */
 .step-num { font-size: clamp(2.4rem, 5.5vw, 3.8rem); }
 
 /* ============================================================
-   שלב 3 — המעבר מהישרדות ליצירה כמערכת (--j: 0 → 1)
+   שלב 3 - המעבר מהישרדות ליצירה כמערכת (--j: 0 → 1)
    ============================================================
    הצבע והטיפוגרפיה נעולים, ולכן המרחב והקצב נושאים את ההבחנה לבדם.
    --j נקבע ב-motion.js לפי מיקום הסקשן במסע. שני הפרמטרים כאן
@@ -1935,7 +1929,7 @@ html.journey-on [style*="--j"] .container {
   width: min(100% - 48px, calc(880px + 300px * var(--j, 0)));
   transition: none;
 }
-/* ההצהרה והקריאה לפעולה מרוכזות בכוונה — לא נפתחות עם השאר */
+/* ההצהרה והקריאה לפעולה מרוכזות בכוונה - לא נפתחות עם השאר */
 html.journey-on .statement .container.narrow,
 html.journey-on .closing .container.narrow { max-width: 820px; }
 
@@ -1951,10 +1945,10 @@ html.journey-on [style*="--j"] .section-head {
 }
 
 /* ============================================================
-   שלב 4 — תרגיל הנשימה כסקשן משלו
+   שלב 4 - תרגיל הנשימה כסקשן משלו
    ============================================================
    היה קבור בתחתית המסלול, על רקע כהה. עכשיו הוא סקשן עצמאי על רקע
-   בהיר — ולכן הצבעים שהותאמו לרקע הכהה צריכים היפוך. */
+   בהיר - ולכן הצבעים שהותאמו לרקע הכהה צריכים היפוך. */
 .breathe .breath {
   margin-top: 0;
   background: #fff;
@@ -1963,29 +1957,29 @@ html.journey-on [style*="--j"] .section-head {
 }
 .breathe .breath-info h3 { color: var(--ink); }
 .breathe .breath-steps { color: var(--ink-soft); }
-/* הניגודיות של ink-faint על לבן היא 2.9:1 — מתחת לסף. ראה חוק הנגישות למטה. */
+/* הניגודיות של ink-faint על לבן היא 2.9:1 - מתחת לסף. ראה חוק הנגישות למטה. */
 .breathe .breath-ring { border-color: var(--sky-a45); }
 .breathe .label-sky { color: var(--blue-mid); }
-/* הכותרת רחבה מדי במסך אחד — מאזנים שורות */
+/* הכותרת רחבה מדי במסך אחד - מאזנים שורות */
 .breathe .section-head h2 { text-wrap: balance; }
 
-/* אנימציית הלוגו בשער — תופסת בדיוק את מקום התמונה הסטטית */
+/* אנימציית הלוגו בשער - תופסת בדיוק את מקום התמונה הסטטית */
 .gate-logo { width: min(420px, 70vw); } /* ‏OC ‏29.7: ‏300→420, ממורכז-אמת */
 .gate-logo img, .gate-logo video { width: 100%; height: auto; display: block; }
 .gate-logo video { filter: drop-shadow(0 0 60px var(--sky-a45)); }
 @media (max-width: 899px) { .gate-logo { width: min(300px, 68vw); } }
 
 /* ============================================================
-   שלב 8 — אורך שורה (פריט 10: הסולם צריך לעבוד קשה)
+   שלב 8 - אורך שורה (פריט 10: הסולם צריך לעבוד קשה)
    ============================================================
    מדידה ב-768 וב-1440 הראתה עשרות פסקאות שחוצות 75 תווים לשורה.
-   העמודה נפתחת לאורך המסע (--j), אבל הטקסט עצמו לא אמור להתרחב איתה —
+   העמודה נפתחת לאורך המסע (--j), אבל הטקסט עצמו לא אמור להתרחב איתה -
    רק לקבל יותר אוויר סביבו. */
 p { max-width: 68ch; }
-/* מרכזי מטבעם — שומרים על המרכוז */
+/* מרכזי מטבעם - שומרים על המרכוז */
 .statement-text, .arrival-sub, .section-intro,
 .cta p, .breathe .section-intro { margin-inline: auto; }
-/* פסקאות בתוך רכיבים צרים ממילא — בלי הגבלה כפולה */
+/* פסקאות בתוך רכיבים צרים ממילא - בלי הגבלה כפולה */
 .card p, .tri p, .basket-card p,
 .footer-tagline, .footer-bottom p { max-width: none; }
 /* שורות הימים הן הטקסט הרחב ביותר בעמוד (823px = 109 תווים) */
@@ -1995,7 +1989,7 @@ p { max-width: 68ch; }
 /* ============================================================
    סרגל ניווט שמשתנה עם מה שמאחוריו
    ============================================================
-   הפס הנייבי האטום ישב על הרקע הבהיר וחתך את הרגע הכי פתוח באתר —
+   הפס הנייבי האטום ישב על הרקע הבהיר וחתך את הרגע הכי פתוח באתר -
    נראה כמו רכיב מדף שהודבק מעל חוויה. עכשיו הוא קורא את הסקשן שמתחתיו.
    החלפת הלוגו נעשית בין שני נכסי מותג אמיתיים, בלי פילטר CSS. */
 .nav-logo { position: relative; display: block; }
@@ -2011,11 +2005,11 @@ html.nav-light .nav.scrolled {
 html.nav-light .nav-burger-word { color: var(--ink-soft); }
 html.nav-light .nav-burger-lines span { background: var(--navy); }
 html.nav-light .nav-links a { color: var(--ink-soft); }
-@media (hover: hover) { html.nav-light .nav-links a:hover { color: var(--navy); } }/* התפריט הפתוח תמיד כהה — הוא מסך מלא משלו */
+@media (hover: hover) { html.nav-light .nav-links a:hover { color: var(--navy); } }/* התפריט הפתוח תמיד כהה - הוא מסך מלא משלו */
 html.nav-light .mobile-menu.open ~ * .nav-burger-lines span,
 .mobile-menu.open ~ .nav .nav-burger-lines span { background: #fff; }
 
-/* בצלילה עצמה הסרגל נסוג — הוא לא חלק מהחוויה עד שנוחתים */
+/* בצלילה עצמה הסרגל נסוג - הוא לא חלק מהחוויה עד שנוחתים */
 html.dive-hush .nav {
   opacity: 0;
   pointer-events: none;
@@ -2062,14 +2056,14 @@ html.dive-hush .nav {
 @media (hover: hover) { .dive-skip:hover { border-color: var(--sky); background: rgba(11, 11, 34, 0.62); } }/* ברגע ההגעה לאור אין יותר מה לדלג עליו */
 .dive-skip.gone { opacity: 0; pointer-events: none; }
 @media (max-width: 899px) { .dive-skip { bottom: 18px; font-size: 0.78rem; } }
-/* בלי תנועה אין צלילה ארוכה — ולכן גם אין מה לדלג */
+/* בלי תנועה אין צלילה ארוכה - ולכן גם אין מה לדלג */
 @media (prefers-reduced-motion: reduce) { .dive-skip { display: none; } }
 
 /* ============================================================
    נגישות (פריט T7)
    ============================================================ */
 
-/* יעד מגע: הנקודות עצמן 10px — קטנות מהמינימום של WCAG 2.2 (24×24).
+/* יעד מגע: הנקודות עצמן 10px - קטנות מהמינימום של WCAG 2.2 (24×24).
    שטח הלחיצה מורחב בלי לשנות את המראה. */
 .dot-nav a { position: relative; }
 .dot-nav a::before {
@@ -2080,7 +2074,7 @@ html.dive-hush .nav {
   height: 26px;
 }
 
-/* הערת המחקר והסייג הבריאותי היו ב-ink-faint (יחס 2.9:1) — מתחת לסף.
+/* הערת המחקר והסייג הבריאותי היו ב-ink-faint (יחס 2.9:1) - מתחת לסף.
    הסייג הוא אזהרה רפואית; הוא חייב להיות קריא, לא "עדין". */
 .breathe .breath-note, .breath-note { color: var(--ink-soft); }
 .breathe .breath-disclaimer, .breath-disclaimer {
@@ -2091,7 +2085,7 @@ html.dive-hush .nav {
 .program .breath-note, .program .breath-disclaimer { color: var(--white-soft); }
 
 /* ============================================================
-   אורך שורה בעברית (פריט TB) — תיקון של תיקון
+   אורך שורה בעברית (פריט TB) - תיקון של תיקון
    ============================================================
    בסבב הקודם הוגבל טקסט הגוף ל-68ch, ונמדד כ"תקין". המדידה הייתה
    שגויה: היא העריכה תווים לפי רוחב חלקי גודל גופן. מדידה אמיתית של
@@ -2113,15 +2107,15 @@ h3 { text-wrap: balance; }
 p, .statement-title, .section-intro { text-wrap: pretty; }
 
 /* ============================================================
-   B3 — שתי גרסאות לסיום הצלילה, להכרעת OC (27.7)
+   B3 - שתי גרסאות לסיום הצלילה, להכרעת OC (27.7)
    ברירת המחדל ללא שינוי. הגרסאות נדלקות רק במחלקה על <html>
    (b3-curtain / b3-panel) לצורך צילומי ההדמיה ב-delivery/.
-   לא מיושם סופית בלי אישור OC — NEXT.md, סעיף B3.
+   לא מיושם סופית בלי אישור OC - NEXT.md, סעיף B3.
    ============================================================ */
 .arrival-logo { display: none; height: auto; }
 
-/* — גרסה א: הווילון — חיה מאז 27.7 (מחלקת ending-curtain על <html>).
-     שכבת הווילון נפרדת מה-veil ומונעת ע"י render() לפי התקדמות ההגעה. — */
+/* - גרסה א: הווילון - חיה מאז 27.7 (מחלקת ending-curtain על <html>).
+     שכבת הווילון נפרדת מה-veil ומונעת ע"י render() לפי התקדמות ההגעה. - */
 .dive-curtain {
   position: absolute;
   inset: 0;
@@ -2132,7 +2126,7 @@ p, .statement-title, .section-intro { text-wrap: pretty; }
   will-change: opacity;
 }
 @media (prefers-reduced-motion: reduce) {
-  /* במצב שקט ההגעה סטטית על רקע הנייבי של הצלילה — אין צורך בווילון */
+  /* במצב שקט ההגעה סטטית על רקע הנייבי של הצלילה - אין צורך בווילון */
   .dive-curtain { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -2140,7 +2134,7 @@ p, .statement-title, .section-intro { text-wrap: pretty; }
   html.ending-curtain .arrival-logo-light { display: block; width: min(180px, 40vw); margin: 0 auto 24px; }
 }
 /* מגודר ב-no-preference (0.5 סיבוב ב'): הכלל הזה מאוחר בקובץ מבלוק
-   ה-reduce שמעליו — בלי הגידור הוא היה גובר בקסקדה ומדליק את שני
+   ה-reduce שמעליו - בלי הגידור הוא היה גובר בקסקדה ומדליק את שני
    הלוגואים יחד במופחת-תנועה. נתפס ע"י Cowork בסבב 00:05. */
 @media (prefers-reduced-motion: no-preference) {
   html.ending-curtain .arrival-logo-dark {
@@ -2150,7 +2144,7 @@ p, .statement-title, .section-intro { text-wrap: pretty; }
     filter: drop-shadow(0 0 50px var(--sky-a35));
   }
 }
-/* פריט 0.5: במופחת-תנועה אין וילון (הרקע בהיר) — צבעי הווילון היו
+/* פריט 0.5: במופחת-תנועה אין וילון (הרקע בהיר) - צבעי הווילון היו
    נותנים לבן-על-בהיר. הם חיים רק כשיש תנועה, כלומר כשיש וילון. */
 @media (prefers-reduced-motion: no-preference) {
   html.ending-curtain .arrival h1 { color: #fff; }
@@ -2160,8 +2154,8 @@ p, .statement-title, .section-intro { text-wrap: pretty; }
   html.ending-curtain .btn-arrival-ghost { border-color: rgba(255, 255, 255, 0.45); color: #fff; }
 }
 
-/* — גרסה ב: המשטח — האור נשאר, הטקסט יושב על קלף נייר אטום
-     בשפת הקלפים של האתר. — */
+/* - גרסה ב: המשטח - האור נשאר, הטקסט יושב על קלף נייר אטום
+     בשפת הקלפים של האתר. - */
 html.b3-panel .arrival-in {
   background: var(--paper);
   border-radius: var(--radius);
