@@ -1,9 +1,9 @@
 # PROGRAM-SPEC — המפרט המחייב לסקשן "מסלול 21 הימים"
 
-נוצר אוטומטית ב-26.7.2026 על ידי `scripts/generate-program-spec.mjs` מתוך:
+נוצר אוטומטית ב-29.7.2026 על ידי `scripts/generate-program-spec.mjs` מתוך:
 ```
 /Users/ormeircohen/Desktop/SHIFT/shift platform main /shift-platform/קבצי קוד/data.js
-md5: a7a600d7eb9d2b4c23729404e9a3b1f4
+md5: 3f48d78e40eab26c287ab05b6c04ed76
 ```
 
 **אל תערוך את הקובץ הזה ביד ואל תכתוב תוכן מהזיכרון.** אם data.js השתנה — הרץ את המחולל מחדש.
