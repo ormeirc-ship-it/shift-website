@@ -28,3 +28,6 @@ node_modules/
 # צילומי הרגרסיה הוויזואלית הנוכחיים — ארעיים; ה-baseline המחייב
 # יושב ב-tests/vr-baseline/ ומעודכן רק ב-npm run vr:accept
 .vr/
+
+# מקור ה-4K (T14) — 26MB, מחוץ ל-git בכוונה; הורד 29.7 מקישורי NEXT (פג ~31.7)
+_build/brain-dive-4k*.mp4
