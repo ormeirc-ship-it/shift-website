@@ -32,9 +32,10 @@ const SETS = [
   // ‏arrival = תחתית הצלילה (מצב הווילון החי של B3); ‏events = הכרטיסיות
   // עם משבצות-המקום — שניהם נוספו בלולאת-הרקע של 28.7 אחרי שהתברר שהסט
   // המקורי לא מכסה אותם
-  // ‏#past-events נוסף 28.7 עם הסקשן החדש (D10)
-  { tag: 'd', w: 1440, h: 900, targets: ['top', 'dive-end', '.statement', '#method', '#program', '#events', '#past-events', '#story', '.closing'] },
-  { tag: 'm', w: 390, h: 844, mobile: true, targets: ['top', '#program', '#breathe', '#events', '#past-events', '.closing'] },
+  // ‏#past-events נוסף 28.7 (D10); ‏#path נוסף 29.7 (D12 — הסקשן מעולם
+  // לא צולם, וכך הבאג של הפסקה-בטור-הצר חמק מתחת לרדאר)
+  { tag: 'd', w: 1440, h: 900, targets: ['top', 'dive-end', '.statement', '#method', '#path', '#program', '#events', '#past-events', '#story', '.closing'] },
+  { tag: 'm', w: 390, h: 844, mobile: true, targets: ['top', '#path', '#program', '#breathe', '#events', '#past-events', '.closing'] },
 ];
 const THRESHOLD = 1.5;
 

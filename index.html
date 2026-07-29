@@ -425,30 +425,46 @@
       <div class="section-head reveal">
         <h2>הגישה — ארבעה צעדים</h2>
       </div>
-      <div class="steps-wrap">
-      <div class="path-track" aria-hidden="true"><span class="path-line" id="pathLine"></span></div>
+      <!-- D12 (פידבק OC ‏28.7 ערב): הפסקה ישבה בטור ה-96px של המספר
+           (באג auto-placement — שלושה ילדים בגריד של שתי עמודות) והחצי
+           השמאלי נשאר ריק. עכשיו: step-body עוטף כותרת+פסקה, טיפוגרפיה
+           גדולה, ובחצי הפנוי במה חיה — ספרת-ענק + סיב שמתארך צעד-צעד,
+           מונעים מאותו סיגנל .lit של מנוע התנועה. -->
+      <div class="path-grid">
       <ol class="steps">
         <li class="step reveal">
           <span class="step-num">1</span>
-          <h3>עוצרים</h3>
-          <p>מזהים את האוטומטים — הרגעים שבהם פחד ולחץ מנהלים אותנו בלי שנשים לב.</p>
+          <div class="step-body">
+            <h3>עוצרים</h3>
+            <p>מזהים את האוטומטים — הרגעים שבהם פחד ולחץ מנהלים אותנו בלי שנשים לב.</p>
+          </div>
         </li>
         <li class="step reveal delay-1">
           <span class="step-num">2</span>
-          <h3>מבינים</h3>
-          <p>לומדים את המדע שמאחורי התודעה — איך המוח, הגוף וההרגלים מעצבים את המציאות שלנו.</p>
+          <div class="step-body">
+            <h3>מבינים</h3>
+            <p>לומדים את המדע שמאחורי התודעה — איך המוח, הגוף וההרגלים מעצבים את המציאות שלנו.</p>
+          </div>
         </li>
         <li class="step reveal delay-2">
           <span class="step-num">3</span>
-          <h3>מתרגלים</h3>
-          <p>מטמיעים הרגלים מעצבי תודעה — תרגול יומי קצר שמחבר גוף, מוח ורגש.</p>
+          <div class="step-body">
+            <h3>מתרגלים</h3>
+            <p>מטמיעים הרגלים מעצבי תודעה — תרגול יומי קצר שמחבר גוף, מוח ורגש.</p>
+          </div>
         </li>
         <li class="step reveal delay-3">
           <span class="step-num">4</span>
-          <h3>יוצרים</h3>
-          <p>עוברים מהישרדות ליצירה — חיים של בחירה מודעת, צמיחה ואהבה.</p>
+          <div class="step-body">
+            <h3>יוצרים</h3>
+            <p>עוברים מהישרדות ליצירה — חיים של בחירה מודעת, צמיחה ואהבה.</p>
+          </div>
         </li>
       </ol>
+      <div class="path-stage" aria-hidden="true">
+        <div class="path-big"><span>1</span><span>2</span><span>3</span><span>4</span></div>
+        <div class="path-fiber"><i></i></div>
+      </div>
       </div>
     </div>
   </section>

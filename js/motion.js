@@ -725,6 +725,10 @@
         scrollTrigger: { trigger: '.steps', start: 'top 75%', end: 'bottom 60%', scrub: true }
       }));
     }
+    // ‏D12: הבמה (ספרת-ענק + סיב) רוכבת על אותו סיגנל הדלקה — ‏data-step
+    // על הסקשן, וה-CSS עושה את השאר. במצב שקט המנוע לא רץ → מצב-המנוחה
+    // הסטטי של ה-CSS (ספרה 1 עמומה, סיב בסיסי) — בדיוק התנאי.
+    var pathSec = document.querySelector('.path');
     steps.forEach(function (step, i) {
       gsap.from(step, {
         autoAlpha: 0, y: 34, duration: 0.8, clearProps: CLEAR,
@@ -732,8 +736,12 @@
           trigger: step, start: 'top 82%',
           onEnter: function () {
             setTimeout(function () { step.classList.add('lit'); }, 250 + i * 120);
+            if (pathSec) pathSec.dataset.step = String(i + 1);
           },
-          onLeaveBack: function () { step.classList.remove('lit'); }
+          onLeaveBack: function () {
+            step.classList.remove('lit');
+            if (pathSec) pathSec.dataset.step = String(i);
+          }
         }
       });
     });
