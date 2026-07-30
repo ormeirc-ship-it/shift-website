@@ -167,7 +167,7 @@ const step = (name, ok, note = '') => {
 {
   const page = await browser.newPage();
   await page.setViewport({ width: 390, height: 844, isMobile: true, hasTouch: true });
-  // מצב שקט: מסלול הנשימה הלא-מונפש דטרמיניסטי בזמן (13ש' לסבב, מספרי OC)
+  // מצב שקט: מסלול הנשימה הלא-מונפש דטרמיניסטי בזמן (13.5ש' לסבב, מספרי OC)
   await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
   const consoleErrors = [];
   page.on('console', (m) => { if (m.type() === 'error') consoleErrors.push(m.text()); });
@@ -205,7 +205,7 @@ const step = (name, ok, note = '') => {
   step('menu_open נרשם', await page.evaluate(() =>
     (window.dataLayer || []).some((e) => e.event === 'shift:menu_open')));
 
-  // הנשימה — עד הסוף (3 סבבים במסלול השקט ≈ 39ש', מחזור 13ש' של OC)
+  // הנשימה — עד הסוף (3 סבבים במסלול השקט ≈ 40.5ש', מחזור 13.5ש' של OC)
   await page.evaluate(() => document.getElementById('breathe').scrollIntoView());
   await new Promise((r) => setTimeout(r, 500));
   await page.evaluate(() => document.getElementById('breathStart').click());

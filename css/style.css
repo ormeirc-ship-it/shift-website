@@ -320,7 +320,9 @@ h3 {
   grid-template-columns: minmax(0, 1fr) minmax(280px, 420px);
   gap: clamp(24px, 4vw, 64px);
   align-items: center;
-  padding: clamp(28px, 4.5vw, 52px) 4px;
+  /* מרזח פנימי אמיתי (14px) - המלל לא נוגע בקצה הרצועה, ובגרירה יש
+     אוויר בין שקופיות במקום קצה-תמונה חתוך (OC ‏30.7) */
+  padding: clamp(28px, 4.5vw, 52px) 14px;
   min-height: 340px;
 }
 .world-slide img { pointer-events: none; } /* גרירה מתחילה גם מעל התמונה, בלי ghost-drag */
@@ -769,13 +771,14 @@ h1 .w { display: inline-block; }
   /* ‏width:100% חסר כאן מאז ומתמיד - בלעדיו התמונה מרונדרת בגובה
      ה-attribute המלא (‏897 בישנות, ‏1456 בחדשה): הפאנלים "הגבוהים"
      היו באג שקט, והמלל של הקלף נדחק אל מתחת לקו-המסך ברגע שהמסגור
-     החדש העלה את המספרים. ‏4:3 היה הכוונה הכתובה כל הזמן. */
+     החדש העלה את המספרים. ‏4:3 היה הכוונה הכתובה כל הזמן.
+     ‏OC ‏30.7 (צפייה חיה): המסגרת וההצללה ירדו - הצל (60px) של שקופית
+     שכנה נמרח מעבר לקצה הרצועה אל תוך טור-המלל ו"בלע" אותו; תמונה
+     שקטה, בלי עיגול-פינות ובלי צל. */
   width: 100%;
   height: auto;
-  border-radius: var(--radius);
   aspect-ratio: 4 / 3;
   object-fit: cover;
-  box-shadow: 0 24px 60px rgba(24, 22, 59, 0.22);
 }
 
 .world-media { max-width: 440px; }
@@ -870,7 +873,9 @@ h1 .w { display: inline-block; }
 /* ---------- מה אנחנו עושים: סל המוצרים ---------- */
 .basket { padding: clamp(90px, 13vw, 150px) 0; }
 /* ‏3ב (OC ‏14:40): ה-H2 הוא ה-wordmark - אותיות לטיניות, גדול ונושם;
-   המשפט שאחריו תת-כותרת אמיתית: יותר אוויר, מעט גדול וכבד מ-intro רגיל */
+   המשפט שאחריו תת-כותרת אמיתית: יותר אוויר, מעט גדול וכבד מ-intro רגיל.
+   ‏OC ‏30.7: שניהם ממורכזים (הבלוק של תת-הכותרת כבר auto - זה הטקסט) */
+.basket .section-head { text-align: center; }
 .basket-wordmark {
   font-size: clamp(3.2rem, 8vw, 5.4rem);
   font-weight: 200;
@@ -1042,7 +1047,7 @@ h1 .w { display: inline-block; }
   border-radius: 50%;
   border: 1px dashed var(--sky-a35);
   /* ‏D3: הטבעת נושמת עם ההנחיה - העוגן שמחזיק את העין בנשיפה הארוכה
-     (7.5ש' עם טקסט סטטי, מספרי OC ‏29.7). המחלקות מוחלפות ב-main.js לפי השלב. */
+     (7ש' עם טקסט סטטי, מספרי OC ‏30.7). המחלקות מוחלפות ב-main.js לפי השלב. */
   transition: transform 2.4s cubic-bezier(0.45, 0, 0.55, 1), opacity 2.4s ease;
 }
 .breath.inhale .breath-ring { transform: scale(1.14); opacity: 0.95; }
