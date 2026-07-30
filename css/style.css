@@ -1203,6 +1203,61 @@ h1 .w { display: inline-block; }
   border-radius: var(--radius);
 }
 .past-slot .event-soon { margin-top: 0; }
+
+/* ---------- סרגל-רץ ביקורות (הוראת OC ‏30.7 - מסגרת בלבד) ----------
+   ‏CSS בלבד: שתי רצועות זהות בתוך run אחד; ‏translateX ‎0→50%‎ מזיז
+   רצועה שלמה = פריים זהה = לולאה חלקה. ב-RTL הקלפים נכנסים משמאל
+   ונוסעים ימינה - כיוון הקריאה. נעצר ב-hover; במופחת-תנועה אין
+   אנימציה, הכפולה מוסתרת והרצועה נגללת ידנית. */
+.reviews-marquee {
+  margin-top: clamp(40px, 6vw, 64px);
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to left, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(to left, transparent, #000 8%, #000 92%, transparent);
+}
+.reviews-run {
+  display: flex;
+  width: max-content;
+  animation: reviewsRun 46s linear infinite;
+}
+@media (hover: hover) { .reviews-marquee:hover .reviews-run { animation-play-state: paused; } }
+.reviews-strip {
+  display: flex;
+  gap: clamp(12px, 1.6vw, 18px);
+  padding: 0 clamp(6px, 0.8vw, 9px);
+  list-style: none;
+  margin: 0;
+}
+.review-card {
+  width: clamp(230px, 26vw, 320px);
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: var(--radius);
+  padding: 18px 20px 16px;
+}
+.review-mark {
+  display: block;
+  color: var(--sky);
+  font-size: 1.7rem;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.review-card p { color: var(--white-soft); font-size: 0.95rem; margin-bottom: 10px; max-width: none; }
+.review-by { color: var(--white-faint); font-size: 0.8rem; letter-spacing: 0.06em; }
+@keyframes reviewsRun {
+  from { transform: translateX(0); }
+  to { transform: translateX(50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .reviews-run { animation: none; }
+  .reviews-strip[aria-hidden="true"] { display: none; }
+  .reviews-marquee {
+    overflow-x: auto;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
 /* מובייל: קרוסלת scroll-snap - CSS בלבד; RTL מגיע נכון מהדפדפן */
 @media (max-width: 720px) {
   .past-grid {
