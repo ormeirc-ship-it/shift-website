@@ -426,8 +426,9 @@ html:not(.js) .worlds-nav { display: none; }
   font-weight: 600;
   color: var(--ink);
 }
-/* ‏3ד (OC ‏14:40): מייסדי המיזם - שקט ומכובד, קו דק וריווח אותיות.
-   דיוקנאות ושורת-תפקיד יגיעו מ-OC (TODO ב-HTML). */
+/* ‏3ד (עודכן 29.7 ‏18:10): "אז והיום" - זוג דיוקנאות 4:5 באותו יחס,
+   שם, שורת-תפקיד עובדתית ופסקה בגוף ראשון. כרגע מייסד אחד (הכרעת
+   ‏OC ‏18:15) - הפריט בעמודה מרוסנת; הוספת השני = שינוי גריד בלבד. */
 .founders {
   margin-top: 34px;
   padding-top: 22px;
@@ -439,22 +440,39 @@ html:not(.js) .worlds-nav { display: none; }
   font-weight: 600;
   letter-spacing: 0.22em;
   color: var(--ink-soft);
-  margin-bottom: 10px;
+  margin-bottom: 14px;
 }
-.founders-names {
-  display: flex;
-  gap: 12px 36px;
-  flex-wrap: wrap;
+.founder { max-width: 440px; margin-inline: auto; }
+/* הזוג הוא התזה של המותג בתמונה אחת - לא נשבר לשורות, גם במובייל */
+.founder-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
 }
-.founders-names span {
-  font-size: 1.18rem;
-  font-weight: 500;
-  color: var(--ink);
-  letter-spacing: 0.02em;
+.founder-shot { position: relative; margin: 0; }
+.founder-shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: var(--radius);
 }
-@media (max-width: 899px) {
-  .founders-names { flex-direction: column; }
+.founder-shot figcaption {
+  position: absolute;
+  bottom: 10px;
+  inset-inline-start: 10px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: #fff;
+  background: rgba(18, 18, 52, 0.85);
+  padding: 3px 11px;
+  border-radius: var(--pill);
 }
+.founder-name { margin-top: 16px; font-size: 1.25rem; }
+.founder-role { color: var(--ink-soft); font-size: 0.95rem; margin-top: 2px; }
+.founder-story { color: var(--ink-soft); margin-top: 10px; }
 
 /* ---------- מה נפתח ---------- */
 .outcomes { padding: clamp(80px, 12vw, 140px) 0; }
