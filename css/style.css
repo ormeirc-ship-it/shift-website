@@ -467,15 +467,17 @@ html:not(.js) .worlds-nav { display: none; }
 /* ‏2.8: שני המייסדים - שתי עמודות שמתחילות באותו קו עליון. הפרשי
    האורך מאושרים ע"י OC; אסור למתוח/למרכז-אנכית/להדגיש ברקע -
    הפסקה הארוכה פשוט נגמרת נמוך יותר. */
+/* ‏2.8 ערב (OC): עמודה אחת בכל הרוחבים - איתי ואז אור, זה מתחת לזה,
+   בתוך עמודת-הסיפור לצד התמונה הארוכה (שתי עמודות רחבות היו הסיבה
+   שהבלוק גלה לרוחב-מלא; ערימה של אחת נכנסת בנוח ב-‎~560px). */
 .founders-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(24px, 3.5vw, 48px);
+  grid-template-columns: 1fr;
+  gap: 38px;
   align-items: start;
 }
 .founder { max-width: 440px; }
 @media (max-width: 899px) {
-  .founders-row { grid-template-columns: 1fr; gap: 38px; }
   .founder { margin-inline: auto; }
 }
 /* הזוג הוא התזה של המותג בתמונה אחת - לא נשבר לשורות, גם במובייל */

@@ -71,7 +71,7 @@
   }
   </script>
   <!-- פרמטר הגרסה שובר cache ישן אחרי כל פריסה - לעדכן בכל שינוי CSS/JS -->
-  <link rel="stylesheet" href="css/style.css?v=20260802e">
+  <link rel="stylesheet" href="css/style.css?v=20260802f">
   <script>
     document.documentElement.classList.add('js');
     // מנוע התנועה מוכרז מראש כדי שחוקי ה-reveal של ה-CSS לא יידלקו לרגע;
@@ -760,9 +760,11 @@
       </div>
 
       <!-- סרטון הסיכום (הצעת Cowork: פריט רחב בראש, הגריד מתחתיו -
-           מסומן ל-OC ב-HANDOFF). ‏14MB - נטען אך ורק בלחיצת ניגון:
-           ‏preload=none, פוסטר קל (32KB), פקדים נטיביים, בלי לולאה.
-           אין דיבור בסרטון (מוזיקה בלבד) - אין צורך בכתוביות. -->
+           מסומן ל-OC ב-HANDOFF). ‏15MB - נטען אך ורק בלחיצת ניגון:
+           ‏preload=none, פוסטר קל (32KB), פקדים נטיביים, בלי לולאה,
+           בלי autoplay. ‏2.8 ערב: האודיו הוחזר (קידוד מחדש מהמקור,
+           ‏aac 128k) - הפסקול נמחק בעיבוד הקודם בטעות. "מוזיקה בלבד,
+           בלי כתוביות" = הצהרת OC; אם יש דיבור - נדרש <track>. -->
       <figure class="past-video reveal">
         <video controls preload="none" playsinline
                poster="assets/events/after-movie-poster.webp"
@@ -842,37 +844,13 @@
              באותו יחס, הבלוק של אור בלבד בהכרעת OC ("תשלח לקוד כרגע רק
              עליי"). ‏.founders מיכל, ‏.founder פריט חוזר - הוספת מייסד
              שני היא שינוי גריד בלבד. -->
-      </div>
-    </div>
-    <!-- המייסדים פרושים לרוחב מלא - שתי עמודות בתוך עמודת-הסיפור
-         הצרה היו נחנקות (~260px לעמודה) -->
-    <div class="container">
-        <!-- ‏2.8: איתי הגיע - שני המייסדים. ‏OC אישר הכול כמות שהוא
-             ("תעלה הכל כמו שזה") כולל הפרשי האורך (3 מול 7 שורות) -
-             השוויון מושג ברכיבים: תמונות/סגנון/ריווח זהים, הגריד
-             ‏align-items:start, הפסקה הארוכה פשוט יורדת נמוך יותר. -->
+        <!-- ‏2.8 ערב (OC בצפייה): "תחזיר אותנו... איתי ראשון ואני שני,
+             אחד מתחת לשני, לאורך התמונה הארוכה" - הבלוק חזר לעמודת-
+             הסיפור כערימה של עמודה אחת (זוג אז/היום נשאר זו-לצד-זו).
+             סדר ה-DOM עצמו הוחלף - לא order ב-CSS - לקורא-מסך ומקלדת. -->
         <div class="founders reveal delay-3">
           <span class="founders-label">מייסדי SHIFT</span>
           <div class="founders-row">
-          <article class="founder">
-            <div class="founder-pair">
-              <figure class="founder-shot">
-                <picture><source srcset="assets/img/founder-or.webp" type="image/webp"><img src="assets/img/founder-or.jpg" alt="אור מאיר כהן במדים ואפוד קרבי בשטח, מחייך על רקע דיונות בשקיעה" loading="lazy" width="1183" height="1482"></picture>
-                <figcaption>אז</figcaption>
-              </figure>
-              <figure class="founder-shot">
-                <picture><source srcset="assets/img/founder-or-now.webp" type="image/webp"><img src="assets/img/founder-or-now.jpg" alt="אור מאיר כהן מלמד מול קהל בחוץ, לוח לבן עם שרטוטי גלי מוח לצדו" loading="lazy" width="1183" height="1482"></picture>
-                <figcaption>היום</figcaption>
-              </figure>
-            </div>
-            <h3 class="founder-name">אור מאיר כהן</h3>
-            <p class="founder-role">מייסד שותף · לוחם ומפקד לשעבר, סטודנט למשפטים.</p>
-            <p class="founder-story">
-              את המעבר מהישרדות ליצירה לא למדתי בספר. אחרי חרבות ברזל
-              מצאתי את עצמי מול מערכת עצבים שנשארה בכוננות גם כשהקרב
-              נגמר, והחיפוש אחרי הדרך החוצה הפך למה ש-SHIFT מלמד היום.
-            </p>
-          </article>
           <article class="founder">
             <div class="founder-pair">
               <figure class="founder-shot">
@@ -896,8 +874,28 @@
               רוצה להפיץ את האור הזה לכמה שיותר אנשים, ושם נולד SHIFT.
             </p>
           </article>
+          <article class="founder">
+            <div class="founder-pair">
+              <figure class="founder-shot">
+                <picture><source srcset="assets/img/founder-or.webp" type="image/webp"><img src="assets/img/founder-or.jpg" alt="אור מאיר כהן במדים ואפוד קרבי בשטח, מחייך על רקע דיונות בשקיעה" loading="lazy" width="1183" height="1482"></picture>
+                <figcaption>אז</figcaption>
+              </figure>
+              <figure class="founder-shot">
+                <picture><source srcset="assets/img/founder-or-now.webp" type="image/webp"><img src="assets/img/founder-or-now.jpg" alt="אור מאיר כהן מלמד מול קהל בחוץ, לוח לבן עם שרטוטי גלי מוח לצדו" loading="lazy" width="1183" height="1482"></picture>
+                <figcaption>היום</figcaption>
+              </figure>
+            </div>
+            <h3 class="founder-name">אור מאיר כהן</h3>
+            <p class="founder-role">מייסד שותף · לוחם ומפקד לשעבר, סטודנט למשפטים.</p>
+            <p class="founder-story">
+              את המעבר מהישרדות ליצירה לא למדתי בספר. אחרי חרבות ברזל
+              מצאתי את עצמי מול מערכת עצבים שנשארה בכוננות גם כשהקרב
+              נגמר, והחיפוש אחרי הדרך החוצה הפך למה ש-SHIFT מלמד היום.
+            </p>
+          </article>
           </div>
         </div>
+      </div>
     </div>
   </section>
 
@@ -989,7 +987,7 @@
   <script src="assets/vendor/gsap.min.js" defer></script>
   <script src="assets/vendor/ScrollTrigger.min.js" defer></script>
   <script src="assets/vendor/lenis.min.js" defer></script>
-  <script src="js/motion.js?v=20260802e" defer></script>
-  <script src="js/main.js?v=20260802e" defer></script>
+  <script src="js/motion.js?v=20260802f" defer></script>
+  <script src="js/main.js?v=20260802f" defer></script>
 </body>
 </html>
