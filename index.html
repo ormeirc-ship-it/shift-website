@@ -71,7 +71,7 @@
   }
   </script>
   <!-- פרמטר הגרסה שובר cache ישן אחרי כל פריסה - לעדכן בכל שינוי CSS/JS -->
-  <link rel="stylesheet" href="css/style.css?v=20260730a">
+  <link rel="stylesheet" href="css/style.css?v=20260802a">
   <script>
     document.documentElement.classList.add('js');
     // מנוע התנועה מוכרז מראש כדי שחוקי ה-reveal של ה-CSS לא יידלקו לרגע;
@@ -159,6 +159,11 @@
   <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
 
 
+  <!-- ‏B9: ציון-דרך main לניווט טכנולוגיה-מסייעת. הפוטר וה-CTA הסוגר
+       נשארים בחוץ (סצנת הסיום מכילה את הפוטר - פיצול שלה היה משנה
+       את אנימציות הסגירה); קישור הדילוג ממשיך אל #products בכוונה -
+       תפקידו לדלג על 440vh של צלילה, וה-H1 נגיש בניווט-כותרות. -->
+  <main id="main">
   <!-- פתיח + הצהרה: במת הכיסוי - ההצהרה מחליקה מעל ההירו -->
   <div class="cover-stage">
   <!-- הכניסה דרך המוח: הגלילה מניעה צלילה מהחושך אל האור.
@@ -410,8 +415,11 @@
         </p>
       </div>
         <div class="breath" id="breath">
-          <div class="breath-stage" aria-hidden="true">
-            <div class="breath-ring"></div>
+          <!-- ‏B3: ‏aria-hidden ישב על הבמה כולה וביטל את ה-aria-live של
+               שלב-הנשימה - קורא-מסך לא שמע את ההנחיות. עכשיו רק הטבעת
+               הדקורטיבית מוסתרת; העיגול נושא טקסט אמיתי ונשאר חשוף. -->
+          <div class="breath-stage">
+            <div class="breath-ring" aria-hidden="true"></div>
             <div class="breath-circle" id="breathCircle"><span id="breathPhase" aria-live="polite">רגע אחד</span></div>
           </div>
           <div class="breath-info">
@@ -761,6 +769,10 @@
          לולאה חלקה (הכפולה aria-hidden); ‏CSS בלבד, נעצר ב-hover
          ובמופחת-תנועה (שם הרצועה נגללת ידנית). -->
     <div class="reviews-marquee" role="group" aria-label="ביקורות מהאירועים - בקרוב">
+      <!-- ‏B10 (‏WCAG 2.2.2): תנועה אוטומטית מעל 5ש' חייבת מנגנון עצירה
+           גלוי - ‏hover לא קיים בטלפון. הכפתור חי רק עם JS; במופחת-תנועה
+           אין תנועה וגם לא כפתור. -->
+      <button class="reviews-pause" id="reviewsPause" type="button" aria-pressed="false" aria-label="השהיית סרגל הביקורות"><i aria-hidden="true"></i></button>
       <div class="reviews-run">
         <ul class="reviews-strip" role="list">
           <!-- TODO: ביקורת 1 מ-OC - מלל + שם משתתף/ת + שם אירוע -->
@@ -874,6 +886,7 @@
       </div>
     </div>
   </section>
+  </main>
 
   <!-- סצנת הסיום: קריאה לפעולה + פוטר - מסך סוגר אחד ענק -->
   <div class="closing">
@@ -922,7 +935,7 @@
   <script src="assets/vendor/gsap.min.js" defer></script>
   <script src="assets/vendor/ScrollTrigger.min.js" defer></script>
   <script src="assets/vendor/lenis.min.js" defer></script>
-  <script src="js/motion.js?v=20260730a" defer></script>
-  <script src="js/main.js?v=20260730a" defer></script>
+  <script src="js/motion.js?v=20260802a" defer></script>
+  <script src="js/main.js?v=20260802a" defer></script>
 </body>
 </html>

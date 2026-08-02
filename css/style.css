@@ -163,7 +163,8 @@ h3 {
   inset-inline: 0;
   top: 0;
   z-index: 100;
-  transition: background-color 0.35s ease, box-shadow 0.35s ease;
+  /* (שורת ה-transition הוסרה - 🟢: מוצלת ע"י ההגדרה המלאה בבלוק
+     ‏dive-hush בהמשך, שכוללת גם opacity/transform) */
 }
 .nav.scrolled {
   background: rgba(18, 18, 52, 0.85);
@@ -193,17 +194,7 @@ h3 {
   transition: color 0.2s ease;
 }
 @media (hover: hover) { .nav-links a:hover { color: #fff; } }
-.nav-burger {
-  display: none;
-  background: none;
-  border: none;
-  width: 40px;
-  height: 40px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 7px;
-}
+/* (בלוק ה-nav-burger הקדם-איזאנמי אוחד אל ההגדרה היחידה למטה - 🟢) */
 /* (חוקי ה-span הישירים של העידן הקדם-איזאנמי הוסרו - אחרי הסרת המילה
    "תפריט" ה-span:first/last-child שלהם היה תופס את מכולת הקווים עצמה
    ושובר את מורף ה-X; הקווים חיים ב-.nav-burger-lines בלבד) */
@@ -553,19 +544,8 @@ html:not(.js) .worlds-nav { display: none; }
     box-shadow: 0 16px 40px rgba(24, 22, 59, 0.1);
   }
 }
-.step-num {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: var(--navy);
-  color: var(--sky);
-  font-weight: 700;
-  font-size: 1.15rem;
-  margin-bottom: 18px;
-}
+/* (בלוק ה-step-num העגול מעידן-הקלפים נמחק - 🟢: היה מוצל כליל
+   ע"י ההגדרה של D12 בהמשך הקובץ והטעה את הקורא) */
 .step h3 { margin-bottom: 8px; }
 .step p { color: var(--ink-soft); font-size: 0.98rem; }
 
@@ -642,7 +622,11 @@ html:not(.js) .worlds-nav { display: none; }
   text-decoration: none;
   font-size: 0.98rem;
   transition: color 0.2s ease;
+  /* ‏B7: יעד מגע - הטקסט ~27px; שטח הלחיצה מורחב בלי לשנות מראה,
+     באותו דפוס כמו נקודות-הניווט */
+  position: relative;
 }
+.footer-links a::before { content: ""; position: absolute; inset: -9px 0; }
 @media (hover: hover) { .footer-links a:hover { color: #fff; } }.footer-bottom { padding-top: 24px; font-size: 0.85rem; }
 
 /* ---------- אנימציות הופעה ----------
@@ -666,24 +650,28 @@ html.js:not(.gsap-on) .reveal.visible { opacity: 1; transform: none; }
 }
 
 /* ---------- מובייל ---------- */
-@media (max-width: 900px) {
+/* ‏B5: היה 900 מול 899 בשאר הקובץ - בדיוק ב-900px נוצרה פריסה
+   היברידית שבורה; מיושר ל-899 כמו כולם */
+@media (max-width: 899px) {
   .cards-3 { grid-template-columns: 1fr; }
   .steps { grid-template-columns: repeat(2, 1fr); }
   .story-grid { grid-template-columns: 1fr; }
   /* D1 #5 מובייל: מילים לפני תמונה - הסקשן נפתח בכותרת, לא במסך גרדיאנט */
   .story-body { order: -1; }
   .story-media { max-width: 440px; margin-inline: auto; }
+  /* ‏B4: השקופית נשברת לטור יחיד כאן (899) ולא ב-720 - בפער 721-899
+     עמודת הטקסט התכווצה ל-241px, ‏13 תווים לשורה */
+  .world-slide { grid-template-columns: 1fr; gap: 18px; min-height: 0; }
 }
 
 @media (max-width: 720px) {
   .nav-links, .btn-nav { display: none; }
-  .nav-burger { display: flex; }
   .nav { background: rgba(18, 18, 52, 0.85); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
 
   .steps { grid-template-columns: 1fr; }
-  .world-slide { grid-template-columns: 1fr; gap: 18px; min-height: 0; }
 
-  .hero-ctas { flex-direction: column; width: 100%; max-width: 320px; }
+  /* ‏B6: היו צמודים לימין - ‏margin-inline:auto ממרכז את הטור */
+  .hero-ctas { flex-direction: column; width: 100%; max-width: 320px; margin-inline: auto; }
   .hero-ctas .btn { width: 100%; text-align: center; }
 
   .footer-grid { flex-direction: column; }
@@ -757,6 +745,9 @@ html.js:not(.gsap-on) .reveal.visible { opacity: 1; transform: none; }
   transition: opacity var(--t-fast) ease;
 }
 @media (hover: hover) { .dot-nav a:hover::after { opacity: 1; } }@media (max-width: 899px) { .dot-nav { display: none; } }
+/* ‏B8: ב-900-1215 שולי התוכן צרים מ-38px והנקודות (‏inset 28) ישבו
+   בתוך תיבת התוכן - נדחקות אל רצועת השוליים (24px) */
+@media (min-width: 900px) and (max-width: 1215px) { .dot-nav { inset-inline-end: 7px; } }
 
 /* ---------- גרעין קולנועי עדין ---------- */
 .grain {
@@ -1178,7 +1169,10 @@ h1 .w { display: inline-block; }
   border-bottom: 1px solid var(--sky-a35);
   padding-bottom: 3px;
   transition: border-color var(--t-med) ease;
+  /* ‏B7: קישור ההמרה של האירועים היה ~30px - שטח לחיצה 44px+ */
+  position: relative;
 }
+.event-link::before { content: ""; position: absolute; inset: -8px -6px; }
 @media (hover: hover) { .event-link:hover { border-color: var(--sky); } }/* פריסה מדורגת בדסקטופ */
 @media (min-width: 900px) {
   .event-card:nth-child(2) { margin-inline-start: clamp(30px, 5vw, 90px); }
@@ -1238,6 +1232,41 @@ h1 .w { display: inline-block; }
   animation: reviewsRun 46s linear infinite;
 }
 @media (hover: hover) { .reviews-marquee:hover .reviews-run { animation-play-state: paused; } }
+/* ‏B10: עצירה גם למקלדת ולמגע - פוקוס פנימי עוצר, והכפתור קובע מצב */
+.reviews-marquee:focus-within .reviews-run,
+.reviews-marquee.paused .reviews-run { animation-play-state: paused; }
+.reviews-pause {
+  position: absolute;
+  top: -6px;
+  inset-inline-start: 0;
+  z-index: 2;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(18, 18, 52, 0.6);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+/* אייקון השהיה/ניגון ב-CSS בלבד: שני פסים - ובמצב עצור, משולש */
+.reviews-pause i {
+  display: block;
+  width: 8px;
+  height: 10px;
+  border-inline: 2.5px solid var(--white-soft);
+}
+.reviews-marquee.paused .reviews-pause i {
+  width: 0;
+  height: 0;
+  border: none;
+  border-block: 5px solid transparent;
+  border-inline-end: 8px solid var(--white-soft);
+}
+@media (hover: hover) { .reviews-pause:hover { border-color: var(--sky-a60); } }
+html:not(.js) .reviews-pause { display: none; }
+@media (prefers-reduced-motion: reduce) { .reviews-pause { display: none; } }
+.reviews-marquee { position: relative; }
 .reviews-strip {
   display: flex;
   gap: clamp(12px, 1.6vw, 18px);
@@ -1281,7 +1310,8 @@ h1 .w { display: inline-block; }
     display: flex;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
-    scroll-padding-inline: 18px;
+    /* (‏scroll-padding-inline הוסר - 🟢: נלחם ב-snap-align:center
+       והראשון/האחרון לא הגיעו למרכז) */
     -webkit-overflow-scrolling: touch;
     padding-bottom: 6px; /* אוויר לפס-גלילה במכשירים שמציגים אותו */
   }
@@ -1510,9 +1540,8 @@ h1 .w { display: inline-block; }
 .program.lit .week-tag { color: var(--blue-mid); }
 .program.lit .day-no { color: var(--blue-mid); border-color: rgba(58, 95, 138, 0.45); }
 .program.lit .day-rest .day-no { color: var(--ink-soft); border-color: rgba(24, 22, 59, 0.3); }
-/* --card-bg מונפש ע"י motion.js יחד עם רקע הסקשן; הערך כאן הוא רשת
-   ביטחון לרגע ההיפוך (ההרכבה של 4% נייבי מעל הנייר = #EDECEB, אטום). */
-.program.lit { --card-bg: #EDECEB; }
+/* (חוק ‏--card-bg על ‏.lit נמחק - 🟢: המנוע כותב את המשתנה inline
+   וגובר תמיד, ובלי מנוע אין ‏.lit בכלל - החוק היה בלתי-נגיש) */
 .program.lit .week-card { border-color: var(--line); }
 .program.lit .day-list { border-top-color: var(--line); }
 .program.lit .day-item { border-bottom-color: var(--line); }
@@ -1568,10 +1597,12 @@ h1 .w { display: inline-block; }
 .nav-links, .nav .btn-nav { display: none; }
 .nav-burger {
   display: flex;
-  flex-direction: row;
   align-items: center;
-  gap: 12px;
-  width: auto;
+  justify-content: center;
+  background: none;
+  border: none;
+  /* ‏B7: הקווים 26px - הכפתור עצמו 44px לפחות, יעד מגע תקני */
+  min-width: 44px;
   height: 44px;
   margin-inline-start: auto;
   cursor: pointer;
@@ -2110,8 +2141,18 @@ html.nav-light .nav.scrolled {
 html.nav-light .nav-burger-lines span { background: var(--navy); }
 html.nav-light .nav-links a { color: var(--ink-soft); }
 @media (hover: hover) { html.nav-light .nav-links a:hover { color: var(--navy); } }/* התפריט הפתוח תמיד כהה - הוא מסך מלא משלו */
-html.nav-light .mobile-menu.open ~ * .nav-burger-lines span,
-.mobile-menu.open ~ .nav .nav-burger-lines span { background: #fff; }
+/* ‏B1: שני כללי ה-~ הישנים היו מתים - ‏.nav מקדים את ‏.mobile-menu
+   ב-DOM וסלקטור אחים לא מסתכל אחורה. המצב חי עכשיו על <html>
+   (main.js setMenu): קווי ה-X לבנים על התפריט הפתוח בכל רקע. */
+html.menu-open .nav-burger-lines span { background: #fff; }
+/* ‏B2: הנקודות (z:140) צפו מעל התפריט (z:99) - לחיצה גללה בלי לסגור
+   והגלילה נשארה נעולה, נראה כמו אתר קפוא. בתפריט פתוח הן מפנות. */
+html.menu-open .dot-nav {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity var(--t-med) ease, visibility 0s var(--t-med);
+}
 
 /* הסרגל שקט מהפיקסל הראשון ועד ההצהרה (OC ‏29.7 ‏14:15: מסך הפתיחה
    מכיל ארבעה דברים בלבד). המחלקה מוצהרת אופטימית ב-head - בלי זה

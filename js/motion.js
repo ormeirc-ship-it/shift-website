@@ -18,7 +18,8 @@
 
   var docEl = document.documentElement;
   var REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var NAV_OFFSET = -72;
+  // 🟢: נגזר מ---nav-h במקום מספר-קסם כפול (main.js כבר קורא מה-CSS)
+  var NAV_OFFSET = -(parseFloat(getComputedStyle(docEl).getPropertyValue('--nav-h')) || 72);
   var DESKTOP = window.matchMedia('(min-width: 900px)');
   var FINE_POINTER = window.matchMedia('(hover: hover) and (pointer: fine)');
   var CLEAR = 'transform,opacity,visibility';
@@ -461,8 +462,11 @@
     // הכלל: כל <section> ישיר של body, פלוס הסקשנים שבתוך במת הכיסוי
     // וסצנת הסיום (שם ה-<section> עטוף ב-div). הצלילה עצמה לא נכללת -
     // היא לא נושאת תוכן זורם.
+    // ‏B9: הסקשנים עטופים כעת ב-<main> (ציון-דרך לנגישות) - הגזירה
+    // עודכנה יחד עם העטיפה; ‏body > section נשאר לרשת-ביטחון אם
+    // סקשן עתידי יתווסף מחוץ ל-main
     var els = Array.prototype.filter.call(
-      document.querySelectorAll('body > section, .cover-stage > section, .closing'),
+      document.querySelectorAll('main > section, body > section, .cover-stage > section, .closing'),
       function (el) { return !el.classList.contains('dive'); }
     );
     els.forEach(function (el, i) {
@@ -515,12 +519,20 @@
     if (!dot) return;
     var qx = gsap.quickTo(dot, 'x', { duration: 0.18, ease: 'power2.out' });
     var qy = gsap.quickTo(dot, 'y', { duration: 0.18, ease: 'power2.out' });
-    var shown = false;
+    // ‏B11: היה gsap.to חדש בכל mousemove - מאות אובייקטי-tween בשנייה.
+    // ‏quickTo ממחזר tween אחד, והכתיבה נורית רק כשמצב-הריחוף מתחלף.
+    var qs = gsap.quickTo(dot, 'scale', { duration: 0.25, ease: 'power2.out' });
+    var qo = gsap.quickTo(dot, 'opacity', { duration: 0.25, ease: 'power2.out' });
+    var shown = false, overInteractive = null;
     document.addEventListener('mousemove', function (e) {
       if (!shown) { shown = true; gsap.to(dot, { autoAlpha: 1, duration: 0.3 }); }
       qx(e.clientX); qy(e.clientY);
-      var interactive = e.target.closest('a, button, .btn');
-      gsap.to(dot, { scale: interactive ? 2.6 : 1, opacity: interactive ? 0.55 : 1, duration: 0.25 });
+      var interactive = !!e.target.closest('a, button, .btn');
+      if (interactive !== overInteractive) {
+        overInteractive = interactive;
+        qs(interactive ? 2.6 : 1);
+        qo(interactive ? 0.55 : 1);
+      }
     });
     document.addEventListener('mouseleave', function () {
       shown = false;

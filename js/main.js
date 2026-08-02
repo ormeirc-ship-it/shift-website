@@ -156,6 +156,10 @@ if (burger && menu) {
 
   const setMenu = (open) => {
     menu.classList.toggle('open', open);
+    // ‏B1/B2: מצב-התפריט חי על <html> - סלקטור אחים (~) מעולם לא תפס
+    // כי ה-nav מקדים את התפריט ב-DOM; המחלקה מכבה את נקודות-הניווט
+    // (שצפו מעל התפריט וחצי-עבדו) ומלבינה את קווי ה-X בכל רקע
+    document.documentElement.classList.toggle('menu-open', open);
     burger.setAttribute('aria-expanded', String(open));
     document.body.style.overflow = open ? 'hidden' : '';
     // ניהול פוקוס: בפתיחה - לקישור הראשון; בסגירה - חזרה לכפתור התפריט
@@ -305,6 +309,18 @@ safe('worlds-carousel', () => {
   }, true);
 });
 
+// ── עצירת סרגל הביקורות (B10, WCAG 2.2.2) ────────────────────────────
+safe('reviews-pause', () => {
+  const btn = document.getElementById('reviewsPause');
+  const marquee = btn && btn.closest('.reviews-marquee');
+  if (!btn || !marquee) return;
+  btn.addEventListener('click', () => {
+    const paused = marquee.classList.toggle('paused');
+    btn.setAttribute('aria-pressed', String(paused));
+    btn.setAttribute('aria-label', paused ? 'המשך סרגל הביקורות' : 'השהיית סרגל הביקורות');
+  });
+});
+
 // ============================================================
 // טעימה מהמסלול: "כפתור ההרגעה הפנימי" - אנחה כפולה (יום 1)
 // שאיפה עמוקה מהאף → שאיפה קצרה נוספת → נשיפה ארוכה מהפה.
@@ -335,7 +351,7 @@ safe('breath', () => {
 
   const finish = () => {
     setPhase('איך זה מרגיש עכשיו?');
-    counter.textContent = 'סיימתם ' + TOTAL + ' סבבים';
+    if (counter) counter.textContent = 'סיימתם ' + TOTAL + ' סבבים'; // 🟢: שאר האחים כבר מוגנים
     btn.disabled = false;
     btn.textContent = 'עוד סיבוב';
     running = false;
@@ -346,7 +362,7 @@ safe('breath', () => {
   };
 
   const runRound = (round) => {
-    counter.textContent = 'סבב ' + round + ' מתוך ' + TOTAL;
+    if (counter) counter.textContent = 'סבב ' + round + ' מתוך ' + TOTAL;
     const next = () => (round < TOTAL ? runRound(round + 1) : finish());
 
     // מספרי OC (עודכן ‏30.7 בצפייה חיה): שאיפה ‏5.0 · השלמה ‏1.5 · נשיפה ‏7.0

@@ -68,7 +68,9 @@ test('מובייל טוען את סט הפריימים שלו בלבד, והספ
 test('סולם המסע נגזר מה-DOM ולא מרשימה קשיחה', () => {
   assert.ok(!/var JOURNEY\s*=\s*\[/.test(motion),
     'חזרה רשימת סלקטורים קשיחה - סקשן חדש יקבל מרווח ורוחב שבורים בשקט');
-  assert.match(motion, /querySelectorAll\('body > section/, 'הגזירה מה-DOM נעלמה');
+  // ‏B9: הסקשנים ב-<main>; ‏body > section נשאר כרשת-ביטחון בגזירה
+  assert.match(motion, /querySelectorAll\('main > section, body > section/,
+    'הגזירה מה-DOM נעלמה או איבדה את עטיפת ה-main');
 });
 
 test('גוון הניווט לא קורא פריסה בזמן גלילה (layout thrash)', () => {
