@@ -753,13 +753,29 @@
     // --card-bg נוסע איתו: זה הצבע האטום של הקלפים (B1) - ההרכבה של
     // הזכוכית הישנה מעל הרקע הנוכחי - כך שהם נראים זכוכית אבל לא מגלים
     // טקסט של קלף מכוסה.
-    gsap.fromTo(prog, { backgroundColor: '#121234', '--card-bg': '#1E1E3E' }, {
-      backgroundColor: '#F6F5F2', '--card-bg': '#EDECEB', ease: 'none',
+    // ‏2ב (OC ‏2.8: "שבוע 2 נבלע") - האזור המת נמדד: בין ‏40% ל-55% של
+    // מעבר-הרקע הרציף אף צבע טקסט לא עמד ב-AA (‏4.16/3.44 בשיא). התיקון
+    // בשלושה חלקים: (א) משטח הקלפים יצא מהאנימציה הרציפה - קלף הוא
+    // תמיד כהה-מוגדר או נייר-מוגדר (.lit פר-קלף, למטה), הניגודיות
+    // מובטחת מבנית; (ב) רקע הסקשן ממשיך לנסוע אבל בעקומת S -
+    // ‏power2.inOut שוהה בכהה, חוצה את האמצע מהר ומתייצב על נייר;
+    // (ג) הטקסט בקלף מתהפך יחד עם המשטח שלו, לא עם הסקשן.
+    gsap.fromTo(prog, { backgroundColor: '#121234' }, {
+      backgroundColor: '#F6F5F2', ease: 'power2.inOut',
       scrollTrigger: { trigger: prog, start: 'top 30%', end: 'bottom 110%', scrub: true }
     });
+    // מצב הסקשן (כותרת, אינטרו, שדרה, תווית-צד) - כמו שהיה
     ScrollTrigger.create({
       trigger: prog, start: '52% center', end: 'bottom -10%',
       onToggle: function (self) { prog.classList.toggle('lit', self.isActive); }
+    });
+    // מצב פר-קלף: כל קלף מתהפך כשהוא עצמו מגיע - אין רגע שבו קלף
+    // יושב על משטח-ביניים אפור. זה מה שמבטל את האזור המת של שבוע 2.
+    gsap.utils.toArray('.week-card').forEach(function (card) {
+      ScrollTrigger.create({
+        trigger: card, start: 'top 55%', end: 'bottom -10%',
+        onToggle: function (self) { card.classList.toggle('lit', self.isActive); }
+      });
     });
 
     // B1: הערימה (סטיקי + עמעום הקלף המכוסה) רצה רק כשנמדד שהקלף הגבוה

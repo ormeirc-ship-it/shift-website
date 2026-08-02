@@ -122,6 +122,70 @@ for (const [w, h] of VIEWPORTS) {
   await page.close();
 }
 
+// ── 2ב: ניגודיות הקלפים לאורך כל ציר הגלילה ─────────────────────────
+// האזור המת של שבוע 2 (OC 2.8): במעבר הרציף הישן, בין 40-55% אף צבע
+// טקסט לא עמד ב-4.5. עכשיו המשטח מדורג פר-קלף - והאסרטה הזו מוודאת
+// שזה לא יחזור: סורקים את הסקשן בצעדי 5%, בכל עצירה (מצב-מנוחה,
+// אחרי התיישבות הטרנזישן) מודדים רקע-קלף מול טקסט לכל קלף נראה.
+// שני חלונות מייצגים - רחב וצר; המעבר עצמו זהה בכולם.
+{
+  console.log('\n2ב — ניגודיות קלפי-המסלול על ציר הגלילה (סף 4.5)');
+  console.log('─'.repeat(66));
+  const browser2 = await puppeteer.launch({ executablePath: chromePath(), headless: 'new', args: ['--no-sandbox', '--hide-scrollbars'] });
+  const srv2 = await serveRepo();
+  for (const [w, h] of [[1440, 900], [600, 900]]) {
+    const page = await browser2.newPage();
+    await page.setViewport({ width: w, height: h });
+    await page.goto(srv2.url, { waitUntil: 'load', timeout: 60000 });
+    await ready(page, { frames: false });
+    const res = await page.evaluate(async () => {
+      if (window.__lenis) window.__lenis.stop();
+      const lum = (r, g, b) => {
+        const f = (v) => { v /= 255; return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; };
+        return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);
+      };
+      const parse = (s) => (s.match(/[\d.]+/g) || [0, 0, 0]).map(Number);
+      const ratio = (fg, bg) => {
+        const [r1, g1, b1] = parse(fg); const [r2, g2, b2] = parse(bg);
+        const l1 = lum(r1, g1, b1); const l2 = lum(r2, g2, b2);
+        return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+      };
+      const prog = document.querySelector('.program');
+      const from = Math.max(0, prog.offsetTop - innerHeight);
+      const to = prog.offsetTop + prog.offsetHeight;
+      const worst = { ratio: Infinity, at: 0, what: '' };
+      for (let y = from; y <= to; y += (to - from) / 20) {
+        scrollTo(0, y);
+        if (window.ScrollTrigger) ScrollTrigger.update();
+        await new Promise((r) => setTimeout(r, 450)); // התיישבות טרנזישן (0.35s)
+        for (const card of document.querySelectorAll('.week-card')) {
+          const cr = card.getBoundingClientRect();
+          if (cr.bottom < 0 || cr.top > innerHeight) continue;
+          const bg = getComputedStyle(card).backgroundColor;
+          const probes = [
+            ['h3', card.querySelector('.week-head h3')],
+            ['desc', card.querySelector('.week-desc p')],
+            ['h4', card.querySelector('.day-body h4')],
+            ['day-no', card.querySelector('.day-no')],
+          ];
+          for (const [name, el] of probes) {
+            if (!el) continue;
+            const r = ratio(getComputedStyle(el).color, bg);
+            if (r < worst.ratio) Object.assign(worst, { ratio: r, at: Math.round(((y - from) / (to - from)) * 100), what: 'ש' + card.dataset.week + '/' + name });
+          }
+        }
+      }
+      return worst;
+    });
+    const ok = res.ratio >= 4.5;
+    if (!ok) failed++;
+    console.log(`${ok ? '✓' : '✗'} ${w}×${h}   הגרוע ביותר: ${res.ratio.toFixed(2)} (${res.what} ב-${res.at}%)`);
+    await page.close();
+  }
+  await browser2.close();
+  await srv2.close();
+}
+
 await browser.close();
 await srv.close();
 console.log('─'.repeat(66));
