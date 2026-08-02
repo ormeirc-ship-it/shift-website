@@ -28,6 +28,9 @@
 3. **`sitemap.xml`** — ה-`loc`.
 4. **`404.html`** — שלושת הנתיבים האבסולוטיים `/shift-website/` → `/`.
 4½. **`site.webmanifest`** — ‏`start_url`.
+4¾. **`join/` + `terms.html`** — אין מה להחליף: נתיבים יחסיים
+    בכוונה (בניגוד ל-404 שמוגש מכל נתיב). ‏grep הביטחון בשלב 5
+    מכסה גם אותם.
 5. חיפוש ביטחון: `grep -rn "ormeirc-ship-it.github.io" --include="*.html" --include="*.txt" --include="*.xml" .`
    חייב לחזור ריק (מחוץ ל-docs).
 6. ב-GitHub: ‏Settings → Pages → Custom domain (+ Enforce HTTPS).

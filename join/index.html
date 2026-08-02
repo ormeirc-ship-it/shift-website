@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>‏הצטרפות למסלול | SHIFT</title>
+  <meta name="description" content="הצטרפות למסלול 21 הימים של SHIFT - משאירים פרטים ומקבלים קישור אישי למייל.">
+  <!-- עד שהזרימה עובדת מקצה-לקצה (יעד-ליד + מייל בצד הפלטפורמה) העמוד
+       במצב-החזקה ולא מקושר מהאתר - לכן גם מחוץ ל-sitemap ו-noindex.
+       כשמחווטים: להסיר את ה-noindex, להוסיף ל-sitemap, ולהחליף את קישור
+       ה-CTA בסקשן המסלול. -->
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#18163B">
+  <!-- עמוד עצמאי: CSS פנימי ונתיבים יחסיים - בניגוד ל-404 (שמוגש מכל
+       נתיב ולכן אבסולוטי), ‏/join/ תמיד מוגש מהתיקייה שלו. יתרון:
+       עובד זהה מקומית, ב-Pages והחל מיום-הדומיין בלי החלפות. -->
+  <link rel="icon" type="image/png" href="../assets/brand/favicon.png">
+  <link href="../css/fonts.css?v=20260728a" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root { --navy: #18163B; --sky: #5CBBF0; --paper: #F6F5F2; }
+    body {
+      min-height: 100svh;
+      background: var(--navy);
+      color: var(--paper);
+      font-family: 'Assistant', -apple-system, 'Segoe UI', system-ui, sans-serif;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      line-height: 1.7;
+    }
+    a { color: var(--sky); }
+    .top {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 18px clamp(20px, 4vw, 48px);
+    }
+    .top img { width: 92px; height: auto; display: block; }
+    .back { font-size: 0.95rem; text-decoration: none; padding: 10px 4px; }
+    .back:hover { text-decoration: underline; }
+    main { display: grid; place-items: start center; padding: clamp(16px, 4vw, 48px) 20px 64px; }
+    .card {
+      width: min(520px, 100%);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 18px;
+      padding: clamp(24px, 5vw, 40px);
+    }
+    h1 { font-size: clamp(1.5rem, 4.5vw, 2rem); font-weight: 600; line-height: 1.3; margin-bottom: 10px; }
+    .sub { color: rgba(246, 245, 242, 0.78); font-weight: 300; margin-bottom: 28px; }
+    .field { margin-bottom: 18px; }
+    label { display: block; font-size: 0.95rem; font-weight: 600; margin-bottom: 6px; }
+    input[type="text"], input[type="email"], input[type="tel"] {
+      width: 100%;
+      min-height: 48px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--paper);
+      font: inherit;
+    }
+    input:focus-visible { outline: 2px solid var(--sky); outline-offset: 2px; border-color: transparent; }
+    input[aria-invalid="true"] { border-color: #ff9d9d; }
+    .err { display: none; color: #ffb3b3; font-size: 0.88rem; margin-top: 6px; }
+    .err.on { display: block; }
+    .consent { display: flex; gap: 10px; align-items: flex-start; margin: 22px 0 26px; }
+    .consent input {
+      width: 22px; height: 22px; margin-top: 3px; flex: 0 0 auto;
+      accent-color: var(--sky);
+    }
+    .consent label { font-weight: 400; font-size: 0.92rem; margin: 0; }
+    .submit {
+      width: 100%;
+      min-height: 52px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--sky);
+      color: var(--navy);
+      font: inherit; font-weight: 600; font-size: 1.05rem;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .submit:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(92, 187, 240, 0.35); }
+    .submit:focus-visible { outline: 2px solid var(--paper); outline-offset: 3px; }
+    .submit[disabled] { opacity: 0.6; cursor: default; transform: none; box-shadow: none; }
+    .panel { border-top: 1px solid rgba(255, 255, 255, 0.12); margin-top: 26px; padding-top: 22px; }
+    .panel h2 { font-size: 1.15rem; font-weight: 600; margin-bottom: 8px; }
+    .panel p { color: rgba(246, 245, 242, 0.82); font-size: 0.97rem; margin-bottom: 16px; }
+    .alt {
+      display: inline-block;
+      padding: 12px 26px;
+      border-radius: 999px;
+      border: 1px solid rgba(92, 187, 240, 0.5);
+      color: var(--sky);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .alt:hover { border-color: var(--sky); }
+    footer { padding: 20px; text-align: center; font-size: 0.82rem; color: rgba(246, 245, 242, 0.5); }
+    [hidden] { display: none !important; }
+    @media (prefers-reduced-motion: reduce) { .submit, .alt { transition: none; } }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <a href="../" aria-label="SHIFT - חזרה לעמוד הבית">
+      <img src="../assets/brand/logo-white.png" alt="SHIFT" width="1531" height="940">
+    </a>
+    <a class="back" href="../#program">חזרה למסלול ←</a>
+  </header>
+
+  <main>
+    <div class="card">
+      <h1>מצטרפים למסלול 21 הימים</h1>
+      <p class="sub">
+        משאירים פרטים, ואנחנו שולחים למייל קישור אישי לכניסה למסלול.
+      </p>
+
+      <!-- מכונת-המצבים ב-join.js: ולידציה נגישה (aria-invalid +
+           הודעה מקושרת + פוקוס לשגיאה הראשונה), בלי alert().
+           בלי שדות תשלום - לעולם. סליקה, כשתגיע, אצל ספק מאוחסן. -->
+      <form id="joinForm" novalidate>
+        <div class="field">
+          <label for="jName">שם מלא</label>
+          <input id="jName" name="name" type="text" autocomplete="name" required>
+          <p class="err" id="jNameErr">כמה אותיות, שנדע איך לפנות אליך.</p>
+        </div>
+        <div class="field">
+          <label for="jEmail">מייל</label>
+          <input id="jEmail" name="email" type="email" autocomplete="email" inputmode="email" required>
+          <p class="err" id="jEmailErr">כתובת מייל תקינה, לשם ישלח הקישור.</p>
+        </div>
+        <div class="field">
+          <label for="jPhone">טלפון</label>
+          <input id="jPhone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required>
+          <p class="err" id="jPhoneErr">מספר טלפון ישראלי תקין (למשל 052-1234567).</p>
+        </div>
+        <div class="consent">
+          <input id="jConsent" name="consent" type="checkbox" required>
+          <label for="jConsent">
+            קראתי ואני מסכימ/ה
+            <a href="../terms.html">לתקנון ולמדיניות הפרטיות</a>.
+          </label>
+        </div>
+        <p class="err" id="jConsentErr">כדי להמשיך צריך לאשר את התקנון.</p>
+        <button class="submit" id="jSubmit" type="submit">שליחת פרטים</button>
+      </form>
+
+      <!-- מצב-החזקה: כל עוד אין יעד-ליד (הכרעת OC) הטופס לא מבטיח דבר -
+           אחרי שליחה תקינה מוצגת האמת + הדרך שכן עובדת היום. -->
+      <div class="panel" id="jHolding" hidden>
+        <h2>ההרשמה דרך הטופס נפתחת ממש בקרוב</h2>
+        <p>
+          הפרטים עברו בדיקה אבל עוד לא נשמרים בשלב הזה.
+          בינתיים המסלול פתוח דרך הכניסה הישירה:
+        </p>
+        <a class="alt" href="https://shift-21-day-course-ceos.web.app" target="_blank" rel="noopener">לכניסה ישירה למסלול</a>
+      </div>
+
+      <div class="panel" id="jSuccess" hidden>
+        <h2>הפרטים נקלטו</h2>
+        <p>קישור אישי לכניסה למסלול בדרך למייל שלך. אם הוא לא הגיע תוך כמה דקות, כדאי להציץ בספאם.</p>
+      </div>
+
+      <noscript>
+        <div class="panel">
+          <p>הטופס דורש JavaScript. אפשר גם להיכנס ישירות:</p>
+          <a class="alt" href="https://shift-21-day-course-ceos.web.app" rel="noopener">לכניסה ישירה למסלול</a>
+        </div>
+      </noscript>
+    </div>
+  </main>
+
+  <footer>© 2026 SHIFT. כל הזכויות שמורות.</footer>
+
+  <script src="join.js?v=20260802e" defer></script>
+</body>
+</html>
