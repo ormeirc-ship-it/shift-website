@@ -37,7 +37,9 @@ const SETS = [
   // ‏method-end נוסף 29.7 (מסגור-מחדש): מצבי-הפנים של הבמה הנעוצה
   // (קלפים 02/03) לא היו מכוסים — בדיוק סוג החור שהסתיר את באג #path
   { tag: 'd', w: 1440, h: 900, targets: ['top', 'dive-end', '.statement', '#method', 'method-end', '#path', '#program', '#events', '#past-events', '#story', '.closing'] },
-  { tag: 'm', w: 390, h: 844, mobile: true, targets: ['top', '#path', '#program', '#breathe', '#events', '#past-events', '.closing'] },
+  // ‏.statement נוסף למובייל 2.8 (🌌): מדרגת-הצבע של ההצהרה השתנתה -
+  // חייבת כיסוי בשני ה-viewports
+  { tag: 'm', w: 390, h: 844, mobile: true, targets: ['top', '.statement', '#path', '#program', '#breathe', '#events', '#past-events', '.closing'] },
 ];
 const THRESHOLD = 1.5;
 
