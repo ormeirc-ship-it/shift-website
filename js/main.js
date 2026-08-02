@@ -347,6 +347,23 @@ safe('reviews-marquee', () => {
       btn.setAttribute('aria-label', paused ? 'המשך סרגל הביקורות' : 'השהיית סרגל הביקורות');
     });
   }
+
+  // ‏B10 המשך (Cowork): במגע אין hover - אחיזה על הרצועה עוצרת אותה,
+  // ואחרי עזיבה יש חסד קצר לקריאה לפני שהתנועה חוזרת. מחלקה נפרדת
+  // (‏touch-hold) כדי לא להתנגש במצב הכפתור (paused).
+  let touchTimer = 0;
+  marquee.addEventListener('pointerdown', (e) => {
+    if (e.pointerType === 'mouse') return;
+    clearTimeout(touchTimer);
+    marquee.classList.add('touch-hold');
+  });
+  const touchRelease = (e) => {
+    if (e.pointerType === 'mouse') return;
+    clearTimeout(touchTimer);
+    touchTimer = setTimeout(() => marquee.classList.remove('touch-hold'), 1600);
+  };
+  marquee.addEventListener('pointerup', touchRelease);
+  marquee.addEventListener('pointercancel', touchRelease);
 });
 
 // ============================================================

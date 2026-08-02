@@ -79,8 +79,11 @@ test('הפלטה והפונט נעולים - לא הוחלפו', () => {
 });
 
 test('התבניות שהוסרו לא חזרו', () => {
-  const labels = (html.match(/class="label/g) || []).length;
-  assert.ok(labels <= 1, `${labels} לייבלים - היו אמורים להישאר לכל היותר 1`);
+  // היה ≤1 מאז הניקוי הגדול; תגית-המחקר (‏NEXT ‏2.8, בדפוס .label
+  // בכוונה) הוסיפה שנייה לצד "טעימה מתוך יום 1". התאמה מדויקת -
+  // שהעוטף label-row לא ייספר כלייבל.
+  const labels = (html.match(/class="label label-sky"/g) || []).length;
+  assert.ok(labels <= 2, `${labels} לייבלים - מותר לכל היותר 2 (טעימה + תגית-המחקר)`);
   assert.equal((html.match(/class="sec-num"/g) || []).length, 0, 'מספור הסקשנים חזר');
   assert.ok(!/grad-text/.test(html) && !/\.grad-text\s*\{/.test(css), '.grad-text חזר');
 });

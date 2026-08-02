@@ -128,6 +128,9 @@ h3 {
   margin-bottom: 14px;
 }
 .label-sky { color: var(--sky); }
+/* שתי תגיות זו-לצד-זו (תגית מחקר-הנשימה, ‏OC ‏2.8); נגללות לשורה
+   שנייה בצר במקום להישבר באמצע תגית */
+.label-row { display: flex; flex-wrap: wrap; column-gap: 18px; }
 
 
 /* ---------- כפתורים ---------- */
@@ -1296,9 +1299,11 @@ h1 .w { display: inline-block; }
   animation: reviewsRun 46s linear infinite;
 }
 @media (hover: hover) { .reviews-marquee:hover .reviews-run { animation-play-state: paused; } }
-/* ‏B10: עצירה גם למקלדת ולמגע - פוקוס פנימי עוצר, והכפתור קובע מצב */
+/* ‏B10: עצירה גם למקלדת ולמגע - פוקוס פנימי עוצר, הכפתור קובע מצב,
+   ואחיזת-מגע (main.js) עוצרת כל עוד האצבע על הרצועה + חסד קצר */
 .reviews-marquee:focus-within .reviews-run,
-.reviews-marquee.paused .reviews-run { animation-play-state: paused; }
+.reviews-marquee.paused .reviews-run,
+.reviews-marquee.touch-hold .reviews-run { animation-play-state: paused; }
 .reviews-pause {
   position: absolute;
   top: -6px;
@@ -1346,6 +1351,11 @@ html:not(.js) .reviews-pause { display: none; }
   border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: var(--radius);
   padding: 18px 20px 16px;
+  /* חמש ביקורות באורכים שונים מאוד (נועה ~פי 3 מלירז): הרצועה מותחת
+     את כולם לגובה אחיד (align-items:stretch ברירת-המחדל), והעמודה
+     מיישרת מלל לראש ומעגנת את החתימה לתחתית - בלי חורים באמצע. */
+  display: flex;
+  flex-direction: column;
 }
 .review-mark {
   display: block;
@@ -1355,7 +1365,7 @@ html:not(.js) .reviews-pause { display: none; }
   margin-bottom: 6px;
 }
 .review-card p { color: var(--white-soft); font-size: 0.95rem; margin-bottom: 10px; max-width: none; }
-.review-by { color: var(--white-faint); font-size: 0.8rem; letter-spacing: 0.06em; }
+.review-by { color: var(--white-faint); font-size: 0.8rem; letter-spacing: 0.06em; margin-top: auto; padding-top: 8px; }
 @keyframes reviewsRun {
   from { transform: translateX(0); }
   to { transform: translateX(50%); }

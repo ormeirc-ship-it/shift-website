@@ -56,7 +56,10 @@ for (const set of SETS) {
   await page.evaluate(async () => {
     if (window.__lenis) window.__lenis.stop();
     const s = document.createElement('style');
-    s.textContent = '*,*::before,*::after{animation:none!important;caret-color:transparent!important}';
+    // ‏transition:none נוסף 2.8: ה-reveal הוא transition, לא animation -
+    // צילום בזנב-ההתיישבות תפס תזוזת תת-פיקסל של בלוקי-טקסט שלמים
+    // (‏m-program קפץ 0.63%→1.56% בלי שינוי קוד). מצב סופי מיידי = יציב.
+    s.textContent = '*,*::before,*::after{animation:none!important;transition:none!important;caret-color:transparent!important}';
     document.head.appendChild(s);
     await document.fonts.ready;
   });
