@@ -919,15 +919,6 @@ h1 .w { display: inline-block; }
   position: relative;
   padding-top: 40px;
 }
-.basket-card-num {
-  position: absolute;
-  top: 22px;
-  inset-inline-end: 24px;
-  font-size: 2.4rem;
-  font-weight: 200;
-  color: rgba(255, 255, 255, 0.14);
-  line-height: 1;
-}
 .basket-card h3 { color: var(--sky); margin-bottom: 12px; font-size: 1.35rem; }
 .basket-card p { color: var(--white-soft); font-size: 1rem; flex: 1; }
 .basket-card-link {

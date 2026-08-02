@@ -1,7 +1,7 @@
 {
-  "name": "SHIFT — מהישרדות ליצירה",
+  "name": "SHIFT - מהישרדות ליצירה",
   "short_name": "SHIFT",
-  "description": "תוכנית לפיתוח אישי שמחברת בין מדעי המוח, מודעות גופנית ובינה מלאכותית.",
+  "description": "SHIFT הוא מסע מעשי לפיתוח אישי שמחבר בין מדעי המוח ומודעות גופנית.",
   "lang": "he",
   "dir": "rtl",
   "start_url": "/shift-website/",
