@@ -163,6 +163,73 @@ const step = (name, ok, note = '') => {
   await page.close();
 }
 
+// ── A1: מסלולי הכשל של המנוע - ההירו חייב לחיות בשניהם ────────────────
+// ‏(א) GSAP נחסם (חוסם פרסומות / רשת חלשה): ‏JS רץ, motion.js מסיר
+// ‏gsap-on, וכללי ה-CSS של html:not(.gsap-on) מציגים את ההגעה.
+{
+  const page = await browser.newPage();
+  await page.setViewport({ width: 1440, height: 900 });
+  await page.setRequestInterception(true);
+  page.on('request', (req) => {
+    if (req.url().includes('/vendor/gsap')) req.abort();
+    else req.continue();
+  });
+  await page.goto(site.url, { waitUntil: 'networkidle2', timeout: 60000 });
+  await new Promise((r) => setTimeout(r, 1200));
+  const noGsap = await page.evaluate(() => {
+    const h1 = document.querySelector('#diveArrival h1');
+    const ctas = [...document.querySelectorAll('.arrival-ctas a')];
+    const vis = (el) => {
+      const r = el.getBoundingClientRect();
+      const cs = getComputedStyle(el);
+      return r.height > 0 && cs.visibility !== 'hidden' && +cs.opacity > 0.5 &&
+             r.top < innerHeight && r.bottom > 0;
+    };
+    const arrivalOp = +getComputedStyle(document.getElementById('diveArrival')).opacity;
+    return {
+      gsapOn: document.documentElement.classList.contains('gsap-on'),
+      h1Visible: h1 ? vis(h1) : false,
+      ctasVisible: ctas.length === 2 && ctas.every(vis),
+      arrivalOp,
+      diveH: document.querySelector('.dive').offsetHeight,
+      vh: innerHeight,
+      navVisible: getComputedStyle(document.getElementById('nav')).visibility === 'visible',
+    };
+  });
+  step('‏GSAP חסום: המחלקה הוסרה', noGsap.gsapOn === false);
+  step('‏GSAP חסום: הכותרת ושני ה-CTA נראים', noGsap.h1Visible && noGsap.ctasVisible,
+    'אטימות ' + noGsap.arrivalOp);
+  step('‏GSAP חסום: אין 440vh ריקים', noGsap.diveH <= noGsap.vh * 1.2,
+    noGsap.diveH + 'px');
+  step('‏GSAP חסום: הסרגל לא נשאר נעול-נסתר', noGsap.navVisible);
+  await page.close();
+}
+// ‏(ב) JS כבוי לגמרי: אין אף מחלקה על <html> - אותם כללים חייבים לתפוס.
+{
+  const page = await browser.newPage();
+  await page.setJavaScriptEnabled(false);
+  await page.setViewport({ width: 1440, height: 900 });
+  await page.goto(site.url, { waitUntil: 'networkidle2', timeout: 60000 });
+  const noJs = await page.evaluate(() => {
+    const h1 = document.querySelector('#diveArrival h1');
+    const ctas = [...document.querySelectorAll('.arrival-ctas a')];
+    const vis = (el) => {
+      const r = el.getBoundingClientRect();
+      const cs = getComputedStyle(el);
+      return r.height > 0 && cs.visibility !== 'hidden' && +cs.opacity > 0.5 &&
+             r.top < innerHeight * 1.5 && r.bottom > 0;
+    };
+    return {
+      h1Visible: h1 ? vis(h1) : false,
+      ctasVisible: ctas.length === 2 && ctas.every(vis),
+      menuHidden: getComputedStyle(document.getElementById('mobileMenu')).display === 'none',
+    };
+  });
+  step('בלי JS: הכותרת ושני ה-CTA נראים', noJs.h1Visible && noJs.ctasVisible);
+  step('בלי JS: התפריט באמת נסתר (A5)', noJs.menuHidden);
+  await page.close();
+}
+
 // ── מובייל: תפריט (פתיחה/עוגן/Escape/מלכודת פוקוס) + נשימה עד הסוף ─────
 {
   const page = await browser.newPage();

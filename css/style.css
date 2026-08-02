@@ -31,6 +31,9 @@
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
+/* ‏A5: בלי זה, כל display מפורש (כמו ה-flex של התפריט) גובר על כלל
+   ה-UA של ‏hidden - וה-hidden ב-HTML הופך לקישוט. חוזה: ‏hidden מנצח. */
+[hidden] { display: none !important; }
 
 html {
   /* גלילה חלקה מנוהלת ע"י Lenis (motion.js); fallback ב-JS לניווט עוגנים */
@@ -213,14 +216,28 @@ h3 {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   display: flex;
-  align-items: center;
-  justify-content: center;
+  /* ‏A2: ‏safe - כשהתוכן גבוה מהחלון (מובייל-לרוחב) המרכוז נופל
+     ל-start במקום לחתוך את הקצוות; יחד עם margin-block:auto על
+     ה-nav (מרכוז עמיד-גלישה בכל דפדפן) ו-overflow-y - הכול נגיש */
+  align-items: safe center;
+  justify-content: safe center;
+  overflow-y: auto;
   opacity: 0;
+  /* ‏A4: אטימות לבדה משאירה את חמשת הקישורים בתור ה-Tab - בדיוק
+     כמו הדפוס של הסרגל: ‏visibility יוצאת בסוף הדהייה, חוזרת מיד */
+  visibility: hidden;
   pointer-events: none;
+  transition: opacity var(--t-med) ease, visibility 0s var(--t-med);
+}
+.mobile-menu.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
   transition: opacity var(--t-med) ease;
 }
-.mobile-menu.open { opacity: 1; pointer-events: auto; }
 .mobile-menu nav {
+  margin-block: auto;
+  padding-block: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1934,6 +1951,37 @@ html.gate-accent-b .gate-cue i { width: 2px; }
   .gate { display: none; }
   .arrival { opacity: 1; pointer-events: auto; position: relative; z-index: 5; }
   .dive-veil { background: rgba(246, 245, 242, 0.72); }
+}
+
+/* ---------- A1: בלי מנוע (GSAP נחסם / JS כבוי) - ההירו חי ----------
+   ‏render() הוא הכותב היחיד של arrival.opacity, והוא לא רץ בלי מנוע -
+   בלי הכללים האלה המבקר מקבל 440vh של גלילה ריקה בלי כותרת ובלי
+   ‏CTA. באוויר זה קורה באמת: חוסמי פרסומות ורשתות חלשות. אותו מצב
+   בדיוק כמו מופחת-תנועה (הבלוק שמעל), רק שהשער נופל על תנאי המנוע -
+   ‏gsap-on מוצהר ב-head ומוסר ע"י motion.js אם הספריות לא נטענו. */
+html:not(.gsap-on) .dive { height: auto; }
+html:not(.gsap-on) .dive-sticky { position: relative; height: 100vh;
+ height: 100svh; }
+html:not(.gsap-on) .gate-cue i { animation: none; }
+html:not(.gsap-on) .passing { display: none; }
+html:not(.gsap-on) .gate { display: none; }
+html:not(.gsap-on) .arrival { opacity: 1; pointer-events: auto; position: relative; z-index: 5; }
+html:not(.gsap-on) .dive-veil { background: rgba(246, 245, 242, 0.72); }
+
+/* ---------- A3: מובייל-לרוחב - מסך ההגעה נכנס כולו ----------
+   ב-844x390 התוכן היה ~448px בתוך 390px בלי מוצא גלילה - כותרת
+   קטומה וחצי כפתור ברגע הרגשי של האתר. */
+@media (max-height: 560px) {
+  html.ending-curtain .arrival-logo-light { display: none; }
+  .arrival h1 { font-size: clamp(1.7rem, 6vh, 2.6rem); }
+  .arrival-sub { font-size: 0.92rem; margin-top: 10px; }
+  .arrival-ctas { margin-top: 14px; gap: 10px; }
+}
+
+/* ‏A2 (המשך): מסך נמוך - התפריט מצטופף במקום להיחתך */
+@media (max-height: 520px) {
+  .mobile-menu nav { gap: 12px; }
+  .mobile-menu a { font-size: clamp(1.3rem, 5.5vh, 1.9rem); }
 }
 
 /* ============================================================
