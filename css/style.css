@@ -984,11 +984,33 @@ h1 .w { display: inline-block; }
    קלף מכוסה להיראות דרך הקלף שמעליו בערימה. motion.js מזיז את המשתנה
    יחד עם רקע הסקשן (כהה→בהיר), כך שההרכבה נשארת זהה לאורך כל הגלילה. */
 .week-card {
-  background: var(--card-bg, #1E1E3E);
+  /* ‏2ב: משטח בשתי מדרגות מוגדרות במקום גרדיאנט רציף - קלף כהה או
+     קלף נייר, אף פעם לא אפור-ביניים. הטקסט בפנים עצמאי מהסקשן
+     (color כאן) ומתהפך יחד עם המשטח - ניגודיות מובטחת בכל רגע. */
+  background: #1E1E3E;
+  color: #fff;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: var(--radius);
   padding: clamp(26px, 4vw, 44px);
 }
+.week-card,
+.week-card .week-head h3,
+.week-card .week-desc p,
+.week-card .week-tag,
+.week-card .day-body h4,
+.week-card .day-no { transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease; }
+.week-card.lit {
+  background: #EDECEB;
+  color: var(--ink);
+  border-color: var(--line);
+}
+.week-card.lit .week-head h3, .week-card.lit .day-body h4 { color: var(--ink); }
+.week-card.lit .week-desc p { color: var(--ink-soft); }
+.week-card.lit .week-tag { color: var(--blue-mid); }
+.week-card.lit .day-no { color: var(--blue-mid); border-color: rgba(58, 95, 138, 0.45); }
+.week-card.lit .day-rest .day-no { color: var(--ink-soft); border-color: rgba(24, 22, 59, 0.3); }
+.week-card.lit .day-list { border-top-color: var(--line); }
+.week-card.lit .day-item { border-bottom-color: var(--line); }
 .week-tag {
   font-size: 0.8rem;
   font-weight: 600;
@@ -1210,10 +1232,30 @@ h1 .w { display: inline-block; }
   display: grid;
   place-items: center;
   background: rgba(255, 255, 255, 0.04);
-  border: 1px dashed rgba(246, 245, 242, 0.28);
+  /* המסגרת המקווקוות של ה-placeholder ירדה - יש תיעוד אמיתי (2.8) */
   border-radius: var(--radius);
+  overflow: hidden;
+}
+.past-slot picture, .past-slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 .past-slot .event-soon { margin-top: 0; }
+
+/* סרטון הסיכום - פריט רחב בראש הגלריה; נטען רק בלחיצת ניגון */
+.past-video {
+  margin: clamp(28px, 4vw, 44px) 0 0;
+}
+.past-video video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius);
+  background: var(--navy-deep);
+}
 
 /* ---------- סרגל-רץ ביקורות (הוראת OC ‏30.7 - מסגרת בלבד) ----------
    ‏CSS בלבד: שתי רצועות זהות בתוך run אחד; ‏translateX ‎0→50%‎ מזיז
@@ -1229,6 +1271,11 @@ h1 .w { display: inline-block; }
 .reviews-run {
   display: flex;
   width: max-content;
+}
+/* הלולאה רצה רק אחרי שה-JS השלים אותה (שכפול לרוחב + רצועה שנייה) -
+   בלי JS אין שכפולים ולולאה הייתה קופצת; נשארת רצועה סטטית. המשך
+   נקבע ב-JS לפי הרוחב (מהירות קבועה). */
+.reviews-marquee.filled .reviews-run {
   animation: reviewsRun 46s linear infinite;
 }
 @media (hover: hover) { .reviews-marquee:hover .reviews-run { animation-play-state: paused; } }
@@ -1275,7 +1322,8 @@ html:not(.js) .reviews-pause { display: none; }
   margin: 0;
 }
 .review-card {
-  width: clamp(230px, 26vw, 320px);
+  /* רוחב גדל מעט עם התוכן האמיתי - הביקורות ארוכות מה-placeholder */
+  width: clamp(270px, 32vw, 390px);
   flex-shrink: 0;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.09);
@@ -1526,25 +1574,13 @@ html:not(.js) .reviews-pause { display: none; }
   .chip-groups { grid-template-columns: 1fr; gap: 26px; }
 }
 
-/* ---------- מעבר רקע כהה→בהיר במסלול ---------- */
-.program .section-head h2, .program .week-head h3 { transition: color 0.5s ease; }
+/* ---------- מעבר רקע כהה→בהיר במסלול ----------
+   ‏2ב: כל מה שבתוך הקלפים עבר ל-.week-card.lit (פר-קלף, ליד הקלף) -
+   כאן נשאר רק כרום-הסקשן: כותרת, אינטרו, שדרה, תווית-צד, כפתור. */
+.program .section-head h2 { transition: color 0.5s ease; }
 .program.lit { color: var(--ink); }
-/* חוקי ‏.program.lit .breath-* הוסרו (1ד): שרידים מהתקופה שבה תרגיל
-   הנשימה ישב בתוך המסלול - האלמנטים לא קיימים שם יותר, והחוקים המתים
-   האלה בדיוק מה שהטעה את ניתוח-הצבע של הסקירה */
-.program.lit .section-head h2, .program.lit .week-head h3,
-.program.lit .day-body h4 { color: var(--ink); }
-.program.lit .section-intro, .program.lit .week-desc p { color: var(--ink-soft); }
-/* ‏1ד - שני כשלי ‏AA אמיתיים במצב הבהיר: תכלת על נייר היא ‏~2:1.
-   ‏blue-mid מהפלטה מחזיק ‏6.1:1 ושומר על משפחת-הצבע */
-.program.lit .week-tag { color: var(--blue-mid); }
-.program.lit .day-no { color: var(--blue-mid); border-color: rgba(58, 95, 138, 0.45); }
-.program.lit .day-rest .day-no { color: var(--ink-soft); border-color: rgba(24, 22, 59, 0.3); }
-/* (חוק ‏--card-bg על ‏.lit נמחק - 🟢: המנוע כותב את המשתנה inline
-   וגובר תמיד, ובלי מנוע אין ‏.lit בכלל - החוק היה בלתי-נגיש) */
-.program.lit .week-card { border-color: var(--line); }
-.program.lit .day-list { border-top-color: var(--line); }
-.program.lit .day-item { border-bottom-color: var(--line); }
+.program.lit .section-head h2 { color: var(--ink); }
+.program.lit .section-intro { color: var(--ink-soft); }
 .program.lit .sec-num, .program.lit .side-label { color: var(--ink-faint); }
 .program.lit .program-spine-track { background: rgba(24, 22, 59, 0.15); }
 .program.lit .program-spine i { background: var(--paper); border-color: rgba(24, 22, 59, 0.3); }

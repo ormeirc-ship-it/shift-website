@@ -309,16 +309,44 @@ safe('worlds-carousel', () => {
   }, true);
 });
 
-// ── עצירת סרגל הביקורות (B10, WCAG 2.2.2) ────────────────────────────
-safe('reviews-pause', () => {
+// ── סרגל הביקורות: מילוי הלולאה + עצירה (B10) ────────────────────────
+// כל ביקורת כתובה ב-HTML פעם אחת (נגישות + הוספה בשורה). כאן:
+// משכפלים את הסט עד שהרצועה רחבה מהחלון (השכפולים aria-hidden),
+// בונים את הרצועה השנייה ללולאה חלקה, וקובעים משך לפי רוחב -
+// מהירות קבועה (~55px/ש') במקום משך קבוע שמאיץ כשמוסיפים ביקורות.
+safe('reviews-marquee', () => {
+  const marquee = document.querySelector('.reviews-marquee');
+  const run = marquee && marquee.querySelector('.reviews-run');
+  const strip = run && run.querySelector('.reviews-strip');
+  if (!marquee || !run || !strip || !strip.children.length) return;
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!reduced) {
+    const originals = Array.from(strip.children);
+    let guard = 0;
+    while (strip.scrollWidth < innerWidth * 1.25 && guard < 40) {
+      originals.forEach((card) => {
+        const clone = card.cloneNode(true);
+        clone.setAttribute('aria-hidden', 'true');
+        strip.appendChild(clone);
+      });
+      guard++;
+    }
+    const twin = strip.cloneNode(true);
+    twin.setAttribute('aria-hidden', 'true');
+    run.appendChild(twin);
+    run.style.animationDuration = Math.round(strip.scrollWidth / 55) + 's';
+    marquee.classList.add('filled'); // האנימציה נדלקת רק כשהלולאה שלמה
+  }
+
   const btn = document.getElementById('reviewsPause');
-  const marquee = btn && btn.closest('.reviews-marquee');
-  if (!btn || !marquee) return;
-  btn.addEventListener('click', () => {
-    const paused = marquee.classList.toggle('paused');
-    btn.setAttribute('aria-pressed', String(paused));
-    btn.setAttribute('aria-label', paused ? 'המשך סרגל הביקורות' : 'השהיית סרגל הביקורות');
-  });
+  if (btn) {
+    btn.addEventListener('click', () => {
+      const paused = marquee.classList.toggle('paused');
+      btn.setAttribute('aria-pressed', String(paused));
+      btn.setAttribute('aria-label', paused ? 'המשך סרגל הביקורות' : 'השהיית סרגל הביקורות');
+    });
+  }
 });
 
 // ============================================================

@@ -71,7 +71,7 @@
   }
   </script>
   <!-- פרמטר הגרסה שובר cache ישן אחרי כל פריסה - לעדכן בכל שינוי CSS/JS -->
-  <link rel="stylesheet" href="css/style.css?v=20260802a">
+  <link rel="stylesheet" href="css/style.css?v=20260802b">
   <script>
     document.documentElement.classList.add('js');
     // מנוע התנועה מוכרז מראש כדי שחוקי ה-reveal של ה-CSS לא יידלקו לרגע;
@@ -743,24 +743,46 @@
     <div class="container">
       <div class="section-head reveal">
         <h2>רגעים מאירועים קודמים</h2>
-        <!-- TODO: תוכן מ-OC - משפט פתיחה לגלריה -->
+        <!-- שורת הפתיחה עודכנה עם כניסת התיעוד האמיתי (2.8) - השורה
+             הישנה ("בדרך לכאן") הפכה לא-נכונה. עובדתי בלבד, משם האירוע
+             שמסר OC. -->
         <p class="section-intro">
-          התמונות והסרטונים מהמפגשים עצמם - בדרך לכאן.
+          מתוך המפגש בבית לחם הגלילית, מאי 26.
         </p>
       </div>
+
+      <!-- סרטון הסיכום (הצעת Cowork: פריט רחב בראש, הגריד מתחתיו -
+           מסומן ל-OC ב-HANDOFF). ‏14MB - נטען אך ורק בלחיצת ניגון:
+           ‏preload=none, פוסטר קל (32KB), פקדים נטיביים, בלי לולאה.
+           אין דיבור בסרטון (מוזיקה בלבד) - אין צורך בכתוביות. -->
+      <figure class="past-video reveal">
+        <video controls preload="none" playsinline
+               poster="assets/events/after-movie-poster.webp"
+               width="1280" height="720"
+               aria-label="סרטון סיכום מהמפגש בבית לחם הגלילית, מאי 26">
+          <source src="assets/events/after-movie.mp4" type="video/mp4">
+        </video>
+      </figure>
+
       <ul class="past-grid" role="list">
-        <!-- TODO: מדיה מ-OC - משבצת 1 (תמונה/סרטון + alt/כיתוב) -->
-        <li class="past-slot reveal"><span class="event-soon">תמונה או סרטון - בקרוב</span></li>
-        <!-- TODO: מדיה מ-OC - משבצת 2 -->
-        <li class="past-slot reveal delay-1"><span class="event-soon">תמונה או סרטון - בקרוב</span></li>
-        <!-- TODO: מדיה מ-OC - משבצת 3 -->
-        <li class="past-slot reveal delay-2"><span class="event-soon">תמונה או סרטון - בקרוב</span></li>
-        <!-- TODO: מדיה מ-OC - משבצת 4 -->
-        <li class="past-slot reveal"><span class="event-soon">תמונה או סרטון - בקרוב</span></li>
-        <!-- TODO: מדיה מ-OC - משבצת 5 -->
-        <li class="past-slot reveal delay-1"><span class="event-soon">תמונה או סרטון - בקרוב</span></li>
-        <!-- TODO: מדיה מ-OC - משבצת 6 -->
-        <li class="past-slot reveal delay-2"><span class="event-soon">תמונה או סרטון - בקרוב</span></li>
+        <li class="past-slot reveal">
+          <picture><source srcset="assets/events/event-teaching-wide.webp" type="image/webp"><img src="assets/events/event-teaching-wide.jpg" alt="אור ואיתי מלמדים מול הקהל היושב במפגש בבית לחם הגלילית, מאי 26" loading="lazy" width="1600" height="900"></picture>
+        </li>
+        <li class="past-slot reveal delay-1">
+          <picture><source srcset="assets/events/event-group.webp" type="image/webp"><img src="assets/events/event-group.jpg" alt="אור מלמד ואיתי לצדו, שרטוטי גלי מוח על הלוח - בית לחם הגלילית, מאי 26" loading="lazy" width="1600" height="1067"></picture>
+        </li>
+        <li class="past-slot reveal delay-2">
+          <picture><source srcset="assets/events/event-portrait.webp" type="image/webp"><img src="assets/events/event-portrait.jpg" alt="איתי עומד מול הקהל במפגש בבית לחם הגלילית, מאי 26" loading="lazy" width="1000" height="1500"></picture>
+        </li>
+        <li class="past-slot reveal">
+          <picture><source srcset="assets/events/event-booklets.webp" type="image/webp"><img src="assets/events/event-booklets.jpg" alt="חוברות SHIFT ממותגות מונחות לקראת המפגש" loading="lazy" width="1000" height="1333"></picture>
+        </li>
+        <li class="past-slot reveal delay-1">
+          <picture><source srcset="assets/events/event-aerial.webp" type="image/webp"><img src="assets/events/event-aerial.jpg" alt="צילום אווירי של מרחב המפגש בבית לחם הגלילית" loading="lazy" width="1000" height="1333"></picture>
+        </li>
+        <!-- המשבצת השישית ירדה - חמש תמונות אמיתיות עדיפות על ריבוע
+             "בקרוב" ליד תיעוד אמיתי; הגריד זורם 3+2. תמונות נוספות
+             מ-OC = ‏<li> אחד. -->
       </ul>
     </div>
 
@@ -768,30 +790,19 @@
          והאירועים יגיעו מ-OC; אסור להמציא ביקורות. שתי רצועות זהות =
          לולאה חלקה (הכפולה aria-hidden); ‏CSS בלבד, נעצר ב-hover
          ובמופחת-תנועה (שם הרצועה נגללת ידנית). -->
-    <div class="reviews-marquee" role="group" aria-label="ביקורות מהאירועים - בקרוב">
+    <!-- ביקורות אמיתיות (‏OC ‏2.8) - המלל מדויק, לא נערך. כל ביקורת
+         כתובה פעם אחת בלבד; ‏main.js משכפל עד רוחב הלולאה (השכפולים
+         ‏aria-hidden) ובונה את הרצועה השנייה. הוספת ביקורת = <li> אחד.
+         בלי JS: רצועה סטטית, בלי אנימציה (מגודר ב-html.js ב-CSS). -->
+    <div class="reviews-marquee" role="group" aria-label="ביקורות מהאירועים">
       <!-- ‏B10 (‏WCAG 2.2.2): תנועה אוטומטית מעל 5ש' חייבת מנגנון עצירה
            גלוי - ‏hover לא קיים בטלפון. הכפתור חי רק עם JS; במופחת-תנועה
            אין תנועה וגם לא כפתור. -->
       <button class="reviews-pause" id="reviewsPause" type="button" aria-pressed="false" aria-label="השהיית סרגל הביקורות"><i aria-hidden="true"></i></button>
       <div class="reviews-run">
         <ul class="reviews-strip" role="list">
-          <!-- TODO: ביקורת 1 מ-OC - מלל + שם משתתף/ת + שם אירוע -->
-          <li class="review-card"><span class="review-mark" aria-hidden="true">״</span><p>ביקורת מהמשתתפים - בקרוב</p><span class="review-by">שם · אירוע</span></li>
-          <!-- TODO: ביקורת 2 מ-OC -->
-          <li class="review-card"><span class="review-mark" aria-hidden="true">״</span><p>ביקורת מהמשתתפים - בקרוב</p><span class="review-by">שם · אירוע</span></li>
-          <!-- TODO: ביקורת 3 מ-OC -->
-          <li class="review-card"><span class="review-mark" aria-hidden="true">״</span><p>ביקורת מהמשתתפים - בקרוב</p><span class="review-by">שם · אירוע</span></li>
-          <!-- TODO: ביקורת 4 מ-OC -->
-          <li class="review-card"><span class="review-mark" aria-hidden="true">״</span><p>ביקורת מהמשתתפים - בקרוב</p><span class="review-by">שם · אירוע</span></li>
-          <!-- TODO: ביקורת 5 מ-OC -->
-          <li class="review-card"><span class="review-mark" aria-hidden="true">״</span><p>ביקורת מהמשתתפים - בקרוב</p><span class="review-by">שם · אירוע</span></li>
-        </ul>
-        <ul class="reviews-strip" role="list" aria-hidden="true">
-          <li class="review-card"><span class="review-mark" aria-hidden="true">״</span><p>ביקורת מהמשתתפים - בקרוב</p><span class="review-by">שם · אירוע</span></li>
-          <li class="review-card"><span class="review-mark" aria-hidden="true">״</span><p>ביקורת מהמשתתפים - בקרוב</p><span class="review-by">שם · אירוע</span></li>
-          <li class="review-card"><span class="review-mark" aria-hidden="true">״</span><p>ביקורת מהמשתתפים - בקרוב</p><span class="review-by">שם · אירוע</span></li>
-          <li class="review-card"><span class="review-mark" aria-hidden="true">״</span><p>ביקורת מהמשתתפים - בקרוב</p><span class="review-by">שם · אירוע</span></li>
-          <li class="review-card"><span class="review-mark" aria-hidden="true">״</span><p>ביקורת מהמשתתפים - בקרוב</p><span class="review-by">שם · אירוע</span></li>
+          <li class="review-card"><span class="review-mark" aria-hidden="true">״</span><p>ממש חשוב לי לכתוב לכם ולהגיד שהאירוע היה מושלם. זה עלה מעבר לכל הציפיות וזו הייתה חוויה מטורפת ומשמעותית בשבילי שבאמת תרוץ איתי קדימה כי למדתי המון ואני אשמח עוד ללמוד המון</p><span class="review-by">טל · בית לחם הגלילית, מאי 26</span></li>
+          <li class="review-card"><span class="review-mark" aria-hidden="true">״</span><p>אני רוצה להגיד תודה ענקית מכל הלב. זה היה יום מדהים ומציף. בעזרת המרחב אזרתי אומץ לשתף ולהוציא הכל. גם אם זה היה עם קול חנוק ודמעות התמסרתי לחוויה.</p><span class="review-by">שון · בית לחם הגלילית, מאי 26</span></li>
         </ul>
       </div>
     </div>
@@ -935,7 +946,7 @@
   <script src="assets/vendor/gsap.min.js" defer></script>
   <script src="assets/vendor/ScrollTrigger.min.js" defer></script>
   <script src="assets/vendor/lenis.min.js" defer></script>
-  <script src="js/motion.js?v=20260802a" defer></script>
-  <script src="js/main.js?v=20260802a" defer></script>
+  <script src="js/motion.js?v=20260802b" defer></script>
+  <script src="js/main.js?v=20260802b" defer></script>
 </body>
 </html>
