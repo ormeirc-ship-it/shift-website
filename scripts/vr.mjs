@@ -113,6 +113,13 @@ for (const set of SETS) {
         } catch (e) { /* וידאו בלי מקור — לא מעניין */ }
       }
     });
+    // דטרמיניזם סרגל-הביקורות: הרצועה נעה ~55px/ש' ברצף, אז זמן-הצילום
+    // מזיז את כל הפיקסלים שלה - נמדד 2.8: ‏4.61% סטייה על m-past-events
+    // בלי שום שינוי קוד (שתי ריצות קודמות עברו במזל). ‏animation:none
+    // מקבע את הרצועה בנקודת-הבסיס - אותו פריים בכל ריצה.
+    await page.evaluate(() => {
+      for (const run of document.querySelectorAll('.reviews-run')) run.style.animation = 'none';
+    });
     await new Promise((r) => setTimeout(r, 150));
     const name = `${set.tag}-${target.replace(/[#.]/g, '')}.png`;
     await page.screenshot({ path: join(CUR, name) });

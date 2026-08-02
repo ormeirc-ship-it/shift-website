@@ -289,6 +289,15 @@ h3 {
 }
 
 .section-head { max-width: 680px; margin-bottom: clamp(40px, 7vw, 72px); }
+/* כותרת-על (kicker) מעל כותרת סקשן - הוראת OC ‏2.8; תכלת = מבטא, לא משטח */
+.section-kicker {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--sky);
+  margin-bottom: 12px;
+}
 .section-intro {
   margin-top: 18px;
   font-size: 1.08rem;
@@ -902,6 +911,10 @@ h1 .w { display: inline-block; }
   font-weight: 200;
   letter-spacing: 0.16em;
   line-height: 1;
+  /* ‏OC ‏2.8 ("נטייה ימינה"): ריווח-האותיות משאיר רווח מת אחרי ה-T,
+     והמרכוז הגאומטרי מזיז את ה-I - ציר המותג - חצי-ריווח ימינה.
+     ‏padding בצד הסיום (‏ltr=ימין) בגודל הריווח מחזיר את ה-I לציר. */
+  padding-inline-end: 0.16em;
 }
 .basket-sub {
   font-size: 1.14rem;
