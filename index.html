@@ -71,7 +71,7 @@
   }
   </script>
   <!-- פרמטר הגרסה שובר cache ישן אחרי כל פריסה - לעדכן בכל שינוי CSS/JS -->
-  <link rel="stylesheet" href="css/style.css?v=20260803f">
+  <link rel="stylesheet" href="css/style.css?v=20260804a">
   <script>
     document.documentElement.classList.add('js');
     // מנוע התנועה מוכרז מראש כדי שחוקי ה-reveal של ה-CSS לא יידלקו לרגע;
@@ -665,7 +665,7 @@
             </li>
             <li class="day-item">
               <span class="day-no">19</span>
-              <div class="day-body"><h4>חמלה עצמית אחרי נפילה</h4></div>
+              <div class="day-body"><h4>שגרה</h4></div>
             </li>
             <li class="day-item">
               <span class="day-no">20</span>
@@ -792,26 +792,37 @@
         </video>
       </figure>
 
-      <ul class="past-grid" role="list">
-        <li class="past-slot reveal">
-          <picture><source srcset="assets/events/event-teaching-wide.webp" type="image/webp"><img src="assets/events/event-teaching-wide.jpg" alt="אור ואיתי מלמדים מול הקהל היושב במפגש בבית לחם הגלילית, מאי 26" loading="lazy" width="1600" height="900"></picture>
-        </li>
-        <li class="past-slot reveal delay-1">
-          <picture><source srcset="assets/events/event-group.webp" type="image/webp"><img src="assets/events/event-group.jpg" alt="אור מלמד ואיתי לצדו, שרטוטי גלי מוח על הלוח - בית לחם הגלילית, מאי 26" loading="lazy" width="1600" height="1067"></picture>
-        </li>
-        <li class="past-slot reveal delay-2">
-          <picture><source srcset="assets/events/event-portrait.webp" type="image/webp"><img src="assets/events/event-portrait.jpg" alt="איתי עומד מול הקהל במפגש בבית לחם הגלילית, מאי 26" loading="lazy" width="1000" height="1500"></picture>
-        </li>
-        <li class="past-slot reveal">
-          <picture><source srcset="assets/events/event-booklets.webp" type="image/webp"><img src="assets/events/event-booklets.jpg" alt="חוברות SHIFT ממותגות מונחות לקראת המפגש" loading="lazy" width="1000" height="1333"></picture>
-        </li>
-        <li class="past-slot reveal delay-1">
-          <picture><source srcset="assets/events/event-aerial.webp" type="image/webp"><img src="assets/events/event-aerial.jpg" alt="צילום אווירי של מרחב המפגש בבית לחם הגלילית" loading="lazy" width="1000" height="1333"></picture>
-        </li>
-        <!-- המשבצת השישית ירדה - חמש תמונות אמיתיות עדיפות על ריבוע
-             "בקרוב" ליד תיעוד אמיתי; הגריד זורם 3+2. תמונות נוספות
-             מ-OC = ‏<li> אחד. -->
-      </ul>
+      <!-- ‏D17 (הכרעת OC ‏3.8): רצועה נעה אחת, ‏18 תמונות - הגריד ירד.
+           הסדר מסופר (הכנה→מרחב→מעגל→למידה→תרגול→קרח→שחרור→חיבור→דממה→
+           מבט-על), האוויריות פותחות וסוגרות. אותו מנוע כמו הביקורות
+           (main.js runMarquee); ‏width/height על כל תמונה = חובה, בלעדיהם
+           לולאת-המילוי נמדדת לפני הטעינה ונוצר תפר. חמש הישנות עברו את
+           צינור-הדחיסה (1200px, ‏q76/78) - המידות עודכנו בהתאם. -->
+      <div class="past-marquee" role="group" aria-label="תמונות מהאירועים הקודמים">
+        <button class="reviews-pause" id="pastPause" type="button" aria-pressed="false" aria-label="השהיית גלריית התמונות"><i aria-hidden="true"></i></button>
+        <div class="past-run">
+          <ul class="past-strip" role="list">
+            <li class="past-shot"><picture><source srcset="assets/events/event-booklets.webp" type="image/webp"><img src="assets/events/event-booklets.jpg" alt="חוברות SHIFT ממותגות מונחות לקראת המפגש" loading="lazy" width="900" height="1200"></picture></li>
+            <li class="past-shot"><picture><source srcset="assets/events/event-aerial.webp" type="image/webp"><img src="assets/events/event-aerial.jpg" alt="צילום אווירי של מרחב המפגש בבית לחם הגלילית" loading="lazy" width="900" height="1200"></picture></li>
+            <li class="past-shot"><picture><source srcset="assets/events/gallery-099.webp" type="image/webp"><img src="assets/events/gallery-099.jpg" alt="קבוצה גדולה יושבת במעגל בסלון, שיחה קבוצתית באולם פנימי" loading="lazy" width="1200" height="800"></picture></li>
+            <li class="past-shot"><picture><source srcset="assets/events/event-teaching-wide.webp" type="image/webp"><img src="assets/events/event-teaching-wide.jpg" alt="אור ואיתי מלמדים מול הקהל היושב במפגש בבית לחם הגלילית, מאי 26" loading="lazy" width="1200" height="675"></picture></li>
+            <li class="past-shot"><picture><source srcset="assets/events/gallery-107.webp" type="image/webp"><img src="assets/events/gallery-107.jpg" alt="גבר ואישה יושבים ומשוחחים בפנים ליד חלון עץ" loading="lazy" width="1200" height="960"></picture></li>
+            <li class="past-shot"><picture><source srcset="assets/events/gallery-100.webp" type="image/webp"><img src="assets/events/gallery-100.jpg" alt="גבר ואישה יושבים בישיבה מוצלבת על מזרנים בתוך חדר עם חלון" loading="lazy" width="800" height="1200"></picture></li>
+            <li class="past-shot"><picture><source srcset="assets/events/event-portrait.webp" type="image/webp"><img src="assets/events/event-portrait.jpg" alt="איתי עומד מול הקהל במפגש בבית לחם הגלילית, מאי 26" loading="lazy" width="800" height="1200"></picture></li>
+            <li class="past-shot"><picture><source srcset="assets/events/gallery-044.webp" type="image/webp"><img src="assets/events/gallery-044.jpg" alt="שני גברים יושבים בכריעה בחוץ מול לוח עם תרשים גלים" loading="lazy" width="1200" height="800"></picture></li>
+            <li class="past-shot"><picture><source srcset="assets/events/event-group.webp" type="image/webp"><img src="assets/events/event-group.jpg" alt="אור מלמד ואיתי לצדו, שרטוטי גלי מוח על הלוח - בית לחם הגלילית, מאי 26" loading="lazy" width="1200" height="800"></picture></li>
+            <li class="past-shot"><picture><source srcset="assets/events/gallery-028.webp" type="image/webp"><img src="assets/events/gallery-028.jpg" alt="שתי נשים יושבות זו מול זו בחוץ ומחייכות, לוח עם שרטוט מאחוריהן" loading="lazy" width="800" height="1200"></picture></li>
+            <li class="past-shot"><picture><source srcset="assets/events/gallery-013.webp" type="image/webp"><img src="assets/events/gallery-013.jpg" alt="קבוצת אנשים יושבת על שטיח בחוץ ומקשיבה, גינה ברקע" loading="lazy" width="800" height="1200"></picture></li>
+            <li class="past-shot"><picture><source srcset="assets/events/gallery-089.webp" type="image/webp"><img src="assets/events/gallery-089.jpg" alt="אישה מחזיקה קערת זמזום ומקל, ברקע אדם שרוע על מזרן" loading="lazy" width="800" height="1200"></picture></li>
+            <li class="past-shot"><picture><source srcset="assets/events/gallery-054.webp" type="image/webp"><img src="assets/events/gallery-054.jpg" alt="גבר שרוע באמבט קרח בחוץ עם עיניים עצומות" loading="lazy" width="800" height="1200"></picture></li>
+            <li class="past-shot"><picture><source srcset="assets/events/gallery-140.webp" type="image/webp"><img src="assets/events/gallery-140.jpg" alt="גבר צועק בשמחה בחוץ ומחזיק חולצה מעל ראשו, אנשים סביבו" loading="lazy" width="739" height="1200"></picture></li>
+            <li class="past-shot"><picture><source srcset="assets/events/gallery-142.webp" type="image/webp"><img src="assets/events/gallery-142.jpg" alt="קבוצת גברים עומדת בחוץ אחרי טבילה, משוחחים ומחייכים" loading="lazy" width="1200" height="800"></picture></li>
+            <li class="past-shot"><picture><source srcset="assets/events/gallery-135.webp" type="image/webp"><img src="assets/events/gallery-135.jpg" alt="שני משתתפים עומדים בחוץ מול שיח ירוק, מחבקים ומחייכים" loading="lazy" width="800" height="1200"></picture></li>
+            <li class="past-shot"><picture><source srcset="assets/events/gallery-043.webp" type="image/webp"><img src="assets/events/gallery-043.jpg" alt="גבר יושב בישיבה מוצלבת על הדשא בחוץ עם משקפי שמש" loading="lazy" width="800" height="1200"></picture></li>
+            <li class="past-shot"><picture><source srcset="assets/events/gallery-004.webp" type="image/webp"><img src="assets/events/gallery-004.jpg" alt="צילום אווירי של חצר עם מזרנים, שולחנות ואנשים מתכוננים לפעילות" loading="lazy" width="1200" height="675"></picture></li>
+          </ul>
+        </div>
+      </div>
     </div>
 
     <!-- סרגל-רץ ביקורות (הוראת OC ‏30.7): מסגרת בלבד - המלל, השמות
@@ -1005,7 +1016,7 @@
   <script src="assets/vendor/gsap.min.js" defer></script>
   <script src="assets/vendor/ScrollTrigger.min.js" defer></script>
   <script src="assets/vendor/lenis.min.js" defer></script>
-  <script src="js/motion.js?v=20260803f" defer></script>
-  <script src="js/main.js?v=20260803f" defer></script>
+  <script src="js/motion.js?v=20260804a" defer></script>
+  <script src="js/main.js?v=20260804a" defer></script>
 </body>
 </html>

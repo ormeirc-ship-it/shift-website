@@ -133,14 +133,11 @@ for (const set of SETS) {
     // בלי שום שינוי קוד (שתי ריצות קודמות עברו במזל). ‏animation:none
     // מקבע את הרצועה בנקודת-הבסיס - אותו פריים בכל ריצה.
     await page.evaluate(() => {
-      for (const run of document.querySelectorAll('.reviews-run')) run.style.animation = 'none';
+      // ‏D17: שתי רצועות נעות - שתיהן מוקפאות בנקודת-הבסיס
+      for (const run of document.querySelectorAll('.reviews-run, .past-run')) run.style.animation = 'none';
       // ‏🌅 3.8: רשת-ההגעה אקראית-בזמן - ההקפאה זורעת מחדש ומציירת
       // פריים 0 קבוע (motion.js §arrival-net), אחרת d-dive-end מגריל
       window.__netFreeze = true;
-      // ‏3.8 ערב: גלריית-העבר במובייל היא scroll-snap אופקי שמתייצב
-      // כמה פיקסלים אחרת בין טעינות (m-past-events קפץ ‏4-9% בלי שינוי
-      // קוד, שלוש פעמים) - מקבעים לנקודת-ההתחלה, אותו פריים תמיד.
-      for (const g of document.querySelectorAll('.past-grid')) g.scrollLeft = 0;
     });
     await new Promise((r) => setTimeout(r, 150));
     const name = `${set.tag}-${target.replace(/[#.]/g, '')}.png`;

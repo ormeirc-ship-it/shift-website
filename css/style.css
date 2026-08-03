@@ -1248,32 +1248,42 @@ h1 .w { display: inline-block; }
   .event-body { padding: 22px; padding-top: 0; }
 }
 
-/* ---------- אירועים קודמים (D10) - מבנה; המדיה תגיע מ-OC ---------- */
+/* ---------- אירועים קודמים (D10) ---------- */
 .past-events { position: relative; padding: clamp(70px, 10vw, 120px) 0; }
-.past-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(14px, 2vw, 24px);
+/* ‏D17 (3.8): הגריד ירד - רצועה נעה אחת של 18 תמונות, אותו מנגנון
+   כמו סרגל-הביקורות (מנוע משותף ב-main.js). גובה אחיד לכל שקופית,
+   רוחב טבעי לפי יחס-הממדים - הרצועה נושמת בין רוחב לגובה. */
+.past-marquee {
+  position: relative;
   margin-top: clamp(28px, 4vw, 44px);
-  padding: 0;
-  list-style: none;
-}
-.past-slot {
-  aspect-ratio: 4 / 3;
-  display: grid;
-  place-items: center;
-  background: rgba(255, 255, 255, 0.04);
-  /* המסגרת המקווקוות של ה-placeholder ירדה - יש תיעוד אמיתי (2.8) */
-  border-radius: var(--radius);
   overflow: hidden;
+  -webkit-mask-image: linear-gradient(to left, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(to left, transparent, #000 8%, #000 92%, transparent);
 }
-.past-slot picture, .past-slot img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.past-run {
+  display: flex;
+  width: max-content;
+}
+.past-marquee.filled .past-run { animation: reviewsRun 60s linear infinite; }
+@media (hover: hover) { .past-marquee:hover .past-run { animation-play-state: paused; } }
+.past-marquee:focus-within .past-run,
+.past-marquee.paused .past-run,
+.past-marquee.touch-hold .past-run { animation-play-state: paused; }
+.past-strip {
+  display: flex;
+  gap: clamp(10px, 1.4vw, 16px);
+  padding: 0 clamp(5px, 0.7vw, 8px);
+  list-style: none;
+  margin: 0;
+}
+.past-shot { flex: 0 0 auto; }
+.past-shot img {
+  height: clamp(220px, 30vw, 340px);
+  width: auto;
   display: block;
+  border-radius: calc(var(--radius) * 0.6);
+  object-fit: cover;
 }
-.past-slot .event-soon { margin-top: 0; }
 
 /* סרטון הסיכום - פריט רחב בראש הגלריה; נטען רק בלחיצת ניגון */
 .past-video {
@@ -1336,7 +1346,8 @@ h1 .w { display: inline-block; }
   height: 10px;
   border-inline: 2.5px solid var(--white-soft);
 }
-.reviews-marquee.paused .reviews-pause i {
+.reviews-marquee.paused .reviews-pause i,
+.past-marquee.paused .reviews-pause i {
   width: 0;
   height: 0;
   border: none;
@@ -1383,26 +1394,22 @@ html:not(.js) .reviews-pause { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .reviews-run { animation: none; }
-  .reviews-strip[aria-hidden="true"] { display: none; }
+  .reviews-strip[aria-hidden="true"], .past-strip[aria-hidden="true"] { display: none; }
+  /* ‏D17: כמו הביקורות - במצב שקט הרצועה סטטית ונגללת ידנית */
+  .past-run { animation: none; }
+  .past-marquee {
+    overflow-x: auto;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
   .reviews-marquee {
     overflow-x: auto;
     -webkit-mask-image: none;
     mask-image: none;
   }
 }
-/* מובייל: קרוסלת scroll-snap - CSS בלבד; RTL מגיע נכון מהדפדפן */
-@media (max-width: 720px) {
-  .past-grid {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    /* (‏scroll-padding-inline הוסר - 🟢: נלחם ב-snap-align:center
-       והראשון/האחרון לא הגיעו למרכז) */
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: 6px; /* אוויר לפס-גלילה במכשירים שמציגים אותו */
-  }
-  .past-slot { flex: 0 0 76%; scroll-snap-align: center; }
-}
+/* (‏D17: בלוק ה-scroll-snap של הגריד במובייל ירד יחד עם הגריד -
+   הרצועה הנעה חיה בכל הרוחבים, ובמופחת-תנועה נגללת ידנית) */
 
 /* מסכים נמוכים (SE, מובייל-לרוחב, לפטופ עם סרגלים): תרגיל הנשימה קומפקטי,
    שהעיגול והכפתור ייכנסו יחד ל-viewport - נתפס במטריצת המכשירים (28/29) */

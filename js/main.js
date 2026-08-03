@@ -314,10 +314,16 @@ safe('worlds-carousel', () => {
 // משכפלים את הסט עד שהרצועה רחבה מהחלון (השכפולים aria-hidden),
 // בונים את הרצועה השנייה ללולאה חלקה, וקובעים משך לפי רוחב -
 // מהירות קבועה (~55px/ש') במקום משך קבוע שמאיץ כשמוסיפים ביקורות.
-safe('reviews-marquee', () => {
-  const marquee = document.querySelector('.reviews-marquee');
-  const run = marquee && marquee.querySelector('.reviews-run');
-  const strip = run && run.querySelector('.reviews-strip');
+// ── מנוע רצועה-נעה משותף (D17 + בקשת Cowork ב-REQUESTS) ─────────────
+// שתי רצועות חיות באתר (ביקורות · גלריית-העבר) - מנוע אחד, לא שני
+// עותקים שיסחפו. משמר במדויק: לולאת-השכפול עם guard, ה-twin,
+// ‏aria-hidden על שכפולים, ‏animationDuration מ-scrollWidth (מהירות
+// קבועה פר-רצועה), ‏filled שמדליק אנימציה רק כשהלולאה שלמה, כפתור
+// ‏B10, ואחיזת-מגע (touch-hold) עם חסד 1.6ש'.
+function runMarquee(cfg) {
+  const marquee = document.querySelector(cfg.root);
+  const run = marquee && marquee.querySelector(cfg.run);
+  const strip = run && run.querySelector(cfg.strip);
   if (!marquee || !run || !strip || !strip.children.length) return;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -335,16 +341,16 @@ safe('reviews-marquee', () => {
     const twin = strip.cloneNode(true);
     twin.setAttribute('aria-hidden', 'true');
     run.appendChild(twin);
-    run.style.animationDuration = Math.round(strip.scrollWidth / 55) + 's';
+    run.style.animationDuration = Math.round(strip.scrollWidth / cfg.speed) + 's';
     marquee.classList.add('filled'); // האנימציה נדלקת רק כשהלולאה שלמה
   }
 
-  const btn = document.getElementById('reviewsPause');
+  const btn = document.getElementById(cfg.pauseBtn);
   if (btn) {
     btn.addEventListener('click', () => {
       const paused = marquee.classList.toggle('paused');
       btn.setAttribute('aria-pressed', String(paused));
-      btn.setAttribute('aria-label', paused ? 'המשך סרגל הביקורות' : 'השהיית סרגל הביקורות');
+      btn.setAttribute('aria-label', paused ? cfg.labels.resume : cfg.labels.pause);
     });
   }
 
@@ -364,7 +370,20 @@ safe('reviews-marquee', () => {
   };
   marquee.addEventListener('pointerup', touchRelease);
   marquee.addEventListener('pointercancel', touchRelease);
-});
+}
+
+safe('reviews-marquee', () => runMarquee({
+  root: '.reviews-marquee', run: '.reviews-run', strip: '.reviews-strip',
+  pauseBtn: 'reviewsPause', speed: 55,
+  labels: { pause: 'השהיית סרגל הביקורות', resume: 'המשך סרגל הביקורות' },
+}));
+
+// ‏D17: גלריית-העבר - תמונות רחבות מקלפי-טקסט, מהירות מעט איטית יותר
+safe('past-marquee', () => runMarquee({
+  root: '.past-marquee', run: '.past-run', strip: '.past-strip',
+  pauseBtn: 'pastPause', speed: 45,
+  labels: { pause: 'השהיית גלריית התמונות', resume: 'המשך גלריית התמונות' },
+}));
 
 // ============================================================
 // טעימה מהמסלול: "כפתור ההרגעה הפנימי" - אנחה כפולה (יום 1)
