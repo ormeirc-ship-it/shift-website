@@ -74,6 +74,38 @@ function fromSite() {
   return { titles: out };
 }
 
+// ── שבועות: כותרות + תיאורים (T21) ──────────────────────────────────
+// ‏D16 (3.8) חשף שכותרת שבוע 3 נסחפה בזמן שהכלי דיווח "אין סחיפה" -
+// הוא השווה רק ימים. מוניטור שקונה שקט-שווא גרוע מהיעדר מוניטור.
+async function weeksFromFirestore() {
+  const res = await fetch(`${FS_BASE}/weekIntros`);
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  const data = await res.json();
+  const out = new Map();
+  (data.documents || []).forEach((d) => {
+    const wk = Number(d.name.split('/').pop());
+    out.set(wk, {
+      title: norm(d.fields?.title?.stringValue),
+      // במסד התיאור הוא טקסט אחד עם ‎\n\n; באתר - כמה <p>. שני הצדדים
+      // מנורמלים לרווחים אחידים, אחרת הכלי היה מדווח סחיפה תמידית.
+      desc: norm((d.fields?.description?.stringValue || '').replace(/\n+/g, ' ')),
+    });
+  });
+  return out;
+}
+function weeksFromSite() {
+  const html = readFileSync(resolve(ROOT, 'index.html'), 'utf8');
+  const out = new Map();
+  const re = /data-week="(\d)"[\s\S]*?<h3[^>]*>([\s\S]*?)<\/h3>[\s\S]*?class="week-desc">([\s\S]*?)<\/div>/g;
+  let m;
+  while ((m = re.exec(html)) !== null) {
+    // תגיות הופכות לרווח (לא לכלום): גבול <p></p> במסד הוא ‎\n\n,
+    // ומחיקה-לכלום הייתה מדביקה מילים ("בשינוי.המוח") = סחיפת-שווא
+    out.set(Number(m[1]), { title: norm(m[2]), desc: norm(m[3].replace(/<[^>]+>/g, ' ')) });
+  }
+  return out;
+}
+
 // ── השוואה ───────────────────────────────────────────────────────────
 const live = await fromFirestore().catch((e) => ({ error: e.message, titles: new Map() }));
 const file = (() => { try { return fromDataJs(); } catch (e) { return { error: e.message, titles: new Map() }; } })();
@@ -92,10 +124,31 @@ const rows = days.map((d) => {
 const siteDrift = rows.filter((r) => r.siteVsLive !== 'ok');
 const fileDrift = rows.filter((r) => r.fileVsLive === 'drift');
 
+const wLive = await weeksFromFirestore().catch((e) => ({ error: e.message }));
+const wSite = weeksFromSite();
+const weekDrift = [];
+if (!wLive.error) {
+  for (const [wk, lv] of wLive) {
+    const st = wSite.get(wk);
+    if (!st) { weekDrift.push({ wk, what: 'חסר באתר' }); continue; }
+    if (lv.title !== st.title) {
+      weekDrift.push({ wk, what: 'כותרת', live: lv.title, site: st.title });
+    }
+    // תיאור שבוע 3 באתר הוא נוסח OC ‏2.8 שגובר במכוון על המסד (מתועד
+    // בהערה מעל ה-div ב-index.html) - מוחרג במפורש, לא בשקט. כותרתו
+    // כן מושווית - רק התיאור מוכתב.
+    if (wk !== 3 && lv.desc !== st.desc) {
+      weekDrift.push({ wk, what: 'תיאור', live: lv.desc.slice(0, 70), site: st.desc.slice(0, 70) });
+    }
+  }
+}
+
 if (JSON_OUT) {
   console.log(JSON.stringify({ live: { updated: live.updated, error: live.error },
-    file: file ? { path: file.path, error: file.error } : null, rows, siteDrift: siteDrift.length, fileDrift: fileDrift.length }, null, 1));
-  process.exit(siteDrift.length ? 1 : 0);
+    file: file ? { path: file.path, error: file.error } : null, rows,
+    siteDrift: siteDrift.length, fileDrift: fileDrift.length,
+    weekDrift, weekError: wLive.error || null }, null, 1));
+  process.exit(siteDrift.length || weekDrift.length ? 1 : 0);
 }
 
 console.log('\n=== סחיפת תוכן — 21 ימי המסלול ===');
@@ -105,16 +158,21 @@ console.log('data.js:    ' + (file && file.path ? file.path.replace(homedir(), '
   (file.mtime ? ' (נשמר ' + file.mtime.slice(0, 10) + ')' : '') : 'לא נמצא מקומית — מדלג'));
 console.log('האתר:       index.html · ' + site.titles.size + ' ימים\n');
 
-if (!siteDrift.length && !fileDrift.length) {
-  console.log(`✓ שלושת המקורות תואמים בכל ${rows.length} הימים.`);
+if (!siteDrift.length && !fileDrift.length && !weekDrift.length && !wLive.error) {
+  console.log(`✓ שלושת המקורות תואמים בכל ${rows.length} הימים + כותרות ותיאורי ${wSite.size} השבועות.`);
 } else {
   if (siteDrift.length) {
     console.log(`✗ האתר נסחף מהמסד החי ב-${siteDrift.length} ימים:\n`);
     siteDrift.forEach((r) => console.log(`  יום ${pad(r.day, 3)} האתר: ${r.site || '—'}\n         החי:  ${r.live || '—'}`));
   }
+  if (weekDrift.length) {
+    console.log(`✗ שבועות שנסחפו מהמסד החי (${weekDrift.length}):\n`);
+    weekDrift.forEach((w) => console.log(`  שבוע ${w.wk} · ${w.what}\n    האתר: ${w.site || '—'}\n    החי:  ${w.live || '—'}`));
+  }
+  if (wLive.error) console.log('⚠ לא הצלחתי לקרוא weekIntros מ-Firestore: ' + wLive.error);
   if (fileDrift.length) {
     console.log(`\n⚠ data.js נסחף מהמסד החי ב-${fileDrift.length} ימים — הריצו סנכרון בריפו הפלטפורמה.`);
     fileDrift.slice(0, 5).forEach((r) => console.log(`  יום ${r.day}: ${r.file} ≠ ${r.live}`));
   }
 }
-process.exit(siteDrift.length ? 1 : 0);
+process.exit(siteDrift.length || weekDrift.length ? 1 : 0);
