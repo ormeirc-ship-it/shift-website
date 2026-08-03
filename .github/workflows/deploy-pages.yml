@@ -38,6 +38,14 @@ jobs:
             --exclude 'prototype-*.html' \
             --exclude '_deploy' --exclude 'firebase.json' --exclude '.firebaserc' \
             ./ /tmp/site/
+      # ‏זמני (3.8): מקור-ה-Pages הוחלף בטעות ל-branch (build_type=legacy)
+      # וכל push מריץ גם את הבנייה הישנה שמפרסמת את הריפו כולו - והיא
+      # מסיימת אחרונה ומנצחת. עד שההגדרה תוחזר ל-"GitHub Actions"
+      # (Settings→Pages, פעולת OC), אנחנו מחכים שהיא תסיים ואז פורסים
+      # מעליה - מצב-יציב נקי, חשיפה של ~דקה בכל push בלבד.
+      # להסיר את הצעד הזה כשה-build_type חוזר ל-workflow.
+      - name: Wait out the legacy branch build (temporary)
+        run: sleep 150
       - uses: actions/upload-pages-artifact@v3
         with:
           path: '/tmp/site'
