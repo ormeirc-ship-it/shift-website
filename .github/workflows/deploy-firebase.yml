@@ -1,0 +1,54 @@
+# פריסה ל-Firebase Hosting (T22, הכרעת OC 3.8) - מחליף את GitHub Pages
+# כדי שהמאגר יוכל להיות פרטי בארגון shiftceos בלי שהאתר יירד.
+#
+# ⚠️ מופעל ידנית בלבד (workflow_dispatch) עד שסבב-ההפעלה של T22 שלב 3
+# יעבור אותו ל-push; לפני כן חייבים להתקיים שני צעדי OC:
+#   1. פרויקט Firebase נפרד לאתר (לא הפרויקט של הפלטפורמה!) -
+#      ה-id נכנס ל-.firebaserc במקום ה-TODO.
+#   2. Service Account עם הרשאת פריסה, שמור כ-Secret בשם
+#      FIREBASE_SERVICE_ACCOUNT.
+#
+# שלב ה-rsync זהה אחד-לאחד ל-deploy-pages.yml - זו רשימת-ההחרגה
+# שמונעת מה-HANDOFF, ה-BACKLOG, אבות-הטיפוס וכלי-הבדיקה לעלות לאוויר.
+# צעד האימות בסוף מוודא זאת בפועל (404 על HANDOFF.md ועל אב-הטיפוס).
+name: Deploy to Firebase Hosting
+
+on:
+  workflow_dispatch:
+  # T22 שלב 3: להחליף ל-
+  # push:
+  #   branches: [main]
+
+concurrency:
+  group: firebase-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Stage runtime files only (parity with deploy-pages)
+        run: |
+          mkdir -p _deploy
+          rsync -a \
+            --exclude '.git' --exclude '.github' --exclude 'node_modules' \
+            --exclude '_build' --exclude '_old-version' --exclude 'delivery' \
+            --exclude 'scripts' --exclude 'tests' --exclude '*.md' \
+            --exclude 'package.json' --exclude 'package-lock.json' \
+            --exclude 'prototype-*.html' \
+            --exclude '_deploy' --exclude 'firebase.json' --exclude '.firebaserc' \
+            ./ _deploy/
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          channelId: live
+      - name: Verify exclusion trap (docs must 404)
+        run: |
+          SITE_URL="$(node -p "require('./.firebaserc').projects.default + '.web.app'")"
+          for p in HANDOFF.md prototype-arrival.html BACKLOG.md; do
+            CODE=$(curl -s -o /dev/null -w "%{http_code}" "https://${SITE_URL}/${p}")
+            echo "${p}: ${CODE}"
+            [ "$CODE" = "404" ] || { echo "::error::${p} is publicly served!"; exit 1; }
+          done

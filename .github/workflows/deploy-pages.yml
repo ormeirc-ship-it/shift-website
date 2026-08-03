@@ -36,6 +36,7 @@ jobs:
             --exclude 'scripts' --exclude 'tests' --exclude '*.md' \
             --exclude 'package.json' --exclude 'package-lock.json' \
             --exclude 'prototype-*.html' \
+            --exclude '_deploy' --exclude 'firebase.json' --exclude '.firebaserc' \
             ./ /tmp/site/
       - uses: actions/upload-pages-artifact@v3
         with:
