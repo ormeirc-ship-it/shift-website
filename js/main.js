@@ -457,8 +457,7 @@ safe('nav-tone', () => {
   window.__navTone = { set: (key, on) => { active[key] = !!on; apply(); }, active };
 
   if (!('IntersectionObserver' in window)) return;
-  // ‏🌌 2.8: ההצהרה חזרה לכהה - ירדה ממפת המקורות הבהירים
-  const LIGHT = ['#method', '#breathe', '#path', '#story', '#outcomes'];
+  const LIGHT = ['.statement', '#method', '#breathe', '#path', '#story', '#outcomes'];
   const prog = document.querySelector('.program');
   let ios = [];
 
