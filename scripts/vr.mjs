@@ -124,6 +124,9 @@ for (const set of SETS) {
     // מקבע את הרצועה בנקודת-הבסיס - אותו פריים בכל ריצה.
     await page.evaluate(() => {
       for (const run of document.querySelectorAll('.reviews-run')) run.style.animation = 'none';
+      // ‏🌅 3.8: רשת-ההגעה אקראית-בזמן - ההקפאה זורעת מחדש ומציירת
+      // פריים 0 קבוע (motion.js §arrival-net), אחרת d-dive-end מגריל
+      window.__netFreeze = true;
     });
     await new Promise((r) => setTimeout(r, 150));
     const name = `${set.tag}-${target.replace(/[#.]/g, '')}.png`;

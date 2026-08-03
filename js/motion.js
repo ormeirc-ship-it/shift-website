@@ -276,6 +276,7 @@
     }
 
     var target = 0, eased = 0, hushOn = false, litOn = false, onScreen = true;
+    var liveOn = false, staged = false;
     var skipTick = null, lastP = -1, diveTracked = false;
 
     function render() {
@@ -302,6 +303,15 @@
       if (hush !== hushOn) { hushOn = hush; docEl.classList.toggle('dive-hush', hush); }
       var lit = onScreen && aIn > 0.5;
       if (lit !== litOn && window.__navTone) { litOn = lit; window.__navTone.set('dive', lit); }
+      // ‏🌅 3.8: שכבות ההגעה החיה נדלקות עם אותו סף; הכניסה המדורגת
+      // (arrival-staged) נלטשת פעם אחת - חזרה למעלה לא מסתירה תוכן שוב.
+      var live = onScreen && aIn > 0.5;
+      if (live !== liveOn) {
+        liveOn = live;
+        docEl.classList.toggle('arrival-live', live);
+        if (live && !staged) { staged = true; docEl.classList.add('arrival-staged'); }
+        if (net) net.toggle(live);
+      }
       if (skipTick) skipTick(p);
       // אנליטיקס-מוכנות: מי שהשלים את הצלילה עד האור - פעם אחת לביקור
       if (!diveTracked && aIn > 0.9 && window.__track) {
@@ -401,6 +411,118 @@
         onToggle: function (self) { onScreen = self.isActive; render(); }
       });
     }
+
+    // ── 🧬 הרשת שנפתחה (OC ‏3.8, מאב-הטיפוס; חיה=25 → ‏26 נקודות,
+    // קשרים עד ‏138px). דסקטופ בלבד; רצה רק כשהצלילה על המסך (דרך
+    // ‏toggle מ-render) והטאב גלוי. ‏PRNG זרוע - פריסה זהה בכל טעינה,
+    // ו-VR מקפיא פריים ‏t=0 דטרמיניסטי דרך ‏window.__netFreeze.
+    var net = null;
+    if (!matchMedia('(max-width: 899px)').matches) net = (function () {
+      var cv = document.getElementById('arrivalField');
+      if (!cv) return null;
+      var ctx2 = cv.getContext('2d');
+      var stage2 = cv.parentElement;
+      var ALIVE = 0.25;                       // הכרעת OC - לא לשנות
+      var COUNT2 = Math.round(14 + ALIVE * 46);  // = 26
+      var LINK = 128 + ALIVE * 40;               // = 138
+      var SEED = 20260803;
+      var W2 = 0, H2 = 0, nodes = [], raf2 = null, on = false, frozen = false;
+      // ‏mulberry32 - מחולל זרוע קטן; אותו זרע = אותה רשת התחלתית
+      var rng;
+      function reseedRng() {
+        var s = SEED;
+        rng = function () {
+          s |= 0; s = (s + 0x6D2B79F5) | 0;
+          var t = Math.imul(s ^ (s >>> 15), 1 | s);
+          t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+      }
+      reseedRng();
+      function seedNodes() {
+        nodes = [];
+        for (var i = 0; i < COUNT2; i++) {
+          // צפוף סביב המרכז (pow 1.7) - משם מתפזרים החוצה
+          var a = rng() * Math.PI * 2;
+          var r = Math.pow(rng(), 1.7) * Math.min(W2, H2) * 0.42;
+          nodes.push({
+            x: W2 / 2 + Math.cos(a) * r,
+            y: H2 / 2 + Math.sin(a) * r * 0.8,
+            vx: Math.cos(a) * (0.06 + rng() * 0.10),
+            vy: Math.sin(a) * (0.05 + rng() * 0.08),
+            r: 0.7 + rng() * 1.6,
+            ph: rng() * Math.PI * 2
+          });
+        }
+      }
+      function fit2() {
+        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+        W2 = stage2.offsetWidth; H2 = stage2.offsetHeight;
+        cv.width = W2 * dpr; cv.height = H2 * dpr;
+        cv.style.width = W2 + 'px'; cv.style.height = H2 + 'px';
+        ctx2.setTransform(dpr, 0, 0, dpr, 0, 0);
+        reseedRng(); seedNodes();
+      }
+      function advance() {
+        for (var i = 0; i < nodes.length; i++) {
+          var n = nodes[i];
+          n.x += n.vx; n.y += n.vy;
+          // יצא מהמסגרת - נולד מחדש קרוב למרכז; הרשת חיה תמיד
+          if (n.x < -60 || n.x > W2 + 60 || n.y < -60 || n.y > H2 + 60) {
+            var a = rng() * Math.PI * 2, r = rng() * Math.min(W2, H2) * 0.12;
+            n.x = W2 / 2 + Math.cos(a) * r; n.y = H2 / 2 + Math.sin(a) * r * 0.8;
+            n.vx = Math.cos(a) * (0.06 + rng() * 0.10);
+            n.vy = Math.sin(a) * (0.05 + rng() * 0.08);
+          }
+        }
+      }
+      function drawFrame(t) {
+        ctx2.clearRect(0, 0, W2, H2);
+        ctx2.lineWidth = 1;
+        for (var i = 0; i < nodes.length; i++) {
+          for (var j = i + 1; j < nodes.length; j++) {
+            var dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y;
+            var d2 = dx * dx + dy * dy;
+            if (d2 < LINK * LINK) {
+              var o = (1 - Math.sqrt(d2) / LINK) * 0.16 * ALIVE;
+              ctx2.strokeStyle = 'rgba(168, 222, 255, ' + o.toFixed(3) + ')';
+              ctx2.beginPath(); ctx2.moveTo(nodes[i].x, nodes[i].y);
+              ctx2.lineTo(nodes[j].x, nodes[j].y); ctx2.stroke();
+            }
+          }
+        }
+        for (var k = 0; k < nodes.length; k++) {
+          var n2 = nodes[k];
+          var tw = 0.45 + 0.55 * (0.5 + 0.5 * Math.sin(t / 1400 + n2.ph));
+          ctx2.fillStyle = 'rgba(200, 236, 255, ' + (tw * 0.7 * ALIVE).toFixed(3) + ')';
+          ctx2.beginPath(); ctx2.arc(n2.x, n2.y, n2.r, 0, 6.2832); ctx2.fill();
+        }
+      }
+      function tick2(t) {
+        raf2 = null;
+        if (window.__netFreeze) {
+          // ‏VR: פריים קבוע - זריעה מחדש וציור ב-t=0, בלי המשך לולאה
+          if (!frozen) { frozen = true; reseedRng(); seedNodes(); drawFrame(0); }
+          return;
+        }
+        advance();
+        drawFrame(t);
+        if (on && !document.hidden) raf2 = requestAnimationFrame(tick2);
+      }
+      function start() {
+        if (!raf2 && !W2) fit2();
+        if (!raf2) raf2 = requestAnimationFrame(tick2);
+      }
+      function stop() { if (raf2) { cancelAnimationFrame(raf2); raf2 = null; } }
+      document.addEventListener('visibilitychange', function () {
+        if (document.hidden) stop();
+        else if (on) start();
+      });
+      window.addEventListener('resize', function () { if (W2) fit2(); }, { passive: true });
+      return {
+        toggle: function (v) { on = v; if (v) start(); else stop(); }
+      };
+    })();
 
     // חשוף לבדיקות אוטומטיות, כמו window.__lenis - בסביבת בדיקה ה-rAF
     // קפוא ולכן צריך דרך להריץ את הפריים ידנית ולקרוא את המצב.
