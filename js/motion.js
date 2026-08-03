@@ -276,7 +276,11 @@
     }
 
     var target = 0, eased = 0, hushOn = false, litOn = false, onScreen = true;
-    var liveOn = false, staged = false;
+    // ‏T18 (רעיון OC ‏3.8): הגלילה חושפת, לא הזמן. תחנות-p עם נעילה
+    // חד-כיוונית - מה שנחשף לא מוסתר בגלילה למעלה.
+    var liveOn = false, scrubOn = false;
+    var STATIONS = [0.62, 0.70, 0.80, 0.88];
+    var latched = [false, false, false, false];
     var skipTick = null, lastP = -1, diveTracked = false;
 
     function render() {
@@ -284,7 +288,8 @@
       if (Math.abs(target - eased) < 0.0004) eased = target;
       var p = eased;
 
-      draw(Math.min(COUNT - 1, Math.round(p * (COUNT - 1))));
+      // ‏T18: הרצף מסתיים ב-0.60 - משם הבמה שייכת לסצנת-ההגעה
+      draw(Math.round(Math.min(p / 0.60, 1) * (COUNT - 1)));
 
       // ── מצב הסרגל - לפני כל early-return ────────────────────────────
       // זה תלוי גם ב-onScreen, שמשתנה מבחוץ (טריגר הנראוּת) בלי שההתקדמות
@@ -303,14 +308,24 @@
       if (hush !== hushOn) { hushOn = hush; docEl.classList.toggle('dive-hush', hush); }
       var lit = onScreen && aIn > 0.5;
       if (lit !== litOn && window.__navTone) { litOn = lit; window.__navTone.set('dive', lit); }
-      // ‏🌅 3.8: שכבות ההגעה החיה נדלקות עם אותו סף; הכניסה המדורגת
-      // (arrival-staged) נלטשת פעם אחת - חזרה למעלה לא מסתירה תוכן שוב.
-      var live = onScreen && aIn > 0.5;
+      // ‏T18: הסצנה מתעוררת בחפיפה 0.55→0.62 - לא כמתג. ‏wake מוזרם
+      // כמשתנה-CSS (הרמפה של השכבות), והקנבס מתחיל לרוץ כבר ב-0.55
+      // (עדיין שקוף) כדי שהרשת תהיה בתנועה כשרואים אותה.
+      var wake = Math.max(0, Math.min((p - 0.55) / 0.07, 1));
+      var live = onScreen && p >= 0.55;
       if (live !== liveOn) {
         liveOn = live;
         docEl.classList.toggle('arrival-live', live);
-        if (live && !staged) { staged = true; docEl.classList.add('arrival-staged'); }
         if (net) net.toggle(live);
+      }
+      // המסתיר (arrival-scrub) נוסף רק כשהמנוע מוכח-חי (render רץ) -
+      // בלי מנוע אין מחלקה ואין הסתרה (חוזה A1 נשמר).
+      if (!scrubOn) { scrubOn = true; docEl.classList.add('arrival-scrub'); }
+      for (var si = 0; si < STATIONS.length; si++) {
+        if (!latched[si] && p >= STATIONS[si]) {
+          latched[si] = true;
+          docEl.classList.add('ar-s' + (si + 1));
+        }
       }
       if (skipTick) skipTick(p);
       // אנליטיקס-מוכנות: מי שהשלים את הצלילה עד האור - פעם אחת לביקור
@@ -340,14 +355,16 @@
         el.style.opacity = String(vis);
         el.style.transform = 'translateY(' + (-50 + (p - at) * 90) + '%) scale(' + (0.96 + vis * 0.06) + ')';
       }
-      // ההגעה אל האור (aIn חושב למעלה)
+      // ההגעה אל האור - ‏T18: הכול רוכב על רמפת-ההתעוררות (wake),
+      // לא על ‏aIn; ‏aIn ממשיך לשרת את הסרגל ואת dive_complete בלבד
+      section.style.setProperty('--ar-wake', wake.toFixed(3));
       if (arrival) {
-        arrival.style.opacity = String(aIn);
-        arrival.style.pointerEvents = aIn > 0.6 ? 'auto' : 'none';
+        arrival.style.opacity = String(wake);
+        arrival.style.pointerEvents = p > 0.62 ? 'auto' : 'none';
       }
-      if (veil) veil.style.opacity = String(1 - aIn);
-      // הווילון של הסיום עולה עם ההגעה - חלון הפתיחה חוזר (B3-א)
-      if (curtain) curtain.style.opacity = String(aIn);
+      if (veil) veil.style.opacity = String(1 - wake);
+      // הווילון של הסיום עולה עם ההתעוררות - חלון הפתיחה חוזר (B3-א)
+      if (curtain) curtain.style.opacity = String(wake);
     }
 
     gsap.ticker.add(render);
