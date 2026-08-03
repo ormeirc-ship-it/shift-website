@@ -85,6 +85,16 @@ for (const set of SETS) {
         if (window.ScrollTrigger) ScrollTrigger.update();
         await new Promise((r) => requestAnimationFrame(r));
       }
+      // ‏3.8: הצמדת תת-פיקסל - היסטי-גובה שבריים במעלה-הדף (שינוי שורת
+      // טקסט, ‏vh שברי) הזיזו את פאזת ה-AA של צילומים שלמים (רעש דיפוזי
+      // ‏2-9% בלי שינוי נראה). מיישרים את ראש-הסקשן לפיקסל שלם - הפאזה
+      // קבועה לנצח, וכל עריכת-קופי עתידית מפסיקה לשלם מס-בייסליין.
+      const el2 = sel !== 'top' && document.querySelector(sel);
+      if (el2) {
+        const frac = el2.getBoundingClientRect().top;
+        const snap = frac - Math.round(frac);
+        if (Math.abs(snap) > 0.01) scrollTo(0, scrollY + snap);
+      }
     }, target);
     // ‏method-end: מצבי-הפנים של הקרוסלה — מקבעים את השקופית האחרונה
     // (השילוב) דטרמיניסטית; ‏behavior:auto = בלי תלות בזמני smooth

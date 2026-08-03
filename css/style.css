@@ -299,11 +299,11 @@ html { scrollbar-gutter: stable both-edges; }
 
 .section-head { max-width: 680px; margin-bottom: clamp(40px, 7vw, 72px); }
 /* כותרת-על (kicker) מעל כותרת סקשן - הוראת OC ‏2.8; תכלת = מבטא, לא
-   משטח. ‏3.8: הוגדלה בהוראת OC "כמעט עד לגודל" של ה-h2
-   (‏h2 = clamp(1.9rem,5vw,3rem)) - ~85% ממנו; הריווח רוכך ביחס. */
+   משטח. ‏3.8: הוגדלה בהוראת OC "כמעט עד לגודל" של ה-h2, ואז
+   "תקטין מעט" - ‏~73% מה-h2 (‏clamp(1.9rem,5vw,3rem)). */
 .section-kicker {
   display: block;
-  font-size: clamp(1.6rem, 4.2vw, 2.55rem);
+  font-size: clamp(1.4rem, 3.6vw, 2.2rem);
   font-weight: 400;
   letter-spacing: 0.08em;
   line-height: 1.25;
