@@ -439,7 +439,7 @@
       if (!cv) return null;
       var ctx2 = cv.getContext('2d');
       var stage2 = cv.parentElement;
-      var ALIVE = 0.25;                       // הכרעת OC - לא לשנות
+      var ALIVE = 0.50;                       // ‏T19 (OC ‏3.8): "שכבה חיה ב-50" - 50 על הכל עד הכרעת linkLock
       var COUNT2 = Math.round(14 + ALIVE * 46);  // = 26
       var LINK = 128 + ALIVE * 40;               // = 138
       var SEED = 20260803;

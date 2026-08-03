@@ -149,9 +149,12 @@ body.better.playing .a-ctas   {animation:riseIn 1.0s cubic-bezier(.22,1,.36,1) 3
   <button class="chip" id="btnBetter">מוצע</button>
   <button class="chip" id="btnReplay">▶ שוב</button>
   <label class="sl">אור <input type="range" id="slLight" min="0" max="100" value="62"><output id="oLight">62</output></label>
-  <label class="sl">שכבה חיה <input type="range" id="slAlive" min="0" max="100" value="85"><output id="oAlive">85</output></label>
+  <label class="sl">שכבה חיה <input type="range" id="slAlive" min="0" max="100" value="50"><output id="oAlive">50</output></label>
   <label class="sl">בליטת טקסט <input type="range" id="slPop" min="0" max="100" value="70"><output id="oPop">70</output></label>
-  <span class="right">גרור עד שזה מרגיש נכון — ותגיד לי את שלושת המספרים</span>
+  <button class="chip on" id="btnNet">🧬 רשת</button>
+  <button class="chip" id="btnFwd">→ תנועה קדימה</button>
+  <button class="chip" id="btnLock">קווים כמו ב-25</button>
+  <span class="right">‏OC בחר ברשת (3.8) — התנועה קדימה נשארת להשוואה בלבד</span>
 </div>
 
 <div class="stage" id="stage">
@@ -188,14 +191,23 @@ const root = document.documentElement.style;
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* ─────────────────────────────────────────────
-   🧬 השכבה החיה — הרשת שנפתחה
-   הנוירונים מהצלילה לא נעלמים: הם מתפזרים החוצה,
-   מאטים, והקשרים ביניהם נמתחים ונחלשים. זו בדיוק
-   התמונה של "הישרדות → יצירה": הצפוף שנפתח למרחב.
+   השכבה החיה — שני אופיים להשוואה
+
+   🧬 רשת (הישן) — נוירונים שמתפזרים, מחוברים בקווים.
+      הקווים הם מה שגורם לזה להיקרא "מוח", והם גם מה
+      שעוצר את התנועה: רשת קשורה נראית כמו מבנה, לא
+      כמו מסע.
+
+   →  קדימה (מוצע) — שדה בפרספקטיבה. לכל חלקיק זווית
+      ורדיוס קבועים ורק העומק z משתנה; המיקום על המסך
+      הוא FOCAL/z. מכאן שהמהירות הנראית גדלה מעצמה ככל
+      שהחלקיק מתקרב — בדיוק מה שהעין רואה כשהמצלמה
+      ממשיכה לנוע קדימה. בלי קווי-קישור.
+      הצלילה לא נעצרה בהגעה. היא רק יצאה מהמוח.
    ───────────────────────────────────────────── */
 const cv = document.getElementById('field'), ctx = cv.getContext('2d');
 const stage = document.getElementById('stage');
-let W, H, nodes = [], alive = 0.85, raf = null;
+let W, H, nodes = [], alive = 0.50, mode = 'net', raf = null, last = 0;
 
 function resize(){
   const dpr = Math.min(devicePixelRatio || 1, 2);
@@ -205,60 +217,131 @@ function resize(){
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   seed();
 }
+/* ── שני מחוללים ─────────────────────────── */
+function bornNet(){
+  const a = Math.random() * Math.PI * 2;
+  const r = Math.pow(Math.random(), 1.7) * Math.min(W, H) * 0.42;
+  return {
+    x: W/2 + Math.cos(a) * r,
+    y: H/2 + Math.sin(a) * r * 0.8,
+    vx: Math.cos(a) * (0.06 + Math.random() * 0.10),
+    vy: Math.sin(a) * (0.05 + Math.random() * 0.08),
+    r: 0.7 + Math.random() * 1.6,
+    ph: Math.random() * Math.PI * 2
+  };
+}
+// z=1 ליד נקודת הנעלם (רחוק) · z→0 חולף על פני המצלמה.
+// scattered=true רק בזריעה הראשונה, כדי שהשדה לא יתחיל ריק.
+function bornFwd(scattered){
+  return {
+    a:  Math.random() * Math.PI * 2,
+    rr: 0.06 + Math.pow(Math.random(), 0.75) * 1.05,
+    z:  scattered ? (0.10 + Math.random() * 0.90) : 1,
+    ph: Math.random() * Math.PI * 2,
+    px: null, py: null
+  };
+}
 function seed(){
-  const count = Math.round(14 + alive * 46);
+  const count = mode === 'fwd'
+    ? Math.round(30 + alive * 90)   // בלי קווים אפשר יותר — וזה גם זול יותר
+    : Math.round(14 + alive * 46);
   nodes = [];
   for (let i = 0; i < count; i++){
-    // מתחילים צפוף סביב המרכז — משם הם מתפזרים
-    const a = Math.random() * Math.PI * 2;
-    const r = Math.pow(Math.random(), 1.7) * Math.min(W, H) * 0.42;
-    nodes.push({
-      x: W/2 + Math.cos(a) * r,
-      y: H/2 + Math.sin(a) * r * 0.8,
-      vx: Math.cos(a) * (0.06 + Math.random() * 0.10),   // סחיפה החוצה
-      vy: Math.sin(a) * (0.05 + Math.random() * 0.08),
-      r: 0.7 + Math.random() * 1.6,
-      ph: Math.random() * Math.PI * 2                     // פאזת הבהוב
-    });
+    nodes.push(mode === 'fwd' ? bornFwd(true) : bornNet());
   }
 }
+
 function tick(t){
+  const dt = last ? Math.min(t - last, 50) : 16;
+  last = t;
   ctx.clearRect(0, 0, W, H);
-  if (alive > 0.01){
-    const LINK = 128 + alive * 40;
-    for (let i = 0; i < nodes.length; i++){
-      const n = nodes[i];
-      n.x += n.vx; n.y += n.vy;
-      // כשהם יוצאים מהמסגרת — נולדים מחדש קרוב למרכז (הרשת ממשיכה לחיות)
-      if (n.x < -60 || n.x > W+60 || n.y < -60 || n.y > H+60){
-        const a = Math.random() * Math.PI * 2, r = Math.random() * Math.min(W,H) * 0.12;
-        n.x = W/2 + Math.cos(a)*r; n.y = H/2 + Math.sin(a)*r*0.8;
-        n.vx = Math.cos(a) * (0.06 + Math.random()*0.10);
-        n.vy = Math.sin(a) * (0.05 + Math.random()*0.08);
+  if (alive > 0.01) (mode === 'fwd' ? drawFwd : drawNet)(t, dt);
+  raf = requestAnimationFrame(tick);
+}
+
+/* → תנועה קדימה ─────────────────────────────
+   שום מהירות לא נקבעת ביד. רדיוס = FOCAL/z, ולכן
+   ההאצה נופלת מהחשבון. זו החתימה של "עדיין נעים". */
+function drawFwd(t, dt){
+  const FOCAL = Math.min(W, H) * 0.085;
+  const SPEED = 0.000115 * dt;          // ~7.5ש' מהנעלם אל מחוץ למסגרת
+  for (const n of nodes){
+    n.z -= SPEED;
+    const s = FOCAL / n.z;
+    const x = W/2 + Math.cos(n.a) * n.rr * s;
+    const y = H/2 + Math.sin(n.a) * n.rr * s * 0.82;
+    // רצפת z נמוכה בכוונה: חלקיק שנולד קרוב לציר-הטיסה (rr קטן) יוצא
+    // מהמסגרת רק ב-z≈0.006. רצפה גבוהה מזו הייתה מוחקת אותו באמצע
+    // המסך — נבדק בסימולציה: ב-0.055 זה קרה 179 פעם בדקה.
+    if (n.z < 0.004 || x < -80 || x > W + 80 || y < -80 || y > H + 80){
+      Object.assign(n, bornFwd(false));
+      continue;
+    }
+    const near = 1 - n.z;                                  // 0 רחוק → 1 קרוב
+    const tw   = 0.55 + 0.45 * (0.5 + 0.5 * Math.sin(t/1600 + n.ph));
+    const fade = Math.min(1, near * 5);                    // כניסה רכה בנעלם
+    const A    = tw * fade * alive * (0.16 + 0.72 * near * near);
+    const rad  = 0.45 + 1.5 * near;
+    // שובל שאורכו = המרחק שנעשה בפריים. לכן הרחוקים נקודות
+    // והקרובים פסים — נגזר מהתנועה, לא מזויף עליה.
+    if (n.px !== null){
+      let dx = x - n.px, dy = y - n.py;
+      const L2 = dx*dx + dy*dy;
+      if (L2 > 0.35){
+        // תקרה על האורך: בפריימים האחרונים החלקיק עושה מאות פיקסלים
+        // בפריים אחד. פיזיקלית נכון, ויזואלית זה שריטה. גוזמים ל-64
+        // ומקצרים מהזנב — הראש נשאר בדיוק במקום האמיתי.
+        let sx = n.px, sy = n.py;
+        const L = Math.sqrt(L2);
+        if (L > 64){ sx = x - dx / L * 64; sy = y - dy / L * 64; }
+        ctx.strokeStyle = 'rgba(178, 228, 255, ' + (A * 0.62).toFixed(3) + ')';
+        ctx.lineWidth = rad * 0.95;
+        ctx.lineCap = 'round';
+        ctx.beginPath(); ctx.moveTo(sx, sy); ctx.lineTo(x, y); ctx.stroke();
       }
     }
-    // קשרים — דקים, נמתחים ונחלשים עם המרחק
-    ctx.lineWidth = 1;
-    for (let i = 0; i < nodes.length; i++){
-      for (let j = i+1; j < nodes.length; j++){
-        const dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y;
-        const d2 = dx*dx + dy*dy;
-        if (d2 < LINK*LINK){
-          const o = (1 - Math.sqrt(d2)/LINK) * 0.16 * alive;
-          ctx.strokeStyle = 'rgba(168, 222, 255, ' + o.toFixed(3) + ')';
-          ctx.beginPath(); ctx.moveTo(nodes[i].x, nodes[i].y);
-          ctx.lineTo(nodes[j].x, nodes[j].y); ctx.stroke();
-        }
-      }
-    }
-    // הנקודות — מהבהבות לאט, כמו סינפסות שעוד פעילות
-    for (const n of nodes){
-      const tw = 0.45 + 0.55 * (0.5 + 0.5 * Math.sin(t/1400 + n.ph));
-      ctx.fillStyle = 'rgba(200, 236, 255, ' + (tw * 0.7 * alive).toFixed(3) + ')';
-      ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, 6.2832); ctx.fill();
+    ctx.fillStyle = 'rgba(205, 238, 255, ' + A.toFixed(3) + ')';
+    ctx.beginPath(); ctx.arc(x, y, rad, 0, 6.2832); ctx.fill();
+    n.px = x; n.py = y;
+  }
+}
+
+/* 🧬 רשת — האופי שנבחר.
+   ⚠️ הסליידר מזיז שלושה דברים בבת-אחת: מספר הנקודות, רדיוס הקישור,
+   ואטימות הקו. לכן מעבר מ-25 ל-50 מכפיל את הנקודות ב-1.42 בלבד אבל
+   את "הדיו" של הקווים פי 6. `linkLock` מנתק את הקווים מהסליידר
+   ומשאיר אותם ברמת 0.25 — יותר נקודות, אותה רשת. */
+let linkLock = false;
+function drawNet(t){
+  const la = linkLock ? 0.25 : alive;
+  const LINK = 128 + la * 40;
+  for (const n of nodes){
+    n.x += n.vx; n.y += n.vy;
+    if (n.x < -60 || n.x > W+60 || n.y < -60 || n.y > H+60){
+      const a = Math.random() * Math.PI * 2, r = Math.random() * Math.min(W,H) * 0.12;
+      n.x = W/2 + Math.cos(a)*r; n.y = H/2 + Math.sin(a)*r*0.8;
+      n.vx = Math.cos(a) * (0.06 + Math.random()*0.10);
+      n.vy = Math.sin(a) * (0.05 + Math.random()*0.08);
     }
   }
-  raf = requestAnimationFrame(tick);
+  ctx.lineWidth = 1;
+  for (let i = 0; i < nodes.length; i++){
+    for (let j = i+1; j < nodes.length; j++){
+      const dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y;
+      const d2 = dx*dx + dy*dy;
+      if (d2 < LINK*LINK){
+        const o = (1 - Math.sqrt(d2)/LINK) * 0.16 * la;
+        ctx.strokeStyle = 'rgba(168, 222, 255, ' + o.toFixed(3) + ')';
+        ctx.beginPath(); ctx.moveTo(nodes[i].x, nodes[i].y);
+        ctx.lineTo(nodes[j].x, nodes[j].y); ctx.stroke();
+      }
+    }
+  }
+  for (const n of nodes){
+    const tw = 0.45 + 0.55 * (0.5 + 0.5 * Math.sin(t/1400 + n.ph));
+    ctx.fillStyle = 'rgba(200, 236, 255, ' + (tw * 0.7 * alive).toFixed(3) + ')';
+    ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, 6.2832); ctx.fill();
+  }
 }
 
 /* ── בקרה ─────────────────────────────────── */
@@ -272,7 +355,7 @@ const TEXT = {
            <span>פסקה <i>2.5ש׳</i></span>
            <span>כפתורים <i>3.35ש׳</i></span>
            <span>זוהר נושם <i>8.7ש׳</i></span>
-           <span>🧬 הרשת מתפזרת החוצה — חיה תמיד</span>
+           <span>🧬 הרשת מתפזרת החוצה — צפופה יותר ב-50</span>
            <span>🌑 סקרים + הילות: לוגו וכותרת <i>100%</i> · פסקה <i>~40%</i></span>`
 };
 function replay(){
@@ -289,6 +372,17 @@ btnNow.onclick = () => setMode(false);
 btnBetter.onclick = () => setMode(true);
 btnReplay.onclick = replay;
 
+/* החלפת אופי השכבה החיה — זריעה מחדש, המנוע ממשיך לרוץ */
+function setField(m){
+  mode = m;
+  btnNet.classList.toggle('on', m === 'net');
+  btnFwd.classList.toggle('on', m === 'fwd');
+  seed();
+}
+btnNet.onclick = () => setField('net');
+btnFwd.onclick = () => setField('fwd');
+btnLock.onclick = () => { linkLock = !linkLock; btnLock.classList.toggle('on', linkLock); };
+
 slLight.oninput = e => { oLight.value = e.target.value; root.setProperty('--light', e.target.value/100); };
 slAlive.oninput = e => {
   oAlive.value = e.target.value; alive = e.target.value/100;
@@ -297,6 +391,7 @@ slAlive.oninput = e => {
 slPop.oninput = e => { oPop.value = e.target.value; root.setProperty('--pop', e.target.value/100); };
 
 root.setProperty('--light', 0.62);
+root.setProperty('--alive', 0.50);
 root.setProperty('--pop', 0.70);
 addEventListener('resize', resize, {passive:true});
 resize();
