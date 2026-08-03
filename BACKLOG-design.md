@@ -10,6 +10,102 @@
 
 ## עכשיו
 
+### D17. 🔴 גלריית האירועים הופכת לקרוסלה נעה — 13 תמונות חדשות מ-OC
+**OC ‏3.8:** "אני מוסיף תמונות שתוסיף לאתר, ואני רוצה להפוך את התמונות
+לקרוסלה כמו הביקורות."
+
+**✅ הנכסים כבר במאגר.** ‏Cowork עיבד את 13 הקבצים (‏`SHIFT-*.jpg`,
+‏~2.4MB כל אחד) ל-`assets/events/gallery-NNN.{webp,jpg}` — צלע ארוכה
+1200px, ‏WebP q76 + ‏JPEG q78 גיבוי, בדיוק כמו חמש התמונות הקיימות.
+**סה"כ ‏1.2MB WebP.** לא צריך לגעת בנכסים.
+
+#### הכרעת OC ‏3.8: **רצועה אחת, 18 תמונות.** הגריד נמחק.
+חמש התמונות הקיימות נכנסות לרצועה ומשתלבות בסדר הסיפורי — לא
+נדחפות לסוף. ‏`.past-grid` וה-CSS שלו יורדים.
+
+⚠️ **משקל — לבדוק לפני שמאשרים.** חמש הישנות נשמרו לפני שהצינור
+הנוכחי היה קיים והן **כבדות מהחדשות**: `event-aerial.webp` לבדה
+347KB, מול 212KB לכבדה שבחדשות ו-27KB לקלה. סה"כ הרצועה ≈2.5MB
+עצל. **להעביר את חמש הישנות דרך אותו צינור** (צלע ארוכה 1200px,
+‏WebP q76 + ‏JPEG q78) לפני שמוסיפים — צפוי לחסוך ~0.6MB בלי הבדל
+נראה לעין. אם `npm run budget` נכשל, זה הצעד הראשון, לא הורדת תמונות.
+
+#### הרצועה — הסדר מסופר, לא אקראי
+הכנה → מרחב → מעגל → למידה → תרגול → קרח → שחרור → חיבור → דממה →
+מבט-על. שתי התמונות האוויריות **פותחות וסוגרות בכוונה**: המרחב לפני,
+המרחב מלא. לסירוגין רוחב/גובה כדי שהרצועה לא תיראה גושית.
+
+**הסדר המלא (18):**
+`event-booklets` · `event-aerial` · `gallery-099` · `event-teaching-wide` ·
+`gallery-107` · `gallery-100` · `event-portrait` · `gallery-044` ·
+`event-group` · `gallery-028` · `gallery-013` · `gallery-089` ·
+`gallery-054` · `gallery-140` · `gallery-142` · `gallery-135` ·
+`gallery-043` · `gallery-004`
+
+ה-`<li>` של חמש הישנות קיים כבר ב-`.past-grid` — **להעביר אותם
+כמות שהם** (כולל ה-alt המדויק שלהם, שכן מזכיר מקום ותאריך) ולהסיר
+רק את `class="past-slot reveal delay-N"`.
+
+**13 החדשות, מוכנות להדבקה במקומן בסדר שלמעלה:**
+
+```html
+<li class="past-shot"><picture><source srcset="assets/events/gallery-099.webp" type="image/webp"><img src="assets/events/gallery-099.jpg" alt="קבוצה גדולה יושבת במעגל בסלון, שיחה קבוצתית באולם פנימי" loading="lazy" width="1200" height="800"></picture></li>
+<li class="past-shot"><picture><source srcset="assets/events/gallery-107.webp" type="image/webp"><img src="assets/events/gallery-107.jpg" alt="גבר ואישה יושבים ומשוחחים בפנים ליד חלון עץ" loading="lazy" width="1200" height="960"></picture></li>
+<li class="past-shot"><picture><source srcset="assets/events/gallery-100.webp" type="image/webp"><img src="assets/events/gallery-100.jpg" alt="גבר ואישה יושבים בישיבה מוצלבת על מזרנים בתוך חדר עם חלון" loading="lazy" width="800" height="1200"></picture></li>
+<li class="past-shot"><picture><source srcset="assets/events/gallery-044.webp" type="image/webp"><img src="assets/events/gallery-044.jpg" alt="שני גברים יושבים בכריעה בחוץ מול לוח עם תרשים גלים" loading="lazy" width="1200" height="800"></picture></li>
+<li class="past-shot"><picture><source srcset="assets/events/gallery-028.webp" type="image/webp"><img src="assets/events/gallery-028.jpg" alt="שתי נשים יושבות זו מול זו בחוץ ומחייכות, לוח עם שרטוט מאחוריהן" loading="lazy" width="800" height="1200"></picture></li>
+<li class="past-shot"><picture><source srcset="assets/events/gallery-089.webp" type="image/webp"><img src="assets/events/gallery-089.jpg" alt="אישה מחזיקה קערת זמזום ומקל, ברקע אדם שרוע על מזרן" loading="lazy" width="800" height="1200"></picture></li>
+<li class="past-shot"><picture><source srcset="assets/events/gallery-054.webp" type="image/webp"><img src="assets/events/gallery-054.jpg" alt="גבר שרוע באמבט קרח בחוץ עם עיניים עצומות" loading="lazy" width="800" height="1200"></picture></li>
+<li class="past-shot"><picture><source srcset="assets/events/gallery-140.webp" type="image/webp"><img src="assets/events/gallery-140.jpg" alt="גבר צועק בשמחה בחוץ ומחזיק חולצה מעל ראשו, אנשים סביבו" loading="lazy" width="739" height="1200"></picture></li>
+<li class="past-shot"><picture><source srcset="assets/events/gallery-142.webp" type="image/webp"><img src="assets/events/gallery-142.jpg" alt="קבוצת גברים עומדת בחוץ אחרי טבילה, משוחחים ומחייכים" loading="lazy" width="1200" height="800"></picture></li>
+<li class="past-shot"><picture><source srcset="assets/events/gallery-135.webp" type="image/webp"><img src="assets/events/gallery-135.jpg" alt="שני משתתפים עומדים בחוץ מול שיח ירוק, מחבקים ומחייכים" loading="lazy" width="800" height="1200"></picture></li>
+<li class="past-shot"><picture><source srcset="assets/events/gallery-043.webp" type="image/webp"><img src="assets/events/gallery-043.jpg" alt="גבר יושב בישיבה מוצלבת על הדשא בחוץ עם משקפי שמש" loading="lazy" width="800" height="1200"></picture></li>
+<li class="past-shot"><picture><source srcset="assets/events/gallery-013.webp" type="image/webp"><img src="assets/events/gallery-013.jpg" alt="קבוצת אנשים יושבת על שטיח בחוץ ומקשיבה, גינה ברקע" loading="lazy" width="800" height="1200"></picture></li>
+<li class="past-shot"><picture><source srcset="assets/events/gallery-004.webp" type="image/webp"><img src="assets/events/gallery-004.jpg" alt="צילום אווירי של חצר עם מזרנים, שולחנות ואנשים מתכוננים לפעילות" loading="lazy" width="1200" height="675"></picture></li>
+```
+
+#### 🚨 המלכודת — היא תשבור את הלולאה בשקט
+מנוע הביקורות משכפל עד ש-`strip.scrollWidth >= innerWidth * 1.25`.
+עם **תמונות** הרוחב הזה נמדד **לפני** שהן נטענו. בלי `width` ו-`height`
+על כל `<img>` הדפדפן מחזיר רוחב אפס, הלולאה מתמלאת שגוי, ונוצר **תפר
+או קפיצה** באמצע הרצועה. כל 13 השורות למעלה כבר כוללות אותם —
+**לא למחוק, ולא "לנקות".** לאמת: להריץ עם רשת מואטת ולראות שהמעבר
+בין סוף הרצועה לתחילתה חלק.
+
+#### שימוש חוזר במנוע, לא העתקה
+‏`main.js` תא `reviews-marquee` מקודד קשיח `.reviews-run` ·
+`.reviews-strip` · `#reviewsPause`. **לא להעתיק את הבלוק** — שני
+עותקים כמעט-זהים יסחפו זה מזה תוך שבועיים. להוציא פונקציה אחת
+שמקבלת שלושת הסלקטורים ומהירות, ולקרוא לה פעמיים.
+⚠️ **בעלות מכניקה** — שורה ב-`REQUESTS.md`.
+
+#### מה נשאר, מה משתנה
+- **הווידאו נשאר בראש** ובאותם תנאים (`preload=none`).
+- **`past-grid` — הכרעת OC נדרשת:** האם חמש התמונות הישנות נכנסות
+  לרצועה (18 סה"כ) או שהגריד נשאר מעליה? **עד תשובה: הגריד נשאר.**
+- ‏**WCAG 2.2.2:** כפתור השהיה משלו, `id` נפרד. אותה התנהגות
+  ‏`hover`/`focus-within`/`touch-hold`.
+- **מופחת-תנועה:** בלי אנימציה ובלי כפתור, רצועה נגללת ידנית — כמו
+  בביקורות.
+- **בלי JS:** רצועה סטטית שנגללת נטיבית.
+- **גובה אחיד** לכל השקופיות + `object-fit: cover`, אחרת רצועה
+  מעורבת רוחב/גובה תקפוץ.
+
+#### אימות
+- ‏`npm run budget` — **+1.2MB עצל.** אם חורג, לרדת ל-1000px צלע
+  ארוכה לפני שמוותרים על תמונות.
+- ‏`npm run a11y` · `console` · מובייל 390 · מקלדת בלבד.
+- ‏VR: `d-past-events`/`m-past-events` — **רצועה נעה אינה דטרמיניסטית.**
+  להקפיא את האנימציה בצילום (כמו שנעשה לקנבס ההגעה), אחרת הבייסליין
+  ייכשל אקראית. לוודא שתי ריצות זהות.
+
+⚠️ **שתי שאלות פתוחות ל-OC — נשאלו בצ'אט 3.8, לא לנחש:**
+‏(א) מאיזה אירוע התמונות? כותרת הסקשן אומרת "בית לחם הגלילית, מאי 26".
+**לכן ה-alt לא מזכיר מקום ותאריך** — נכון בכל מקרה.
+‏(ב) הסכמת המצולמים לפרסום באתר פומבי.
+
+נוסף 3.8 ע"י Cowork · הנכסים עובדו ואומתו.
+
 ### D16. ✅ 🔴 כותרת שבוע 3 תוקנה מהמסלול החי (3.8) — אומת מול Firestore ישירות
 **OC ‏3.8:** "באתר הימים לא בדיוק כפי שמופיע במסלול."
 
