@@ -529,3 +529,135 @@ safe('nav-tone', () => {
     t = setTimeout(build, 180);
   }, { passive: true });
 });
+
+// ── טופס השארת פרטים להצטרפות (join-form) ────────────────────────────
+// כפתור "להצטרפות למסלול" פותח <dialog> נייטיבי עם 4 שדות; השליחה נכתבת
+// ל-Firestore ב-REST (אותה שכבה שהאפליקציה החיה משתמשת בה - עובד בכל רשת,
+// בלי SDK). היעד: קולקציה נפרדת websiteLeads בפרויקט המסלול. append-only.
+//
+// ⚠️ כלל Firestore חובה: הקולקציה websiteLeads מוצהרת ב-firestore.rules
+// של פרויקט המסלול (create:true, בלי read/update/delete). בלי פריסת הכללים
+// הכתיבה מוחזרת 403 והטופס מציג הודעת שגיאה עם נפילה לאפליקציה.
+//
+// נגישות: <dialog> מטפל בלכידת-פוקוס/ESC. בלי JS או בלי showModal - הכפתור
+// נשאר קישור ישיר לאפליקציה (data-join, href), ההרשמה לא נשברת.
+safe('join-form', () => {
+  const dialog = document.getElementById('joinDialog');
+  const form = document.getElementById('joinForm');
+  const status = document.getElementById('joinStatus');
+  const triggers = document.querySelectorAll('[data-join]');
+  if (!dialog || !form || !triggers.length || typeof dialog.showModal !== 'function') return;
+
+  const PROJECT = 'shift-21-day-course-ceos';
+  const COLLECTION = 'websiteLeads';
+  const ENDPOINT = `https://firestore.googleapis.com/v1/projects/${PROJECT}/databases/(default)/documents/${COLLECTION}`;
+  const appHref = triggers[0].getAttribute('href') || 'https://shift-21-day-course-ceos.web.app';
+
+  const submitBtn = form.querySelector('.join-submit');
+  let sending = false;
+
+  const setStatus = (msg, kind) => {
+    status.textContent = msg || '';
+    status.classList.toggle('is-error', kind === 'error');
+    status.classList.toggle('is-ok', kind === 'ok');
+  };
+
+  const open = (e) => {
+    if (e) e.preventDefault();
+    setStatus('');
+    dialog.showModal();
+    track('join_open');
+    const first = form.querySelector('input[name="name"]');
+    if (first) setTimeout(() => first.focus(), 60);
+  };
+  const close = () => { if (dialog.open) dialog.close(); };
+
+  triggers.forEach((btn) => btn.addEventListener('click', open));
+  form.querySelector('[data-join-close]').addEventListener('click', close);
+  // לחיצה על ה-backdrop (מחוץ לטופס) סוגרת
+  dialog.addEventListener('click', (e) => { if (e.target === dialog) close(); });
+
+  // סימון שדה כלא-תקין להצגה חזותית + קורא-מסך
+  const markInvalid = (el, bad) => {
+    if (bad) el.setAttribute('aria-invalid', 'true');
+    else el.removeAttribute('aria-invalid');
+  };
+
+  const validate = () => {
+    const name = form.name.value.trim();
+    const ageRaw = form.age.value.trim();
+    const age = parseInt(ageRaw, 10);
+    const gender = form.gender.value;
+    const phoneDigits = form.phone.value.replace(/\D/g, '');
+
+    markInvalid(form.name, name.length < 2);
+    markInvalid(form.age, !(age >= 14 && age <= 120));
+    markInvalid(form.gender, !gender);
+    markInvalid(form.phone, phoneDigits.length < 9);
+
+    if (name.length < 2) return { ok: false, msg: 'נא למלא שם מלא.' };
+    if (!(age >= 14 && age <= 120)) return { ok: false, msg: 'נא למלא גיל תקין.' };
+    if (!gender) return { ok: false, msg: 'נא לבחור מין.' };
+    if (phoneDigits.length < 9) return { ok: false, msg: 'נא למלא מספר טלפון תקין.' };
+
+    return { ok: true, data: { name, age, gender, phone: phoneDigits } };
+  };
+
+  // קידוד ערכי Firestore REST (זהה לשכבת firebase.js של האפליקציה)
+  const toFields = (obj) => {
+    const fields = {};
+    for (const [k, v] of Object.entries(obj)) {
+      if (typeof v === 'number' && Number.isInteger(v)) fields[k] = { integerValue: String(v) };
+      else fields[k] = { stringValue: String(v) };
+    }
+    return { fields };
+  };
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (sending) return;
+
+    const res = validate();
+    if (!res.ok) { setStatus(res.msg, 'error'); return; }
+
+    sending = true;
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'שולח…';
+    setStatus('');
+
+    const payload = Object.assign({}, res.data, {
+      source: 'website',
+      createdAt: new Date().toISOString(),
+    });
+
+    fetch(ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(toFields(payload)),
+    })
+      .then((r) => {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        track('join_submit', { ok: true });
+        setStatus('קיבלנו! נחזור אליכם בהקדם 🙏', 'ok');
+        form.reset();
+        submitBtn.textContent = 'נשלח ✓';
+        setTimeout(close, 1800);
+      })
+      .catch((err) => {
+        track('join_submit', { ok: false });
+        if (window.console) console.error('join-form שליחה נכשלה:', err);
+        setStatus('משהו השתבש בשליחה. אפשר להצטרף ישירות דרך האפליקציה.', 'error');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'שליחת פרטים';
+        // נפילה חיננית: קישור ישיר לאפליקציה מתחת להודעה
+        if (!status.querySelector('a')) {
+          const a = document.createElement('a');
+          a.href = appHref; a.target = '_blank'; a.rel = 'noopener';
+          a.textContent = 'למעבר לאפליקציה ←';
+          a.style.cssText = 'display:block;margin-top:8px;color:var(--sky);';
+          status.appendChild(a);
+        }
+      })
+      .finally(() => { sending = false; });
+  });
+});

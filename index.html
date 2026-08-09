@@ -71,7 +71,7 @@
   }
   </script>
   <!-- פרמטר הגרסה שובר cache ישן אחרי כל פריסה - לעדכן בכל שינוי CSS/JS -->
-  <link rel="stylesheet" href="css/style.css?v=20260804a">
+  <link rel="stylesheet" href="css/style.css?v=20260809a">
   <script>
     document.documentElement.classList.add('js');
     // מנוע התנועה מוכרז מראש כדי שחוקי ה-reveal של ה-CSS לא יידלקו לרגע;
@@ -681,7 +681,9 @@
       </div>
 
       <div class="program-cta reveal">
-        <a class="btn btn-primary" href="https://shift-21-day-course-ceos.web.app" target="_blank" rel="noopener">להצטרפות למסלול</a>
+        <!-- ההצטרפות פותחת טופס השארת פרטים (‏join-form ב-main.js). ה-href
+             נשאר לאפליקציה כנפילה חיננית: בלי JS הכפתור עדיין מוביל להרשמה. -->
+        <a class="btn btn-primary" href="https://shift-21-day-course-ceos.web.app" target="_blank" rel="noopener" data-join>להצטרפות למסלול</a>
         <a class="btn btn-ghost" href="#contact">דברו איתנו קודם</a>
       </div>
     </div>
@@ -1017,10 +1019,50 @@
   </footer>
   </div><!-- /closing -->
 
+  <!-- טופס השארת פרטים להצטרפות (‏join-form ב-main.js). ‏<dialog> נייטיבי:
+       לכידת פוקוס, ‏ESC ו-backdrop בחינם ונגישים. בלי JS הוא נשאר סגור
+       וכפתור ההצטרפות מוביל ישירות לאפליקציה (data-join). -->
+  <dialog class="join-dialog" id="joinDialog" aria-labelledby="joinTitle">
+    <form class="join-form" id="joinForm" method="dialog" novalidate>
+      <button type="button" class="join-close" data-join-close aria-label="סגירה">×</button>
+      <h2 id="joinTitle">רוצים להצטרף? נשאיר פרטים</h2>
+      <p class="join-sub">נחזור אליכם עם כל המידע על המסלול. בלי התחייבות.</p>
+
+      <label class="join-field">
+        <span>שם מלא</span>
+        <input type="text" name="name" autocomplete="name" required minlength="2" placeholder="השם שלכם">
+      </label>
+
+      <div class="join-row">
+        <label class="join-field">
+          <span>גיל</span>
+          <input type="number" name="age" inputmode="numeric" required min="14" max="120" placeholder="גיל">
+        </label>
+        <label class="join-field">
+          <span>מין</span>
+          <select name="gender" required>
+            <option value="" disabled selected>בחירה</option>
+            <option value="אישה">אישה</option>
+            <option value="גבר">גבר</option>
+            <option value="אחר">אחר</option>
+          </select>
+        </label>
+      </div>
+
+      <label class="join-field">
+        <span>טלפון</span>
+        <input type="tel" name="phone" autocomplete="tel" inputmode="tel" required placeholder="050-0000000">
+      </label>
+
+      <button type="submit" class="btn btn-primary join-submit">שליחת פרטים</button>
+      <p class="join-status" id="joinStatus" role="status" aria-live="polite"></p>
+    </form>
+  </dialog>
+
   <script src="assets/vendor/gsap.min.js" defer></script>
   <script src="assets/vendor/ScrollTrigger.min.js" defer></script>
   <script src="assets/vendor/lenis.min.js" defer></script>
-  <script src="js/motion.js?v=20260804a" defer></script>
-  <script src="js/main.js?v=20260804a" defer></script>
+  <script src="js/motion.js?v=20260809a" defer></script>
+  <script src="js/main.js?v=20260809a" defer></script>
 </body>
 </html>
