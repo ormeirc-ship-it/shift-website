@@ -661,3 +661,21 @@ safe('join-form', () => {
       .finally(() => { sending = false; });
   });
 });
+
+// ── מודאל "פרטים נוספים" על יום של SHIFT (details-dialog) ─────────────
+// כפתור [data-details] פותח <dialog> עם תוכן האירוע (גלילה פנימית).
+// בלי JS/showModal - הכפתור פשוט לא מגיב (הפרטים נגישים דרך "דברו איתנו").
+safe('details-dialog', () => {
+  const dialog = document.getElementById('detailsDialog');
+  const triggers = document.querySelectorAll('[data-details]');
+  if (!dialog || !triggers.length || typeof dialog.showModal !== 'function') return;
+
+  const open = (e) => { if (e) e.preventDefault(); dialog.showModal(); track('details_open'); };
+  const close = () => { if (dialog.open) dialog.close(); };
+
+  triggers.forEach((b) => b.addEventListener('click', open));
+  const closeBtn = dialog.querySelector('[data-details-close]');
+  if (closeBtn) closeBtn.addEventListener('click', close);
+  // לחיצה על ה-backdrop (מחוץ לתיבה) סוגרת
+  dialog.addEventListener('click', (e) => { if (e.target === dialog) close(); });
+});

@@ -71,7 +71,7 @@
   }
   </script>
   <!-- פרמטר הגרסה שובר cache ישן אחרי כל פריסה - לעדכן בכל שינוי CSS/JS -->
-  <link rel="stylesheet" href="css/style.css?v=20260809c">
+  <link rel="stylesheet" href="css/style.css?v=20260809d">
   <script>
     document.documentElement.classList.add('js');
     // מנוע התנועה מוכרז מראש כדי שחוקי ה-reveal של ה-CSS לא יידלקו לרגע;
@@ -742,8 +742,8 @@
             <!-- TODO: תוכן מ-OC - מבנה האירוע, תאריכים, מחיר -->
             <span class="event-soon">מבנה האירוע ותאריכים יפורסמו כאן</span>
             <div class="event-actions">
-              <!-- TODO: קישור רכישת כרטיס מ-OC - כרגע מפנה ליצירת קשר -->
-              <a class="btn btn-primary event-buy" href="#contact">רכישת כרטיס</a>
+              <a class="btn btn-primary event-buy" href="checkout.html">רכישת כרטיס</a>
+              <button class="event-link" type="button" data-details>פרטים נוספים ←</button>
               <a class="event-link" href="#contact">דברו איתנו ←</a>
             </div>
           </div>
@@ -863,8 +863,7 @@
     <div class="reviews-cta container reveal">
       <p class="reviews-cta-line">רוצים לשמוע על האירוע הבא?</p>
       <div class="reviews-cta-btns">
-        <!-- TODO: קישור רכישת כרטיס מ-OC - כרגע מפנה ליצירת קשר -->
-        <a class="btn btn-primary" href="#contact">רכישת כרטיס</a>
+        <a class="btn btn-primary" href="checkout.html">רכישת כרטיס</a>
         <a class="btn btn-ghost" href="https://shift-21-day-course-ceos.web.app" target="_blank" rel="noopener" data-join>להשארת פרטים</a>
         <a class="btn btn-ghost" href="https://wa.me/972528972050?text=%D7%94%D7%99%D7%99%21%20%D7%A8%D7%90%D7%99%D7%AA%D7%99%20%D7%90%D7%AA%20%D7%94%D7%91%D7%99%D7%A7%D7%95%D7%A8%D7%95%D7%AA%20%D7%95%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A9%D7%9E%D7%95%D7%A2%20%D7%A2%D7%95%D7%93%20%D7%A2%D7%9C%20%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%20SHIFT%20%F0%9F%99%8F" target="_blank" rel="noopener">הודעה בוואטסאפ</a>
       </div>
@@ -1075,10 +1074,55 @@
     </form>
   </dialog>
 
+  <!-- פרטים נוספים על "יום של SHIFT" (details-dialog ב-main.js). התוכן
+       מקורו ב-OC (9.8). ‏<dialog> נייטיבי + גלילה פנימית לתוכן ארוך. -->
+  <dialog class="details-dialog" id="detailsDialog" aria-labelledby="detailsTitle">
+    <div class="details-inner">
+      <button type="button" class="join-close" data-details-close aria-label="סגירה">×</button>
+      <span class="details-kicker">יום של SHIFT</span>
+      <h2 id="detailsTitle">זמן לעצור הכל, לנשום עמוק ולעצב מחדש</h2>
+      <p class="details-lead">
+        מתוך שברים ותובנות שמצאנו בדרך נולד SHIFT — כדי לחלוק את הכלים שעזרו
+        לנו לצמוח מחדש. מרחב פתוח ומחבק שבו לומדים לעבור ממצב של הישרדות
+        וסטרס ליצירה ולשקט נפשי.
+      </p>
+
+      <h3>מה מחכה לכם שם</h3>
+      <ul class="details-list">
+        <li><strong>ארכיטקטורת השינוי</strong> — עקרונות מפתח ממדעי המוח, ההתנהגות ואפיגנטיקה לשינוי דפוסים אוטומטיים.</li>
+        <li><strong>עבודה רגשית</strong> — סשן ריברסינג (נשימות מעגליות) עמוק עם דור ספיריט, לשחרור חסמים והתחדשות.</li>
+        <li><strong>חוסן גופני ותנועה</strong> — יוגה עם נועה אופיר וטבילת קרח עם גל עדיקה, לוויסות מערכת העצבים.</li>
+        <li><strong>השראה וכלים</strong> — מדיטציה מודרכת, כתיבה ושיח פתוח על עיצוב תודעתי, ריפוי וצמיחה.</li>
+      </ul>
+
+      <h3>לוח הזמנים</h3>
+      <ul class="details-schedule">
+        <li><span>8:30–9:30</span> התכנסות, קפה ומינגלינג</li>
+        <li><span>9:30–10:15</span> שיחת פתיחה ומדיטציה מודרכת</li>
+        <li><span>10:30–12:15</span> ריברסינג / יוגה + קרח (בקבוצות)</li>
+        <li><span>12:15–13:00</span> הפסקת אוכל</li>
+        <li><span>13:00–14:45</span> יוגה + קרח / ריברסינג (החלפה)</li>
+        <li><span>14:45–15:30</span> שיחת סיכום, מדיטציה וכלים להמשך</li>
+      </ul>
+
+      <p class="details-food">
+        לאורך היום: קפה ותה קר ללא הגבלה, וארוחת צהריים עשירה — כריכי בריוש,
+        קישים, סלטים ופירות.
+      </p>
+
+      <p class="details-note">
+        המסע שלנו שזור זה בזה — סיפורים שונים, כאב שונה, אבל דרך משותפת לריפוי.
+        אנחנו מזמינים אתכם ללכת איתנו ולהיות חלק מקהילה לומדת, מתפתחת ומרפאה.
+      </p>
+
+      <a class="btn btn-primary details-buy" href="checkout.html">רכישת כרטיס</a>
+    </div>
+  </dialog>
+
   <script src="assets/vendor/gsap.min.js" defer></script>
   <script src="assets/vendor/ScrollTrigger.min.js" defer></script>
   <script src="assets/vendor/lenis.min.js" defer></script>
-  <script src="js/motion.js?v=20260809c" defer></script>
-  <script src="js/main.js?v=20260809c" defer></script>
+  <script src="js/motion.js?v=20260809d" defer></script>
+  <script src="js/main.js?v=20260809d" defer></script>
 </body>
 </html>

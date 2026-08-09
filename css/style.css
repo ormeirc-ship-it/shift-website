@@ -2664,3 +2664,50 @@ html.b3-panel .arrival-logo-light {
   justify-content: center;
   flex-wrap: wrap;
 }
+
+/* כפתור "פרטים נוספים" משתמש ב-<button> בסגנון event-link — מאפסים UA */
+button.event-link {
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--sky-a35);
+  font: inherit;
+  cursor: pointer;
+}
+
+/* ---------- מודאל "פרטים נוספים" ---------- */
+.details-dialog {
+  border: 0;
+  padding: 0;
+  margin: auto;                       /* ה-reset הגלובלי דורס margin:auto של <dialog> */
+  border-radius: var(--radius);
+  width: min(560px, 94vw);
+  max-height: 88vh;
+  color: #fff;
+  background: linear-gradient(180deg, var(--navy) 0%, var(--navy-deep) 100%);
+  box-shadow: 0 34px 90px rgba(18, 18, 52, 0.55);
+  overflow: hidden;
+}
+.details-dialog::backdrop { background: rgba(10, 10, 30, 0.62); backdrop-filter: blur(3px); }
+.details-inner {
+  position: relative;
+  padding: clamp(28px, 5vw, 44px);
+  max-height: 88vh;
+  overflow-y: auto;
+  text-align: right;
+}
+.details-kicker { color: var(--sky); font-weight: 600; letter-spacing: 0.04em; }
+.details-dialog h2 { font-size: clamp(1.4rem, 4vw, 1.9rem); margin: 6px 0 14px; line-height: 1.2; }
+.details-lead { color: var(--white-soft); margin: 0 0 22px; }
+.details-dialog h3 { font-size: 1.1rem; margin: 24px 0 12px; color: var(--sky); }
+.details-list, .details-schedule { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+.details-list li { color: var(--white-soft); line-height: 1.55; }
+.details-list strong { color: #fff; }
+.details-schedule li { display: flex; gap: 14px; color: var(--white-soft); }
+.details-schedule li span { color: var(--sky); min-width: 96px; font-variant-numeric: tabular-nums; }
+.details-food { color: var(--white-soft); font-size: 0.95rem; margin: 22px 0; }
+.details-note { color: var(--white-soft); font-style: italic; margin: 0 0 24px; line-height: 1.55; }
+.details-buy { display: block; width: 100%; border: 0; text-align: center; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .details-dialog[open] { animation: joinIn var(--t-med) var(--ease-out); }
+}
