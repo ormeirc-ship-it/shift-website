@@ -71,7 +71,7 @@
   }
   </script>
   <!-- פרמטר הגרסה שובר cache ישן אחרי כל פריסה - לעדכן בכל שינוי CSS/JS -->
-  <link rel="stylesheet" href="css/style.css?v=20260809b">
+  <link rel="stylesheet" href="css/style.css?v=20260809c">
   <script>
     document.documentElement.classList.add('js');
     // מנוע התנועה מוכרז מראש כדי שחוקי ה-reveal של ה-CSS לא יידלקו לרגע;
@@ -741,7 +741,11 @@
             <p>מפגש עוצמתי של כמה שעות - גוף, מוח ותודעה ברצף אחד, עם תרגול חי וחוויה משותפת שנשארת איתכם.</p>
             <!-- TODO: תוכן מ-OC - מבנה האירוע, תאריכים, מחיר -->
             <span class="event-soon">מבנה האירוע ותאריכים יפורסמו כאן</span>
-            <a class="event-link" href="#contact">דברו איתנו ←</a>
+            <div class="event-actions">
+              <!-- TODO: קישור רכישת כרטיס מ-OC - כרגע מפנה ליצירת קשר -->
+              <a class="btn btn-primary event-buy" href="#contact">רכישת כרטיס</a>
+              <a class="event-link" href="#contact">דברו איתנו ←</a>
+            </div>
           </div>
         </article>
         <article class="event-card">
@@ -859,7 +863,9 @@
     <div class="reviews-cta container reveal">
       <p class="reviews-cta-line">רוצים לשמוע על האירוע הבא?</p>
       <div class="reviews-cta-btns">
-        <a class="btn btn-primary" href="https://shift-21-day-course-ceos.web.app" target="_blank" rel="noopener" data-join>להשארת פרטים</a>
+        <!-- TODO: קישור רכישת כרטיס מ-OC - כרגע מפנה ליצירת קשר -->
+        <a class="btn btn-primary" href="#contact">רכישת כרטיס</a>
+        <a class="btn btn-ghost" href="https://shift-21-day-course-ceos.web.app" target="_blank" rel="noopener" data-join>להשארת פרטים</a>
         <a class="btn btn-ghost" href="https://wa.me/972528972050?text=%D7%94%D7%99%D7%99%21%20%D7%A8%D7%90%D7%99%D7%AA%D7%99%20%D7%90%D7%AA%20%D7%94%D7%91%D7%99%D7%A7%D7%95%D7%A8%D7%95%D7%AA%20%D7%95%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A9%D7%9E%D7%95%D7%A2%20%D7%A2%D7%95%D7%93%20%D7%A2%D7%9C%20%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%20SHIFT%20%F0%9F%99%8F" target="_blank" rel="noopener">הודעה בוואטסאפ</a>
       </div>
     </div>
@@ -1072,7 +1078,7 @@
   <script src="assets/vendor/gsap.min.js" defer></script>
   <script src="assets/vendor/ScrollTrigger.min.js" defer></script>
   <script src="assets/vendor/lenis.min.js" defer></script>
-  <script src="js/motion.js?v=20260809b" defer></script>
-  <script src="js/main.js?v=20260809b" defer></script>
+  <script src="js/motion.js?v=20260809c" defer></script>
+  <script src="js/main.js?v=20260809c" defer></script>
 </body>
 </html>

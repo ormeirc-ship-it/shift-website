@@ -2637,6 +2637,17 @@ html.b3-panel .arrival-logo-light {
   }
 }
 
+/* שורת פעולות בכרטיס אירוע: כפתור רכישה + קישור "דברו איתנו" זה לצד זה */
+.event-actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+.event-actions .event-link { margin-top: 0; }
+.event-buy { padding: 11px 26px; font-size: 0.95rem; }
+
 /* ---------- CTA מתחת לביקורות ---------- */
 .reviews-cta {
   text-align: center;
