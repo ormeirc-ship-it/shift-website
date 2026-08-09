@@ -919,7 +919,9 @@ h1 .w { display: inline-block; }
 /* ‏3ב (OC ‏14:40): ה-H2 הוא ה-wordmark - אותיות לטיניות, גדול ונושם;
    המשפט שאחריו תת-כותרת אמיתית: יותר אוויר, מעט גדול וכבד מ-intro רגיל.
    ‏OC ‏30.7: שניהם ממורכזים (הבלוק של תת-הכותרת כבר auto - זה הטקסט) */
-.basket .section-head { text-align: center; }
+/* ‏margin-inline:auto ממרכז את קופסת ה-680px עצמה בקונטיינר — בלעדיו
+   ה-text-align:center ממרכז רק *בתוך* קופסה שיושבת בצד, וה-SHIFT נראה נוטה. */
+.basket .section-head { text-align: center; margin-inline: auto; }
 .basket-wordmark {
   font-size: clamp(3.2rem, 8vw, 5.4rem);
   font-weight: 200;
@@ -2633,4 +2635,21 @@ html.b3-panel .arrival-logo-light {
     from { opacity: 0; transform: translateY(12px) scale(0.98); }
     to   { opacity: 1; transform: translateY(0) scale(1); }
   }
+}
+
+/* ---------- CTA מתחת לביקורות ---------- */
+.reviews-cta {
+  text-align: center;
+  margin-top: clamp(28px, 5vw, 48px);
+}
+.reviews-cta-line {
+  color: var(--white-soft);
+  font-size: 1.1rem;
+  margin: 0 0 18px;
+}
+.reviews-cta-btns {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
 }
