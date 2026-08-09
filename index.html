@@ -1077,7 +1077,9 @@
   <!-- פרטים נוספים על "יום של SHIFT" (details-dialog ב-main.js). התוכן
        מקורו ב-OC (9.8). ‏<dialog> נייטיבי + גלילה פנימית לתוכן ארוך. -->
   <dialog class="details-dialog" id="detailsDialog" aria-labelledby="detailsTitle">
-    <div class="details-inner">
+    <!-- data-lenis-prevent: בלעדיו מנוע הגלילה החלקה (Lenis) חוטף את הגלגלת
+         וגלילת התוכן הארוך בתוך המודאל לא עובדת. -->
+    <div class="details-inner" data-lenis-prevent>
       <button type="button" class="join-close" data-details-close aria-label="סגירה">×</button>
       <span class="details-kicker">יום של SHIFT</span>
       <h2 id="detailsTitle">זמן לעצור הכל, לנשום עמוק ולעצב מחדש</h2>
@@ -1090,8 +1092,8 @@
       <h3>מה מחכה לכם שם</h3>
       <ul class="details-list">
         <li><strong>ארכיטקטורת השינוי</strong> — עקרונות מפתח ממדעי המוח, ההתנהגות ואפיגנטיקה לשינוי דפוסים אוטומטיים.</li>
-        <li><strong>עבודה רגשית</strong> — סשן ריברסינג (נשימות מעגליות) עמוק עם דור ספיריט, לשחרור חסמים והתחדשות.</li>
-        <li><strong>חוסן גופני ותנועה</strong> — יוגה עם נועה אופיר וטבילת קרח עם גל עדיקה, לוויסות מערכת העצבים.</li>
+        <li><strong>עבודה רגשית</strong> — סשן ריברסינג (נשימות מעגליות) עמוק לשחרור חסמים והתחדשות.</li>
+        <li><strong>חוסן גופני ותנועה</strong> — תרגול יוגה וטבילת קרח לוויסות מערכת העצבים.</li>
         <li><strong>השראה וכלים</strong> — מדיטציה מודרכת, כתיבה ושיח פתוח על עיצוב תודעתי, ריפוי וצמיחה.</li>
       </ul>
 
