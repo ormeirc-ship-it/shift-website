@@ -771,18 +771,30 @@
       });
     }
     if (body) {
-      var parts = body.querySelectorAll('.label, h2, p');
-      gsap.from(parts, {
-        // D2: משך הכניסה נמתח עם המסע (--j) - הישרדות נכנסת מהר,
-        // יצירה נושמת. זה הציר השלישי מהמפרט, שהיה חסר עד 27.7.
-        autoAlpha: 0, y: 28, duration: jDur(body, 0.7, 1.1), stagger: 0.12, clearProps: CLEAR,
-        scrollTrigger: { trigger: body, start: 'top 75%' }
+      // רק הכותרת והפסקה הישירות תחתיה - כניסה נקייה ומסודרת, ease חלק.
+      // בעבר כל פסקאות המייסדים היו באותו tween וטריגר, כך שראש הסקשן
+      // "קפץ" ולא נכנס בצורה מסודרת. עכשיו לכל בלוק טריגר משלו.
+      var intro = body.querySelectorAll(':scope > .label, :scope > h2, :scope > p');
+      gsap.from(intro, {
+        // D2: משך הכניסה נמתח עם המסע (--j) - הישרדות נכנסת מהר, יצירה נושמת.
+        autoAlpha: 0, y: 24, duration: jDur(body, 0.7, 1.1), ease: 'power3.out',
+        stagger: 0.14, clearProps: CLEAR,
+        scrollTrigger: { trigger: body, start: 'top 82%' }
       });
       var quote = body.querySelector('blockquote');
       if (quote) {
         gsap.from(quote, {
-          autoAlpha: 0, y: 26, duration: jDur(quote, 0.85, 1.25), delay: 0.15, clearProps: CLEAR,
+          autoAlpha: 0, y: 24, duration: jDur(quote, 0.85, 1.25), ease: 'power3.out',
+          delay: 0.1, clearProps: CLEAR,
           scrollTrigger: { trigger: quote, start: 'top 85%' }
+        });
+      }
+      var founders = body.querySelector('.founders');
+      if (founders) {
+        gsap.from(founders.querySelectorAll('.founders-label, .founder'), {
+          autoAlpha: 0, y: 30, duration: jDur(founders, 0.7, 1.1), ease: 'power3.out',
+          stagger: 0.14, clearProps: CLEAR,
+          scrollTrigger: { trigger: founders, start: 'top 84%' }
         });
       }
     }

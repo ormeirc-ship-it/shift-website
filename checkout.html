@@ -77,7 +77,7 @@
 <body>
   <main class="co">
     <div class="co-top">
-      <a class="co-back" href="index.html">← חזרה לאתר</a>
+      <a class="co-back" href="index.html" id="coBack">← חזרה לאתר</a>
       <img class="co-logo" src="assets/brand/logo-white.png" alt="SHIFT" width="1531" height="940">
     </div>
 
@@ -121,5 +121,18 @@
       </div>
     </div>
   </main>
+  <script>
+    // חזרה לאתר בלי לאבד מיקום: אם הגענו מהאתר עצמו, history.back()
+    // משחזר מ-bfcache את המסך המדויק (כולל מיקום הגלילה) במקום טעינה
+    // מחדש מלמעלה. נפילה ל-href (index.html) אם נכנסו ישירות לדף.
+    (function () {
+      var back = document.getElementById('coBack');
+      var fromSite = document.referrer &&
+        (function () { try { return new URL(document.referrer).origin === location.origin; } catch (e) { return false; } })();
+      if (back && fromSite) {
+        back.addEventListener('click', function (e) { e.preventDefault(); history.back(); });
+      }
+    })();
+  </script>
 </body>
 </html>
