@@ -1194,6 +1194,40 @@ h1 .w { display: inline-block; }
   inset: 0;
   background: linear-gradient(105deg, rgba(18, 18, 52, 0) 55%, rgba(18, 18, 52, 0.55));
 }
+/* כרטיס "האירוע הקרוב": תמונה מהאירוע האחרון עם כיתוב על גבי התמונה */
+.event-featured::after {
+  /* scrim אנכי חזק יותר לקריאוּת הכיתוב מעל התמונה (למעלה ולמטה) */
+  background: linear-gradient(180deg, rgba(18, 18, 52, 0.5) 0%, rgba(18, 18, 52, 0) 30%, rgba(18, 18, 52, 0) 52%, rgba(18, 18, 52, 0.82) 100%);
+}
+.event-badge {
+  position: absolute;
+  z-index: 2;
+  inset-block-start: 16px;
+  inset-inline-start: 16px;
+  background: var(--sky);
+  color: var(--navy-deep);
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  padding: 7px 16px;
+  border-radius: var(--pill);
+  box-shadow: 0 6px 20px rgba(92, 187, 240, 0.4);
+}
+.event-date {
+  position: absolute;
+  z-index: 2;
+  inset-block-end: 16px;
+  inset-inline-start: 18px;
+  color: #fff;
+  line-height: 1.05;
+}
+.event-date strong {
+  display: block;
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  font-weight: 700;
+}
+.event-date span { font-size: 0.95rem; color: var(--white-soft); }
+
 .event-body { padding: clamp(22px, 3vw, 40px); padding-inline-start: 0; }
 .event-kicker {
   font-size: 0.82rem;
