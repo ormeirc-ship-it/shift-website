@@ -71,7 +71,7 @@
   }
   </script>
   <!-- פרמטר הגרסה שובר cache ישן אחרי כל פריסה - לעדכן בכל שינוי CSS/JS -->
-  <link rel="stylesheet" href="css/style.css?v=20260810d">
+  <link rel="stylesheet" href="css/style.css?v=20260810e">
   <script>
     document.documentElement.classList.add('js');
     // מנוע התנועה מוכרז מראש כדי שחוקי ה-reveal של ה-CSS לא יידלקו לרגע;
@@ -745,7 +745,7 @@
             <!-- TODO: תוכן מ-OC - מבנה מלא ומחיר -->
             <span class="event-soon">בית לחם הגלילית · 10.10</span>
             <div class="event-actions">
-              <a class="btn btn-primary event-buy" href="checkout.html">רכישת כרטיס</a>
+              <a class="btn btn-primary event-buy" href="checkout.html" data-checkout>רכישת כרטיס</a>
               <button class="event-link" type="button" data-details>פרטים נוספים ←</button>
               <a class="event-link" href="#contact">דברו איתנו ←</a>
             </div>
@@ -865,7 +865,7 @@
     <div class="reviews-cta container reveal">
       <p class="reviews-cta-line">רוצים להגיע לאירוע הבא?</p>
       <div class="reviews-cta-btns">
-        <a class="btn btn-primary" href="checkout.html">רכישת כרטיס</a>
+        <a class="btn btn-primary" href="checkout.html" data-checkout>רכישת כרטיס</a>
         <a class="btn btn-ghost" href="https://shift-21-day-course-ceos.web.app" target="_blank" rel="noopener" data-join>להשארת פרטים</a>
         <a class="btn btn-ghost" href="https://wa.me/972528972050?text=%D7%94%D7%99%D7%99%21%20%D7%A8%D7%90%D7%99%D7%AA%D7%99%20%D7%90%D7%AA%20%D7%94%D7%91%D7%99%D7%A7%D7%95%D7%A8%D7%95%D7%AA%20%D7%95%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A9%D7%9E%D7%95%D7%A2%20%D7%A2%D7%95%D7%93%20%D7%A2%D7%9C%20%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%20SHIFT%20%F0%9F%99%8F" target="_blank" rel="noopener">הודעה בוואטסאפ</a>
       </div>
@@ -1114,14 +1114,57 @@
         אנחנו מזמינים אתכם ללכת איתנו ולהיות חלק מקהילה לומדת, מתפתחת ומרפאה.
       </p>
 
-      <a class="btn btn-primary details-buy" href="checkout.html">רכישת כרטיס</a>
+      <a class="btn btn-primary details-buy" href="checkout.html" data-checkout>רכישת כרטיס</a>
+    </div>
+  </dialog>
+
+  <!-- מודאל רכישת כרטיס (checkout-modal ב-main.js). על אותו עמוד כדי שאין
+       ניווט: סגירה מחזירה בדיוק לאותו מסך. אין כאן איסוף אמיתי של אשראי -
+       השדות מנוטרלים; יוחלפו בדף סליקה מאובטח (PCI) של ספק תשלומים.
+       בלי JS: כפתורי "רכישת כרטיס" נופלים ל-checkout.html (data-checkout). -->
+  <dialog class="checkout-dialog" id="checkoutDialog" aria-labelledby="checkoutTitle">
+    <div class="checkout-inner" data-lenis-prevent>
+      <button type="button" class="join-close" data-checkout-close aria-label="סגירה">×</button>
+      <h2 id="checkoutTitle">רכישת כרטיס</h2>
+
+      <div class="checkout-summary">
+        <span>יום של SHIFT · כרטיס משתתף</span>
+        <!-- TODO: מחיר מ-OC -->
+        <strong>המחיר יעודכן</strong>
+      </div>
+
+      <div class="checkout-notice">
+        <strong>התשלום המאובטח ייפתח כאן בקרוב.</strong>
+        אנחנו מחברים מערכת סליקה מאובטחת. בינתיים אין להזין פרטי אשראי —
+        השאירו פרטים או כתבו לנו בוואטסאפ, ונשלים איתכם את הרכישה.
+      </div>
+
+      <!-- הדגמה בלבד: השדות מנוטרלים ולא נאספים. יוחלפו בדף סליקה מאובטח. -->
+      <form class="checkout-form" aria-hidden="true">
+        <label>שם בעל הכרטיס
+          <input type="text" disabled placeholder="בקרוב" autocomplete="off">
+        </label>
+        <label>מספר כרטיס
+          <input type="text" disabled placeholder="•••• •••• •••• ••••" autocomplete="off">
+        </label>
+        <div class="checkout-row">
+          <label>תוקף<input type="text" disabled placeholder="MM/YY" autocomplete="off"></label>
+          <label>CVV<input type="text" disabled placeholder="•••" autocomplete="off"></label>
+        </div>
+        <button type="button" class="btn btn-primary checkout-pay" disabled>לתשלום (בקרוב)</button>
+      </form>
+
+      <div class="checkout-alt">
+        <a class="btn btn-ghost" href="https://wa.me/972528972050?text=%D7%94%D7%99%D7%99%21%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A8%D7%9B%D7%95%D7%A9%20%D7%9B%D7%A8%D7%98%D7%99%D7%A1%20%D7%9C%D7%99%D7%95%D7%9D%20%D7%A9%D7%9C%20SHIFT%20%F0%9F%99%8F" target="_blank" rel="noopener">רכישה בוואטסאפ</a>
+        <button type="button" class="btn btn-ghost" data-leave-details>השארת פרטים</button>
+      </div>
     </div>
   </dialog>
 
   <script src="assets/vendor/gsap.min.js" defer></script>
   <script src="assets/vendor/ScrollTrigger.min.js" defer></script>
   <script src="assets/vendor/lenis.min.js" defer></script>
-  <script src="js/motion.js?v=20260810d" defer></script>
-  <script src="js/main.js?v=20260810d" defer></script>
+  <script src="js/motion.js?v=20260810e" defer></script>
+  <script src="js/main.js?v=20260810e" defer></script>
 </body>
 </html>
