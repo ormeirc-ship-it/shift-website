@@ -2075,7 +2075,8 @@ html.gate-accent-b .gate-cue i { width: 2px; }
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  color: rgba(24, 22, 59, 0.6);
+  color: rgba(255, 255, 255, 0.82);
+  text-shadow: 0 1px 10px rgba(11, 11, 34, 0.45);
   font-size: 0.82rem;
   letter-spacing: 0.14em;
   pointer-events: none;
@@ -2084,7 +2085,7 @@ html.gate-accent-b .gate-cue i { width: 2px; }
   width: 1px;
   height: 38px;
   display: block;
-  background: linear-gradient(to bottom, transparent, #1E6FA8);
+  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.9));
   animation: diveDrop 2.1s cubic-bezier(0.6, 0, 0.3, 1) infinite;
 }
 @media (prefers-reduced-motion: reduce) { .arrival-cue i { animation: none; } }
