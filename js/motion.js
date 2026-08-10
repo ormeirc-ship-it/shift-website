@@ -771,24 +771,16 @@
       });
     }
     if (body) {
-      // רק הכותרת והפסקה הישירות תחתיה - כניסה נקייה ומסודרת, ease חלק.
-      // בעבר כל פסקאות המייסדים היו באותו tween וטריגר, כך שראש הסקשן
-      // "קפץ" ולא נכנס בצורה מסודרת. עכשיו לכל בלוק טריגר משלו.
-      var intro = body.querySelectorAll(':scope > .label, :scope > h2, :scope > p');
+      // הכותרת, הפסקה והציטוט נכנסים אחד אחרי השני לפי סדר ה-DOM, בכניסה
+      // חלקה (ease). בעבר הציטוט היה בטריגר נפרד וה"קפיצה" לא הרגישה מסודרת.
+      // בלוק המייסדים מקבל טריגר משלו כדי שלא ירוץ מחוץ למסך באותו רצף.
+      var intro = body.querySelectorAll(':scope > .label, :scope > h2, :scope > p, :scope > blockquote');
       gsap.from(intro, {
         // D2: משך הכניסה נמתח עם המסע (--j) - הישרדות נכנסת מהר, יצירה נושמת.
         autoAlpha: 0, y: 24, duration: jDur(body, 0.7, 1.1), ease: 'power3.out',
-        stagger: 0.14, clearProps: CLEAR,
-        scrollTrigger: { trigger: body, start: 'top 82%' }
+        stagger: 0.16, clearProps: CLEAR,
+        scrollTrigger: { trigger: body, start: 'top 80%' }
       });
-      var quote = body.querySelector('blockquote');
-      if (quote) {
-        gsap.from(quote, {
-          autoAlpha: 0, y: 24, duration: jDur(quote, 0.85, 1.25), ease: 'power3.out',
-          delay: 0.1, clearProps: CLEAR,
-          scrollTrigger: { trigger: quote, start: 'top 85%' }
-        });
-      }
       var founders = body.querySelector('.founders');
       if (founders) {
         gsap.from(founders.querySelectorAll('.founders-label, .founder'), {
