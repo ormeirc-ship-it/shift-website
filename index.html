@@ -71,7 +71,7 @@
   }
   </script>
   <!-- פרמטר הגרסה שובר cache ישן אחרי כל פריסה - לעדכן בכל שינוי CSS/JS -->
-  <link rel="stylesheet" href="css/style.css?v=20260809e">
+  <link rel="stylesheet" href="css/style.css?v=20260810a">
   <script>
     document.documentElement.classList.add('js');
     // מנוע התנועה מוכרז מראש כדי שחוקי ה-reveal של ה-CSS לא יידלקו לרגע;
@@ -244,6 +244,9 @@
             <a href="#method" class="btn btn-arrival-ghost">איך זה עובד?</a>
           </div>
         </div>
+        <!-- רמז גלילה בתחתית מסך ההגעה (OC 10.8): המסך נראה כמו נחיתה
+             סגורה בגלל ה-CTAs; האינדיקציה מבהירה שיש המשך למטה. -->
+        <div class="arrival-cue" aria-hidden="true"><span>המשיכו לגלול</span><i></i></div>
       </div>
     </div>
   </section>
@@ -860,7 +863,7 @@
          או וואטסאפ ישיר. ה-data-join נשען על אותו מודול; בלי JS הכפתור
          נופל חיננית לאפליקציה (href). -->
     <div class="reviews-cta container reveal">
-      <p class="reviews-cta-line">רוצים לשמוע על האירוע הבא?</p>
+      <p class="reviews-cta-line">רוצים להגיע לאירוע הבא?</p>
       <div class="reviews-cta-btns">
         <a class="btn btn-primary" href="checkout.html">רכישת כרטיס</a>
         <a class="btn btn-ghost" href="https://shift-21-day-course-ceos.web.app" target="_blank" rel="noopener" data-join>להשארת פרטים</a>
@@ -1123,7 +1126,7 @@
   <script src="assets/vendor/gsap.min.js" defer></script>
   <script src="assets/vendor/ScrollTrigger.min.js" defer></script>
   <script src="assets/vendor/lenis.min.js" defer></script>
-  <script src="js/motion.js?v=20260809e" defer></script>
-  <script src="js/main.js?v=20260809e" defer></script>
+  <script src="js/motion.js?v=20260810a" defer></script>
+  <script src="js/main.js?v=20260810a" defer></script>
 </body>
 </html>

@@ -2063,6 +2063,31 @@ html.gate-accent-b .gate-cue i { width: 2px; }
   text-wrap: pretty;
 }
 .arrival-ctas { margin-top: 32px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+/* רמז גלילה בתחתית מסך ההגעה (הבהיר) — כהה כדי להיקרא על הרקע הבהיר.
+   מוריש את אנימציית ה-opacity של .arrival, ולכן מופיע יחד עם ההגעה. */
+.arrival-cue {
+  position: absolute;
+  inset-block-end: clamp(16px, 4vh, 38px);
+  inset-inline: 0;
+  margin-inline: auto;
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: rgba(24, 22, 59, 0.6);
+  font-size: 0.82rem;
+  letter-spacing: 0.14em;
+  pointer-events: none;
+}
+.arrival-cue i {
+  width: 1px;
+  height: 38px;
+  display: block;
+  background: linear-gradient(to bottom, transparent, #1E6FA8);
+  animation: diveDrop 2.1s cubic-bezier(0.6, 0, 0.3, 1) infinite;
+}
+@media (prefers-reduced-motion: reduce) { .arrival-cue i { animation: none; } }
 .btn-arrival { background: var(--navy); color: #fff; }
 @media (hover: hover) { .btn-arrival:hover { box-shadow: 0 14px 40px rgba(24, 22, 59, 0.3); } }.btn-arrival-ghost { border: 1px solid rgba(24, 22, 59, 0.28); color: var(--navy); }
 @media (hover: hover) { .btn-arrival-ghost:hover { background: rgba(24, 22, 59, 0.05); border-color: var(--navy); } }
