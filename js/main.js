@@ -545,8 +545,10 @@ safe('join-form', () => {
   const dialog = document.getElementById('joinDialog');
   const form = document.getElementById('joinForm');
   const status = document.getElementById('joinStatus');
+  // הטופס נפתח גם ממודאל התשלום ("השארת פרטים"), לא רק מכפתורי [data-join] -
+  // לכן לא יוצאים מוקדם כשאין triggers; מחווטים את השליחה בכל מקרה.
   const triggers = document.querySelectorAll('[data-join]');
-  if (!dialog || !form || !triggers.length || typeof dialog.showModal !== 'function') return;
+  if (!dialog || !form || typeof dialog.showModal !== 'function') return;
 
   const PROJECT = 'shift-21-day-course-ceos';
   const COLLECTION = 'websiteLeads';
