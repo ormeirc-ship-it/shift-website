@@ -28,6 +28,7 @@ const I18N = {
     breathBreathing: 'נושמים…',
     breathRound: (n, total) => 'סבב ' + n + ' מתוך ' + total,
     breathDone: (total) => 'סיימתם ' + total + ' סבבים',
+    carouselSlide: 'שקופית ',
     joinNameRequired: 'נא למלא שם מלא.',
     joinAgeRequired: 'נא למלא גיל תקין.',
     joinGenderRequired: 'נא לבחור מין.',
@@ -49,6 +50,7 @@ const I18N = {
     breathBreathing: 'Breathing…',
     breathRound: (n, total) => 'Round ' + n + ' of ' + total,
     breathDone: (total) => 'You completed ' + total + ' rounds',
+    carouselSlide: 'Slide ',
     joinNameRequired: 'Please enter your full name.',
     joinAgeRequired: 'Please enter a valid age.',
     joinGenderRequired: 'Please select a gender.',
@@ -70,6 +72,7 @@ const I18N = {
     breathBreathing: 'Respirando…',
     breathRound: (n, total) => 'Ronda ' + n + ' de ' + total,
     breathDone: (total) => 'Completaste ' + total + ' rondas',
+    carouselSlide: 'Diapositiva ',
     joinNameRequired: 'Introduce tu nombre completo.',
     joinAgeRequired: 'Introduce una edad válida.',
     joinGenderRequired: 'Selecciona un género.',
@@ -318,7 +321,7 @@ safe('worlds-carousel', () => {
     const b = document.createElement('button');
     b.type = 'button';
     const title = slide.querySelector('h3');
-    b.setAttribute('aria-label', 'שקופית ' + (i + 1) + (title ? ': ' + title.textContent : ''));
+    b.setAttribute('aria-label', t('carouselSlide') + (i + 1) + (title ? ': ' + title.textContent : ''));
     b.addEventListener('click', () => go(i));
     dotsWrap.appendChild(b);
     return b;
