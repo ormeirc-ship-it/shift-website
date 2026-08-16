@@ -71,7 +71,7 @@
   }
   </script>
   <!-- פרמטר הגרסה שובר cache ישן אחרי כל פריסה - לעדכן בכל שינוי CSS/JS -->
-  <link rel="stylesheet" href="css/style.css?v=20260810g">
+  <link rel="stylesheet" href="css/style.css?v=20260812a">
   <script>
     document.documentElement.classList.add('js');
     // מנוע התנועה מוכרז מראש כדי שחוקי ה-reveal של ה-CSS לא יידלקו לרגע;
@@ -94,6 +94,14 @@
   </script>
 </head>
 <body>
+
+  <!-- בורר שפה - position:fixed מעל ה-preloader (z-index 10000), מופיע כבר
+       במסך הפתיחה. הקישורים יחסיים; ב-index.html העברית היא הפעילה. -->
+  <nav class="lang-switch" aria-label="Language · שפה · Idioma">
+    <a href="index.html" hreflang="he" lang="he" aria-current="page">עב</a>
+    <a href="en.html" hreflang="en" lang="en">EN</a>
+    <a href="es.html" hreflang="es" lang="es">ES</a>
+  </nav>
 
   <!-- מסך פתיחה - נסגר ברגע שהפריים הראשון של הרצף מוכן, לא כשכולו נטען.
        המשפט "מהישרדות ליצירה" עבר לרגע ההגעה אל האור, שם הוא הפואנטה. -->
@@ -1122,7 +1130,7 @@
   <script src="assets/vendor/gsap.min.js" defer></script>
   <script src="assets/vendor/ScrollTrigger.min.js" defer></script>
   <script src="assets/vendor/lenis.min.js" defer></script>
-  <script src="js/motion.js?v=20260810g" defer></script>
-  <script src="js/main.js?v=20260810g" defer></script>
+  <script src="js/motion.js?v=20260812a" defer></script>
+  <script src="js/main.js?v=20260812a" defer></script>
 </body>
 </html>

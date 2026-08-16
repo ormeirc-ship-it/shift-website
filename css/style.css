@@ -82,6 +82,61 @@ html.preloader-done .preloader {
   .preloader { display: none !important; }
 }
 
+/* ---------- בורר שפה (עב · EN · ES) ---------- */
+/* ‏z-index 10000 - מעל ה-preloader (300) וכל שאר השכבות; מופיע כבר
+   במסך הפתיחה. ‏inset-inline-end מתהפך לבד: ימין ב-RTL, שמאל ב-LTR. */
+.lang-switch {
+  position: fixed;
+  top: 16px;
+  inset-inline-end: 16px;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  border-radius: var(--pill);
+  background: rgba(18, 18, 52, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(10px) saturate(1.1);
+  -webkit-backdrop-filter: blur(10px) saturate(1.1);
+  box-shadow: 0 6px 22px rgba(10, 10, 30, 0.28);
+}
+.lang-switch a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  padding: 5px 9px;
+  border-radius: var(--pill);
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--white-soft);
+  text-decoration: none;
+  transition: color var(--t-fast) ease, background-color var(--t-fast) ease;
+}
+.lang-switch a:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+}
+.lang-switch a[aria-current="page"] {
+  background: var(--sky);
+  color: var(--navy-deep);
+}
+.lang-switch a[aria-current="page"]:hover {
+  background: var(--sky);
+  color: var(--navy-deep);
+}
+.lang-switch a:focus-visible {
+  outline: 2px solid var(--sky);
+  outline-offset: 2px;
+}
+/* מופחת-תנועה: אין מה לכבות (אין אנימציה) - המצב הסטטי כבר נכון. */
+@media (prefers-reduced-motion: reduce) {
+  .lang-switch a { transition: none; }
+}
+
 body {
   font-family: 'Assistant', -apple-system, sans-serif;
   font-weight: 400;
@@ -2771,3 +2826,16 @@ button.event-link {
 @media (prefers-reduced-motion: no-preference) {
   .details-dialog[open] { animation: joinIn var(--t-med) var(--ease-out); }
 }
+
+/* ---------- התאמות LTR (אנגלית/ספרדית) ---------- */
+/* חלים רק כש-<html dir="ltr"> (en.html/es.html); העברית (dir="rtl") לא
+   מושפעת. שאר הפריסה בנויה על מאפיינים לוגיים (inset-inline / margin-inline /
+   padding-inline) שמתהפכים לבד - ולכן אין להם צורך בעקיפה כאן. הבלוק הזה
+   מטפל אך ורק במאפיינים *פיזיים* שנשארים קשיחים בין הכיוונים. */
+
+/* text-align: right פיזי בטפסים - בכיוון LTR צריך להתיישר לשמאל */
+[dir="ltr"] .join-form { text-align: left; }
+[dir="ltr"] .details-inner { text-align: left; }
+
+/* אלמנטים לטיניים/מספריים שמוצהרים direction:ltr (wordmark, ספרות-הענק,
+   מילת-הסיום) נשארים ltr בשתי השפות בכוונה - אין להם עקיפה. */
