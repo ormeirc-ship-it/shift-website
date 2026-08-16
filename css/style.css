@@ -100,6 +100,14 @@ html.preloader-done .preloader {
   backdrop-filter: blur(10px) saturate(1.1);
   -webkit-backdrop-filter: blur(10px) saturate(1.1);
   box-shadow: 0 6px 22px rgba(10, 10, 30, 0.28);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+/* הבורר בולט במסך הפתיחה; נעלם בעדינות בגלילה כשה-nav מופיע - מונע
+   התנגשות עם כפתור התפריט (בורגר) שיושב באותה פינה. */
+html.is-scrolled .lang-switch {
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
 }
 .lang-switch a {
   display: flex;
@@ -134,7 +142,7 @@ html.preloader-done .preloader {
 }
 /* מופחת-תנועה: אין מה לכבות (אין אנימציה) - המצב הסטטי כבר נכון. */
 @media (prefers-reduced-motion: reduce) {
-  .lang-switch a { transition: none; }
+  .lang-switch, .lang-switch a { transition: none; }
 }
 
 body {

@@ -218,11 +218,15 @@ afterReveal(() => {
 // ניווט: רקע אטום אחרי גלילה (עם הגנת null - שינוי HTML לא יפיל את הקובץ)
 safe('nav-scrolled', () => {
 const nav = document.getElementById('nav');
-if (nav) {
-  const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 24);
-  onScroll();
-  window.addEventListener('scroll', onScroll, { passive: true });
-}
+const onScroll = () => {
+  const scrolled = window.scrollY > 24;
+  if (nav) nav.classList.toggle('scrolled', scrolled);
+  // בורר השפה חי ובולט במסך הפתיחה; כשה-nav מופיע בגלילה הבורר נעלם
+  // בעדינות כדי לא להתנגש בכפתור התפריט (בורגר) שיושב באותה פינה.
+  document.documentElement.classList.toggle('is-scrolled', scrolled);
+};
+onScroll();
+window.addEventListener('scroll', onScroll, { passive: true });
 });
 
 // תפריט מסך מלא
