@@ -29,6 +29,10 @@ const I18N = {
     breathRound: (n, total) => 'סבב ' + n + ' מתוך ' + total,
     breathDone: (total) => 'סיימתם ' + total + ' סבבים',
     carouselSlide: 'שקופית ',
+    marqReviewsPause: 'השהיית סרגל הביקורות',
+    marqReviewsResume: 'המשך סרגל הביקורות',
+    marqGalleryPause: 'השהיית גלריית התמונות',
+    marqGalleryResume: 'המשך גלריית התמונות',
     joinNameRequired: 'נא למלא שם מלא.',
     joinAgeRequired: 'נא למלא גיל תקין.',
     joinGenderRequired: 'נא לבחור מין.',
@@ -51,6 +55,10 @@ const I18N = {
     breathRound: (n, total) => 'Round ' + n + ' of ' + total,
     breathDone: (total) => 'You completed ' + total + ' rounds',
     carouselSlide: 'Slide ',
+    marqReviewsPause: 'Pause the reviews strip',
+    marqReviewsResume: 'Resume the reviews strip',
+    marqGalleryPause: 'Pause the photo gallery',
+    marqGalleryResume: 'Resume the photo gallery',
     joinNameRequired: 'Please enter your full name.',
     joinAgeRequired: 'Please enter a valid age.',
     joinGenderRequired: 'Please select a gender.',
@@ -73,6 +81,10 @@ const I18N = {
     breathRound: (n, total) => 'Ronda ' + n + ' de ' + total,
     breathDone: (total) => 'Completaste ' + total + ' rondas',
     carouselSlide: 'Diapositiva ',
+    marqReviewsPause: 'Pausar la franja de reseñas',
+    marqReviewsResume: 'Reanudar la franja de reseñas',
+    marqGalleryPause: 'Pausar la galería de fotos',
+    marqGalleryResume: 'Reanudar la galería de fotos',
     joinNameRequired: 'Introduce tu nombre completo.',
     joinAgeRequired: 'Introduce una edad válida.',
     joinGenderRequired: 'Selecciona un género.',
@@ -457,14 +469,14 @@ function runMarquee(cfg) {
 safe('reviews-marquee', () => runMarquee({
   root: '.reviews-marquee', run: '.reviews-run', strip: '.reviews-strip',
   pauseBtn: 'reviewsPause', speed: 55,
-  labels: { pause: 'השהיית סרגל הביקורות', resume: 'המשך סרגל הביקורות' },
+  labels: { pause: t('marqReviewsPause'), resume: t('marqReviewsResume') },
 }));
 
 // ‏D17: גלריית-העבר - תמונות רחבות מקלפי-טקסט, מהירות מעט איטית יותר
 safe('past-marquee', () => runMarquee({
   root: '.past-marquee', run: '.past-run', strip: '.past-strip',
   pauseBtn: 'pastPause', speed: 45,
-  labels: { pause: 'השהיית גלריית התמונות', resume: 'המשך גלריית התמונות' },
+  labels: { pause: t('marqGalleryPause'), resume: t('marqGalleryResume') },
 }));
 
 // ============================================================

@@ -260,6 +260,24 @@ h3 {
   transition: color 0.2s ease;
 }
 @media (hover: hover) { .nav-links a:hover { color: #fff; } }
+/* בורר שפה קבוע בתוך הסרגל - מלווה את גוון ה-nav (כהה/בהיר) בכל השפות */
+.nav-lang { display: flex; align-items: center; gap: 2px; }
+.nav-lang a {
+  padding: 4px 8px;
+  border-radius: var(--pill);
+  color: var(--white-soft);
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+@media (hover: hover) { .nav-lang a:not([aria-current]):hover { color: #fff; } }
+.nav-lang a[aria-current="page"] { color: var(--navy-deep); background: var(--sky); }
+html.nav-light .nav-lang a { color: var(--ink-soft); }
+@media (hover: hover) { html.nav-light .nav-lang a:not([aria-current]):hover { color: var(--navy); } }
+html.nav-light .nav-lang a[aria-current="page"] { color: var(--navy-deep); background: var(--sky); }
 /* (בלוק ה-nav-burger הקדם-איזאנמי אוחד אל ההגדרה היחידה למטה - 🟢) */
 /* (חוקי ה-span הישירים של העידן הקדם-איזאנמי הוסרו - אחרי הסרת המילה
    "תפריט" ה-span:first/last-child שלהם היה תופס את מכולת הקווים עצמה
@@ -1490,6 +1508,17 @@ html:not(.js) .reviews-pause { display: none; }
 @keyframes reviewsRun {
   from { transform: translateX(0); }
   to { transform: translateX(50%); }
+}
+/* ‏LTR (אנגלית/ספרדית): הרצועה נעה שמאלה - כיוון הקריאה בשפות אלה - ולא
+   ימינה כמו ב-RTL. translateX שלילי + הכפולה שאחרי הרצועה ממלאת מימין,
+   כך שאין קטיעה. עברית (dir=rtl) לא מושפעת ונשארת ימינה. */
+@keyframes reviewsRunLtr {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+[dir="ltr"] .reviews-marquee.filled .reviews-run,
+[dir="ltr"] .past-marquee.filled .past-run {
+  animation-name: reviewsRunLtr;
 }
 @media (prefers-reduced-motion: reduce) {
   .reviews-run { animation: none; }
