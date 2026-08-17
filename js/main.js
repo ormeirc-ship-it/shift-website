@@ -12,6 +12,96 @@ const track = (event, detail) => {
 };
 window.__track = track; // ‏motion.js מדווח דרך זה (צימוד רופף, לא תלות)
 
+// ── i18n: מחרוזות UI שה-JS *מזריק* ל-DOM (he/en/es לפי <html lang>) ────
+// מחרוזות שה-JS רק *קורא* מה-DOM מתורגמות דרך עותקי ה-HTML (en.html/es.html);
+// כאן חיות רק המחרוזות שנכתבות ל-DOM מתוך JS. ערכי he זהים למקור מילה-במילה -
+// התנהגות העברית לא משתנה. ערכים עם פרמטר הם פונקציות: t('key')(a, b).
+const LANG = (document.documentElement.lang || 'he');
+const I18N = {
+  he: {
+    breathInhale: 'שאיפה עמוקה מהאף',
+    breathInhaleTop: 'ועוד שאיפה קצרה - למלא עד הסוף',
+    breathInhaleTopShort: 'ועוד שאיפה קצרה',
+    breathExhale: 'נשיפה ארוכה ואיטית מהפה…',
+    breathHow: 'איך זה מרגיש עכשיו?',
+    breathAgain: 'עוד סיבוב',
+    breathBreathing: 'נושמים…',
+    breathRound: (n, total) => 'סבב ' + n + ' מתוך ' + total,
+    breathDone: (total) => 'סיימתם ' + total + ' סבבים',
+    carouselSlide: 'שקופית ',
+    marqReviewsPause: 'השהיית סרגל הביקורות',
+    marqReviewsResume: 'המשך סרגל הביקורות',
+    marqGalleryPause: 'השהיית גלריית התמונות',
+    marqGalleryResume: 'המשך גלריית התמונות',
+    joinNameRequired: 'נא למלא שם מלא.',
+    joinAgeRequired: 'נא למלא גיל תקין.',
+    joinGenderRequired: 'נא לבחור מין.',
+    joinPhoneRequired: 'נא למלא מספר טלפון תקין.',
+    joinSending: 'שולח…',
+    joinSuccess: 'קיבלנו! נחזור אליכם בהקדם 🙏',
+    joinSent: 'נשלח ✓',
+    joinError: 'משהו השתבש בשליחה. אפשר להצטרף ישירות דרך האפליקציה.',
+    joinSubmit: 'שליחת פרטים',
+    joinToApp: 'למעבר לאפליקציה ←',
+  },
+  en: {
+    breathInhale: 'Deep breath in through the nose',
+    breathInhaleTop: 'One more short breath in — fill all the way',
+    breathInhaleTopShort: 'One more short breath in',
+    breathExhale: 'Long, slow breath out through the mouth…',
+    breathHow: 'How does that feel now?',
+    breathAgain: 'Another round',
+    breathBreathing: 'Breathing…',
+    breathRound: (n, total) => 'Round ' + n + ' of ' + total,
+    breathDone: (total) => 'You completed ' + total + ' rounds',
+    carouselSlide: 'Slide ',
+    marqReviewsPause: 'Pause the reviews strip',
+    marqReviewsResume: 'Resume the reviews strip',
+    marqGalleryPause: 'Pause the photo gallery',
+    marqGalleryResume: 'Resume the photo gallery',
+    joinNameRequired: 'Please enter your full name.',
+    joinAgeRequired: 'Please enter a valid age.',
+    joinGenderRequired: 'Please select a gender.',
+    joinPhoneRequired: 'Please enter a valid phone number.',
+    joinSending: 'Sending…',
+    joinSuccess: 'Got it! We\'ll get back to you soon 🙏',
+    joinSent: 'Sent ✓',
+    joinError: 'Something went wrong. You can join directly through the app.',
+    joinSubmit: 'Send details',
+    joinToApp: 'Go to the app →',
+  },
+  es: {
+    breathInhale: 'Inhala profundo por la nariz',
+    breathInhaleTop: 'Una inhalación corta más — llena hasta arriba',
+    breathInhaleTopShort: 'Una inhalación corta más',
+    breathExhale: 'Exhala largo y lento por la boca…',
+    breathHow: '¿Cómo se siente ahora?',
+    breathAgain: 'Otra ronda',
+    breathBreathing: 'Respirando…',
+    breathRound: (n, total) => 'Ronda ' + n + ' de ' + total,
+    breathDone: (total) => 'Completaste ' + total + ' rondas',
+    carouselSlide: 'Diapositiva ',
+    marqReviewsPause: 'Pausar la franja de reseñas',
+    marqReviewsResume: 'Reanudar la franja de reseñas',
+    marqGalleryPause: 'Pausar la galería de fotos',
+    marqGalleryResume: 'Reanudar la galería de fotos',
+    joinNameRequired: 'Introduce tu nombre completo.',
+    joinAgeRequired: 'Introduce una edad válida.',
+    joinGenderRequired: 'Selecciona un género.',
+    joinPhoneRequired: 'Introduce un número de teléfono válido.',
+    joinSending: 'Enviando…',
+    joinSuccess: '¡Recibido! Te responderemos pronto 🙏',
+    joinSent: 'Enviado ✓',
+    joinError: 'Algo salió mal. Puedes unirte directamente desde la app.',
+    joinSubmit: 'Enviar datos',
+    joinToApp: 'Ir a la app →',
+  },
+};
+const t = (k) => {
+  const v = (I18N[LANG] || I18N.he)[k];
+  return v === undefined ? I18N.he[k] : v;
+};
+
 // יעדים יוצאים - אירוע אחד לכל הקלקה החוצה (אינסטגרם / הפלטפורמה /
 // וואטסאפ / מייל). ‏mailto נוסף כשנפתחו ערוצי הקשר (T13, ‏28.7).
 document.addEventListener('click', (e) => {
@@ -140,11 +230,15 @@ afterReveal(() => {
 // ניווט: רקע אטום אחרי גלילה (עם הגנת null - שינוי HTML לא יפיל את הקובץ)
 safe('nav-scrolled', () => {
 const nav = document.getElementById('nav');
-if (nav) {
-  const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 24);
-  onScroll();
-  window.addEventListener('scroll', onScroll, { passive: true });
-}
+const onScroll = () => {
+  const scrolled = window.scrollY > 24;
+  if (nav) nav.classList.toggle('scrolled', scrolled);
+  // בורר השפה חי ובולט במסך הפתיחה; כשה-nav מופיע בגלילה הבורר נעלם
+  // בעדינות כדי לא להתנגש בכפתור התפריט (בורגר) שיושב באותה פינה.
+  document.documentElement.classList.toggle('is-scrolled', scrolled);
+};
+onScroll();
+window.addEventListener('scroll', onScroll, { passive: true });
 });
 
 // תפריט מסך מלא
@@ -243,7 +337,7 @@ safe('worlds-carousel', () => {
     const b = document.createElement('button');
     b.type = 'button';
     const title = slide.querySelector('h3');
-    b.setAttribute('aria-label', 'שקופית ' + (i + 1) + (title ? ': ' + title.textContent : ''));
+    b.setAttribute('aria-label', t('carouselSlide') + (i + 1) + (title ? ': ' + title.textContent : ''));
     b.addEventListener('click', () => go(i));
     dotsWrap.appendChild(b);
     return b;
@@ -375,14 +469,14 @@ function runMarquee(cfg) {
 safe('reviews-marquee', () => runMarquee({
   root: '.reviews-marquee', run: '.reviews-run', strip: '.reviews-strip',
   pauseBtn: 'reviewsPause', speed: 55,
-  labels: { pause: 'השהיית סרגל הביקורות', resume: 'המשך סרגל הביקורות' },
+  labels: { pause: t('marqReviewsPause'), resume: t('marqReviewsResume') },
 }));
 
 // ‏D17: גלריית-העבר - תמונות רחבות מקלפי-טקסט, מהירות מעט איטית יותר
 safe('past-marquee', () => runMarquee({
   root: '.past-marquee', run: '.past-run', strip: '.past-strip',
   pauseBtn: 'pastPause', speed: 45,
-  labels: { pause: 'השהיית גלריית התמונות', resume: 'המשך גלריית התמונות' },
+  labels: { pause: t('marqGalleryPause'), resume: t('marqGalleryResume') },
 }));
 
 // ============================================================
@@ -414,10 +508,10 @@ safe('breath', () => {
   };
 
   const finish = () => {
-    setPhase('איך זה מרגיש עכשיו?');
-    if (counter) counter.textContent = 'סיימתם ' + TOTAL + ' סבבים'; // 🟢: שאר האחים כבר מוגנים
+    setPhase(t('breathHow'));
+    if (counter) counter.textContent = t('breathDone')(TOTAL); // 🟢: שאר האחים כבר מוגנים
     btn.disabled = false;
-    btn.textContent = 'עוד סיבוב';
+    btn.textContent = t('breathAgain');
     running = false;
     setAir(null);
     // הרגע שאחרי: החוויה הצביעה על משהו - נותנים לה לאן להוביל
@@ -426,24 +520,24 @@ safe('breath', () => {
   };
 
   const runRound = (round) => {
-    if (counter) counter.textContent = 'סבב ' + round + ' מתוך ' + TOTAL;
+    if (counter) counter.textContent = t('breathRound')(round, TOTAL);
     const next = () => (round < TOTAL ? runRound(round + 1) : finish());
 
     // מספרי OC (עודכן ‏30.7 בצפייה חיה): שאיפה ‏5.0 · השלמה ‏1.5 · נשיפה ‏7.0
     // (מחזור ‏13.5ש'). שני המסלולים - המונפש והשקט - חיים על אותם מספרים.
     if (hasGsap && !reduced) {
       const tl = gsap.timeline({ onComplete: next });
-      tl.call(() => { setPhase('שאיפה עמוקה מהאף'); setAir('in'); });
+      tl.call(() => { setPhase(t('breathInhale')); setAir('in'); });
       tl.to(circle, { scale: 1.3, duration: 5.0, ease: 'power2.inOut' });
-      tl.call(() => setPhase('ועוד שאיפה קצרה - למלא עד הסוף'));
+      tl.call(() => setPhase(t('breathInhaleTop')));
       tl.to(circle, { scale: 1.5, duration: 1.5, ease: 'power2.out' });
-      tl.call(() => { setPhase('נשיפה ארוכה ואיטית מהפה…'); setAir('out'); });
+      tl.call(() => { setPhase(t('breathExhale')); setAir('out'); });
       tl.to(circle, { scale: 1, duration: 7.0, ease: 'power2.inOut' });
     } else {
       // גרסה שקטה: הנחיות מתחלפות בלי אנימציה
-      setPhase('שאיפה עמוקה מהאף');
-      setTimeout(() => setPhase('ועוד שאיפה קצרה'), 5000);
-      setTimeout(() => setPhase('נשיפה ארוכה ואיטית מהפה…'), 6500);
+      setPhase(t('breathInhale'));
+      setTimeout(() => setPhase(t('breathInhaleTopShort')), 5000);
+      setTimeout(() => setPhase(t('breathExhale')), 6500);
       setTimeout(next, 13500);
     }
   };
@@ -452,7 +546,7 @@ safe('breath', () => {
     if (running) return;
     running = true;
     btn.disabled = true;
-    btn.textContent = 'נושמים…';
+    btn.textContent = t('breathBreathing');
     runRound(1);
   });
 });
@@ -597,10 +691,10 @@ safe('join-form', () => {
     markInvalid(form.gender, !gender);
     markInvalid(form.phone, phoneDigits.length < 9);
 
-    if (name.length < 2) return { ok: false, msg: 'נא למלא שם מלא.' };
-    if (!(age >= 14 && age <= 120)) return { ok: false, msg: 'נא למלא גיל תקין.' };
-    if (!gender) return { ok: false, msg: 'נא לבחור מין.' };
-    if (phoneDigits.length < 9) return { ok: false, msg: 'נא למלא מספר טלפון תקין.' };
+    if (name.length < 2) return { ok: false, msg: t('joinNameRequired') };
+    if (!(age >= 14 && age <= 120)) return { ok: false, msg: t('joinAgeRequired') };
+    if (!gender) return { ok: false, msg: t('joinGenderRequired') };
+    if (phoneDigits.length < 9) return { ok: false, msg: t('joinPhoneRequired') };
 
     return { ok: true, data: { name, age, gender, phone: phoneDigits } };
   };
@@ -624,7 +718,7 @@ safe('join-form', () => {
 
     sending = true;
     submitBtn.disabled = true;
-    submitBtn.textContent = 'שולח…';
+    submitBtn.textContent = t('joinSending');
     setStatus('');
 
     const payload = Object.assign({}, res.data, {
@@ -640,22 +734,22 @@ safe('join-form', () => {
       .then((r) => {
         if (!r.ok) throw new Error('HTTP ' + r.status);
         track('join_submit', { ok: true });
-        setStatus('קיבלנו! נחזור אליכם בהקדם 🙏', 'ok');
+        setStatus(t('joinSuccess'), 'ok');
         form.reset();
-        submitBtn.textContent = 'נשלח ✓';
+        submitBtn.textContent = t('joinSent');
         setTimeout(close, 1800);
       })
       .catch((err) => {
         track('join_submit', { ok: false });
         if (window.console) console.error('join-form שליחה נכשלה:', err);
-        setStatus('משהו השתבש בשליחה. אפשר להצטרף ישירות דרך האפליקציה.', 'error');
+        setStatus(t('joinError'), 'error');
         submitBtn.disabled = false;
-        submitBtn.textContent = 'שליחת פרטים';
+        submitBtn.textContent = t('joinSubmit');
         // נפילה חיננית: קישור ישיר לאפליקציה מתחת להודעה
         if (!status.querySelector('a')) {
           const a = document.createElement('a');
           a.href = appHref; a.target = '_blank'; a.rel = 'noopener';
-          a.textContent = 'למעבר לאפליקציה ←';
+          a.textContent = t('joinToApp');
           a.style.cssText = 'display:block;margin-top:8px;color:var(--sky);';
           status.appendChild(a);
         }

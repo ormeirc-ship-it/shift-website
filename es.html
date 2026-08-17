@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="es" class="ending-curtain">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>SHIFT - De la supervivencia a la creación | Programa de desarrollo personal</title>
+  <meta name="description" content="SHIFT es un viaje práctico de desarrollo personal que une la neurociencia y la conciencia corporal: de la reactividad automática a una vida de elección, creación y crecimiento.">
+  <meta property="og:title" content="SHIFT - De la supervivencia a la creación">
+  <meta property="og:description" content="Un viaje práctico de desarrollo personal que une la neurociencia y la conciencia corporal. Hábitos que moldean la mente para un cambio de raíz.">
+  <meta property="og:image" content="https://ormeirc-ship-it.github.io/shift-website/assets/brand/og.png">
+  <meta property="og:url" content="https://ormeirc-ship-it.github.io/shift-website/es.html">
+  <meta property="og:type" content="website">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="es_ES">
+  <!-- Imagen social dedicada de 1200×630 (generada desde los activos de marca) -> large_image. El host cambia con el dominio. -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#18163B">
+  <link rel="canonical" href="https://ormeirc-ship-it.github.io/shift-website/es.html">
+  <!-- גרסאות שפה (hreflang) - זיהוי גרסאות השפה ע"י מנועי חיפוש -->
+  <link rel="alternate" hreflang="he" href="https://ormeirc-ship-it.github.io/shift-website/">
+  <link rel="alternate" hreflang="en" href="https://ormeirc-ship-it.github.io/shift-website/en.html">
+  <link rel="alternate" hreflang="es" href="https://ormeirc-ship-it.github.io/shift-website/es.html">
+  <link rel="alternate" hreflang="x-default" href="https://ormeirc-ship-it.github.io/shift-website/">
+  <link rel="icon" type="image/png" href="assets/brand/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/brand/icons/icon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/brand/icons/icon-16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/brand/icons/apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <!-- El primer fotograma de la inmersión es lo primero que ve el visitante. Sin esta indicación
+       espera en cola detrás del paquete de animación (175KB), y en una red lenta son segundos. -->
+  <link rel="preload" as="image" href="assets/brain-seq/m/f001.webp" type="image/webp"
+        media="(max-width: 899px)" fetchpriority="high">
+  <link rel="preload" as="image" href="assets/brain-seq/d/f001.webp" type="image/webp"
+        media="(min-width: 900px)" fetchpriority="high">
+  <!-- Fuente self-hosted: sin preconnect doble y sin origen externo.
+       La fuente se libera solo cuando el preloader se cierra (shift:reveal / preloader-done,
+       con un muro de 2.6s); en la pantalla de apertura solo hay un logo-imagen y una línea. -->
+  <link id="fontsCss" href="css/fonts.css?v=20260728a" rel="stylesheet" media="print">
+  <script>
+    (function () {
+      var flip = function () { var l = document.getElementById('fontsCss'); if (l) l.media = 'all'; };
+      if (document.documentElement.classList.contains('preloader-done')) flip();
+      else { window.addEventListener('shift:reveal', flip, { once: true }); setTimeout(flip, 2600); }
+    })();
+  </script>
+  <noscript><link href="css/fonts.css?v=20260728a" rel="stylesheet"></noscript>
+  <!-- Datos estructurados: solo hechos ya presentes en la página (nombre, descripción, Instagram).
+       Sin dirección, teléfono ni fechas: no existen en la página. Las URL cambian con el dominio. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://ormeirc-ship-it.github.io/shift-website/#org",
+        "name": "SHIFT",
+        "url": "https://ormeirc-ship-it.github.io/shift-website/",
+        "logo": "https://ormeirc-ship-it.github.io/shift-website/assets/brand/asset10.png",
+        "description": "SHIFT es un viaje práctico de desarrollo personal que une la neurociencia y la conciencia corporal: de la reactividad automática a una vida de elección, creación y crecimiento.",
+        "sameAs": ["https://www.instagram.com/shift_ecosystem/"]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://ormeirc-ship-it.github.io/shift-website/#website",
+        "name": "SHIFT - De la supervivencia a la creación",
+        "url": "https://ormeirc-ship-it.github.io/shift-website/",
+        "inLanguage": "es",
+        "publisher": { "@id": "https://ormeirc-ship-it.github.io/shift-website/#org" }
+      }
+    ]
+  }
+  </script>
+  <!-- El parámetro de versión rompe la caché antigua tras cada despliegue: actualizar en cada cambio de CSS/JS -->
+  <link rel="stylesheet" href="css/style.css?v=20260812d">
+  <script>
+    document.documentElement.classList.add('js');
+    // El motor de animación se declara por adelantado para que las reglas de reveal del CSS
+    // no se enciendan un instante; motion.js retira la clase si las librerías no cargaron.
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('gsap-on');
+    }
+    // La barra permanece en silencio desde la primera pantalla: se declara aquí para que no parpadee
+    // antes de que suba el motor. motion.js la retira cuando la inmersión sale de pantalla.
+    document.documentElement.classList.add('dive-hush');
+    // Red de seguridad superior: aunque motion.js falle antes de registrar su temporizador interno,
+    // la pantalla de apertura baja y el sitio no queda bloqueado en una pantalla vacía.
+    setTimeout(function () {
+      document.documentElement.classList.add('preloader-done');
+    }, 2200);
+  </script>
+</head>
+<body>
+
+  <!-- Selector de idioma: position:fixed sobre el preloader (z-index 10000), aparece ya
+       en la pantalla de apertura. Los enlaces son relativos; en es.html el español es el activo. -->
+  <nav class="lang-switch" aria-label="Language · שפה · Idioma">
+    <a href="index.html" hreflang="he" lang="he">עב</a>
+    <a href="en.html" hreflang="en" lang="en">EN</a>
+    <a href="es.html" hreflang="es" lang="es" aria-current="page">ES</a>
+  </nav>
+
+  <!-- Pantalla de apertura: se cierra en cuanto el primer fotograma de la secuencia está listo,
+       no cuando todo ha cargado. La frase "de la supervivencia a la creación" se trasladó al momento de la llegada a la luz. -->
+  <div class="preloader" id="preloader" aria-hidden="true">
+    <img src="assets/brand/logo-white.png" alt="" width="1531" height="940">
+    <p class="preloader-line" id="preloaderLine">Un momento, entrando…</p>
+  </div>
+
+  <!-- Saltar la inmersión: para teclado (salta al enfocar) y para ratón/táctil (aparece tras unos
+       segundos). 520vh son unas cuatro pantallas de scroll antes de la primera frase de contenido. -->
+  <a class="skip-dive" href="#products">Saltar al contenido</a>
+  <button class="dive-skip" id="diveSkip" type="button" hidden>Saltar al contenido ↓</button>
+
+  <!-- Navegación -->
+  <header class="nav" id="nav">
+    <div class="nav-inner">
+      <!-- Los dos activos de marca reales, no un filtro CSS: el blanco para fondo oscuro, el oscuro
+           para fondo claro. El CSS alterna entre ellos según lo que haya detrás de la barra. -->
+      <a href="#top" class="nav-logo" aria-label="SHIFT - Volver arriba">
+        <img class="logo-on-dark" src="assets/brand/logo-white.png" alt="SHIFT" width="1531" height="940">
+        <img class="logo-on-light" src="assets/brand/logo.png" alt="" aria-hidden="true" width="1531" height="940">
+      </a>
+      <nav class="nav-links" aria-label="Navegación principal">
+        <a href="#method">El método</a>
+        <a href="#program">El programa</a>
+        <a href="#events">Eventos</a>
+        <a href="#story">Nuestra historia</a>
+      </nav>
+      <div class="nav-lang" aria-label="Language">
+        <a href="index.html" hreflang="he" lang="he">עב</a>
+        <a href="en.html" hreflang="en" lang="en">EN</a>
+        <a href="es.html" hreflang="es" lang="es" aria-current="page">ES</a>
+      </div>
+      <a href="#contact" class="btn btn-primary btn-nav">Hablemos</a>
+      <!-- Icono clásico de hamburguesa en lugar de la palabra "menú": tres líneas;
+           la palabra sigue viva en el aria-label -->
+      <button class="nav-burger" id="navBurger" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobileMenu">
+        <span class="nav-burger-lines"><span></span><span></span><span></span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Menú móvil -->
+  <div class="mobile-menu" id="mobileMenu" hidden>
+    <nav aria-label="Navegación móvil">
+      <a href="#method">El método</a>
+      <a href="#program">El programa</a>
+      <a href="#events">Eventos</a>
+      <a href="#story">Nuestra historia</a>
+      <a href="#contact" class="btn btn-primary">Hablemos</a>
+    </nav>
+  </div>
+
+  <!-- Capas globales: barra de progreso, navegación por puntos, grano cinematográfico -->
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+  <nav class="dot-nav" id="dotNav" aria-label="Navegación por secciones">
+    <a href="#top" data-label="Inicio" aria-label="Inicio"></a>
+    <a href="#products" data-label="Qué hacemos" aria-label="Qué hacemos"></a>
+    <a href="#method" data-label="El método" aria-label="El método"></a>
+    <a href="#breathe" data-label="Una respiración" aria-label="Una respiración"></a>
+    <a href="#program" data-label="El programa" aria-label="El programa"></a>
+    <a href="#events" data-label="Eventos" aria-label="Eventos"></a>
+    <a href="#story" data-label="La historia" aria-label="La historia"></a>
+    <a href="#contact" data-label="Hablemos" aria-label="Hablemos"></a>
+  </nav>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+
+
+  <!-- Hito main para la navegación con tecnología asistiva. El footer y el CTA de cierre
+       quedan fuera; el enlace de salto continúa hacia #products a propósito. -->
+  <main id="main">
+  <!-- Apertura + declaración: escenario de portada; la declaración se desliza sobre el hero -->
+  <div class="cover-stage">
+  <!-- La entrada a través del cerebro: el scroll impulsa una inmersión de la oscuridad a la luz.
+       La secuencia son fotogramas y no vídeo: video.currentTime no es fiable en Safari móvil,
+       de donde llega la mayor parte del público. Los fotogramas también pesan menos. -->
+  <section class="dive" id="top">
+    <div class="dive-sticky">
+      <canvas class="dive-canvas" id="brainCanvas" aria-hidden="true"></canvas>
+      <picture>
+        <!-- Sin JS esta es la única imagen visible. No hay motivo para que el móvil descargue
+             el fotograma de escritorio (15KB, 900px) en lugar del suyo (9KB, 640px). -->
+        <source srcset="assets/brain-seq/m/f001.webp" media="(max-width: 899px)" type="image/webp" width="1280" height="720">
+        <!-- En cuanto esta imagen está aquí hay algo que mostrar, y la pantalla de apertura ya
+             no aporta nada. Su retirada no espera al JS. -->
+        <img class="dive-still" id="brainStill" src="assets/brain-seq/d/f001.webp" alt="" aria-hidden="true"
+             width="1920" height="1080" fetchpriority="high"
+             onload="document.documentElement.classList.add('preloader-done')">
+      </picture>
+      <div class="dive-veil" id="diveVeil" aria-hidden="true"></div>
+
+      <!-- Las palabras del viaje: pasan durante la inmersión. La última sale justo cuando la
+           escena despierta (0.55-0.62). -->
+      <div class="passing" id="divePassing" aria-hidden="true">
+        <p data-at="0.26">Cada pensamiento traza un camino.</p>
+        <p data-at="0.40">Lo que se repite, se consolida.</p>
+        <p data-at="0.52">Y lo que se ha construido también puede cambiar.</p>
+      </div>
+
+      <!-- Las microetiquetas se retiraron: en la inmersión el escenario pertenece a las
+           palabras blancas del viaje, sin una capa de información que compita. -->
+
+      <!-- La puerta de entrada -->
+      <div class="gate" id="diveGate">
+        <div class="gate-logo"><img src="assets/brand/logo-white.png" alt="SHIFT" width="1531" height="940"></div>
+        <p class="gate-line">«De la supervivencia a la creación»</p>
+        <div class="gate-cue" aria-hidden="true"><i></i><span>Desplázate para entrar</span></div>
+      </div>
+
+      <!-- El telón del final: sube con la llegada, baja el ruido del fotograma iluminado y
+           devuelve la ventana de apertura. La variante alternativa queda dormida en el CSS. -->
+      <div class="dive-curtain" id="diveCurtain" aria-hidden="true"></div>
+
+      <!-- 🌅 "La llegada cobra vida": resplandor que respira ×2 (ciclo de 8.7s como el ejercicio
+           de respiración) + un haz suave + una malla de canvas viva (solo escritorio) + scrims
+           detrás del texto. Se encienden con html.arrival-live; la entrada escalonada corre una
+           vez con html.arrival-staged. -->
+      <div class="arrival-bloom2" aria-hidden="true"></div>
+      <div class="arrival-bloom" aria-hidden="true"></div>
+      <div class="arrival-shaft" aria-hidden="true"></div>
+      <canvas class="arrival-field" id="arrivalField" aria-hidden="true"></canvas>
+      <div class="arrival-scrim" aria-hidden="true"></div>
+
+      <!-- La llegada a la luz -->
+      <div class="arrival" id="diveArrival">
+        <div class="arrival-in">
+          <!-- Logo para las dos variantes propuestas del final de la inmersión. Dormido por
+               defecto (display:none): se enciende solo con html.b3-curtain / html.b3-panel. -->
+          <img class="arrival-logo arrival-logo-dark" src="assets/brand/logo-white.png" alt="" aria-hidden="true" width="1531" height="940" loading="lazy">
+          <img class="arrival-logo arrival-logo-light" src="assets/brand/logo.png" alt="" aria-hidden="true" width="1531" height="940" loading="lazy">
+          <h1>«De la supervivencia a la <b>creación</b>»</h1>
+          <p class="arrival-sub">
+            SHIFT es un viaje práctico que va de la reactividad automática y los patrones
+            negativos hacia una vida de elección, creación y crecimiento, a través del
+            aprendizaje sobre los sistemas humanos y principios científicos y psicológicos.
+          </p>
+          <div class="arrival-ctas">
+            <a href="#contact" class="btn btn-arrival">Empezar SHIFT</a>
+            <a href="#method" class="btn btn-arrival-ghost">¿Cómo funciona?</a>
+          </div>
+        </div>
+        <!-- Pista de scroll al pie de la pantalla de llegada: los CTAs hacen que parezca un
+             cierre, y esta indicación aclara que hay más abajo. -->
+        <div class="arrival-cue" aria-hidden="true"><span>Sigue desplazándote</span><i></i></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Declaración -->
+  <section class="statement section-light">
+    <div class="container narrow">
+      <h2 class="statement-title reveal delay-1">
+        La realidad no es lo que vemos,
+        <em>sino el modo en que la interpretamos.</em>
+      </h2>
+      <p class="statement-text reveal delay-2">
+        La mayoría interpretamos el mundo desde el miedo, la tensión y un estado interno de
+        supervivencia. Incluso cuando logramos rozar por un momento la vida «perfecta» que
+        anhelamos, si no cambiamos nuestra forma de pensar, nuestros hábitos y nuestro nivel
+        de conciencia, todo vuelve al mismo lugar. SHIFT nació para cambiar esto de raíz.
+      </p>
+    </div>
+  </section>
+  </div><!-- /cover-stage -->
+
+  <!-- Qué hacemos: el ecosistema de propuestas -->
+  <section class="basket section-dark" id="products">
+    <div class="container">
+      <div class="section-head reveal">
+        <!-- El wordmark tipográfico es el título: letras latinas, dir=ltr para que no se rompa;
+             la frase que sigue es un subtítulo real con aire. -->
+        <h2 class="basket-wordmark" dir="ltr">SHIFT</h2>
+        <p class="section-intro basket-sub">
+          SHIFT es un ecosistema. Puedes encontrarlo en un evento en vivo, en el contenido
+          diario o en un proceso de acompañamiento completo.
+        </p>
+      </div>
+      <div class="cards-3 basket-cards">
+        <a class="card basket-card" href="#events">
+          <h3>Eventos</h3>
+          <p>Retiros, talleres y eventos inmersivos: encuentros en vivo donde el método se encuentra con el cuerpo, juntos.</p>
+          <span class="basket-card-link">Ver eventos →</span>
+        </a>
+        <a class="card basket-card" href="https://www.instagram.com/shift_ecosystem/" target="_blank" rel="noopener">
+          <h3>Contenido</h3>
+          <p>Contenido sobre neurociencia, cuerpo y conciencia: abierto a todos, a un ritmo diario.</p>
+          <span class="basket-card-link">Ver nuestro contenido →</span>
+        </a>
+        <a class="card basket-card" href="#program">
+          <h3>Programa de acompañamiento</h3>
+          <p>El programa digital de 21 días: un proceso diario acompañado, paso a paso, de la supervivencia a la creación.</p>
+          <span class="basket-card-link">Ver el programa →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- El método: la unión de los mundos - carrusel de diapositivas -->
+  <section class="worlds section-light" id="method">
+    <div class="container">
+      <div class="section-head reveal">
+        <h2>La unión de los mundos de la ciencia, la conciencia y el desarrollo físico</h2>
+        <p class="section-intro">
+          El conocimiento existe desde hace cientos y miles de años. Las herramientas de las que
+          disponemos hoy nos permiten unir la neurociencia, el estudio de la psique y la
+          conciencia, y el desarrollo corporal, hacia nuevos niveles de crecimiento y sanación.
+        </p>
+      </div>
+
+      <!-- La estructura es un carrusel scroll-snap (nativo) con flechas, puntos, arrastre y
+           teclado, sin librería (main.js, celda worlds-carousel). La cuarta diapositiva -la
+           integración- es el corazón de la sección. Sin JS: la pista se desplaza de forma nativa. -->
+      <div class="worlds-slider reveal">
+        <div class="worlds-track" id="worldsTrack" tabindex="0" role="group"
+             aria-roledescription="carrusel" aria-label="Los mundos del método - cuatro diapositivas">
+          <article class="world-slide">
+            <div class="world-body">
+              <h3>El cerebro y el sistema nervioso</h3>
+              <p>
+                Cómo se forman los patrones negativos automáticos y cómo es posible reentrenar
+                el cerebro y el sistema nervioso. Nos apoyamos en la neurociencia y la
+                neuroplasticidad para comprender los mecanismos del estrés, el hábito y la
+                reactividad, y para reemplazar la supervivencia automática por patrones de
+                regulación, crecimiento y desarrollo.
+              </p>
+            </div>
+            <figure class="world-media">
+              <picture><source srcset="assets/img/world-neuro.webp" type="image/webp"><img src="assets/img/world-neuro.jpg" alt="Sinapsis brillantes: una red neuronal" loading="lazy" width="1200" height="897"></picture>
+            </figure>
+          </article>
+          <article class="world-slide">
+            <div class="world-body">
+              <h3>La psique y la conciencia</h3>
+              <p>
+                Bajo cada comportamiento hay una historia que nos contamos a nosotros mismos y
+                una conciencia que interpreta la realidad. Aquí nos encontramos con los patrones
+                emocionales que se crearon para protegernos y aprendemos a reconocer cuándo ya
+                no nos sirven. No es un análisis interminable del pasado, sino un trabajo preciso
+                con el presente: emoción, interpretación y elección.
+              </p>
+            </div>
+            <figure class="world-media">
+              <picture><source srcset="assets/img/world-body.webp" type="image/webp"><img src="assets/img/world-body.jpg" alt="Una figura en meditación frente a aguas tranquilas al amanecer" loading="lazy" width="1200" height="897"></picture>
+            </figure>
+          </article>
+          <article class="world-slide">
+            <div class="world-body">
+              <h3>Desarrollo físico y corporal</h3>
+              <p>
+                El cambio no se queda en la cabeza: pasa por el cuerpo. El movimiento, la
+                respiración y la práctica física anclan las comprensiones y las convierten en
+                hábitos estables. Cuando el cuerpo y el entorno físico sostienen el proceso, el
+                cambio perdura en el tiempo.
+              </p>
+            </div>
+            <figure class="world-media">
+              <picture><source srcset="assets/events/gallery-107.webp" type="image/webp"><img src="assets/events/gallery-107.jpg" alt="Dos participantes sobre esterillas de práctica en el espacio del evento: trabajo corporal y movimiento" loading="lazy" width="1200" height="960"></picture>
+            </figure>
+          </article>
+          <article class="world-slide world-slide-heart">
+            <div class="world-body">
+              <h3>La integración</h3>
+              <p>
+                Ninguno de los tres mundos basta por sí solo. La ciencia sin práctica se queda
+                en conocimiento; la conciencia sin acción se queda en comprensión; y la práctica
+                física sin entendimiento se queda en un entrenamiento vacío. SHIFT une los tres
+                en un solo camino: comprendemos el mecanismo del cerebro y el sistema nervioso,
+                nos encontramos con la psique y la conciencia, y anclamos el cambio en el cuerpo
+                y en la acción.
+              </p>
+            </div>
+          </article>
+        </div>
+        <div class="worlds-nav">
+          <button class="worlds-arrow" id="worldsPrev" type="button" aria-label="Diapositiva anterior">←</button>
+          <div class="worlds-dots" id="worldsDots" role="group" aria-label="Cambiar de diapositiva"></div>
+          <button class="worlds-arrow" id="worldsNext" type="button" aria-label="Diapositiva siguiente">→</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- Hábitos que moldean la mente -->
+  <section class="habits section-dark" id="habits">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="section-kicker">De la teoría a la práctica</span>
+        <h2>Hábitos que moldean la mente</h2>
+        <p class="section-intro">
+          No es otra teoría que se queda en la cabeza. Pequeños hábitos diarios, respaldados
+          por la ciencia, que reprograman nuestro sistema operativo interno y cambian de raíz
+          la forma en que pensamos, sentimos y actuamos.
+        </p>
+      </div>
+      <!-- Tríptico editorial, no tarjetas: estos tres son principios; una línea fina y la
+           tipografía bastan. -->
+      <div class="triptych">
+        <article class="tri reveal">
+          <h3>De la comprensión a la acción</h3>
+          <p>Cada principio científico se traduce en una práctica diaria breve y sencilla, que encaja en tu rutina real, no en otra lista que se olvida.</p>
+        </article>
+        <article class="tri reveal delay-1">
+          <h3>El cuerpo y la mente juntos</h3>
+          <p>Cada hábito activa tanto el cuerpo como la mente. Porque un cambio que se queda solo en la cabeza no perdura en el tiempo.</p>
+        </article>
+        <article class="tri reveal delay-2">
+          <h3>Un cambio de raíz</h3>
+          <p>No se trata de tratar los síntomas, sino de reconstruir el sistema que nos dirige: de la supervivencia a la creación.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Muestra en vivo: el único momento en que el visitante experimenta SHIFT en lugar de leer sobre él. -->
+  <section class="breathe section-paper" id="breathe">
+    <div class="container">
+      <div class="section-head reveal">
+        <h2>Toma una respiración antes de leer una frase más</h2>
+        <p class="section-intro">
+          Es un ejercicio real del primer día del programa. Toma menos de un minuto y es el
+          camino más corto para empezar a recuperar el control.
+        </p>
+      </div>
+        <div class="breath" id="breath">
+          <!-- Solo el anillo decorativo queda oculto; el círculo lleva texto real y permanece expuesto. -->
+          <div class="breath-stage">
+            <div class="breath-ring" aria-hidden="true"></div>
+            <div class="breath-circle" id="breathCircle"><span id="breathPhase" aria-live="polite">Un momento</span></div>
+          </div>
+          <div class="breath-info">
+            <!-- La etiqueta de investigación: una afirmación factual sobre la fuente, sin logo
+                 ni "científicamente probado". Los matices viven en la nota. -->
+            <div class="label-row">
+              <p class="label label-sky">Muestra del día 1</p>
+              <p class="label label-sky">Basado en investigación · Stanford 2023</p>
+            </div>
+            <h3>«El botón de calma interno»: el suspiro doble</h3>
+            <ol class="breath-steps">
+              <li>Inhala profundamente por la nariz.</li>
+              <li>Justo después, una segunda inhalación breve por la nariz («llenar hasta el tope»).</li>
+              <li>Una exhalación larga y lenta por la boca, hasta vaciar casi todo el aire.</li>
+            </ol>
+            <p class="breath-note">
+              La técnica se estudió en Stanford: Balban et al., 2023, Cell Reports Medicine.
+              En el estudio se practicó unos 5 minutos al día durante un mes, y se midió una
+              mejora en el estado de ánimo y en los síntomas de ansiedad. Aquí es una muestra
+              breve: de 1 a 3 rondas para una calma inmediata.
+            </p>
+            <div class="breath-actions">
+              <button class="btn btn-primary" id="breathStart" type="button">Prueba un momento del programa</button>
+              <span class="breath-counter" id="breathCounter" aria-live="polite">Tres rondas · menos de un minuto</span>
+            </div>
+            <p class="breath-after" id="breathAfter" hidden>
+              Esto fue un momento del día 1. En el programa hay 21 días como este.
+              <a href="#program">Ir al programa →</a>
+            </p>
+            <p class="breath-disclaimer">
+              Si estás embarazada, tienes una condición cardíaca o respiratoria, o epilepsia, consulta a un médico antes de realizar ejercicios de respiración.
+            </p>
+          </div>
+        </div>
+    </div>
+  </section>
+
+  <!-- El recorrido -->
+  <section class="path section-light" id="path">
+    <div class="container">
+      <div class="section-head reveal">
+        <h2>El SHIFT: cuatro pasos</h2>
+      </div>
+      <!-- step-body envuelve título+párrafo, tipografía grande, y en la mitad libre un escenario
+           vivo: cifra gigante + una fibra que se alarga paso a paso, alimentada por la misma señal
+           .lit del motor de animación. -->
+      <div class="path-grid">
+      <ol class="steps">
+        <li class="step reveal">
+          <span class="step-num">1</span>
+          <div class="step-body">
+            <h3>Conciencia</h3>
+            <p>Identificamos los patrones negativos automáticos: los momentos en que perdemos el control sin darnos cuenta.</p>
+          </div>
+        </li>
+        <li class="step reveal delay-1">
+          <span class="step-num">2</span>
+          <div class="step-body">
+            <h3>Comprensión</h3>
+            <p>Aprendemos la ciencia que hay detrás de la mente: cómo el cerebro, el cuerpo y los hábitos moldean nuestra realidad.</p>
+          </div>
+        </li>
+        <li class="step reveal delay-2">
+          <span class="step-num">3</span>
+          <div class="step-body">
+            <h3>Práctica</h3>
+            <p>Integramos hábitos que moldean la mente: una práctica diaria breve que une cuerpo, mente y emoción.</p>
+          </div>
+        </li>
+        <li class="step reveal delay-3">
+          <span class="step-num">4</span>
+          <div class="step-body">
+            <h3>Creación</h3>
+            <p>Pasamos de la supervivencia a la creación: una vida de elección consciente, crecimiento y amor.</p>
+          </div>
+        </li>
+      </ol>
+      <div class="path-stage" aria-hidden="true">
+        <div class="path-big"><span>1</span><span>2</span><span>3</span><span>4</span></div>
+        <div class="path-fiber"><i></i></div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- El programa: los 21 días -->
+  <section class="program section-dark" id="program">
+    <span class="side-label" aria-hidden="true">El programa</span>
+    <div class="container">
+      <div class="section-head reveal">
+        <h2>El programa de 21 días</h2>
+        <p class="section-intro">
+          Tres semanas. Un paso al día. Un proceso digital acompañado que comienza conociendo
+          el sistema y termina con tu propio plan de creación. Aquí lo tienes, por dentro.
+        </p>
+      </div>
+
+      <div class="program-layout">
+        <div class="program-spine" aria-hidden="true">
+          <span class="program-spine-track"><span class="program-spine-fill" id="spineFill"></span></span>
+        <i data-day="1"></i>
+        <i data-day="2"></i>
+        <i data-day="3"></i>
+        <i data-day="4"></i>
+        <i data-day="5"></i>
+        <i data-day="6"></i>
+        <i data-day="7"></i>
+        <i data-day="8"></i>
+        <i data-day="9"></i>
+        <i data-day="10"></i>
+        <i data-day="11"></i>
+        <i data-day="12"></i>
+        <i data-day="13"></i>
+        <i data-day="14"></i>
+        <i data-day="15"></i>
+        <i data-day="16"></i>
+        <i data-day="17"></i>
+        <i data-day="18"></i>
+        <i data-day="19"></i>
+        <i data-day="20"></i>
+        <i data-day="21"></i>
+        </div>
+        <div class="program-weeks" id="programWeeks">
+        <article class="week-card" data-week="1">
+          <header class="week-head">
+            <span class="week-tag">Semana 1 de 3</span>
+            <h3>Primera semana — Conciencia y conocimiento del sistema</h3>
+          </header>
+          <div class="week-desc"><p>La primera semana es la base de todo.</p><p>Antes de cambiar hábitos, creencias o patrones, conviene entender qué ocurre en el cuerpo. Parece que buena parte de los mecanismos del sistema nervioso y del cerebro se desarrollaron a lo largo de la evolución para mantenernos con vida, no necesariamente para hacernos felices.</p><p>Esta semana conoceremos el sistema nervioso: el estado de supervivencia y el estado de creación, las hormonas que nos influyen, nuestro patrón personal bajo presión, y aprenderemos una primera herramienta de regulación. Es el mapa del que se derivará todo cambio posterior.</p></div>
+          <ol class="day-list">
+            <li class="day-item">
+              <span class="day-no">1</span>
+              <div class="day-body"><h4>Conocer el sistema y saber calmarlo</h4></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">2</span>
+              <div class="day-body"><h4>El modelo Evento–Interpretación–Emoción–Respuesta — qué ocurre realmente entre nosotros y la reacción</h4></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">3</span>
+              <div class="day-body"><h4>Las ondas cerebrales</h4></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">4</span>
+              <div class="day-body"><h4>Las hormonas que nos gobiernan</h4></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">5</span>
+              <div class="day-body"><h4>Diseño del entorno</h4></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">6</span>
+              <div class="day-body"><h4>Biología, no fracaso — y cierre de la primera semana</h4></div>
+            </li>
+            <li class="day-item day-rest">
+              <span class="day-no">7</span>
+              <div class="day-body"><h4>Día de descanso</h4></div>
+            </li>
+          </ol>
+        </article>
+        <article class="week-card" data-week="2">
+          <header class="week-head">
+            <span class="week-tag">Semana 2 de 3</span>
+            <h3>Segunda semana — Cambiar el sistema</h3>
+          </header>
+          <div class="week-desc"><p>La primera semana trató del reconocimiento. La segunda trata del cambio.</p><p>Se considera que el cerebro es «plástico», es decir, capaz de cambiar. Los estudios sugieren que los patrones que se formaron con la repetición podrían, al parecer, también cambiar con la repetición.</p><p>Esta semana entenderemos cómo las creencias y el entorno podrían influir en la biología, cuál es el papel de la dopamina en el deseo y los hábitos, por qué es tan difícil cambiar y cómo, aun así, es posible.</p></div>
+          <ol class="day-list">
+            <li class="day-item">
+              <span class="day-no">8</span>
+              <div class="day-body"><h4>Neuroplasticidad — y el cerebro que no siempre distingue entre realidad e imaginación</h4></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">9</span>
+              <div class="day-body"><h4>El círculo de la identidad «I am» — y nuestros genes no son una sentencia</h4></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">10</span>
+              <div class="day-body"><h4>De lo consciente a lo subconsciente — quién dirige realmente nuestro día</h4></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">11</span>
+              <div class="day-body"><h4>La pesadilla y el sueño</h4></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">12</span>
+              <div class="day-body"><h4>Meditación</h4></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">13</span>
+              <div class="day-body"><h4>Cierre de la segunda semana</h4></div>
+            </li>
+            <li class="day-item day-rest">
+              <span class="day-no">14</span>
+              <div class="day-body"><h4>Día de descanso</h4></div>
+            </li>
+          </ol>
+        </article>
+        <article class="week-card" data-week="3">
+          <header class="week-head">
+            <span class="week-tag">Semana 3 de 3</span>
+            <h3>Tercera semana — Del cuerpo a la vida, y un rumbo hacia adelante</h3>
+          </header>
+          <div class="week-desc"><p>Has llegado a la última semana, y ya no eres la misma persona que empezó.</p><p>Hasta aquí comprendimos el sistema nervioso y empezamos a cambiarlo desde dentro. Esta semana lo llevaremos a la vida misma: entenderemos la química del deseo (la dopamina), fortaleceremos la base física —movimiento y nutrición—, examinaremos quién y qué nos nutre en el entorno, nos enfrentaremos con delicadeza a un miedo, y construiremos una rutina que perdure.</p><p>Y al final, un plan de 90 días y una mirada atrás sobre todo el camino. No metas desde el miedo, sino un rumbo desde el estado de creación. Estos últimos momentos no son el final: son el punto de despegue. Estás justo aquí, y mereces sentirte orgulloso.</p></div>
+          <ol class="day-list">
+            <li class="day-item">
+              <span class="day-no">15</span>
+              <div class="day-body"><h4>Dopamina — la química del deseo</h4></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">16</span>
+              <div class="day-body"><h4>Ejercicio y nutrición — el combustible del cuerpo y la mente</h4></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">17</span>
+              <div class="day-body"><h4>Tu entorno social — quién nutre a quién</h4></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">18</span>
+              <div class="day-body"><h4>Enfrentarse a un miedo</h4></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">19</span>
+              <div class="day-body"><h4>Rutina</h4></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">20</span>
+              <div class="day-body"><h4>Planificar 90 días — la ciencia de las metas que perduran</h4></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">21</span>
+              <div class="day-body"><h4>21 días — una mirada atrás y, desde aquí, hacia adelante</h4></div>
+            </li>
+          </ol>
+        </article>
+        </div>
+      </div>
+
+      <div class="program-cta reveal">
+        <!-- Compra del programa a través de la página de pago segura de Grow. -->
+        <a class="btn btn-primary" href="https://pay.grow.link/MTA0NDE0~ab4b83f16fc1061e8ccf64aaa3ba0a6c-MzgzMDI1Mg">Comprar el programa</a>
+        <a class="btn btn-ghost" href="#contact">Habla primero con nosotros</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Eventos -->
+  <section class="events section-dark" id="events">
+    <span class="side-label" aria-hidden="true">Eventos</span>
+    <!-- Envoltorio sticky de altura cero: el dibujo continúa con el scroll a lo largo de toda la
+         sección, y el scrub termina antes de que la sección se libere. -->
+    <div class="events-video-pin" aria-hidden="true">
+      <video class="events-video" id="eventsVideo" muted loop playsinline preload="none"
+             data-src="assets/video/events-loop.mp4"></video>
+    </div>
+    <div class="events-bg" aria-hidden="true"></div>
+    <div class="container">
+      <div class="section-head reveal">
+        <h2>Los encuentros en vivo</h2>
+        <p class="section-intro">
+          Hay cosas que solo ocurren cuando estamos juntos en un espacio preciso: el sistema
+          nervioso se calma, la frecuencia baja, la energía sube, el aprendizaje se intensifica
+          y el SHIFT se vuelve profundo.
+        </p>
+      </div>
+      <div class="event-cards">
+        <article class="event-card">
+          <figure class="event-media">
+            <picture><source srcset="assets/events/gallery-004.webp" type="image/webp"><img src="assets/events/gallery-004.jpg" alt="Vista del espacio del evento en la naturaleza: esterillas y un círculo de práctica sobre el césped" loading="lazy" width="1200" height="675"></picture>
+          </figure>
+          <div class="event-body">
+            <span class="event-kicker">Una noche o más</span>
+            <h3>Retiros</h3>
+            <p>Salir de la rutina hacia un espacio de calma: práctica, aprendizaje y descanso profundo.</p>
+            <span class="event-soon">Fechas y detalles se publicarán aquí</span>
+            <a class="event-link" href="#contact">Hablemos →</a>
+          </div>
+        </article>
+        <article class="event-card">
+          <figure class="event-media event-featured">
+            <picture><source srcset="assets/events/event-teaching-wide.webp" type="image/webp"><img src="assets/events/event-teaching-wide.jpg" alt="Encuentro SHIFT en Beit Lehem HaGlilit: los dos fundadores enseñan a un grupo en la naturaleza" loading="lazy" width="1200" height="675"></picture>
+            <span class="event-badge">Próximo evento</span>
+            <div class="event-date"><strong>10.10</strong><span>Beit Lehem HaGlilit</span></div>
+          </figure>
+          <div class="event-body">
+            <span class="event-kicker">Unas horas</span>
+            <h3>Eventos inmersivos</h3>
+            <p>Un encuentro potente de unas horas: cuerpo, mente y conciencia en una sola secuencia, con práctica en vivo y una experiencia compartida que permanece contigo.</p>
+            <span class="event-soon">Beit Lehem HaGlilit · 10.10</span>
+            <div class="event-actions">
+              <a class="btn btn-primary event-buy" href="https://pay.grow.link/MTA0NDE0~c3f97d2282fbb957d07092da4fb9063d-MzgzMTUwNg">Comprar entrada</a>
+              <button class="event-link" type="button" data-details>Más detalles →</button>
+              <a class="event-link" href="#contact">Hablemos →</a>
+            </div>
+          </div>
+        </article>
+        <article class="event-card">
+          <figure class="event-media">
+            <picture><source srcset="assets/events/gallery-013.webp" type="image/webp"><img src="assets/events/gallery-013.jpg" alt="Participantes sentados en la naturaleza, atentos durante un encuentro SHIFT" loading="lazy" width="800" height="1200"></picture>
+          </figure>
+          <div class="event-body">
+            <span class="event-kicker">Para grupos privados</span>
+            <h3>Talleres</h3>
+            <p>Talleres a medida para grupos: empresas, equipos y familias. Adaptamos el método, la práctica y las herramientas al grupo y a su objetivo.</p>
+            <span class="event-soon">Para organizar un taller a medida, hablemos</span>
+            <a class="event-link" href="#contact">Hablemos →</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Eventos anteriores: grid en escritorio, carrusel scroll-snap en móvil (solo CSS). -->
+  <section class="past-events section-dark" id="past-events">
+    <span class="side-label" aria-hidden="true">Ya pasó</span>
+    <div class="container">
+      <div class="section-head reveal">
+        <h2>Momentos de eventos anteriores</h2>
+        <p class="section-intro">
+          Del encuentro en Beit Lehem HaGlilit, mayo de 2026.
+        </p>
+      </div>
+
+      <!-- Vídeo resumen: 15MB, se carga solo al pulsar reproducir (preload=none, póster ligero,
+           controles nativos, sin bucle, sin autoplay). -->
+      <figure class="past-video reveal">
+        <video controls preload="none" playsinline
+               poster="assets/events/after-movie-poster.webp"
+               width="1280" height="720"
+               aria-label="Vídeo resumen del encuentro en Beit Lehem HaGlilit, mayo de 2026">
+          <source src="assets/events/after-movie.mp4" type="video/mp4">
+        </video>
+      </figure>
+
+      <!-- Una única tira en movimiento, 18 imágenes. width/height en cada imagen es obligatorio;
+           sin ellos el bucle de relleno se mide antes de la carga y se crea una costura. -->
+      <div class="past-marquee" role="group" aria-label="Imágenes de los eventos anteriores">
+        <button class="reviews-pause" id="pastPause" type="button" aria-pressed="false" aria-label="Pausar la galería de imágenes"><i aria-hidden="true"></i></button>
+        <div class="past-run">
+          <ul class="past-strip" role="list">
+            <li class="past-shot"><picture><source srcset="assets/events/event-booklets.webp" type="image/webp"><img src="assets/events/event-booklets.jpg" alt="Cuadernillos SHIFT de marca dispuestos antes del encuentro" loading="lazy" width="900" height="1200"></picture></li>
+            <li class="past-shot"><picture><source srcset="assets/events/event-aerial.webp" type="image/webp"><img src="assets/events/event-aerial.jpg" alt="Fotografía aérea del espacio del encuentro en Beit Lehem HaGlilit" loading="lazy" width="900" height="1200"></picture></li>
+            <li class="past-shot"><picture><source srcset="assets/events/gallery-099.webp" type="image/webp"><img src="assets/events/gallery-099.jpg" alt="Un grupo grande sentado en círculo en el salón, conversación grupal en una sala interior" loading="lazy" width="1200" height="800"></picture></li>
+            <li class="past-shot"><picture><source srcset="assets/events/event-teaching-wide.webp" type="image/webp"><img src="assets/events/event-teaching-wide.jpg" alt="Or e Itay enseñando ante el público sentado en el encuentro de Beit Lehem HaGlilit, mayo de 2026" loading="lazy" width="1200" height="675"></picture></li>
+            <li class="past-shot"><picture><source srcset="assets/events/gallery-107.webp" type="image/webp"><img src="assets/events/gallery-107.jpg" alt="Un hombre y una mujer sentados conversando en el interior junto a una ventana de madera" loading="lazy" width="1200" height="960"></picture></li>
+            <li class="past-shot"><picture><source srcset="assets/events/gallery-100.webp" type="image/webp"><img src="assets/events/gallery-100.jpg" alt="Un hombre y una mujer sentados con las piernas cruzadas sobre esterillas en una sala con ventana" loading="lazy" width="800" height="1200"></picture></li>
+            <li class="past-shot"><picture><source srcset="assets/events/event-portrait.webp" type="image/webp"><img src="assets/events/event-portrait.jpg" alt="Itay de pie ante el público en el encuentro de Beit Lehem HaGlilit, mayo de 2026" loading="lazy" width="800" height="1200"></picture></li>
+            <li class="past-shot"><picture><source srcset="assets/events/gallery-044.webp" type="image/webp"><img src="assets/events/gallery-044.jpg" alt="Dos hombres agachados al aire libre frente a una pizarra con un diagrama de ondas" loading="lazy" width="1200" height="800"></picture></li>
+            <li class="past-shot"><picture><source srcset="assets/events/event-group.webp" type="image/webp"><img src="assets/events/event-group.jpg" alt="Or enseñando con Itay a su lado, dibujos de ondas cerebrales en la pizarra — Beit Lehem HaGlilit, mayo de 2026" loading="lazy" width="1200" height="800"></picture></li>
+            <li class="past-shot"><picture><source srcset="assets/events/gallery-028.webp" type="image/webp"><img src="assets/events/gallery-028.jpg" alt="Dos mujeres sentadas frente a frente al aire libre y sonriendo, una pizarra con un dibujo detrás de ellas" loading="lazy" width="800" height="1200"></picture></li>
+            <li class="past-shot"><picture><source srcset="assets/events/gallery-013.webp" type="image/webp"><img src="assets/events/gallery-013.jpg" alt="Un grupo de personas sentadas sobre una alfombra al aire libre y escuchando, un jardín al fondo" loading="lazy" width="800" height="1200"></picture></li>
+            <li class="past-shot"><picture><source srcset="assets/events/gallery-089.webp" type="image/webp"><img src="assets/events/gallery-089.jpg" alt="Una mujer sostiene un cuenco tibetano y una maza, al fondo una persona tumbada sobre una esterilla" loading="lazy" width="800" height="1200"></picture></li>
+            <li class="past-shot"><picture><source srcset="assets/events/gallery-054.webp" type="image/webp"><img src="assets/events/gallery-054.jpg" alt="Un hombre tumbado en un baño de hielo al aire libre con los ojos cerrados" loading="lazy" width="800" height="1200"></picture></li>
+            <li class="past-shot"><picture><source srcset="assets/events/gallery-140.webp" type="image/webp"><img src="assets/events/gallery-140.jpg" alt="Un hombre grita de alegría al aire libre sosteniendo una camiseta sobre su cabeza, con gente alrededor" loading="lazy" width="739" height="1200"></picture></li>
+            <li class="past-shot"><picture><source srcset="assets/events/gallery-142.webp" type="image/webp"><img src="assets/events/gallery-142.jpg" alt="Un grupo de hombres de pie al aire libre después de una inmersión, conversando y sonriendo" loading="lazy" width="1200" height="800"></picture></li>
+            <li class="past-shot"><picture><source srcset="assets/events/gallery-135.webp" type="image/webp"><img src="assets/events/gallery-135.jpg" alt="Dos participantes de pie al aire libre frente a un arbusto verde, abrazándose y sonriendo" loading="lazy" width="800" height="1200"></picture></li>
+            <li class="past-shot"><picture><source srcset="assets/events/gallery-043.webp" type="image/webp"><img src="assets/events/gallery-043.jpg" alt="Un hombre sentado con las piernas cruzadas sobre el césped al aire libre con gafas de sol" loading="lazy" width="800" height="1200"></picture></li>
+            <li class="past-shot"><picture><source srcset="assets/events/gallery-004.webp" type="image/webp"><img src="assets/events/gallery-004.jpg" alt="Fotografía aérea de un patio con esterillas, mesas y personas preparándose para una actividad" loading="lazy" width="1200" height="675"></picture></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Barra de reseñas reales: el texto es exacto, sin editar. Cada reseña se escribe una sola
+         vez; main.js la duplica hasta el ancho del bucle y construye la segunda tira. -->
+    <div class="reviews-marquee" role="group" aria-label="Reseñas de los eventos">
+      <!-- Movimiento automático sobre 5s exige un mecanismo de parada visible; el botón vive solo con JS. -->
+      <button class="reviews-pause" id="reviewsPause" type="button" aria-pressed="false" aria-label="Pausar la barra de reseñas"><i aria-hidden="true"></i></button>
+      <div class="reviews-run">
+        <ul class="reviews-strip" role="list">
+          <li class="review-card"><span class="review-mark" aria-hidden="true">«</span><p>Tenía muchas ganas de escribiros para deciros que el evento fue perfecto. Superó todas mis expectativas y fue una experiencia increíble y significativa para mí, que de verdad me va a acompañar hacia adelante, porque aprendí muchísimo y me encantaría seguir aprendiendo mucho más.</p><span class="review-by">Tal · Beit Lehem HaGlilit, mayo de 2026</span></li>
+          <li class="review-card"><span class="review-mark" aria-hidden="true">«</span><p>Quiero dar las gracias enormes de todo corazón. Fue un día maravilloso y desbordante. Gracias al espacio reuní el valor para compartir y sacarlo todo. Aunque fuera con la voz entrecortada y con lágrimas, me entregué a la experiencia.</p><span class="review-by">Shon · Beit Lehem HaGlilit, mayo de 2026</span></li>
+          <li class="review-card"><span class="review-mark" aria-hidden="true">«</span><p>¡Fue increíble a otro nivel! Aprendí y descubrí un montón de cosas nuevas sobre mí misma. Siento que me entiendo mejor, con una poderosa sensación de capacidad. ¡Espero vuestro próximo evento!</p><span class="review-by">Omer · Beit Lehem HaGlilit, mayo de 2026</span></li>
+          <li class="review-card"><span class="review-mark" aria-hidden="true">«</span><p>La verdad, increíble; es un evento muy significativo. Las emociones son realmente complejas, y de verdad espero con ganas otro así.</p><span class="review-by">Liraz · Beit Lehem HaGlilit, mayo de 2026</span></li>
+          <li class="review-card"><span class="review-mark" aria-hidden="true">«</span><p>Sabía al cien por cien, sin ninguna duda, que sería espectacular, pero no imaginé un resultado así, con gente tan valiosa y un contenido asombroso. Había personas muy diversas, cada una con un carácter distinto, y el simple hecho de que cada una de ellas, sin importar su edad ni su origen, aceptara abrirse a temas nada fáciles y ser parte de ellos de forma tan expuesta, es algo poderoso y significativo.</p><span class="review-by">Noa · Beit Lehem HaGlilit, mayo de 2026</span></li>
+          <li class="review-card"><span class="review-mark" aria-hidden="true">«</span><p>Una experiencia asombrosa, enriquecedora y empoderadora: un espacio preciso de liberación y buena energía con la gente, con muchísima atención a los pequeños detalles. Solté las riendas y dejé que los facilitadores me guiaran en un viaje breve y especial de autoexploración, y salí con conclusiones y herramientas nuevas que uso en mi día a día. 10/10.</p><span class="review-by">Omri · Beit Lehem HaGlilit, mayo de 2026</span></li>
+          <li class="review-card"><span class="review-mark" aria-hidden="true">«</span><p>El evento fue superimportante para mí. Por primera vez sentí que podía mostrarme desde un punto de vista algo distinto; el ambiente que crearon allí era especial y sin compromisos, y eso permitió que la apertura natural hiciera su parte.</p><span class="review-by">Guy · Beit Lehem HaGlilit, mayo de 2026</span></li>
+          <li class="review-card"><span class="review-mark" aria-hidden="true">«</span><p>Llegué sin demasiadas expectativas y salí con mucho más de lo que pensé que recibiría. Un ambiente especial, gente maravillosa y un contenido que dio espacio para parar, respirar y reconectar conmigo misma. Más allá de la producción cuidada, lo que de verdad marcó la diferencia fue el corazón detrás de cada momento. Una experiencia empoderadora, emocionante y que llena; y no tengo duda de que esto es solo el comienzo de algo grande. ❤️</p><span class="review-by">Noy · Beit Lehem HaGlilit, mayo de 2026</span></li>
+        </ul>
+      </div>
+    </div>
+    <!-- CTA bajo las reseñas: dejar los datos (abre join-form) o WhatsApp directo. -->
+    <div class="reviews-cta container reveal">
+      <p class="reviews-cta-line">¿Quieres asistir al próximo evento?</p>
+      <div class="reviews-cta-btns">
+        <a class="btn btn-primary" href="https://pay.grow.link/MTA0NDE0~c3f97d2282fbb957d07092da4fb9063d-MzgzMTUwNg">Comprar entrada</a>
+        <a class="btn btn-ghost" href="https://shift-21-day-course-ceos.web.app" target="_blank" rel="noopener" data-join>Dejar mis datos</a>
+        <a class="btn btn-ghost" href="https://wa.me/972528972050?text=%C2%A1Hola%21%20Vi%20las%20rese%C3%B1as%20y%20me%20encantar%C3%ADa%20saber%20m%C3%A1s%20sobre%20el%20programa%20SHIFT%20%F0%9F%99%8F" target="_blank" rel="noopener">Mensaje por WhatsApp</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Nuestra historia -->
+  <section class="story section-light" id="story">
+    <div class="container story-grid">
+      <figure class="story-media reveal">
+        <picture><source srcset="assets/img/story.webp" type="image/webp"><img src="assets/img/story.jpg" alt="Una figura mira hacia un horizonte iluminado antes del amanecer" loading="lazy" width="1600" height="2068"></picture>
+      </figure>
+      <div class="story-body">
+        <h2 class="reveal delay-1">Del dolor nació un gran avance</h2>
+        <p class="reveal delay-2">
+          Nuestra propia necesidad de salir de una crisis profunda nos llevó a ahondar en
+          nuestros sistemas internos, recopilando información y principios de la neurociencia,
+          la epigenética y distintos mundos terapéuticos. Atravesamos un cambio fuerte y
+          estable, y comprendimos que teníamos que compartirlo con cuantas más personas mejor.
+          De esa visión nació SHIFT: un ecosistema que hace accesible un viaje práctico, de la
+          reactividad automática y los patrones negativos hacia una vida de elección, creación
+          y crecimiento, a través del aprendizaje sobre los sistemas humanos y principios
+          científicos y psicológicos.
+        </p>
+        <blockquote class="reveal delay-3">
+          No enseñamos desde un lugar de perfección, sino desde el camino que recorrimos nosotros mismos y el que seguimos recorriendo.
+        </blockquote>
+        <!-- Formato "antes y hoy": un par de imágenes con la misma proporción. -->
+        <div class="founders reveal delay-3">
+          <span class="founders-label">Fundadores de SHIFT</span>
+          <div class="founders-row">
+          <article class="founder">
+            <div class="founder-pair">
+              <figure class="founder-shot">
+                <picture><source srcset="assets/img/founder-itay.webp" type="image/webp"><img src="assets/img/founder-itay.jpg" alt="Itay Berman con uniforme y equipo de combate en una cima al atardecer, durante su servicio militar" loading="lazy" width="1183" height="1482"></picture>              </figure>
+              <figure class="founder-shot">
+                <picture><source srcset="assets/img/founder-itay-now.webp" type="image/webp"><img src="assets/img/founder-itay-now.jpg" alt="Itay Berman de pie con los ojos cerrados en un campo verde abierto" loading="lazy" width="1183" height="1482"></picture>              </figure>
+            </div>
+            <h3 class="founder-name">Itay Berman</h3>
+            <p class="founder-role">Cofundador · excombatiente y excomandante · entrenador físico · coach de PNL certificado</p>
+            <p class="founder-story">
+              Durante años hubo una brecha enorme entre la realidad que imaginaba en mi cabeza
+              y la que vivía de verdad. Me acompañaban creencias limitantes y patrones
+              destructivos que estaban enterrados muy hondo y de los que no era consciente.
+              Después del servicio militar todo salió a flote de golpe, y dentro de ese gran
+              dolor llegó el deseo de conocer mi sistema y entender cómo funcionar mejor con él.
+              Con el tiempo ocurrió un gran shift en mi vida: los patrones positivos tomaron el
+              mando y se fortalecieron, y la brecha entre la imaginación y la realidad se cerró
+              por completo. Comprendí que quería llevar esa luz a cuantas más personas mejor, y
+              ahí, junto a Or Meir, nació SHIFT.
+            </p>
+          </article>
+          <article class="founder">
+            <div class="founder-pair">
+              <figure class="founder-shot">
+                <picture><source srcset="assets/img/founder-or.webp" type="image/webp"><img src="assets/img/founder-or.jpg" alt="Or Meir Cohen con uniforme y chaleco de combate en el campo, sonriendo sobre un fondo de dunas al atardecer" loading="lazy" width="1183" height="1482"></picture>              </figure>
+              <figure class="founder-shot">
+                <picture><source srcset="assets/img/founder-or-now.webp" type="image/webp"><img src="assets/img/founder-or-now.jpg" alt="Or Meir Cohen enseñando ante un público al aire libre, una pizarra blanca con dibujos de ondas cerebrales a su lado" loading="lazy" width="1183" height="1482"></picture>              </figure>
+            </div>
+            <h3 class="founder-name">Or Meir Cohen</h3>
+            <p class="founder-role">Cofundador · excombatiente y excomandante, estudiante de Derecho.</p>
+            <p class="founder-story">
+              El paso de la supervivencia a la creación no lo aprendí en un libro. Después de la
+              guerra me encontré frente a un sistema nervioso que se mantenía en alerta incluso
+              cuando el combate había terminado, y la búsqueda de la salida se convirtió en lo
+              que SHIFT enseña hoy.
+            </p>
+          </article>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Qué se abre -->
+  <section class="outcomes section-paper" id="outcomes">
+    <div class="container">
+      <div class="section-head reveal">
+        <h2>Qué se abre cuando haces SHIFT</h2>
+      </div>
+      <div class="chip-groups reveal delay-1">
+        <div class="chip-group">
+          <h3 class="chip-group-title">Hacia dentro</h3>
+          <ul class="chips">
+            <li>Un conocimiento profundo de ti mismo</li>
+            <li>Seguridad interior</li>
+            <li>Conexión con la intuición</li>
+            <li>Regulación emocional</li>
+            <li>Calma interior</li>
+          </ul>
+        </div>
+        <div class="chip-group">
+          <h3 class="chip-group-title">Hacia adelante</h3>
+          <ul class="chips">
+            <li>Fe en lo posible</li>
+            <li>Autorrealización</li>
+            <li>Una puerta a la creatividad</li>
+            <li>Claridad y enfoque</li>
+            <li>Resiliencia frente a la presión</li>
+          </ul>
+        </div>
+        <div class="chip-group">
+          <h3 class="chip-group-title">En el día a día</h3>
+          <ul class="chips">
+            <li>Un mayor sentido de felicidad</li>
+            <li>Una memoria más aguda</li>
+            <li>Habilidades personales y sociales elevadas</li>
+            <li>Presencia en el momento</li>
+            <li>Equilibrio y serenidad</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  </main>
+
+  <!-- Escena de cierre: llamada a la acción + footer, una gran pantalla final -->
+  <div class="closing">
+  <section class="cta section-dark" id="contact">
+    <div class="container narrow cta-content">
+      <h2 class="reveal">¿Listo para hacer SHIFT?</h2>
+      <p class="reveal delay-1">
+        Conozcámonos. Una breve conversación por WhatsApp, un mensaje en Instagram o
+        <a href="mailto:ormeirc@gmail.com" class="cta-mail">por correo</a>,
+        sin compromiso y con total cercanía.
+      </p>
+      <div class="hero-ctas reveal delay-2">
+        <a href="https://wa.me/972528972050?text=%C2%A1Hola%21%20Me%20encantar%C3%ADa%20recibir%20m%C3%A1s%20informaci%C3%B3n%20sobre%20el%20programa%20SHIFT." target="_blank" rel="noopener" class="btn btn-primary">Hablar por WhatsApp</a>
+        <a href="https://www.instagram.com/shift_ecosystem/" target="_blank" rel="noopener" class="btn btn-ghost">Ir a nuestro Instagram</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="closing-word" aria-hidden="true">SHIFT</div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <img src="assets/brand/logo-white.png" alt="SHIFT" class="footer-logo" width="1531" height="940">
+        <p class="footer-tagline"><span class="footer-pulse" aria-hidden="true"></span>De la supervivencia a la creación · Shift Your Perspective</p>
+      </div>
+      <nav class="footer-links" aria-label="Navegación inferior">
+        <a href="#method">El método</a>
+        <a href="#habits">Hábitos</a>
+        <a href="#story">Nuestra historia</a>
+        <a href="#program">El programa</a>
+        <a href="#events">Eventos</a>
+        <a href="#contact">Contacto</a>
+        <a href="https://www.instagram.com/shift_ecosystem/" target="_blank" rel="noopener">Instagram</a>
+      </nav>
+    </div>
+    <div class="container footer-bottom">
+      <p>© 2026 SHIFT. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+  </div><!-- /closing -->
+
+  <!-- Formulario para dejar los datos (join-form en main.js). <dialog> nativo: captura de foco,
+       ESC y backdrop gratis y accesibles. Sin JS queda cerrado y el botón lleva directamente a la app. -->
+  <dialog class="join-dialog" id="joinDialog" aria-labelledby="joinTitle">
+    <form class="join-form" id="joinForm" method="dialog" novalidate>
+      <button type="button" class="join-close" data-join-close aria-label="Cerrar">×</button>
+      <h2 id="joinTitle">¿Quieres unirte? Déjanos tus datos</h2>
+      <p class="join-sub">Te contactaremos con toda la información sobre el programa. Sin compromiso.</p>
+
+      <label class="join-field">
+        <span>Nombre completo</span>
+        <input type="text" name="name" autocomplete="name" required minlength="2" placeholder="Tu nombre">
+      </label>
+
+      <div class="join-row">
+        <label class="join-field">
+          <span>Edad</span>
+          <input type="number" name="age" inputmode="numeric" required min="14" max="120" placeholder="Edad">
+        </label>
+        <label class="join-field">
+          <span>Sexo</span>
+          <select name="gender" required>
+            <option value="" disabled selected>Seleccionar</option>
+            <option value="Mujer">Mujer</option>
+            <option value="Hombre">Hombre</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </label>
+      </div>
+
+      <label class="join-field">
+        <span>Teléfono</span>
+        <input type="tel" name="phone" autocomplete="tel" inputmode="tel" required placeholder="600 000 000">
+      </label>
+
+      <button type="submit" class="btn btn-primary join-submit">Enviar datos</button>
+      <p class="join-status" id="joinStatus" role="status" aria-live="polite"></p>
+    </form>
+  </dialog>
+
+  <!-- Más detalles sobre "un día de SHIFT" (details-dialog en main.js). <dialog> nativo + scroll interno. -->
+  <dialog class="details-dialog" id="detailsDialog" aria-labelledby="detailsTitle">
+    <!-- data-lenis-prevent: sin él el motor de scroll suave (Lenis) captura la rueda y el scroll
+         del contenido largo dentro del modal no funciona. -->
+    <div class="details-inner" data-lenis-prevent>
+      <button type="button" class="join-close" data-details-close aria-label="Cerrar">×</button>
+      <span class="details-kicker">Un día de SHIFT</span>
+      <h2 id="detailsTitle">Un momento para parar todo, respirar hondo y rediseñarte</h2>
+      <p class="details-lead">
+        De las grietas y las comprensiones que encontramos por el camino nació SHIFT, para
+        compartir las herramientas que nos ayudaron a volver a crecer. Un espacio abierto y
+        acogedor donde se aprende a pasar de un estado de supervivencia y estrés a la creación
+        y la calma interior.
+      </p>
+
+      <h3>Lo que te espera allí</h3>
+      <ul class="details-list">
+        <li><strong>La arquitectura del cambio</strong> — principios clave de la neurociencia, la conducta y la epigenética para cambiar los patrones automáticos.</li>
+        <li><strong>Trabajo emocional</strong> — una sesión profunda de rebirthing (respiración circular) para liberar bloqueos y renovarse.</li>
+        <li><strong>Resiliencia física y movimiento</strong> — práctica de yoga y baño de hielo para regular el sistema nervioso.</li>
+        <li><strong>Inspiración y herramientas</strong> — meditación guiada, escritura y una conversación abierta sobre el diseño de la mente, la sanación y el crecimiento.</li>
+      </ul>
+
+      <h3>El horario</h3>
+      <ul class="details-schedule">
+        <li><span>8:30–9:30</span> Llegada, café y encuentro</li>
+        <li><span>9:30–10:15</span> Charla de apertura y meditación guiada</li>
+        <li><span>10:30–12:15</span> Rebirthing / yoga + hielo (en grupos)</li>
+        <li><span>12:15–13:00</span> Pausa para comer</li>
+        <li><span>13:00–14:45</span> Yoga + hielo / rebirthing (intercambio)</li>
+        <li><span>14:45–15:30</span> Charla de cierre, meditación y herramientas para continuar</li>
+      </ul>
+
+      <p class="details-food">
+        A lo largo del día: café y té frío sin límite, y un almuerzo abundante — sándwiches de
+        brioche, quiches, ensaladas y fruta.
+      </p>
+
+      <p class="details-note">
+        Nuestro viaje está entrelazado — historias distintas, un dolor distinto, pero un mismo
+        camino hacia la sanación. Te invitamos a caminar con nosotros y a ser parte de una
+        comunidad que aprende, evoluciona y sana.
+      </p>
+
+      <a class="btn btn-primary details-buy" href="https://pay.grow.link/MTA0NDE0~c3f97d2282fbb957d07092da4fb9063d-MzgzMTUwNg">Comprar entrada</a>
+    </div>
+  </dialog>
+
+  <script src="assets/vendor/gsap.min.js" defer></script>
+  <script src="assets/vendor/ScrollTrigger.min.js" defer></script>
+  <script src="assets/vendor/lenis.min.js" defer></script>
+  <script src="js/motion.js?v=20260812d" defer></script>
+  <script src="js/main.js?v=20260812d" defer></script>
+</body>
+</html>
