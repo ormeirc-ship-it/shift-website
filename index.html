@@ -76,7 +76,7 @@
   }
   </script>
   <!-- פרמטר הגרסה שובר cache ישן אחרי כל פריסה - לעדכן בכל שינוי CSS/JS -->
-  <link rel="stylesheet" href="css/style.css?v=20260812d">
+  <link rel="stylesheet" href="css/style.css?v=20260812e">
   <script>
     document.documentElement.classList.add('js');
     // מנוע התנועה מוכרז מראש כדי שחוקי ה-reveal של ה-CSS לא יידלקו לרגע;
@@ -102,11 +102,19 @@
 
   <!-- בורר שפה - position:fixed מעל ה-preloader (z-index 10000), מופיע כבר
        במסך הפתיחה. הקישורים יחסיים; ב-index.html העברית היא הפעילה. -->
-  <nav class="lang-switch" aria-label="Language · שפה · Idioma">
-    <a href="index.html" hreflang="he" lang="he" aria-current="page">עב</a>
-    <a href="en.html" hreflang="en" lang="en">EN</a>
-    <a href="es.html" hreflang="es" lang="es">ES</a>
-  </nav>
+  <!-- בורר שפה נפתח (lang-select ב-main.js): כפתור מכווץ שנפתח לכל השפות. -->
+  <div class="lang-select" dir="ltr">
+    <button class="lang-toggle" id="langToggle" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Language / שפה / Idioma">
+      <svg class="lang-globe" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.6 2.7 2.6 15.3 0 18M12 3c-2.6 2.7-2.6 15.3 0 18"/></svg>
+      <span class="lang-cur">עברית</span>
+      <svg class="lang-caret" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <div class="lang-menu" id="langMenu" role="menu">
+      <a href="index.html" class="lang-opt active" hreflang="he" lang="he" role="menuitem">עברית</a>
+      <a href="en.html" class="lang-opt" hreflang="en" lang="en" role="menuitem">English</a>
+      <a href="es.html" class="lang-opt" hreflang="es" lang="es" role="menuitem">Español</a>
+    </div>
+  </div>
 
   <!-- מסך פתיחה - נסגר ברגע שהפריים הראשון של הרצף מוכן, לא כשכולו נטען.
        המשפט "מהישרדות ליצירה" עבר לרגע ההגעה אל האור, שם הוא הפואנטה. -->
@@ -1140,7 +1148,7 @@
   <script src="assets/vendor/gsap.min.js" defer></script>
   <script src="assets/vendor/ScrollTrigger.min.js" defer></script>
   <script src="assets/vendor/lenis.min.js" defer></script>
-  <script src="js/motion.js?v=20260812d" defer></script>
-  <script src="js/main.js?v=20260812d" defer></script>
+  <script src="js/motion.js?v=20260812e" defer></script>
+  <script src="js/main.js?v=20260812e" defer></script>
 </body>
 </html>

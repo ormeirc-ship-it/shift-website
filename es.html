@@ -72,7 +72,7 @@
   }
   </script>
   <!-- El parámetro de versión rompe la caché antigua tras cada despliegue: actualizar en cada cambio de CSS/JS -->
-  <link rel="stylesheet" href="css/style.css?v=20260812d">
+  <link rel="stylesheet" href="css/style.css?v=20260812e">
   <script>
     document.documentElement.classList.add('js');
     // El motor de animación se declara por adelantado para que las reglas de reveal del CSS
@@ -94,11 +94,19 @@
 
   <!-- Selector de idioma: position:fixed sobre el preloader (z-index 10000), aparece ya
        en la pantalla de apertura. Los enlaces son relativos; en es.html el español es el activo. -->
-  <nav class="lang-switch" aria-label="Language · שפה · Idioma">
-    <a href="index.html" hreflang="he" lang="he">עב</a>
-    <a href="en.html" hreflang="en" lang="en">EN</a>
-    <a href="es.html" hreflang="es" lang="es" aria-current="page">ES</a>
-  </nav>
+  <!-- בורר שפה נפתח (lang-select ב-main.js): כפתור מכווץ שנפתח לכל השפות. -->
+  <div class="lang-select" dir="ltr">
+    <button class="lang-toggle" id="langToggle" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Language / שפה / Idioma">
+      <svg class="lang-globe" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.6 2.7 2.6 15.3 0 18M12 3c-2.6 2.7-2.6 15.3 0 18"/></svg>
+      <span class="lang-cur">Español</span>
+      <svg class="lang-caret" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <div class="lang-menu" id="langMenu" role="menu">
+      <a href="index.html" class="lang-opt" hreflang="he" lang="he" role="menuitem">עברית</a>
+      <a href="en.html" class="lang-opt" hreflang="en" lang="en" role="menuitem">English</a>
+      <a href="es.html" class="lang-opt active" hreflang="es" lang="es" role="menuitem">Español</a>
+    </div>
+  </div>
 
   <!-- Pantalla de apertura: se cierra en cuanto el primer fotograma de la secuencia está listo,
        no cuando todo ha cargado. La frase "de la supervivencia a la creación" se trasladó al momento de la llegada a la luz. -->
@@ -1063,7 +1071,7 @@
   <script src="assets/vendor/gsap.min.js" defer></script>
   <script src="assets/vendor/ScrollTrigger.min.js" defer></script>
   <script src="assets/vendor/lenis.min.js" defer></script>
-  <script src="js/motion.js?v=20260812d" defer></script>
-  <script src="js/main.js?v=20260812d" defer></script>
+  <script src="js/motion.js?v=20260812e" defer></script>
+  <script src="js/main.js?v=20260812e" defer></script>
 </body>
 </html>

@@ -241,6 +241,25 @@ onScroll();
 window.addEventListener('scroll', onScroll, { passive: true });
 });
 
+// ── בורר שפה נפתח (lang-select) - לחיצה חושפת את כל השפות ────────────
+// האפשרויות הן קישורים לעמודי השפה (index/en/es), אז בחירה = ניווט.
+// כאן רק פתיחה/סגירה של התפריט + סגירה בלחיצה בחוץ / ‏Esc.
+safe('lang-select', () => {
+  const toggle = document.getElementById('langToggle');
+  const menu = document.getElementById('langMenu');
+  if (!toggle || !menu) return;
+  const close = () => { menu.classList.remove('open'); toggle.setAttribute('aria-expanded', 'false'); };
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const open = menu.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', String(open));
+  });
+  document.addEventListener('click', (e) => {
+    if (menu.classList.contains('open') && !(e.target.closest && e.target.closest('.lang-select'))) close();
+  });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+});
+
 // תפריט מסך מלא
 safe('menu', () => {
 const burger = document.getElementById('navBurger');
