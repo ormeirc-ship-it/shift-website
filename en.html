@@ -64,7 +64,7 @@
   }
   </script>
   <!-- Version param busts stale cache after each deploy - update on any CSS/JS change -->
-  <link rel="stylesheet" href="css/style.css?v=20260812e">
+  <link rel="stylesheet" href="css/style.css?v=20260812f">
   <script>
     document.documentElement.classList.add('js');
     if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -82,12 +82,12 @@
        appears already on the opening screen. Links are relative; on en.html English is active. -->
   <!-- בורר שפה נפתח (lang-select ב-main.js): כפתור מכווץ שנפתח לכל השפות. -->
   <div class="lang-select" dir="ltr">
-    <button class="lang-toggle" id="langToggle" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Language / שפה / Idioma">
+    <button class="lang-toggle" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Language / שפה / Idioma">
       <svg class="lang-globe" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.6 2.7 2.6 15.3 0 18M12 3c-2.6 2.7-2.6 15.3 0 18"/></svg>
       <span class="lang-cur">English</span>
       <svg class="lang-caret" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
     </button>
-    <div class="lang-menu" id="langMenu" role="menu">
+    <div class="lang-menu" role="menu">
       <a href="index.html" class="lang-opt" hreflang="he" lang="he" role="menuitem">עברית</a>
       <a href="en.html" class="lang-opt active" hreflang="en" lang="en" role="menuitem">English</a>
       <a href="es.html" class="lang-opt" hreflang="es" lang="es" role="menuitem">Español</a>
@@ -117,10 +117,17 @@
         <a href="#events">Events</a>
         <a href="#story">Our Story</a>
       </nav>
-      <div class="nav-lang" aria-label="Language">
-        <a href="index.html" hreflang="he" lang="he">עב</a>
-        <a href="en.html" hreflang="en" lang="en" aria-current="page">EN</a>
-        <a href="es.html" hreflang="es" lang="es">ES</a>
+      <div class="lang-select in-nav" dir="ltr">
+        <button class="lang-toggle" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Language / שפה / Idioma">
+          <svg class="lang-globe" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.6 2.7 2.6 15.3 0 18M12 3c-2.6 2.7-2.6 15.3 0 18"/></svg>
+          <span class="lang-cur">English</span>
+          <svg class="lang-caret" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="lang-menu" role="menu">
+          <a href="index.html" class="lang-opt" hreflang="he" lang="he" role="menuitem">עברית</a>
+          <a href="en.html" class="lang-opt active" hreflang="en" lang="en" role="menuitem">English</a>
+          <a href="es.html" class="lang-opt" hreflang="es" lang="es" role="menuitem">Español</a>
+        </div>
       </div>
       <a href="#contact" class="btn btn-primary btn-nav">Let's talk</a>
       <button class="nav-burger" id="navBurger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
@@ -1004,7 +1011,7 @@
   <script src="assets/vendor/gsap.min.js" defer></script>
   <script src="assets/vendor/ScrollTrigger.min.js" defer></script>
   <script src="assets/vendor/lenis.min.js" defer></script>
-  <script src="js/motion.js?v=20260812e" defer></script>
-  <script src="js/main.js?v=20260812e" defer></script>
+  <script src="js/motion.js?v=20260812f" defer></script>
+  <script src="js/main.js?v=20260812f" defer></script>
 </body>
 </html>

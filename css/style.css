@@ -94,8 +94,8 @@ html.preloader-done .preloader {
   z-index: 10000;
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
-/* בולט במסך הפתיחה; נעלם בגלילה כשסרגל הניווט מופיע (הבורר הקבוע חי שם). */
-html.is-scrolled .lang-select {
+/* בורר הפתיחה בלבד נעלם בגלילה; זה שבתוך הסרגל (.in-nav) נשאר. */
+html.is-scrolled .lang-select:not(.in-nav) {
   opacity: 0;
   transform: translateY(-10px);
   pointer-events: none;
@@ -139,6 +139,15 @@ html.is-scrolled .lang-select {
   box-shadow: 0 16px 38px rgba(0, 0, 0, 0.45);
 }
 .lang-menu.open { display: flex; }
+/* וריאנט בתוך סרגל הניווט: יושב ב-flex (לא fixed), נשאר בגלילה, מתאים לגוון */
+.lang-select.in-nav { position: relative; top: auto; inset-inline-end: auto; z-index: 50; }
+.lang-select.in-nav .lang-toggle { padding: 6px 11px; font-size: 0.8rem; }
+html.nav-light .lang-select.in-nav .lang-toggle {
+  background: rgba(24, 22, 59, 0.05);
+  border-color: var(--line);
+  color: var(--ink);
+}
+@media (hover: hover) { html.nav-light .lang-select.in-nav .lang-toggle:hover { background: rgba(24, 22, 59, 0.1); border-color: var(--ink-faint); } }
 .lang-opt {
   text-align: start;
   padding: 9px 13px;
@@ -271,24 +280,6 @@ h3 {
   transition: color 0.2s ease;
 }
 @media (hover: hover) { .nav-links a:hover { color: #fff; } }
-/* בורר שפה קבוע בתוך הסרגל - מלווה את גוון ה-nav (כהה/בהיר) בכל השפות */
-.nav-lang { display: flex; align-items: center; gap: 2px; }
-.nav-lang a {
-  padding: 4px 8px;
-  border-radius: var(--pill);
-  color: var(--white-soft);
-  text-decoration: none;
-  font-size: 0.82rem;
-  font-weight: 600;
-  line-height: 1;
-  letter-spacing: 0.02em;
-  transition: color 0.2s ease, background-color 0.2s ease;
-}
-@media (hover: hover) { .nav-lang a:not([aria-current]):hover { color: #fff; } }
-.nav-lang a[aria-current="page"] { color: var(--navy-deep); background: var(--sky); }
-html.nav-light .nav-lang a { color: var(--ink-soft); }
-@media (hover: hover) { html.nav-light .nav-lang a:not([aria-current]):hover { color: var(--navy); } }
-html.nav-light .nav-lang a[aria-current="page"] { color: var(--navy-deep); background: var(--sky); }
 /* (בלוק ה-nav-burger הקדם-איזאנמי אוחד אל ההגדרה היחידה למטה - 🟢) */
 /* (חוקי ה-span הישירים של העידן הקדם-איזאנמי הוסרו - אחרי הסרת המילה
    "תפריט" ה-span:first/last-child שלהם היה תופס את מכולת הקווים עצמה

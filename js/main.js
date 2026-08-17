@@ -245,19 +245,28 @@ window.addEventListener('scroll', onScroll, { passive: true });
 // האפשרויות הן קישורים לעמודי השפה (index/en/es), אז בחירה = ניווט.
 // כאן רק פתיחה/סגירה של התפריט + סגירה בלחיצה בחוץ / ‏Esc.
 safe('lang-select', () => {
-  const toggle = document.getElementById('langToggle');
-  const menu = document.getElementById('langMenu');
-  if (!toggle || !menu) return;
-  const close = () => { menu.classList.remove('open'); toggle.setAttribute('aria-expanded', 'false'); };
-  toggle.addEventListener('click', (e) => {
-    e.stopPropagation();
-    const open = menu.classList.toggle('open');
-    toggle.setAttribute('aria-expanded', String(open));
+  // מבוסס-מחלקות כדי לתמוך בשני בוררים: זה שבמסך הפתיחה וזה שבסרגל הניווט.
+  const items = [...document.querySelectorAll('.lang-select')].map((sel) => ({
+    toggle: sel.querySelector('.lang-toggle'),
+    menu: sel.querySelector('.lang-menu'),
+  })).filter((it) => it.toggle && it.menu);
+  if (!items.length) return;
+  const closeAll = () => items.forEach((it) => {
+    it.menu.classList.remove('open');
+    it.toggle.setAttribute('aria-expanded', 'false');
+  });
+  items.forEach((it) => {
+    it.toggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const willOpen = !it.menu.classList.contains('open');
+      closeAll();
+      if (willOpen) { it.menu.classList.add('open'); it.toggle.setAttribute('aria-expanded', 'true'); }
+    });
   });
   document.addEventListener('click', (e) => {
-    if (menu.classList.contains('open') && !(e.target.closest && e.target.closest('.lang-select'))) close();
+    if (!(e.target.closest && e.target.closest('.lang-select'))) closeAll();
   });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAll(); });
 });
 
 // תפריט מסך מלא
