@@ -102,7 +102,14 @@
           seenSections[id] = 1;
           safe(function () { T.event('section_view', { section: id }); });
         });
-      }, { threshold: 0.4 });
+      }, {
+        // **לא threshold של אחוזים.** המקטעים בעמוד הזה גבוהים מהמסך, ולכן
+        // "40% מהמקטע נראה" לא מתרחש לעולם ואף אירוע לא היה נורה (נבדק).
+        // במקום זה: רצועה צרה במרכז המסך — המקטע נספר כשהוא מגיע לאמצע,
+        // וזו גם ההגדרה הנכונה של "מה המבקר מסתכל עליו עכשיו".
+        rootMargin: '-45% 0px -45% 0px',
+        threshold: 0,
+      });
       document.querySelectorAll('section, .section-light, .section-dark, .section-paper')
         .forEach(function (s) { io.observe(s); });
     }
