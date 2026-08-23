@@ -459,9 +459,19 @@
   };
 
   // לחיצה מתה: אם אחרי 700ms לא היה ניווט ולא השתנה כלום ב-DOM — הפקד לא עשה כלום.
+  //
+  // ⚠️ שדות טופס מוחרגים לחלוטין. לחיצה על תיבת טקסט רק ממקדת אותה: אין ניווט
+  // ואין שינוי ב-DOM, ולכן היא נראית בדיוק כמו לחיצה מתה. זה נתפס בפועל —
+  // הלוח דיווח על "#intention-text נלחץ ולא עושה כלום" ב-SHIFT+, כשכל מה
+  // שקרה הוא שמישהו לחץ על תיבת הכתיבה כדי להתחיל להקליד. ממצא שקרי אחד כזה
+  // מספיק כדי שיפסיקו להאמין לכל הדוח.
+  var DEAD_CLICK_IGNORE = /^(input:|textarea|select)/;
+
   Telemetry.prototype.watchDead = function (el, props) {
     var self = this;
     if (!window.MutationObserver) return;
+    if (DEAD_CLICK_IGNORE.test(props.kind || '')) return;
+    if (el && el.closest && el.closest('input,textarea,select,label,[contenteditable]')) return;
     var url = location.href;
     var changed = false;
     var obs = new MutationObserver(function () { changed = true; });
@@ -469,7 +479,7 @@
     catch (e) { return; }
     setTimeout(function () {
       obs.disconnect();
-      if (!changed && location.href === url && props.kind !== 'input:text') {
+      if (!changed && location.href === url) {
         self.push('dead_click', { label: props.label, path: props.path });
       }
     }, 700);
