@@ -38,6 +38,8 @@
   var SESSION_GAP_MS = 30 * 60 * 1000;
   var LABEL_MAX = 70;
   var QUEUE_MAX = 300;          // תקרה לתור המקומי — לא מצטבר לנצח באוף-ליין
+  var SESSION_EVENT_MAX = 1500; // תקרת אירועים לביקור — הגנה מפני לולאה שמציפה את המכסה
+  var BACKOFF_MAX = 5;          // ניסיונות שידור כושלים ברצף לפני השהיה
 
   // ── עזרים קטנים ──────────────────────────────────────────────────────
 
@@ -90,23 +92,28 @@
     return v;
   }
 
-  // מזהה סשן חי בין טאבים של אותו ביקור, ונחתך אחרי 30 דקות שקט.
+  // מזהה סשן, ונחתך אחרי 30 דקות שקט.
+  //
+  // **localStorage ולא sessionStorage** — וזה לא פרט טכני. sessionStorage הוא
+  // לכל טאב בנפרד, ולכן אדם שפותח את האתר בטאב שני היה נספר כשני ביקורים
+  // נפרדים. כל שיעור ניתור וכל "ביקורים לאדם" היו מנופחים בשקט, ודווקא אצל
+  // המשתמשים הסקרנים ביותר.
   function getSession() {
-    var raw = safeLS(function () { return sessionStorage.getItem(SS_SESSION); }, null);
+    var raw = safeLS(function () { return localStorage.getItem(SS_SESSION); }, null);
     var s = null;
     if (raw) { try { s = JSON.parse(raw); } catch (e) { s = null; } }
     if (!s || (now() - s.last) > SESSION_GAP_MS) {
-      s = { id: uid('s_'), start: now(), last: now(), isNew: true };
+      s = { id: uid('s_'), start: now(), last: now(), isNew: true, n: 0 };
     } else {
       s.isNew = false;
       s.last = now();
     }
-    safeLS(function () { sessionStorage.setItem(SS_SESSION, JSON.stringify(s)); });
+    safeLS(function () { localStorage.setItem(SS_SESSION, JSON.stringify(s)); });
     return s;
   }
   function touchSession(s) {
     s.last = now();
-    safeLS(function () { sessionStorage.setItem(SS_SESSION, JSON.stringify(s)); });
+    safeLS(function () { localStorage.setItem(SS_SESSION, JSON.stringify(s)); });
   }
 
   // ── הקשר הביקור ──────────────────────────────────────────────────────
@@ -211,11 +218,16 @@
     this.disabled = false;
     this.sentCount = 0;
     this.failCount = 0;
+    this.backoff = 0;
+    this.skipTicks = 0;
+    this.lastIndexAt = 0;
   }
 
   Telemetry.prototype.init = function (opts) {
     opts = opts || {};
-    if (this.ready) return this;
+    // אתחול כפול (שני תגי script, מתאם שנטען פעמיים) היה מכפיל כל אירוע
+    // ומייצר "פי שתיים קליקים" שנראה כמו ממצא.
+    if (this.ready || this.disabled) return this;
 
     // מתג כיבוי מקומי + כיבוד Do Not Track באתר הציבורי בלבד. במוצרים
     // שמאחורי התחברות המדידה היא חלק מהשירות, ושם DNT לא מכבה.
@@ -256,6 +268,8 @@
 
   Telemetry.prototype.push = function (name, props) {
     if (!this.ready || this.disabled) return;
+    if (this.session.n >= SESSION_EVENT_MAX) return;
+    this.session.n++;
     var e = {
       n: name,
       t: iso(),
@@ -292,9 +306,12 @@
 
     // "נראה בפעם הראשונה" — מבדיל בין גילוי לבין חזרה, וזה ההבדל בין
     // "המסך לא מובן" לבין "המסך שימושי וחוזרים אליו".
-    var seen = safeLS(function () { return JSON.parse(sessionStorage.getItem(SS_SEEN) || '{}'); }, {}) || {};
-    var first = !seen[name];
-    if (first) { seen[name] = 1; safeLS(function () { sessionStorage.setItem(SS_SEEN, JSON.stringify(seen)); }); }
+    // ממופתח לפי סשן: "ראית את המסך הזה בביקור הזה", לא "אי פעם".
+    var sid = this.session.id;
+    var store = safeLS(function () { return JSON.parse(localStorage.getItem(SS_SEEN) || '{}'); }, {}) || {};
+    if (store.sid !== sid) store = { sid: sid, v: {} };
+    var first = !store.v[name];
+    if (first) { store.v[name] = 1; safeLS(function () { localStorage.setItem(SS_SEEN, JSON.stringify(store)); }); }
 
     this.push('view', Object.assign({ first: first, path: clamp(location.pathname, 120) }, props || {}));
   };
@@ -347,11 +364,8 @@
         kind: kindOf(el),
         path: pathOf(el),
       };
-      // מיקום יחסי — מאפשר מפת חום בלי לשמור קואורדינטות מוחלטות של המסך
-      try {
-        props.x = Math.round((ev.clientX / window.innerWidth) * 100);
-        props.y = Math.round((ev.clientY / window.innerHeight) * 100);
-      } catch (e) { /* ignore */ }
+      // קואורדינטות קליק הוסרו בכוונה: לא היה להן שום צרכן בלוח, והן הוסיפו
+      // שני שדות לכל אירוע קליק. נתון שנאסף ואף אחד לא קורא הוא עלות בלי תמורה.
 
       var link = el.closest && el.closest('a[href]');
       if (link) {
@@ -495,6 +509,13 @@
 
   Telemetry.prototype.flush = function (useBeacon) {
     if (!this.ready || this.disabled || !this.queue.length) return;
+    // רשת שנפלה: מדלגים על מחזורים במקום לתקוף אותה כל 15 שניות. יציאה
+    // מהעמוד (beacon) תמיד עוברת — שם אין הזדמנות שנייה.
+    if (!useBeacon && this.backoff) {
+      this.skipTicks = (this.skipTicks || 0) + 1;
+      if (this.skipTicks < this.backoff) return;
+      this.skipTicks = 0;
+    }
     var batch = this.queue.splice(0, BATCH_MAX);
     var body = JSON.stringify(encDoc({
       v: VERSION,
@@ -521,9 +542,11 @@
       .then(function (r) {
         if (!r.ok) throw new Error('HTTP ' + r.status);
         self.sentCount += batch.length;
+        self.backoff = 0;
       })
       .catch(function () {
         self.failCount++;
+        self.backoff = Math.min((self.backoff || 0) + 1, BACKOFF_MAX);
         self.store(batch);   // לא מאבדים אירועים בגלל רשת
       });
   };
@@ -554,6 +577,10 @@
   // התנועה האנונימית הייתה נכתבת ונשארת בלתי נראית.
   Telemetry.prototype.writeIndex = function (useBeacon) {
     if (!this.ready || this.disabled) return;
+    // ויסות: פעם בדקה לכל היותר. האינדקס הוא נוחות תצוגה, לא נתון —
+    // ובלי הוויסות כל `identify` הוסיף כתיבה שלמה למכסה היומית.
+    if (!useBeacon && this.lastIndexAt && (now() - this.lastIndexAt) < 60000) return;
+    this.lastIndexAt = now();
     var url = BASE + '/analytics/' + encodeURIComponent(this.visitor) +
       '?updateMask.fieldPaths=v&updateMask.fieldPaths=property&updateMask.fieldPaths=lastSeen' +
       '&updateMask.fieldPaths=user&updateMask.fieldPaths=lastView&updateMask.fieldPaths=lastSession';

@@ -19,7 +19,10 @@
   safe(function () {
     // באתר ציבורי מכבדים Do Not Track. במוצרים שמאחורי התחברות המדידה היא
     // חלק מהשירות; כאן המבקר לא ביקש כלום ולכן ההחלטה שלו קובעת.
-    T.init({ property: 'site', honorDNT: true });
+    // autoView:false — אחרת init קובע מסך לפי כותרת העמוד, ומיד אחריו
+    // נקבע המסך האמיתי. התוצאה הייתה view/view_leave/view בכל טעינה,
+    // כלומר צפייה מדומה אחת לכל מבקר בכל עמוד.
+    T.init({ property: 'site', honorDNT: true, autoView: false });
 
     var page = (location.pathname.split('/').pop() || 'index.html').replace('.html', '');
     var lang = document.documentElement.lang || 'he';
