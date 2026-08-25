@@ -24,6 +24,11 @@
   'use strict';
 
   var VERSION = 2;
+  // חותמת בנייה. **לא אותו דבר כמו VERSION**: VERSION הוא מבנה הנתונים,
+  // BUILD הוא הקוד עצמו. בלעדיה אי אפשר לדעת אילו כללים ייצרו נתון מסוים —
+  // וזה קרה בפועל: SHIFT+ רץ באוויר עם בנייה שדיווחה לחיצה על תיבת טקסט
+  // כ"לחיצה מתה", והלוח הציג את זה כממצא. להעלות בכל שינוי התנהגותי.
+  var BUILD = '2026-08-23a';
   var PROJECT = 'shift-21-day-course-ceos';
   var BASE = 'https://firestore.googleapis.com/v1/projects/' + PROJECT + '/databases/(default)/documents';
 
@@ -519,6 +524,7 @@
     var batch = this.queue.splice(0, BATCH_MAX);
     var body = JSON.stringify(encDoc({
       v: VERSION,
+      build: BUILD,
       kind: 'batch',
       property: this.property,
       session: this.session.id,
@@ -604,7 +610,7 @@
 
   Telemetry.prototype.status = function () {
     return {
-      ready: this.ready, disabled: this.disabled, property: this.property,
+      ready: this.ready, disabled: this.disabled, property: this.property, build: BUILD,
       visitor: this.visitor, session: this.session && this.session.id,
       user: this.userKey, view: this.view,
       queued: this.queue.length, sent: this.sentCount, failed: this.failCount,
@@ -628,6 +634,7 @@
     _instance: instance,
     _internals: { labelOf: labelOf, pathOf: pathOf, kindOf: kindOf, enc: enc, encDoc: encDoc, clamp: clamp },
     VERSION: VERSION,
+    BUILD: BUILD,
   };
 
   global.shiftTel = api;
