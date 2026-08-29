@@ -264,7 +264,7 @@ safe('lang-select', () => {
     });
   });
   document.addEventListener('click', (e) => {
-    if (!(e.target.closest && e.target.closest('.lang-select'))) closeAll();
+    if (!(e.target && e.target.closest && e.target.closest('.lang-select'))) closeAll();
   });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAll(); });
 });

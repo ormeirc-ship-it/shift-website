@@ -70,7 +70,9 @@
     }
   }
   document.addEventListener('click', function (e) {
-    var link = e.target.closest('a[href^="#"]');
+    // `e.target` אינו תמיד Element: הוא יכול להיות `document`, צומת טקסט,
+    // או צומת בתוך SVG. לאלה אין `closest`, והקריאה זורקת.
+    var link = e.target && e.target.closest ? e.target.closest('a[href^="#"]') : null;
     if (!link) return;
     var hash = link.getAttribute('href');
     if (hash.length < 2) return;
@@ -666,7 +668,10 @@
     document.addEventListener('mousemove', function (e) {
       if (!shown) { shown = true; gsap.to(dot, { autoAlpha: 1, duration: 0.3 }); }
       qx(e.clientX); qy(e.clientY);
-      var interactive = !!e.target.closest('a, button, .btn');
+      // אותה הגנה, ובנתיב הרבה יותר חם: זה רץ על כל `mousemove`.
+      // חדר המצב תפס כאן שגיאה אמיתית אצל משתמשים —
+      // "e.target.closest is not a function" — שאיש לא דיווח עליה.
+      var interactive = !!(e.target && e.target.closest && e.target.closest('a, button, .btn'));
       if (interactive !== overInteractive) {
         overInteractive = interactive;
         qs(interactive ? 2.6 : 1);
