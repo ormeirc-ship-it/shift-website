@@ -28,7 +28,7 @@
   // BUILD הוא הקוד עצמו. בלעדיה אי אפשר לדעת אילו כללים ייצרו נתון מסוים —
   // וזה קרה בפועל: SHIFT+ רץ באוויר עם בנייה שדיווחה לחיצה על תיבת טקסט
   // כ"לחיצה מתה", והלוח הציג את זה כממצא. להעלות בכל שינוי התנהגותי.
-  var BUILD = '2026-08-23a';
+  var BUILD = '2026-08-29a';
   var PROJECT = 'shift-21-day-course-ceos';
   var BASE = 'https://firestore.googleapis.com/v1/projects/' + PROJECT + '/databases/(default)/documents';
 
@@ -195,6 +195,10 @@
   }
 
   function kindOf(el) {
+    // נגן מדיה נבדק **לפני** השאר: הוא פקד אמיתי עם ממשק משלו, ובלי
+    // התיוג הזה הוא נופל ל-'other' ונספר כלחיצה מתה.
+    var m = el.closest && el.closest('video,audio');
+    if (m) return 'media';
     var t = el.closest && el.closest('button,a,input,select,textarea,[role="button"]');
     if (!t) return 'other';
     var tag = t.tagName.toLowerCase();
@@ -484,13 +488,20 @@
   // הלוח דיווח על "#intention-text נלחץ ולא עושה כלום" ב-SHIFT+, כשכל מה
   // שקרה הוא שמישהו לחץ על תיבת הכתיבה כדי להתחיל להקליד. ממצא שקרי אחד כזה
   // מספיק כדי שיפסיקו להאמין לכל הדוח.
-  var DEAD_CLICK_IGNORE = /^(input:|textarea|select)/;
+  // פקדים שלחיצה עליהם **לא אמורה** לשנות כלום ב-DOM ולא לנווט, ולכן
+  // גלאי הלחיצות המתות מדווח עליהם בטעות כבאג.
+  // · שדות טופס — נוספו אחרי שהלוח דיווח על לחיצה בתיבת טקסט כתקלה.
+  // · **נגני מדיה** — נוספו אחרי ש-`video` ב-SHIFT+ הופיע כ"פקד שבור"
+  //   עם 17 לחיצות משני אנשים. לחיצה על "נגן" מתחילה וידאו ולא נוגעת
+  //   ב-DOM; הפקדים עצמם יושבים ב-shadow DOM. זה היה ממצא חמור-לכאורה
+  //   ששלח לחפש באג שלא היה קיים.
+  var DEAD_CLICK_IGNORE = /^(input:|textarea|select|media)/;
 
   Telemetry.prototype.watchDead = function (el, props) {
     var self = this;
     if (!window.MutationObserver) return;
     if (DEAD_CLICK_IGNORE.test(props.kind || '')) return;
-    if (el && el.closest && el.closest('input,textarea,select,label,[contenteditable]')) return;
+    if (el && el.closest && el.closest('input,textarea,select,label,video,audio,[contenteditable]')) return;
     var url = location.href;
     var changed = false;
     var obs = new MutationObserver(function () { changed = true; });
