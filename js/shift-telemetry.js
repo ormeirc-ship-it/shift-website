@@ -28,7 +28,7 @@
   // BUILD הוא הקוד עצמו. בלעדיה אי אפשר לדעת אילו כללים ייצרו נתון מסוים —
   // וזה קרה בפועל: SHIFT+ רץ באוויר עם בנייה שדיווחה לחיצה על תיבת טקסט
   // כ"לחיצה מתה", והלוח הציג את זה כממצא. להעלות בכל שינוי התנהגותי.
-  var BUILD = '2026-08-29a';
+  var BUILD = '2026-08-29b';
   var PROJECT = 'shift-21-day-course-ceos';
   var BASE = 'https://firestore.googleapis.com/v1/projects/' + PROJECT + '/databases/(default)/documents';
 
@@ -41,6 +41,12 @@
   var BATCH_MAX = 25;
   var FLUSH_MS = 15000;
   var SESSION_GAP_MS = 30 * 60 * 1000;
+  // **תקרה מוחלטת לביקור.** כלל הפער בודק חוסר פעילות בלבד, ולכן טאב
+  // שנשאר פתוח יומיים ומקבל אירוע מדי פעם החזיק את אותו סשן לנצח.
+  // בנתונים האמיתיים נמצאו ביקורים של 66 שעות — וביקור כזה הופך את
+  // "משך חציוני" ואת שיעור הניתור לחסרי משמעות. ארבע שעות הוא הגבול
+  // המקובל בכלי אנליטיקה, והוא ארוך בהרבה מכל שימוש אמיתי במוצר הזה.
+  var SESSION_MAX_MS = 4 * 60 * 60 * 1000;
   var LABEL_MAX = 70;
   var QUEUE_MAX = 300;          // תקרה לתור המקומי — לא מצטבר לנצח באוף-ליין
   var SESSION_EVENT_MAX = 1500; // תקרת אירועים לביקור — הגנה מפני לולאה שמציפה את המכסה
@@ -107,7 +113,7 @@
     var raw = safeLS(function () { return localStorage.getItem(SS_SESSION); }, null);
     var s = null;
     if (raw) { try { s = JSON.parse(raw); } catch (e) { s = null; } }
-    if (!s || (now() - s.last) > SESSION_GAP_MS) {
+    if (!s || (now() - s.last) > SESSION_GAP_MS || (now() - s.start) > SESSION_MAX_MS) {
       s = { id: uid('s_'), start: now(), last: now(), isNew: true, n: 0 };
     } else {
       s.isNew = false;
