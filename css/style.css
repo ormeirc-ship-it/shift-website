@@ -2857,7 +2857,7 @@ button.event-link {
 .details-list li { color: var(--white-soft); line-height: 1.55; }
 .details-list strong { color: #fff; }
 .details-schedule li { display: flex; gap: 14px; color: var(--white-soft); }
-.details-schedule li span { color: var(--sky); min-width: 96px; font-variant-numeric: tabular-nums; }
+.details-schedule li span { color: var(--sky); min-width: 96px; font-variant-numeric: tabular-nums; direction: ltr; unicode-bidi: isolate; text-align: start; }
 .details-food { color: var(--white-soft); font-size: 0.95rem; margin: 22px 0; }
 .details-note { color: var(--white-soft); font-style: italic; margin: 0 0 24px; line-height: 1.55; }
 .details-buy { display: block; width: 100%; border: 0; text-align: center; }
