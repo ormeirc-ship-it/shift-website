@@ -1,0 +1,35 @@
+# ‏_config.yml — קיים בשביל הבנייה ה"ישנה" של GitHub Pages בלבד.
+#
+# הרקע: מקור ה-Pages הוחלף בטעות ל-branch ‏(build_type=legacy), ולכן כל push
+# מריץ **גם** בנייה של Jekyll שמפרסמת את הריפו כולו — כולל HANDOFF, BACKLOG,
+# אבות-טיפוס וכלי הבדיקה. ‏deploy-pages.yml עוקף אותה עם `sleep 150` ופורס
+# מעליה, אבל בזמן ההמתנה הזה הכל חשוף לאוויר.
+#
+# הרשימה כאן סוגרת את החלון: גם הבנייה הישנה לא תפרסם את הקבצים האלה.
+# היא מכוונת אחד-לאחד לרשימת ה-rsync ב-.github/workflows/deploy-pages.yml —
+# מי שמוסיף החרגה שם, שיוסיף גם כאן.
+#
+# ⚠️ `exclude` **מחליף** את ברירות המחדל של Jekyll, ולכן node_modules ו-vendor
+# מופיעים כאן במפורש. אין בקובץ הזה שום הגדרת בנייה אחרת: קובצי HTML בלי
+# front matter עוברים כקבצים סטטיים, בלי עיבוד.
+#
+# כשההגדרה תחזור ל-"GitHub Actions" ‏(Settings → Pages) אפשר למחוק את הקובץ
+# הזה ואת צעד ה-`sleep 150` יחד.
+
+exclude:
+  - .github
+  - node_modules
+  - vendor
+  - _build
+  - _old-version
+  - _deploy
+  - delivery
+  - scripts
+  - tests
+  - perf
+  - package.json
+  - package-lock.json
+  - firebase.json
+  - .firebaserc
+  - "*.md"
+  - "prototype-*.html"

@@ -727,6 +727,40 @@ safe('join-form', () => {
     return { ok: true, data: { name, age, gender, phone: phoneDigits } };
   };
 
+  // ── הקשר הליד: שפה, עמוד, מקור ──────────────────────────────────────
+  // עד 6.9.2026 נשמר `source: 'website'` קבוע ותו לא: בלי שפה, בלי utm ובלי
+  // מפנה. שלושת העמודים (he/en/es) כותבים לאותה קולקציה, ולכן לא היה שום
+  // מפתח לפלח לפיו — קמפיין בספרדית וקמפיין בעברית נראו זהים לגמרי.
+  //
+  // `gender` נשאר בדיוק כפי שהמשתמש בחר (אישה / Woman / Mujer), כדי לא לשנות
+  // את משמעות השדה ברשומות שכבר קיימות. `genderCode` הוא הערך הנורמלי לניתוח.
+  const GENDER_CODES = {
+    'אישה': 'female', 'Woman': 'female', 'Mujer': 'female',
+    'גבר': 'male', 'Man': 'male', 'Hombre': 'male',
+    'אחר': 'other', 'Other': 'other', 'Otro': 'other',
+  };
+
+  const leadContext = () => {
+    const ctx = { lang: LANG, page: (location.pathname.split('/').pop() || 'index.html') };
+    const g = GENDER_CODES[form.gender.value];
+    if (g) ctx.genderCode = g;
+    try {
+      const q = new URLSearchParams(location.search);
+      ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content'].forEach((k) => {
+        const v = (q.get(k) || '').slice(0, 80);
+        if (v) ctx[k] = v;
+      });
+    } catch (e) { /* ignore */ }
+    // מפנה בלבד (origin+path), בלי query — שם עלולים לשבת פרמטרים אישיים
+    try {
+      if (document.referrer) {
+        const u = new URL(document.referrer);
+        if (u.origin !== location.origin) ctx.referrer = (u.origin + u.pathname).slice(0, 120);
+      }
+    } catch (e) { /* ignore */ }
+    return ctx;
+  };
+
   // קידוד ערכי Firestore REST (זהה לשכבת firebase.js של האפליקציה)
   const toFields = (obj) => {
     const fields = {};
@@ -752,7 +786,7 @@ safe('join-form', () => {
     const payload = Object.assign({}, res.data, {
       source: 'website',
       createdAt: new Date().toISOString(),
-    });
+    }, leadContext());
 
     fetch(ENDPOINT, {
       method: 'POST',

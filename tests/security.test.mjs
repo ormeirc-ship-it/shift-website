@@ -34,8 +34,11 @@ test('קישורים חיצוניים יוצאים רק ליעדים המוכר�
   // ‏fonts.googleapis/gstatic הוסרו ב-28.7 (פריט 18 - self-host); חזרה שלהם
   // לעמוד תיתפס כאן ותחייב החלטה מודעת
   // ‏wa.me נוסף 28.7 (T13) - החלטה מודעת: OC פתח את ערוץ הוואטסאפ
+  // ‏pay.grow.link נוסף 6.9 - ספק הסליקה של הכרטיסים לאירוע; אותו ספק
+  // שה-webhook שלו נקלט ב-functions/growWebhook בפרויקט המסלול
   const allowed = ['www.instagram.com', 'shift-21-day-course-ceos.web.app',
-    'schema.org', 'ormeirc-ship-it.github.io', 'www.sitemaps.org', 'wa.me'];
+    'schema.org', 'ormeirc-ship-it.github.io', 'www.sitemaps.org', 'wa.me',
+    'pay.grow.link'];
   for (const [name, html] of Object.entries(pages)) {
     for (const m of html.matchAll(/https?:\/\/([^/"'\s<>)]+)/g)) {
       assert.ok(allowed.includes(m[1]),

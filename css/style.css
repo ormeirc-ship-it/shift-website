@@ -2698,7 +2698,10 @@ html.b3-panel .arrival-logo-light {
 .join-form {
   position: relative;
   padding: clamp(28px, 5vw, 40px);
-  text-align: right;
+  /* כפתור הסגירה תופס 12+36 פיקסלים מלמעלה; בלי המרווח הזה השורה
+     הראשונה של הכותרת נכנסת מתחתיו. */
+  padding-block-start: clamp(52px, 6vw, 58px);
+  text-align: start;
 }
 .join-form h2 {
   font-size: clamp(1.35rem, 4vw, 1.7rem);
@@ -2709,10 +2712,13 @@ html.b3-panel .arrival-logo-light {
   font-size: 0.95rem;
   margin: 0 0 22px;
 }
+/* הכפתור יושב בפינה ההפוכה לכיוון הקריאה. כשהוא ישב ב-inset-inline-start
+   הוא התנגש בכותרת בכל רוחב מסך (נמדד: חפיפה גם ב-375 וגם ב-1280), כי
+   הכותרת מתחילה בדיוק באותה פינה. אותו כפתור, אותו גודל — פינה אחרת. */
 .join-close {
   position: absolute;
   inset-block-start: 12px;
-  inset-inline-start: 14px;
+  inset-inline-end: 14px;
   width: 36px;
   height: 36px;
   border: 0;
@@ -2845,9 +2851,10 @@ button.event-link {
 .details-inner {
   position: relative;
   padding: clamp(28px, 5vw, 44px);
+  padding-block-start: clamp(52px, 6vw, 58px);
   max-height: 88vh;
   overflow-y: auto;
-  text-align: right;
+  text-align: start;
 }
 .details-kicker { color: var(--sky); font-weight: 600; letter-spacing: 0.04em; }
 .details-dialog h2 { font-size: clamp(1.4rem, 4vw, 1.9rem); margin: 6px 0 14px; line-height: 1.2; }
@@ -2873,9 +2880,9 @@ button.event-link {
    padding-inline) שמתהפכים לבד - ולכן אין להם צורך בעקיפה כאן. הבלוק הזה
    מטפל אך ורק במאפיינים *פיזיים* שנשארים קשיחים בין הכיוונים. */
 
-/* text-align: right פיזי בטפסים - בכיוון LTR צריך להתיישר לשמאל */
-[dir="ltr"] .join-form { text-align: left; }
-[dir="ltr"] .details-inner { text-align: left; }
+/* הטופס והמודאל עברו ל-text-align: start, שמתהפך לבד — ולכן העקיפות
+   הפיזיות שהיו כאן (text-align: left ל-LTR) נמחקו. אותה תוצאה, בלי
+   מאפיין כיווני פיזי שצריך לזכור לתחזק בשני הכיוונים. */
 
 /* אלמנטים לטיניים/מספריים שמוצהרים direction:ltr (wordmark, ספרות-הענק,
    מילת-הסיום) נשארים ltr בשתי השפות בכוונה - אין להם עקיפה. */
