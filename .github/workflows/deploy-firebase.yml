@@ -35,6 +35,7 @@ jobs:
             --exclude 'package.json' --exclude 'package-lock.json' \
             --exclude 'prototype-*.html' \
             --exclude '_deploy' --exclude 'firebase.json' --exclude '.firebaserc' \
+            --exclude 'perf' --exclude '_config.yml' \
             ./ _deploy/
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:

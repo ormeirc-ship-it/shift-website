@@ -37,6 +37,7 @@ jobs:
             --exclude 'package.json' --exclude 'package-lock.json' \
             --exclude 'prototype-*.html' \
             --exclude '_deploy' --exclude 'firebase.json' --exclude '.firebaserc' \
+            --exclude 'perf' --exclude '_config.yml' \
             ./ /tmp/site/
       # ‏זמני (3.8): מקור-ה-Pages הוחלף בטעות ל-branch (build_type=legacy)
       # וכל push מריץ גם את הבנייה הישנה שמפרסמת את הריפו כולו - והיא
