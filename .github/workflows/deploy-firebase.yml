@@ -43,11 +43,12 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           channelId: live
       - name: Verify exclusion trap (docs must 404)
-        # 3 ניסיונות בהפרש 15ש': בריצה הראשונה אי-פעם (14.9) הפריסה הצליחה
-        # אבל הצעד הזה נכשל על עיתוי-הפצה - שניות אחרי ההפעלה הראשונה של
-        # האתר ה-CDN עוד לא היה עקבי, ובדיקה ידנית מיד אחרי הראתה 404 תקין.
+        # ‏JSON.parse ולא require: ‏.firebaserc חסר-סיומת, ו-require מקמפל
+        # אותו כ-JS - ‏SyntaxError שהפיל את הצעד בשורה הראשונה בשתי הריצות
+        # הראשונות (14.9), לפני שה-curl בכלל רץ. ה-retry×3 נשאר כהקשחה
+        # מפני עיתוי-הפצה אמיתי בפריסות ראשונות.
         run: |
-          SITE_URL="$(node -p "require('./.firebaserc').projects.default + '.web.app'")"
+          SITE_URL="$(node -p "JSON.parse(require('fs').readFileSync('./.firebaserc','utf8')).projects.default + '.web.app'")"
           for p in HANDOFF.md prototype-arrival.html BACKLOG.md; do
             OK=""
             for i in 1 2 3; do
