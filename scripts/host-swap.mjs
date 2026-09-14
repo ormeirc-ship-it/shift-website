@@ -26,7 +26,10 @@ const newOrigin = process.argv[2] ? process.argv[2].replace(/\/$/, '') : null;
 const DRY = !newOrigin;
 
 // קבצי-הריצה בלבד - המסמכים (*.md) נשארים היסטוריה נכונה
-const FILES = ['index.html', '404.html', 'sitemap.xml', 'robots.txt', 'site.webmanifest'];
+// ‏14.9: ‏en.html + es.html נוספו - ה-i18n של איתי (8-9/2026) הכפיל את
+// המשפחה: ‏canonical/og/hreflang בכל עמוד + ‏sitemap רב-לשוני. הרשימה
+// כבר לא "16": הספירה האמיתית מודפסת בכל ריצה - לאמת מול ‏grep לפני.
+const FILES = ['index.html', 'en.html', 'es.html', '404.html', 'sitemap.xml', 'robots.txt', 'site.webmanifest'];
 
 let total = 0;
 for (const f of FILES) {
