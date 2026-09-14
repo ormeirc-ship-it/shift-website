@@ -1,12 +1,10 @@
 # פריסה ל-Firebase Hosting (T22, הכרעת OC 3.8) - מחליף את GitHub Pages
 # כדי שהמאגר יוכל להיות פרטי בארגון shiftceos בלי שהאתר יירד.
 #
-# ⚠️ מופעל ידנית בלבד (workflow_dispatch) עד שסבב-ההפעלה של T22 שלב 3
-# יעבור אותו ל-push; לפני כן חייבים להתקיים שני צעדי OC:
-#   1. פרויקט Firebase נפרד לאתר (לא הפרויקט של הפלטפורמה!) -
-#      ה-id נכנס ל-.firebaserc במקום ה-TODO.
-#   2. Service Account עם הרשאת פריסה, שמור כ-Secret בשם
-#      FIREBASE_SERVICE_ACCOUNT.
+# הופעל על push ב-14.9.2026 (T22 שלב 3): שני צעדי-OC הושלמו -
+# פרויקט shift-il (→ shift-il.web.app) נכנס ל-.firebaserc, והסוד
+# FIREBASE_SERVICE_ACCOUNT נשמר במאגר. workflow_dispatch נשאר זמין
+# לפריסה ידנית בעת הצורך.
 #
 # שלב ה-rsync זהה אחד-לאחד ל-deploy-pages.yml - זו רשימת-ההחרגה
 # שמונעת מה-HANDOFF, ה-BACKLOG, אבות-הטיפוס וכלי-הבדיקה לעלות לאוויר.
@@ -15,9 +13,8 @@ name: Deploy to Firebase Hosting
 
 on:
   workflow_dispatch:
-  # T22 שלב 3: להחליף ל-
-  # push:
-  #   branches: [main]
+  push:
+    branches: [main]
 
 concurrency:
   group: firebase-deploy
