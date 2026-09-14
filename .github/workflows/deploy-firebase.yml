@@ -43,10 +43,18 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           channelId: live
       - name: Verify exclusion trap (docs must 404)
+        # 3 ניסיונות בהפרש 15ש': בריצה הראשונה אי-פעם (14.9) הפריסה הצליחה
+        # אבל הצעד הזה נכשל על עיתוי-הפצה - שניות אחרי ההפעלה הראשונה של
+        # האתר ה-CDN עוד לא היה עקבי, ובדיקה ידנית מיד אחרי הראתה 404 תקין.
         run: |
           SITE_URL="$(node -p "require('./.firebaserc').projects.default + '.web.app'")"
           for p in HANDOFF.md prototype-arrival.html BACKLOG.md; do
-            CODE=$(curl -s -o /dev/null -w "%{http_code}" "https://${SITE_URL}/${p}")
-            echo "${p}: ${CODE}"
-            [ "$CODE" = "404" ] || { echo "::error::${p} is publicly served!"; exit 1; }
+            OK=""
+            for i in 1 2 3; do
+              CODE=$(curl -s -o /dev/null -w "%{http_code}" "https://${SITE_URL}/${p}")
+              echo "${p} (attempt ${i}): ${CODE}"
+              [ "$CODE" = "404" ] && { OK=1; break; }
+              sleep 15
+            done
+            [ -n "$OK" ] || { echo "::error::${p} is publicly served!"; exit 1; }
           done
