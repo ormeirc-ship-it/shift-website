@@ -36,8 +36,10 @@ test('קישורים חיצוניים יוצאים רק ליעדים המוכר�
   // ‏wa.me נוסף 28.7 (T13) - החלטה מודעת: OC פתח את ערוץ הוואטסאפ
   // ‏pay.grow.link נוסף 6.9 - ספק הסליקה של הכרטיסים לאירוע; אותו ספק
   // שה-webhook שלו נקלט ב-functions/growWebhook בפרויקט המסלול
+  // ‏shift-il.web.app החליף את ormeirc-ship-it.github.io ב-14.9 (T22:
+  // ‏host-swap — הבית הקנוני עבר ל-Firebase; אפס הפניות לכתובת הישנה).
   const allowed = ['www.instagram.com', 'shift-21-day-course-ceos.web.app',
-    'schema.org', 'ormeirc-ship-it.github.io', 'www.sitemaps.org', 'wa.me',
+    'schema.org', 'shift-il.web.app', 'www.sitemaps.org', 'wa.me',
     'pay.grow.link'];
   for (const [name, html] of Object.entries(pages)) {
     for (const m of html.matchAll(/https?:\/\/([^/"'\s<>)]+)/g)) {
