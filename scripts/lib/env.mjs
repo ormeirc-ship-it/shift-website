@@ -50,8 +50,9 @@ export async function serveRepo() {
       if (!s.isFile()) { res.writeHead(404).end(); return; }
       const type = MIME[extname(file).toLowerCase()] || 'application/octet-stream';
       // ‏Range/206 — בלעדיו כרום לא מסוגל לבצע seek בווידאו (seekable ריק,
-      // ‏currentTime ננעל על 0 — נמדד ב-T15). ‏GitHub Pages ופייתון-4173
-      // תומכים; הרִיג חייב לשקף את הפרודקשן.
+      // ‏currentTime ננעל על 0 — נמדד ב-T15). ‏GitHub Pages ו-Firebase
+      // תומכים; הרִיג חייב לשקף את הפרודקשן. (‏15.9: פייתון-http.server
+      // דווקא לא תומך — לתצוגת-פיתוח יש את scripts/preview-server.mjs.)
       const range = /^bytes=(\d*)-(\d*)$/.exec(req.headers.range || '');
       if (range && (range[1] || range[2])) {
         const start = range[1] ? +range[1] : Math.max(0, s.size - +range[2]);

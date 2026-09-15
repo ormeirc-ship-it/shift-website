@@ -1024,8 +1024,15 @@
           else evEased += (evTarget - evEased) * 0.12;
           if (Math.abs(evTarget - evEased) < 0.002) evEased = evTarget;
           var t = evEased * evDur;
+          // שער-seeking (15.9, ‏OC: "נתקעת בגלילה מהירה"): הצבת currentTime
+          // בזמן ש-seek קודם עוד באוויר נערמת לתור-פענוחים - בגלילה מהירה
+          // זה פקק שנראה כקיפאון ואז קפיצה. כותבים רק כשהמפענח פנוי;
+          // הרדיפה אחרי היעד נמשכת כל טיק, אז ברגע שה-seek נגמר נכתב
+          // המיקום הטרי - תנועה רציפה בקצב שהמפענח באמת עומד בו.
           // סף פריים (~30fps) - בלי להציף seek-ים תת-פריימיים
-          if (Math.abs(video.currentTime - t) > 0.034) video.currentTime = t;
+          if (!video.seeking && Math.abs(video.currentTime - t) > 0.034) {
+            video.currentTime = t;
+          }
         }
         requestAnimationFrame(evTick);
       };
