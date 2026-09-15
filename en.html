@@ -64,7 +64,7 @@
   }
   </script>
   <!-- Version param busts stale cache after each deploy - update on any CSS/JS change -->
-  <link rel="stylesheet" href="css/style.css?v=20260812h">
+  <link rel="stylesheet" href="css/style.css?v=20260915a">
   <script>
     document.documentElement.classList.add('js');
     if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -77,6 +77,10 @@
   </script>
 </head>
 <body>
+
+  <!-- ⏳ קמפיין-10.10: זקיף 1px לראש-המסמך - ה-IO של גלולת-הכרטיס צופה בו
+       (‏#top הוא הצלילה כולה, 520vh - לא עוגן שימושי לנקודת חצי-מסך) -->
+  <span class="event-sentinel" aria-hidden="true"></span>
 
   <!-- Language switch - position:fixed above the preloader (z-index 10000),
        appears already on the opening screen. Links are relative; on en.html English is active. -->
@@ -129,7 +133,8 @@
           <a href="es.html" class="lang-opt" hreflang="es" lang="es" role="menuitem">Español</a>
         </div>
       </div>
-      <a href="#contact" class="btn btn-primary btn-nav">Let's talk</a>
+      <!-- ⏳ קמפיין-10.10: nav CTA swapped to the event until after 10.10 -->
+      <a href="#event-deep" class="btn btn-primary btn-nav">Upcoming event</a>
       <button class="nav-burger" id="navBurger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
         <span class="nav-burger-lines"><span></span><span></span><span></span></span>
       </button>
@@ -143,7 +148,9 @@
       <a href="#program">The Program</a>
       <a href="#events">Events</a>
       <a href="#story">Our Story</a>
-      <a href="#contact" class="btn btn-primary">Let's talk</a>
+      <!-- ⏳ קמפיין-10.10 -->
+      <a href="https://pay.grow.link/MTA0NDE0~c3f97d2282fbb957d07092da4fb9063d-MzgzMTUwNg" class="btn btn-primary">Event ticket · 10.10</a>
+      <a href="#contact" class="btn btn-ghost">Let's talk</a>
     </nav>
   </div>
 
@@ -212,6 +219,8 @@
             psychological principles behind them.
           </p>
           <div class="arrival-ctas">
+            <!-- ⏳ קמפיין-10.10 -->
+            <a href="#event-deep" class="btn btn-arrival-buy">Upcoming event</a>
             <a href="#contact" class="btn btn-arrival">Start SHIFT</a>
             <a href="#method" class="btn btn-arrival-ghost">How does it work?</a>
           </div>
@@ -667,7 +676,8 @@
             <a class="event-link" href="#contact">Talk to us →</a>
           </div>
         </article>
-        <article class="event-card">
+        <!-- ⏳ קמפיין-10.10: anchor for the nav/arrival buttons -->
+        <article class="event-card" id="event-deep">
           <figure class="event-media event-featured">
             <picture><source srcset="assets/events/event-teaching-wide.webp" type="image/webp"><img src="assets/events/event-teaching-wide.jpg" alt="A SHIFT gathering in Beit Lehem HaGlilit — the two founders teaching a group in nature" loading="lazy" width="1200" height="675"></picture>
             <span class="event-badge">Next event</span>
@@ -827,12 +837,19 @@
                 <picture><source srcset="assets/img/founder-or-now.webp" type="image/webp"><img src="assets/img/founder-or-now.jpg" alt="Or Meir Cohen teaching an outdoor audience, a whiteboard with brainwave sketches beside him" loading="lazy" width="1183" height="1482"></picture>              </figure>
             </div>
             <h3 class="founder-name">Or Meir Cohen</h3>
-            <p class="founder-role">Co-founder · Former combat soldier and commander, law student.</p>
+            <p class="founder-role">Co-founder · Former combat soldier and commander · Yoga teacher · Law student</p>
             <p class="founder-story">
-              I didn't learn the shift from survival to creation in a book. After
-              the war I found myself facing a nervous system that stayed on high
-              alert even once the fighting was over, and the search for a way out
-              became what SHIFT teaches today.
+              I didn't learn the shift from survival to creation in a book. For
+              years I released through movement what was buried inside, without
+              understanding a thing about the body or the mind. After October 7th
+              I fought for half a year, and came back with a nervous system that
+              stayed on high alert even once the fighting was over. I ran into
+              movement, until two dislocated shoulders and a broken spirit
+              stopped me. Therapy brought me back to talking and feeling, and
+              rehab led me to yoga - where I discovered that body and mind are
+              one, and that choosing again is possible. The moment I understood
+              my own system, everything fell into place - today I'm a yoga
+              teacher, and this path is the heart of what SHIFT teaches.
             </p>
           </article>
           </div>
@@ -894,13 +911,21 @@
         no commitment, with full humanity.
       </p>
       <div class="hero-ctas reveal delay-2">
-        <a href="https://wa.me/972528972050?text=Hi%21%20I%20would%20love%20to%20hear%20more%20about%20the%20SHIFT%20program%21" target="_blank" rel="noopener" class="btn btn-primary">Intro chat on WhatsApp</a>
+        <!-- ⏳ קמפיין-10.10 -->
+        <a href="https://pay.grow.link/MTA0NDE0~c3f97d2282fbb957d07092da4fb9063d-MzgzMTUwNg" class="btn btn-primary">Buy a ticket · 10.10</a>
+        <a href="https://wa.me/972528972050?text=Hi%21%20I%20would%20love%20to%20hear%20more%20about%20the%20SHIFT%20program%21" target="_blank" rel="noopener" class="btn btn-ghost">Intro chat on WhatsApp</a>
         <a href="https://www.instagram.com/shift_ecosystem/" target="_blank" rel="noopener" class="btn btn-ghost">To our Instagram</a>
       </div>
     </div>
   </section>
 
   <div class="closing-word" aria-hidden="true">SHIFT</div>
+
+  <!-- ⏳ קמפיין-10.10: floating ticket capsule (mobile) -->
+  <a class="event-float" id="eventBar" href="https://pay.grow.link/MTA0NDE0~c3f97d2282fbb957d07092da4fb9063d-MzgzMTUwNg">
+    <strong>Buy a ticket · Upcoming event 10.10</strong>
+    <span>Beit Lehem HaGlilit</span>
+  </a>
 
   <!-- Footer -->
   <footer class="footer">
@@ -1011,12 +1036,12 @@
   <script src="assets/vendor/gsap.min.js" defer></script>
   <script src="assets/vendor/ScrollTrigger.min.js" defer></script>
   <script src="assets/vendor/lenis.min.js" defer></script>
-  <script src="js/motion.js?v=20260812h" defer></script>
+  <script src="js/motion.js?v=20260915a" defer></script>
   <!-- SHIFT telemetry: the site had no measurement at all until now. Loaded
        before main.js so it consumes the existing dataLayer from event one.
        Honours Do Not Track. -->
   <script src="js/shift-telemetry.js?v=tel-5" defer></script>
   <script src="js/tel-site.js?v=tel-5" defer></script>
-  <script src="js/main.js?v=20260812h" defer></script>
+  <script src="js/main.js?v=20260915a" defer></script>
 </body>
 </html>

@@ -837,3 +837,25 @@ safe('details-dialog', () => {
   // לחיצה על ה-backdrop (מחוץ לתיבה) סוגרת
   dialog.addEventListener('click', (e) => { if (e.target === dialog) close(); });
 });
+
+// ── ⏳ קמפיין-10.10: גלולת-הכרטיס הניידת ─────────────────────────────
+// נגלית חד-כיוונית אחרי חצי מסך גלילה - לא יושבת על פריים-הפתיחה, ומרגע
+// שהמבקר בתנועה הרכישה נשארת במרחק אגודל. להסרה אחרי האירוע.
+// ‏IO ולא מאזין-scroll (חוזה ה-thrash של המבחנים): rootMargin שמאריך את
+// החלון 50% כלפי מעלה - זקיף-הפיקסל בראש המסמך יוצא ממנו בדיוק
+// כש-scrollY עובר חצי מסך. הקריאה הראשונית מכסה גם טעינה באמצע העמוד.
+// ‏(לא #top - הוא הצלילה כולה, 520vh, ויוצא מהחלון רק אחרי חמישה מסכים.)
+safe('event-bar', () => {
+  const bar = document.getElementById('eventBar');
+  if (!bar) return;
+  const top = document.querySelector('.event-sentinel');
+  const show = () => {
+    bar.classList.add('shown');
+    document.documentElement.classList.add('has-event-bar');
+  };
+  if (!top || typeof IntersectionObserver !== 'function') { show(); return; }
+  const io = new IntersectionObserver((entries) => {
+    if (!entries[0].isIntersecting) { show(); io.disconnect(); }
+  }, { rootMargin: '50% 0px 0px 0px' });
+  io.observe(top);
+});

@@ -76,7 +76,7 @@
   }
   </script>
   <!-- פרמטר הגרסה שובר cache ישן אחרי כל פריסה - לעדכן בכל שינוי CSS/JS -->
-  <link rel="stylesheet" href="css/style.css?v=20260812h">
+  <link rel="stylesheet" href="css/style.css?v=20260915a">
   <script>
     document.documentElement.classList.add('js');
     // מנוע התנועה מוכרז מראש כדי שחוקי ה-reveal של ה-CSS לא יידלקו לרגע;
@@ -99,6 +99,10 @@
   </script>
 </head>
 <body>
+
+  <!-- ⏳ קמפיין-10.10: זקיף 1px לראש-המסמך - ה-IO של גלולת-הכרטיס צופה בו
+       (‏#top הוא הצלילה כולה, 520vh - לא עוגן שימושי לנקודת חצי-מסך) -->
+  <span class="event-sentinel" aria-hidden="true"></span>
 
   <!-- בורר שפה - position:fixed מעל ה-preloader (z-index 10000), מופיע כבר
        במסך הפתיחה. הקישורים יחסיים; ב-index.html העברית היא הפעילה. -->
@@ -156,7 +160,10 @@
           <a href="es.html" class="lang-opt" hreflang="es" lang="es" role="menuitem">Español</a>
         </div>
       </div>
-      <a href="#contact" class="btn btn-primary btn-nav">בואו נדבר</a>
+      <!-- ⏳ קמפיין-10.10 (OC 15.9): כפתור-הניווט מוסב מ"בואו נדבר" לכרטיס
+           האירוע עד אחרי 10.10; "בואו נדבר" חי בינתיים בתפריט, בסגירה ובפוטר.
+           להסרה: חיפוש "קמפיין-10.10" מוצא את כל נגיעות השכבה. -->
+      <a href="#event-deep" class="btn btn-primary btn-nav">לאירוע הקרוב</a>
       <!-- הוראת OC ‏29.7: אייקון המבורגר קלאסי במקום המילה "תפריט" -
            שלושה קווים; המילה חיה הלאה ב-aria-label -->
       <button class="nav-burger" id="navBurger" aria-label="פתיחת תפריט" aria-expanded="false" aria-controls="mobileMenu">
@@ -172,7 +179,9 @@
       <a href="#program">המסלול</a>
       <a href="#events">אירועים</a>
       <a href="#story">הסיפור שלנו</a>
-      <a href="#contact" class="btn btn-primary">בואו נדבר</a>
+      <!-- ⏳ קמפיין-10.10: הכרטיס ראשי בתפריט; "בואו נדבר" יורד לרפאים עד אחרי האירוע -->
+      <a href="https://pay.grow.link/MTA0NDE0~c3f97d2282fbb957d07092da4fb9063d-MzgzMTUwNg" class="btn btn-primary">כרטיס לאירוע · 10.10</a>
+      <a href="#contact" class="btn btn-ghost">בואו נדבר</a>
     </nav>
   </div>
 
@@ -273,6 +282,8 @@
             מדעיים ופסיכולוגיים.
           </p>
           <div class="arrival-ctas">
+            <!-- ⏳ קמפיין-10.10: הכרטיס הוא הפעולה הראשונה שהמבקר פוגש -->
+            <a href="#event-deep" class="btn btn-arrival-buy">לאירוע הקרוב</a>
             <a href="#contact" class="btn btn-arrival">מתחילים SHIFT</a>
             <a href="#method" class="btn btn-arrival-ghost">איך זה עובד?</a>
           </div>
@@ -767,7 +778,8 @@
             <a class="event-link" href="#contact">דברו איתנו ←</a>
           </div>
         </article>
-        <article class="event-card">
+        <!-- ⏳ קמפיין-10.10: עוגן הנחיתה של כפתור "לאירוע הקרוב" בהגעה -->
+        <article class="event-card" id="event-deep">
           <figure class="event-media event-featured">
             <picture><source srcset="assets/events/event-teaching-wide.webp" type="image/webp"><img src="assets/events/event-teaching-wide.jpg" alt="מפגש SHIFT בבית לחם הגלילית - שני המייסדים מלמדים קבוצה בטבע" loading="lazy" width="1200" height="675"></picture>
             <span class="event-badge">האירוע הקרוב</span>
@@ -965,11 +977,18 @@
                 <picture><source srcset="assets/img/founder-or-now.webp" type="image/webp"><img src="assets/img/founder-or-now.jpg" alt="אור מאיר כהן מלמד מול קהל בחוץ, לוח לבן עם שרטוטי גלי מוח לצדו" loading="lazy" width="1183" height="1482"></picture>              </figure>
             </div>
             <h3 class="founder-name">אור מאיר כהן</h3>
-            <p class="founder-role">מייסד שותף · לוחם ומפקד לשעבר, סטודנט למשפטים.</p>
+            <p class="founder-role">מייסד שותף · לוחם ומפקד לשעבר · מורה ליוגה · סטודנט למשפטים</p>
+            <!-- נוסח OC 15.9, עובד יחד בצ'אט (גרסה מצומצמת שאושרה) -->
             <p class="founder-story">
-              את המעבר מהישרדות ליצירה לא למדתי בספר. אחרי חרבות ברזל
-              מצאתי את עצמי מול מערכת עצבים שנשארה בכוננות גם כשהקרב
-              נגמר, והחיפוש אחרי הדרך החוצה הפך למה ש-SHIFT מלמד היום.
+              את המעבר מהישרדות ליצירה לא למדתי בספר. שנים פרקתי בתנועה
+              את מה שנדחס בפנים, בלי להבין דבר על הגוף ועל המוח. אחרי
+              השבעה באוקטובר נלחמתי חצי שנה, וחזרתי עם מערכת עצבים
+              שנשארה בכוננות גם כשהקרב נגמר. ברחתי לתנועה, עד ששתי
+              כתפיים פרוקות ורוח שבורה עצרו אותי. הטיפול החזיר אותי
+              לדבר ולהרגיש, והשיקום הוביל אותי ליוגה - שם גיליתי שהגוף
+              והנפש הם אחד, ושאפשר לבחור מחדש. ברגע שהבנתי את המערכת
+              שלי הכול התיישב במקום - היום אני מורה ליוגה, והדרך הזו
+              היא הלב של מה ש-SHIFT מלמד.
             </p>
           </article>
           </div>
@@ -1035,13 +1054,23 @@
         בלי התחייבות, באנושיות מלאה.
       </p>
       <div class="hero-ctas reveal delay-2">
-        <a href="https://wa.me/972528972050?text=%D7%94%D7%99%D7%99%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A9%D7%9E%D7%95%D7%A2%20%D7%A2%D7%95%D7%93%20%D7%A4%D7%A8%D7%98%D7%99%D7%9D%20%D7%A2%D7%9C%20%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%20SHIFT%21" target="_blank" rel="noopener" class="btn btn-primary">לשיחת היכרות בוואטסאפ</a>
+        <!-- ⏳ קמפיין-10.10: סוף המסע ממיר - הכרטיס ראשי, וואטסאפ יורד לרפאים -->
+        <a href="https://pay.grow.link/MTA0NDE0~c3f97d2282fbb957d07092da4fb9063d-MzgzMTUwNg" class="btn btn-primary">רכישת כרטיס לאירוע · 10.10</a>
+        <a href="https://wa.me/972528972050?text=%D7%94%D7%99%D7%99%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A9%D7%9E%D7%95%D7%A2%20%D7%A2%D7%95%D7%93%20%D7%A4%D7%A8%D7%98%D7%99%D7%9D%20%D7%A2%D7%9C%20%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%20SHIFT%21" target="_blank" rel="noopener" class="btn btn-ghost">לשיחת היכרות בוואטסאפ</a>
         <a href="https://www.instagram.com/shift_ecosystem/" target="_blank" rel="noopener" class="btn btn-ghost">לאינסטגרם שלנו</a>
       </div>
     </div>
   </section>
 
   <div class="closing-word" aria-hidden="true">SHIFT</div>
+
+  <!-- ⏳ קמפיין-10.10: גלולת-כרטיס מרחפת במובייל (הכרעת OC 15.9: בלי פס
+       רקע - התוכן מרחף מעל המסך) - נגלית אחרי חצי מסך גלילה
+       (main.js §event-bar) ומחזיקה את הרכישה במרחק אגודל לכל האורך -->
+  <a class="event-float" id="eventBar" href="https://pay.grow.link/MTA0NDE0~c3f97d2282fbb957d07092da4fb9063d-MzgzMTUwNg">
+    <strong>רכישת כרטיס · האירוע הקרוב 10.10</strong>
+    <span>בית לחם הגלילית</span>
+  </a>
 
   <!-- פוטר -->
   <footer class="footer">
@@ -1156,11 +1185,11 @@
   <script src="assets/vendor/gsap.min.js" defer></script>
   <script src="assets/vendor/ScrollTrigger.min.js" defer></script>
   <script src="assets/vendor/lenis.min.js" defer></script>
-  <script src="js/motion.js?v=20260812h" defer></script>
+  <script src="js/motion.js?v=20260915a" defer></script>
   <!-- טלמטריה של SHIFT: עד היום לא הייתה באתר שום מדידה. נטענת לפני main.js
        כדי לצרוך את dataLayer הקיים מהאירוע הראשון. מכבדת Do Not Track. -->
   <script src="js/shift-telemetry.js?v=tel-5" defer></script>
   <script src="js/tel-site.js?v=tel-5" defer></script>
-  <script src="js/main.js?v=20260812h" defer></script>
+  <script src="js/main.js?v=20260915a" defer></script>
 </body>
 </html>

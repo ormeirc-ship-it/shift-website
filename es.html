@@ -72,7 +72,7 @@
   }
   </script>
   <!-- El parámetro de versión rompe la caché antigua tras cada despliegue: actualizar en cada cambio de CSS/JS -->
-  <link rel="stylesheet" href="css/style.css?v=20260812h">
+  <link rel="stylesheet" href="css/style.css?v=20260915a">
   <script>
     document.documentElement.classList.add('js');
     // El motor de animación se declara por adelantado para que las reglas de reveal del CSS
@@ -91,6 +91,10 @@
   </script>
 </head>
 <body>
+
+  <!-- ⏳ קמפיין-10.10: זקיף 1px לראש-המסמך - ה-IO של גלולת-הכרטיס צופה בו
+       (‏#top הוא הצלילה כולה, 520vh - לא עוגן שימושי לנקודת חצי-מסך) -->
+  <span class="event-sentinel" aria-hidden="true"></span>
 
   <!-- Selector de idioma: position:fixed sobre el preloader (z-index 10000), aparece ya
        en la pantalla de apertura. Los enlaces son relativos; en es.html el español es el activo. -->
@@ -147,7 +151,8 @@
           <a href="es.html" class="lang-opt active" hreflang="es" lang="es" role="menuitem">Español</a>
         </div>
       </div>
-      <a href="#contact" class="btn btn-primary btn-nav">Hablemos</a>
+      <!-- ⏳ קמפיין-10.10 -->
+      <a href="#event-deep" class="btn btn-primary btn-nav">El próximo evento</a>
       <!-- Icono clásico de hamburguesa en lugar de la palabra "menú": tres líneas;
            la palabra sigue viva en el aria-label -->
       <button class="nav-burger" id="navBurger" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobileMenu">
@@ -163,7 +168,9 @@
       <a href="#program">El programa</a>
       <a href="#events">Eventos</a>
       <a href="#story">Nuestra historia</a>
-      <a href="#contact" class="btn btn-primary">Hablemos</a>
+      <!-- ⏳ קמפיין-10.10 -->
+      <a href="https://pay.grow.link/MTA0NDE0~c3f97d2282fbb957d07092da4fb9063d-MzgzMTUwNg" class="btn btn-primary">Entrada al evento · 10.10</a>
+      <a href="#contact" class="btn btn-ghost">Hablemos</a>
     </nav>
   </div>
 
@@ -252,6 +259,8 @@
             aprendizaje sobre los sistemas humanos y principios científicos y psicológicos.
           </p>
           <div class="arrival-ctas">
+            <!-- ⏳ קמפיין-10.10 -->
+            <a href="#event-deep" class="btn btn-arrival-buy">El próximo evento</a>
             <a href="#contact" class="btn btn-arrival">Empezar SHIFT</a>
             <a href="#method" class="btn btn-arrival-ghost">¿Cómo funciona?</a>
           </div>
@@ -723,7 +732,8 @@
             <a class="event-link" href="#contact">Hablemos →</a>
           </div>
         </article>
-        <article class="event-card">
+        <!-- ⏳ קמפיין-10.10 -->
+        <article class="event-card" id="event-deep">
           <figure class="event-media event-featured">
             <picture><source srcset="assets/events/event-teaching-wide.webp" type="image/webp"><img src="assets/events/event-teaching-wide.jpg" alt="Encuentro SHIFT en Beit Lehem HaGlilit: los dos fundadores enseñan a un grupo en la naturaleza" loading="lazy" width="1200" height="675"></picture>
             <span class="event-badge">Próximo evento</span>
@@ -891,12 +901,19 @@
                 <picture><source srcset="assets/img/founder-or-now.webp" type="image/webp"><img src="assets/img/founder-or-now.jpg" alt="Or Meir Cohen enseñando ante un público al aire libre, una pizarra blanca con dibujos de ondas cerebrales a su lado" loading="lazy" width="1183" height="1482"></picture>              </figure>
             </div>
             <h3 class="founder-name">Or Meir Cohen</h3>
-            <p class="founder-role">Cofundador · excombatiente y excomandante, estudiante de Derecho.</p>
+            <p class="founder-role">Cofundador · excombatiente y excomandante · profesor de yoga · estudiante de Derecho</p>
             <p class="founder-story">
-              El paso de la supervivencia a la creación no lo aprendí en un libro. Después de la
-              guerra me encontré frente a un sistema nervioso que se mantenía en alerta incluso
-              cuando el combate había terminado, y la búsqueda de la salida se convirtió en lo
-              que SHIFT enseña hoy.
+              El paso de la supervivencia a la creación no lo aprendí en un libro.
+              Durante años liberé a través del movimiento lo que llevaba guardado
+              dentro, sin entender nada del cuerpo ni de la mente. Después del 7 de
+              octubre luché durante medio año, y volví con un sistema nervioso que
+              se mantenía en alerta incluso cuando el combate había terminado. Huí
+              hacia el movimiento, hasta que dos hombros dislocados y un espíritu
+              roto me detuvieron. La terapia me devolvió el hablar y el sentir, y la
+              rehabilitación me llevó al yoga: allí descubrí que el cuerpo y la
+              mente son uno, y que se puede volver a elegir. En el momento en que
+              entendí mi sistema, todo encajó en su lugar. Hoy soy profesor de
+              yoga, y este camino es el corazón de lo que SHIFT enseña.
             </p>
           </article>
           </div>
@@ -958,13 +975,21 @@
         sin compromiso y con total cercanía.
       </p>
       <div class="hero-ctas reveal delay-2">
-        <a href="https://wa.me/972528972050?text=%C2%A1Hola%21%20Me%20encantar%C3%ADa%20recibir%20m%C3%A1s%20informaci%C3%B3n%20sobre%20el%20programa%20SHIFT." target="_blank" rel="noopener" class="btn btn-primary">Hablar por WhatsApp</a>
+        <!-- ⏳ קמפיין-10.10 -->
+        <a href="https://pay.grow.link/MTA0NDE0~c3f97d2282fbb957d07092da4fb9063d-MzgzMTUwNg" class="btn btn-primary">Comprar entrada · 10.10</a>
+        <a href="https://wa.me/972528972050?text=%C2%A1Hola%21%20Me%20encantar%C3%ADa%20recibir%20m%C3%A1s%20informaci%C3%B3n%20sobre%20el%20programa%20SHIFT." target="_blank" rel="noopener" class="btn btn-ghost">Hablar por WhatsApp</a>
         <a href="https://www.instagram.com/shift_ecosystem/" target="_blank" rel="noopener" class="btn btn-ghost">Ir a nuestro Instagram</a>
       </div>
     </div>
   </section>
 
   <div class="closing-word" aria-hidden="true">SHIFT</div>
+
+  <!-- ⏳ קמפיין-10.10 -->
+  <a class="event-float" id="eventBar" href="https://pay.grow.link/MTA0NDE0~c3f97d2282fbb957d07092da4fb9063d-MzgzMTUwNg">
+    <strong>Comprar entrada · Próximo evento 10.10</strong>
+    <span>Beit Lehem HaGlilit</span>
+  </a>
 
   <!-- Footer -->
   <footer class="footer">
@@ -1079,12 +1104,12 @@
   <script src="assets/vendor/gsap.min.js" defer></script>
   <script src="assets/vendor/ScrollTrigger.min.js" defer></script>
   <script src="assets/vendor/lenis.min.js" defer></script>
-  <script src="js/motion.js?v=20260812h" defer></script>
+  <script src="js/motion.js?v=20260915a" defer></script>
   <!-- Telemetría de SHIFT: el sitio no tenía ninguna medición hasta ahora.
        Se carga antes de main.js para consumir el dataLayer existente desde
        el primer evento. Respeta Do Not Track. -->
   <script src="js/shift-telemetry.js?v=tel-5" defer></script>
   <script src="js/tel-site.js?v=tel-5" defer></script>
-  <script src="js/main.js?v=20260812h" defer></script>
+  <script src="js/main.js?v=20260915a" defer></script>
 </body>
 </html>

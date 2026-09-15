@@ -189,7 +189,7 @@ const step = (name, ok, note = '') => {
     return {
       gsapOn: document.documentElement.classList.contains('gsap-on'),
       h1Visible: h1 ? vis(h1) : false,
-      ctasVisible: ctas.length === 2 && ctas.every(vis),
+      ctasVisible: ctas.length === 3 && ctas.every(vis), // ⏳ קמפיין-10.10: 3 כפתורים; בהסרה להחזיר ל-2
       arrivalOp,
       diveH: document.querySelector('.dive').offsetHeight,
       vh: innerHeight,
@@ -221,7 +221,7 @@ const step = (name, ok, note = '') => {
     };
     return {
       h1Visible: h1 ? vis(h1) : false,
-      ctasVisible: ctas.length === 2 && ctas.every(vis),
+      ctasVisible: ctas.length === 3 && ctas.every(vis), // ⏳ קמפיין-10.10: 3 כפתורים; בהסרה להחזיר ל-2
       menuHidden: getComputedStyle(document.getElementById('mobileMenu')).display === 'none',
     };
   });
