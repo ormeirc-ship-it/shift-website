@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ormeirc-ship-it.github.io/shift-website/sitemap.xml
+Sitemap: https://shift-il.web.app/sitemap.xml

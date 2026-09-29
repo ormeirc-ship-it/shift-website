@@ -4,7 +4,7 @@
   "description": "SHIFT הוא מסע מעשי לפיתוח אישי שמחבר בין מדעי המוח ומודעות גופנית.",
   "lang": "he",
   "dir": "rtl",
-  "start_url": "/shift-website/",
+  "start_url": "/",
   "display": "browser",
   "theme_color": "#18163B",
   "background_color": "#F6F5F2",

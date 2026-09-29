@@ -1,12 +1,10 @@
 # פריסה ל-Firebase Hosting (T22, הכרעת OC 3.8) - מחליף את GitHub Pages
 # כדי שהמאגר יוכל להיות פרטי בארגון shiftceos בלי שהאתר יירד.
 #
-# ⚠️ מופעל ידנית בלבד (workflow_dispatch) עד שסבב-ההפעלה של T22 שלב 3
-# יעבור אותו ל-push; לפני כן חייבים להתקיים שני צעדי OC:
-#   1. פרויקט Firebase נפרד לאתר (לא הפרויקט של הפלטפורמה!) -
-#      ה-id נכנס ל-.firebaserc במקום ה-TODO.
-#   2. Service Account עם הרשאת פריסה, שמור כ-Secret בשם
-#      FIREBASE_SERVICE_ACCOUNT.
+# הופעל על push ב-14.9.2026 (T22 שלב 3): שני צעדי-OC הושלמו -
+# פרויקט shift-il (→ shift-il.web.app) נכנס ל-.firebaserc, והסוד
+# FIREBASE_SERVICE_ACCOUNT נשמר במאגר. workflow_dispatch נשאר זמין
+# לפריסה ידנית בעת הצורך.
 #
 # שלב ה-rsync זהה אחד-לאחד ל-deploy-pages.yml - זו רשימת-ההחרגה
 # שמונעת מה-HANDOFF, ה-BACKLOG, אבות-הטיפוס וכלי-הבדיקה לעלות לאוויר.
@@ -15,9 +13,8 @@ name: Deploy to Firebase Hosting
 
 on:
   workflow_dispatch:
-  # T22 שלב 3: להחליף ל-
-  # push:
-  #   branches: [main]
+  push:
+    branches: [main]
 
 concurrency:
   group: firebase-deploy
@@ -38,7 +35,7 @@ jobs:
             --exclude 'package.json' --exclude 'package-lock.json' \
             --exclude 'prototype-*.html' \
             --exclude '_deploy' --exclude 'firebase.json' --exclude '.firebaserc' \
-            --exclude '_config.yml' \
+            --exclude 'perf' --exclude '_config.yml' \
             ./ _deploy/
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
@@ -46,10 +43,19 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           channelId: live
       - name: Verify exclusion trap (docs must 404)
+        # ‏JSON.parse ולא require: ‏.firebaserc חסר-סיומת, ו-require מקמפל
+        # אותו כ-JS - ‏SyntaxError שהפיל את הצעד בשורה הראשונה בשתי הריצות
+        # הראשונות (14.9), לפני שה-curl בכלל רץ. ה-retry×3 נשאר כהקשחה
+        # מפני עיתוי-הפצה אמיתי בפריסות ראשונות.
         run: |
-          SITE_URL="$(node -p "require('./.firebaserc').projects.default + '.web.app'")"
+          SITE_URL="$(node -p "JSON.parse(require('fs').readFileSync('./.firebaserc','utf8')).projects.default + '.web.app'")"
           for p in HANDOFF.md prototype-arrival.html BACKLOG.md; do
-            CODE=$(curl -s -o /dev/null -w "%{http_code}" "https://${SITE_URL}/${p}")
-            echo "${p}: ${CODE}"
-            [ "$CODE" = "404" ] || { echo "::error::${p} is publicly served!"; exit 1; }
+            OK=""
+            for i in 1 2 3; do
+              CODE=$(curl -s -o /dev/null -w "%{http_code}" "https://${SITE_URL}/${p}")
+              echo "${p} (attempt ${i}): ${CODE}"
+              [ "$CODE" = "404" ] && { OK=1; break; }
+              sleep 15
+            done
+            [ -n "$OK" ] || { echo "::error::${p} is publicly served!"; exit 1; }
           done

@@ -2886,3 +2886,70 @@ button.event-link {
 
 /* אלמנטים לטיניים/מספריים שמוצהרים direction:ltr (wordmark, ספרות-הענק,
    מילת-הסיום) נשארים ltr בשתי השפות בכוונה - אין להם עקיפה. */
+
+/* ---------- ⏳ קמפיין-10.10: שכבת הנעה-לפעולה לאירוע (15.9, להסיר אחרי) ---------- */
+/* כפתור-הקנייה בהגעה: תכלת מלא - הפעולה הראשונה במסך הראשון */
+.btn-arrival-buy { background: var(--sky); color: var(--navy-deep); box-shadow: 0 4px 24px var(--sky-a35); }
+@media (hover: hover) { .btn-arrival-buy:hover { box-shadow: 0 8px 32px var(--sky-a50); } }
+
+/* גלולת-הכרטיס המרחפת (הכרעת OC 15.9: בלי פס-רקע - התוכן מרחף מעל
+   המסך): קפסולת-תכלת אחת, כולה קישור, קריאה על כל סקשן - כהה או בהיר */
+.event-float {
+  position: fixed;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  inset-inline: 0;
+  margin-inline: auto;
+  width: fit-content;
+  max-width: calc(100% - 32px);
+  z-index: 97; /* מתחת לניווט (100) ולתפריט המלא (99) */
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 11px 28px;
+  border-radius: 999px;
+  background: var(--sky);
+  color: var(--navy-deep);
+  text-decoration: none;
+  text-align: center;
+  box-shadow: 0 12px 36px var(--sky-a50), 0 4px 14px rgba(6, 12, 32, 0.35);
+  transform: translateY(180%);
+  visibility: hidden;
+  transition: transform 0.35s ease, visibility 0s linear 0.35s;
+}
+.event-float.shown { transform: none; visibility: visible; transition: transform 0.35s ease; }
+.event-float strong { font-size: 0.95rem; font-weight: 700; white-space: nowrap; }
+.event-float span { font-size: 0.78rem; opacity: 0.82; }
+.event-float:active { transform: translateY(2px); }
+@media (max-width: 899px) {
+  .event-float { display: flex; }
+  /* הפוטר לא נבלע מאחורי הגלולה */
+  html.has-event-bar .footer { padding-bottom: 96px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .event-float, .event-float.shown { transition: none; }
+}
+
+/* ⏳ קמפיין-10.10: בהגעה הכהה "מתחילים SHIFT" היה תכלת-מלא כמו כפתור-
+   הקנייה - שני ראשיים מתחרים. לעת הקמפיין הוא יורד לרפאים; הקנייה
+   לבדה נושאת את התכלת. */
+html.ending-curtain .arrival-ctas .btn-arrival {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  color: #fff;
+  box-shadow: none;
+}
+
+/* ⏳ קמפיין-10.10: עיצוב-האיזאנמי גנז את שורת-הניווט (burger בלבד בכל
+   רוחב), אבל לקמפיין כפתור-הכרטיס לבדו חוזר לסרגל ברוחב 900 ומעלה -
+   נראה בכל נקודת-גלילה שבה הסרגל מוצג; מתחת ל-900 פס-הכרטיס התחתון
+   מחזיק את התפקיד. */
+@media (min-width: 900px) {
+  .nav .btn-nav { display: inline-flex; align-items: center; }
+}
+
+/* ⏳ קמפיין-10.10: הזקיף שגלולת-הכרטיס צופה בו (main.js §event-bar) */
+.event-sentinel { position: absolute; top: 0; inset-inline-start: 0; width: 1px; height: 1px; pointer-events: none; }
+
+/* ⏳ קמפיין-10.10: נחיתת-העוגן מכפתור ההגעה - הכרטיס לא נבלע מתחת לסרגל */
+#event-deep { scroll-margin-top: 96px; }

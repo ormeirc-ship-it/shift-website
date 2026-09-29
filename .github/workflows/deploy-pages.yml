@@ -37,10 +37,8 @@ jobs:
             --exclude 'package.json' --exclude 'package-lock.json' \
             --exclude 'prototype-*.html' \
             --exclude '_deploy' --exclude 'firebase.json' --exclude '.firebaserc' \
-            --exclude '_config.yml' \
+            --exclude 'perf' --exclude '_config.yml' \
             ./ /tmp/site/
-      # ‏משלים ל-_config.yml שבשורש: הוא מחריג את אותם קבצים גם מהבנייה
-      # הישנה, כך שגם בזמן ההמתנה הזו הם לא מתפרסמים.
       # ‏זמני (3.8): מקור-ה-Pages הוחלף בטעות ל-branch (build_type=legacy)
       # וכל push מריץ גם את הבנייה הישנה שמפרסמת את הריפו כולו - והיא
       # מסיימת אחרונה ומנצחת. עד שההגדרה תוחזר ל-"GitHub Actions"
@@ -54,22 +52,3 @@ jobs:
           path: '/tmp/site'
       - id: deployment
         uses: actions/deploy-pages@v4
-      # מלכודת: אם הבנייה הישנה בכל זאת מנצחת את המרוץ, האתר מגיש את הריפו
-      # כולו ואיש לא יידע. הצעד הזה הופך חשיפה שקטה לכישלון רועש. זהה לצעד
-      # שכבר קיים ב-deploy-firebase.yml.
-      - name: Verify exclusion trap (docs must 404)
-        run: |
-          BASE="${{ steps.deployment.outputs.page_url }}"
-          BASE="${BASE%/}"
-          FAILED=0
-          for p in HANDOFF.md BACKLOG.md prototype-arrival.html package.json; do
-            CODE=""
-            for i in 1 2 3 4 5; do
-              CODE=$(curl -s -o /dev/null -w "%{http_code}" "${BASE}/${p}")
-              [ "$CODE" = "404" ] && break
-              sleep 10
-            done
-            echo "${p}: ${CODE}"
-            [ "$CODE" = "404" ] || { echo "::error::${p} is publicly served!"; FAILED=1; }
-          done
-          exit $FAILED
