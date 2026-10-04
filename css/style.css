@@ -513,7 +513,9 @@ html:not(.js) .worlds-nav { display: none; }
 .story { padding: clamp(80px, 12vw, 140px) 0; }
 .story-grid {
   display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  /* תמונת הסיפור הוסרה - עמודה אחת ממורכזת ברוחב קריא במקום שתי עמודות */
+  grid-template-columns: minmax(0, 760px);
+  justify-content: center;
   gap: clamp(36px, 6vw, 72px);
   /* D1 #5: align center דחף את הטקסט אל אמצע הסקשן - המסך הראשון
      היה ריק. יישור לראש מביא את הכותרת אל המפגש הראשון עם העין. */
