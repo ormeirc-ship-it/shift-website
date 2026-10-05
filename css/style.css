@@ -362,6 +362,18 @@ html { scrollbar-gutter: stable both-edges; }
   color: #fff;
 }
 
+/* ── מרחבים דיגיטליים: טיפול כהה *מובחן* מהמפגשים החיים ────────────────
+   זוהר עליון (ולא תחתון), בסיס עמוק יותר, וקו-גבול תכלת שמדגיש את המעבר
+   מסקשן האירועים אל סקשן המרחבים. הקלפים מקבלים מסגרת תכלת עדינה. */
+.spaces.section-dark {
+  background:
+    radial-gradient(ellipse 78% 52% at 50% 0%, rgba(92, 187, 240, 0.18), transparent 60%),
+    linear-gradient(180deg, #0c0c20, var(--navy-deep) 60%, #0c0c20);
+  border-top: 1px solid rgba(92, 187, 240, 0.28);
+}
+.spaces .event-card { border-color: rgba(92, 187, 240, 0.16); }
+.spaces .event-kicker { color: var(--sky); }
+
 .statement { padding: clamp(90px, 14vw, 150px) 0; text-align: center; }
 .statement-title {
   font-weight: 300;

@@ -829,9 +829,18 @@ safe('spaces-reveal', () => {
     btn.addEventListener('click', () => {
       const target = document.getElementById(btn.getAttribute('data-reveal'));
       if (!target) return;
+      const firstTime = target.hidden;
       target.hidden = false;
       btn.setAttribute('aria-expanded', 'true');
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // הסקשן נבנה כ-hidden, ולכן ScrollTrigger מדד אותו באפס. אחרי החשיפה
+      // מודדים מחדש כדי שהרקע הנוסע (כהה→בהיר), מילוי השדרה וחשיפת הימים
+      // יעבדו חלק, ו-resize מחשב מחדש את ערימת הקלפים הסטיקית.
+      const settle = () => {
+        try { if (window.ScrollTrigger) window.ScrollTrigger.refresh(); } catch (e) { /* no gsap */ }
+        try { window.dispatchEvent(new Event('resize')); } catch (e) { /* ignore */ }
+      };
+      if (firstTime) { requestAnimationFrame(() => { settle(); requestAnimationFrame(settle); }); }
+      requestAnimationFrame(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }));
     });
   });
 });
