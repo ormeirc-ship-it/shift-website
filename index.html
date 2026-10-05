@@ -76,7 +76,7 @@
   }
   </script>
   <!-- פרמטר הגרסה שובר cache ישן אחרי כל פריסה - לעדכן בכל שינוי CSS/JS -->
-  <link rel="stylesheet" href="css/style.css?v=20260915a">
+  <link rel="stylesheet" href="css/style.css?v=20261005a">
   <script>
     document.documentElement.classList.add('js');
     // מנוע התנועה מוכרז מראש כדי שחוקי ה-reveal של ה-CSS לא יידלקו לרגע;
@@ -140,7 +140,7 @@
       </a>
       <nav class="nav-links" aria-label="ניווט ראשי">
         <a href="#method">השיטה</a>
-        <a href="#program">המסלול</a>
+        <a href="#spaces">המסלול</a>
         <a href="#events">אירועים</a>
         <a href="#story">הסיפור שלנו</a>
       </nav>
@@ -172,7 +172,7 @@
   <div class="mobile-menu" id="mobileMenu" hidden>
     <nav aria-label="ניווט מובייל">
       <a href="#method">השיטה</a>
-      <a href="#program">המסלול</a>
+      <a href="#spaces">המסלול</a>
       <a href="#events">אירועים</a>
       <a href="#story">הסיפור שלנו</a>
       <!-- ⏳ קמפיין-10.10: הכרטיס ראשי בתפריט; "בואו נדבר" יורד לרפאים עד אחרי האירוע -->
@@ -188,7 +188,7 @@
     <a href="#products" data-label="מה אנחנו עושים" aria-label="מה אנחנו עושים"></a>
     <a href="#method" data-label="השיטה" aria-label="השיטה"></a>
     <a href="#breathe" data-label="נשימה אחת" aria-label="נשימה אחת"></a>
-    <a href="#program" data-label="המסלול" aria-label="המסלול"></a>
+    <a href="#spaces" data-label="המסלול" aria-label="המסלול"></a>
     <a href="#events" data-label="אירועים" aria-label="אירועים"></a>
     <a href="#story" data-label="הסיפור" aria-label="הסיפור"></a>
     <a href="#contact" data-label="בואו נדבר" aria-label="בואו נדבר"></a>
@@ -332,7 +332,7 @@
           <p>תכנים של מדעי המוח, גוף ותודעה - פתוחים לכולם, בקצב יומיומי.</p>
           <span class="basket-card-link">לתוכן שלנו ←</span>
         </a>
-        <a class="card basket-card" href="#program">
+        <a class="card basket-card" href="#spaces">
           <h3>מסלול ליווי</h3>
           <p>מסלול 21 הימים הדיגיטלי - תהליך יומי מלווה, צעד אחר צעד, מהישרדות ליצירה.</p>
           <span class="basket-card-link">למסלול ←</span>
@@ -506,7 +506,7 @@
             </div>
             <p class="breath-after" id="breathAfter" hidden>
               זה היה רגע אחד מתוך יום 1. במסלול יש 21 ימים כאלה -
-              <a href="#program">אל המסלול ←</a>
+              <a href="#spaces">אל המסלול ←</a>
             </p>
             <p class="breath-disclaimer">
               אם את/ה בהיריון, עם מצב לב או נשימה, או אפילפסיה - התייעצ/י עם רופא/ה לפני תרגילי נשימה.
@@ -568,174 +568,6 @@
     </div>
   </section>
 
-  <!-- המסלול: 21 הימים -->
-  <section class="program section-dark" id="program">
-    <span class="side-label" aria-hidden="true">המסלול</span>
-    <div class="container">
-      <div class="section-head reveal">
-        <h2>מסלול 21 הימים</h2>
-        <p class="section-intro">
-          שלושה שבועות. צעד יומי אחד. תהליך דיגיטלי מלווה שמתחיל בהיכרות עם המערכת —
-          ונגמר בתוכנית יצירה משלכם. הנה הוא, מבפנים.
-        </p>
-      </div>
-
-      <!-- המלבנים המרחפים (program-chips) הוסרו בהוראת OC ‏29.7 ‏13:40 -
-           רכבו על המלל. אגב ההסרה התגלה שגם הם ישבו על באג בלוק-ההכלה
-           (ראה .side-label ב-CSS) - מיקומם "בתוך הסקשן" היה אשליה. -->
-      <div class="program-layout">
-        <div class="program-spine" aria-hidden="true">
-          <span class="program-spine-track"><span class="program-spine-fill" id="spineFill"></span></span>
-        <i data-day="1"></i>
-        <i data-day="2"></i>
-        <i data-day="3"></i>
-        <i data-day="4"></i>
-        <i data-day="5"></i>
-        <i data-day="6"></i>
-        <i data-day="7"></i>
-        <i data-day="8"></i>
-        <i data-day="9"></i>
-        <i data-day="10"></i>
-        <i data-day="11"></i>
-        <i data-day="12"></i>
-        <i data-day="13"></i>
-        <i data-day="14"></i>
-        <i data-day="15"></i>
-        <i data-day="16"></i>
-        <i data-day="17"></i>
-        <i data-day="18"></i>
-        <i data-day="19"></i>
-        <i data-day="20"></i>
-        <i data-day="21"></i>
-        </div>
-        <div class="program-weeks" id="programWeeks">
-        <article class="week-card" data-week="1">
-          <header class="week-head">
-            <span class="week-tag">שבוע 1׳ מתוך 3</span>
-            <h3>שבוע ראשון — מודעות והיכרות עם המערכת</h3>
-          </header>
-          <div class="week-desc"><p>השבוע הראשון הוא הבסיס של הכל.</p><p>לפני שנשנה הרגלים, אמונות או דפוסים — כדאי להבין מה קורה בגוף. נראה כי חלק ניכר מהמנגנונים של מערכת העצבים והמוח התפתחו לאורך האבולוציה כדי לשמור עלינו בחיים — לא בהכרח כדי לגרום לנו להיות מאושרים.</p><p>השבוע נכיר את מערכת העצבים: את מצב ההשרדות ואת מצב היצירה, את ההורמונים שמשפיעים עלינו, את הדפוס האישי תחת לחץ, ונלמד כלי ויסות ראשון. זו המפה שממנה ייגזר כל שינוי בהמשך.</p></div>
-          <ol class="day-list">
-            <li class="day-item">
-              <span class="day-no">1</span>
-              <div class="day-body"><h4>להכיר את המערכת — ולדעת להרגיע אותה</h4></div>
-            </li>
-            <li class="day-item">
-              <span class="day-no">2</span>
-              <div class="day-body"><h4>מודל א.פ.ר.ת — מה באמת קורה בינינו לבין התגובה</h4></div>
-            </li>
-            <li class="day-item">
-              <span class="day-no">3</span>
-              <div class="day-body"><h4>גלי המוח</h4></div>
-            </li>
-            <li class="day-item">
-              <span class="day-no">4</span>
-              <div class="day-body"><h4>ההורמונים שמנהלים אותנו</h4></div>
-            </li>
-            <li class="day-item">
-              <span class="day-no">5</span>
-              <div class="day-body"><h4>עיצוב סביבה</h4></div>
-            </li>
-            <li class="day-item">
-              <span class="day-no">6</span>
-              <div class="day-body"><h4>ביולוגיה, לא כישלון — וסיכום שבוע ראשון</h4></div>
-            </li>
-            <li class="day-item day-rest">
-              <span class="day-no">7</span>
-              <div class="day-body"><h4>יום מנוחה</h4></div>
-            </li>
-          </ol>
-        </article>
-        <article class="week-card" data-week="2">
-          <header class="week-head">
-            <span class="week-tag">שבוע 2׳ מתוך 3</span>
-            <h3>שבוע שני — שינוי המערכת</h3>
-          </header>
-          <div class="week-desc"><p>שבוע ראשון עסק בזיהוי. שבוע שני עוסק בשינוי.</p><p>המוח נחשב "פלסטי" — כלומר בעל יכולת להשתנות. מחקרים מצביעים על כך שדפוסים שנבנו בחזרתיות יכולים, ככל הנראה, גם להשתנות בחזרתיות.</p><p>השבוע נבין איך אמונות וסביבה עשויות להשפיע על הביולוגיה, מה תפקיד הדופמין בהשתוקקות ובהרגלים, למה כל כך קשה להשתנות — ואיך בכל זאת אפשר.</p></div>
-          <ol class="day-list">
-            <li class="day-item">
-              <span class="day-no">8</span>
-              <div class="day-body"><h4>נוירופלסטיות — והמוח שלא תמיד מבדיל בין מציאות לדמיון</h4></div>
-            </li>
-            <li class="day-item">
-              <span class="day-no">9</span>
-              <div class="day-body"><h4>מעגל הזהות "I am" — והגנים שלנו הם לא גזר דין</h4></div>
-            </li>
-            <li class="day-item">
-              <span class="day-no">10</span>
-              <div class="day-body"><h4>ממודע לתת-מודע — מי באמת מנהל את היום שלנו</h4></div>
-            </li>
-            <li class="day-item">
-              <span class="day-no">11</span>
-              <div class="day-body"><h4>הסיוט והחלום</h4></div>
-            </li>
-            <li class="day-item">
-              <span class="day-no">12</span>
-              <div class="day-body"><h4>מדיטציה</h4></div>
-            </li>
-            <li class="day-item">
-              <span class="day-no">13</span>
-              <div class="day-body"><h4>סיכום שבוע שני</h4></div>
-            </li>
-            <li class="day-item day-rest">
-              <span class="day-no">14</span>
-              <div class="day-body"><h4>יום מנוחה</h4></div>
-            </li>
-          </ol>
-        </article>
-        <article class="week-card" data-week="3">
-          <header class="week-head">
-            <span class="week-tag">שבוע 3׳ מתוך 3</span>
-            <h3>שבוע שלישי — מהגוף אל החיים, וכיוון קדימה</h3>
-          </header>
-          <!-- נוסח OC ‏2.8 בצפייה חיה (גובר על WEEK_INTROS לתצוגת האתר;
-               כותרות הימים/השבוע נשארות מ-data.js בלבד) -->
-          <div class="week-desc"><p>הגעת לשבוע האחרון — ואת/ה כבר לא אותו אדם שהתחיל.</p><p>עד כאן הבנו את מערכת העצבים והתחלנו לשנות אותה מבפנים. השבוע ניקח את זה אל החיים עצמם: נבין את הכימיה של הרצון (דופמין), נחזק את הבסיס הגופני — תנועה ותזונה, נבחן מי ומה מזין אותנו בסביבה, נתעמת בעדינות עם פחד אחד, ונבנה שגרה שמחזיקה.</p><p>ובסוף — תכנית 90 יום ומבט אחורה על כל הדרך. לא מטרות מתוך פחד, אלא כיוון מתוך מצב יצירה. הרגעים האחרונים האלה הם לא הסוף — הם נקודת ההמראה. את/ה ממש כאן, ומגיע לך להיות גאה.</p></div>
-          <ol class="day-list">
-            <li class="day-item">
-              <span class="day-no">15</span>
-              <div class="day-body"><h4>דופמין — כימיה של הרצון</h4></div>
-            </li>
-            <li class="day-item">
-              <span class="day-no">16</span>
-              <div class="day-body"><h4>כושר ותזונה — הדלק של הגוף והמוח</h4></div>
-            </li>
-            <li class="day-item">
-              <span class="day-no">17</span>
-              <div class="day-body"><h4>הסביבה החברתית שלך — מי מזין את מי</h4></div>
-            </li>
-            <li class="day-item">
-              <span class="day-no">18</span>
-              <div class="day-body"><h4>עימות עם פחד אחד</h4></div>
-            </li>
-            <li class="day-item">
-              <span class="day-no">19</span>
-              <div class="day-body"><h4>שגרה</h4></div>
-            </li>
-            <li class="day-item">
-              <span class="day-no">20</span>
-              <div class="day-body"><h4>תכנון 90 יום — המדע של מטרות שמחזיקות</h4></div>
-            </li>
-            <li class="day-item">
-              <span class="day-no">21</span>
-              <div class="day-body"><h4>21 יום — מבט אחורה, ומכאן קדימה</h4></div>
-            </li>
-          </ol>
-        </article>
-        </div>
-      </div>
-
-      <div class="program-cta reveal">
-        <!-- רכישת המסלול דרך דף הסליקה המאובטח של Grow (אשראי/ביט/אפל-פיי).
-             אותו חלון - Grow מטפל בתשלום ומחזיר לדף תודה. -->
-        <a class="btn btn-primary" href="https://pay.grow.link/MTA0NDE0~ab4b83f16fc1061e8ccf64aaa3ba0a6c-MzgzMDI1Mg">רכישת המסלול</a>
-        <a class="btn btn-ghost" href="#contact">דברו איתנו קודם</a>
-      </div>
-    </div>
-    <!-- מקור התוכן: PROGRAM-SPEC.md (מחולל מ-data.js של האפליקציה החיה
-         באמצעות scripts/generate-program-spec.mjs) — לא לכתוב מחדש מהזיכרון.
-         אימות לפני commit: node scripts/verify-program.mjs -->
-  </section>
 
   <!-- אירועים -->
   <section class="events section-dark" id="events">
@@ -915,6 +747,229 @@
     </div>
   </section>
 
+  <!-- המרחבים הדיגיטליים -->
+  <section class="spaces section-dark" id="spaces">
+    <div class="container">
+      <div class="section-head reveal">
+        <h2>המרחבים הדיגיטליים</h2>
+        <p class="section-intro">
+          שלושה מרחבים שממשיכים את ה-SHIFT אל תוך היום-יום — כל אחד בקצב ובעומק משלו.
+        </p>
+      </div>
+      <div class="event-cards">
+        <article class="event-card">
+          <figure class="event-media">
+            <picture><source srcset="assets/img/world-neuro.webp" type="image/webp"><img src="assets/img/world-neuro.jpg" alt="המחשה של רשת עצבית זוהרת על רקע כהה" loading="lazy" width="1200" height="897"></picture>
+          </figure>
+          <div class="event-body">
+            <span class="event-kicker">21 יום · דיגיטלי</span>
+            <h3>מסלול 21 הימים</h3>
+            <p>שלושה שבועות, צעד יומי אחד — תהליך דיגיטלי מלווה שמתחיל בהיכרות עם המערכת ונגמר בתוכנית יצירה משלכם.</p>
+            <div class="event-actions">
+              <a class="btn btn-primary event-buy" href="https://pay.grow.link/MTA0NDE0~ab4b83f16fc1061e8ccf64aaa3ba0a6c-MzgzMDI1Mg">רכישת המסלול</a>
+              <button class="event-link" type="button" data-reveal="program" aria-expanded="false" aria-controls="program">להעמיק על המסלול ←</button>
+            </div>
+          </div>
+        </article>
+        <article class="event-card">
+          <figure class="event-media">
+            <picture><source srcset="assets/img/world-embody.webp" type="image/webp"><img src="assets/img/world-embody.jpg" alt="צללית של גוף בתנועה חזקה מול מים שקטים בשחר" loading="lazy" width="1200" height="897"></picture>
+          </figure>
+          <div class="event-body">
+            <span class="event-kicker">גרסת ההמשך · אפליקציה</span>
+            <h3><span dir="ltr">SHIFT+</span></h3>
+            <p>כוונה יומית, כלי ויסות, מדיטציות, יומן ולוח הרגלים שבועי. לפני שהיא נפתחת לכולם, קבוצה קטנה נכנסת ראשונה ומכיילת אותה.</p>
+            <div class="event-actions">
+              <button class="btn btn-primary" type="button" data-plus-open>הצטרפות לקבוצת הבדיקה</button>
+            </div>
+          </div>
+        </article>
+        <article class="event-card">
+          <figure class="event-media">
+            <picture><source srcset="assets/img/world-body.webp" type="image/webp"><img src="assets/img/world-body.jpg" alt="דמות במדיטציה מול מים שקטים לפנות בוקר" loading="lazy" width="1200" height="897"></picture>
+          </figure>
+          <div class="event-body">
+            <span class="event-kicker">כל חמישי · בזום · חינם</span>
+            <h3>מדיטציה שבועית</h3>
+            <p>מפגש קצר ומונחה בזום, פעם בשבוע — תרגול דמיון מודרך לבהירות, פוקוס וצלילה עמוקה יותר אל התודעה.</p>
+            <div class="event-actions">
+              <button class="btn btn-primary" type="button" data-med-open>שמרו לי מקום</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- המסלול: 21 הימים -->
+  <section class="program section-dark" id="program" hidden>
+    <span class="side-label" aria-hidden="true">המסלול</span>
+    <div class="container">
+      <div class="section-head reveal">
+        <h2>מסלול 21 הימים</h2>
+        <p class="section-intro">
+          שלושה שבועות. צעד יומי אחד. תהליך דיגיטלי מלווה שמתחיל בהיכרות עם המערכת —
+          ונגמר בתוכנית יצירה משלכם. הנה הוא, מבפנים.
+        </p>
+      </div>
+
+      <!-- המלבנים המרחפים (program-chips) הוסרו בהוראת OC ‏29.7 ‏13:40 -
+           רכבו על המלל. אגב ההסרה התגלה שגם הם ישבו על באג בלוק-ההכלה
+           (ראה .side-label ב-CSS) - מיקומם "בתוך הסקשן" היה אשליה. -->
+      <div class="program-layout">
+        <div class="program-spine" aria-hidden="true">
+          <span class="program-spine-track"><span class="program-spine-fill" id="spineFill"></span></span>
+        <i data-day="1"></i>
+        <i data-day="2"></i>
+        <i data-day="3"></i>
+        <i data-day="4"></i>
+        <i data-day="5"></i>
+        <i data-day="6"></i>
+        <i data-day="7"></i>
+        <i data-day="8"></i>
+        <i data-day="9"></i>
+        <i data-day="10"></i>
+        <i data-day="11"></i>
+        <i data-day="12"></i>
+        <i data-day="13"></i>
+        <i data-day="14"></i>
+        <i data-day="15"></i>
+        <i data-day="16"></i>
+        <i data-day="17"></i>
+        <i data-day="18"></i>
+        <i data-day="19"></i>
+        <i data-day="20"></i>
+        <i data-day="21"></i>
+        </div>
+        <div class="program-weeks" id="programWeeks">
+        <article class="week-card" data-week="1">
+          <header class="week-head">
+            <span class="week-tag">שבוע 1׳ מתוך 3</span>
+            <h3>שבוע ראשון — מודעות והיכרות עם המערכת</h3>
+          </header>
+          <div class="week-desc"><p>השבוע הראשון הוא הבסיס של הכל.</p><p>לפני שנשנה הרגלים, אמונות או דפוסים — כדאי להבין מה קורה בגוף. נראה כי חלק ניכר מהמנגנונים של מערכת העצבים והמוח התפתחו לאורך האבולוציה כדי לשמור עלינו בחיים — לא בהכרח כדי לגרום לנו להיות מאושרים.</p><p>השבוע נכיר את מערכת העצבים: את מצב ההשרדות ואת מצב היצירה, את ההורמונים שמשפיעים עלינו, את הדפוס האישי תחת לחץ, ונלמד כלי ויסות ראשון. זו המפה שממנה ייגזר כל שינוי בהמשך.</p></div>
+          <ol class="day-list">
+            <li class="day-item">
+              <span class="day-no">1</span>
+              <div class="day-body"><h4>להכיר את המערכת — ולדעת להרגיע אותה</h4></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">2</span>
+              <div class="day-body"><h4>מודל א.פ.ר.ת — מה באמת קורה בינינו לבין התגובה</h4></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">3</span>
+              <div class="day-body"><h4>גלי המוח</h4></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">4</span>
+              <div class="day-body"><h4>ההורמונים שמנהלים אותנו</h4></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">5</span>
+              <div class="day-body"><h4>עיצוב סביבה</h4></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">6</span>
+              <div class="day-body"><h4>ביולוגיה, לא כישלון — וסיכום שבוע ראשון</h4></div>
+            </li>
+            <li class="day-item day-rest">
+              <span class="day-no">7</span>
+              <div class="day-body"><h4>יום מנוחה</h4></div>
+            </li>
+          </ol>
+        </article>
+        <article class="week-card" data-week="2">
+          <header class="week-head">
+            <span class="week-tag">שבוע 2׳ מתוך 3</span>
+            <h3>שבוע שני — שינוי המערכת</h3>
+          </header>
+          <div class="week-desc"><p>שבוע ראשון עסק בזיהוי. שבוע שני עוסק בשינוי.</p><p>המוח נחשב "פלסטי" — כלומר בעל יכולת להשתנות. מחקרים מצביעים על כך שדפוסים שנבנו בחזרתיות יכולים, ככל הנראה, גם להשתנות בחזרתיות.</p><p>השבוע נבין איך אמונות וסביבה עשויות להשפיע על הביולוגיה, מה תפקיד הדופמין בהשתוקקות ובהרגלים, למה כל כך קשה להשתנות — ואיך בכל זאת אפשר.</p></div>
+          <ol class="day-list">
+            <li class="day-item">
+              <span class="day-no">8</span>
+              <div class="day-body"><h4>נוירופלסטיות — והמוח שלא תמיד מבדיל בין מציאות לדמיון</h4></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">9</span>
+              <div class="day-body"><h4>מעגל הזהות "I am" — והגנים שלנו הם לא גזר דין</h4></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">10</span>
+              <div class="day-body"><h4>ממודע לתת-מודע — מי באמת מנהל את היום שלנו</h4></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">11</span>
+              <div class="day-body"><h4>הסיוט והחלום</h4></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">12</span>
+              <div class="day-body"><h4>מדיטציה</h4></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">13</span>
+              <div class="day-body"><h4>סיכום שבוע שני</h4></div>
+            </li>
+            <li class="day-item day-rest">
+              <span class="day-no">14</span>
+              <div class="day-body"><h4>יום מנוחה</h4></div>
+            </li>
+          </ol>
+        </article>
+        <article class="week-card" data-week="3">
+          <header class="week-head">
+            <span class="week-tag">שבוע 3׳ מתוך 3</span>
+            <h3>שבוע שלישי — מהגוף אל החיים, וכיוון קדימה</h3>
+          </header>
+          <!-- נוסח OC ‏2.8 בצפייה חיה (גובר על WEEK_INTROS לתצוגת האתר;
+               כותרות הימים/השבוע נשארות מ-data.js בלבד) -->
+          <div class="week-desc"><p>הגעת לשבוע האחרון — ואת/ה כבר לא אותו אדם שהתחיל.</p><p>עד כאן הבנו את מערכת העצבים והתחלנו לשנות אותה מבפנים. השבוע ניקח את זה אל החיים עצמם: נבין את הכימיה של הרצון (דופמין), נחזק את הבסיס הגופני — תנועה ותזונה, נבחן מי ומה מזין אותנו בסביבה, נתעמת בעדינות עם פחד אחד, ונבנה שגרה שמחזיקה.</p><p>ובסוף — תכנית 90 יום ומבט אחורה על כל הדרך. לא מטרות מתוך פחד, אלא כיוון מתוך מצב יצירה. הרגעים האחרונים האלה הם לא הסוף — הם נקודת ההמראה. את/ה ממש כאן, ומגיע לך להיות גאה.</p></div>
+          <ol class="day-list">
+            <li class="day-item">
+              <span class="day-no">15</span>
+              <div class="day-body"><h4>דופמין — כימיה של הרצון</h4></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">16</span>
+              <div class="day-body"><h4>כושר ותזונה — הדלק של הגוף והמוח</h4></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">17</span>
+              <div class="day-body"><h4>הסביבה החברתית שלך — מי מזין את מי</h4></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">18</span>
+              <div class="day-body"><h4>עימות עם פחד אחד</h4></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">19</span>
+              <div class="day-body"><h4>שגרה</h4></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">20</span>
+              <div class="day-body"><h4>תכנון 90 יום — המדע של מטרות שמחזיקות</h4></div>
+            </li>
+            <li class="day-item">
+              <span class="day-no">21</span>
+              <div class="day-body"><h4>21 יום — מבט אחורה, ומכאן קדימה</h4></div>
+            </li>
+          </ol>
+        </article>
+        </div>
+      </div>
+
+      <div class="program-cta reveal">
+        <!-- רכישת המסלול דרך דף הסליקה המאובטח של Grow (אשראי/ביט/אפל-פיי).
+             אותו חלון - Grow מטפל בתשלום ומחזיר לדף תודה. -->
+        <a class="btn btn-primary" href="https://pay.grow.link/MTA0NDE0~ab4b83f16fc1061e8ccf64aaa3ba0a6c-MzgzMDI1Mg">רכישת המסלול</a>
+        <a class="btn btn-ghost" href="#contact">דברו איתנו קודם</a>
+      </div>
+    </div>
+    <!-- מקור התוכן: PROGRAM-SPEC.md (מחולל מ-data.js של האפליקציה החיה
+         באמצעות scripts/generate-program-spec.mjs) — לא לכתוב מחדש מהזיכרון.
+         אימות לפני commit: node scripts/verify-program.mjs -->
+  </section>
+
   <!-- הסיפור שלנו -->
   <section class="story section-light" id="story">
     <div class="container story-grid">
@@ -1029,7 +1084,7 @@
         <a href="#method">השיטה</a>
         <a href="#habits">הרגלים</a>
         <a href="#story">הסיפור שלנו</a>
-        <a href="#program">המסלול</a>
+        <a href="#spaces">המסלול</a>
         <a href="#events">אירועים</a>
         <a href="#contact">צרו קשר</a>
         <a href="https://www.instagram.com/the_shift_il/" target="_blank" rel="noopener">אינסטגרם</a>
@@ -1128,14 +1183,76 @@
     </div>
   </dialog>
 
+  <!-- SHIFT+ — בקשה להצטרף לקבוצת הבדיקה (plus-form ב-main.js → plusBetaRequests) -->
+  <dialog class="join-dialog" id="plusDialog" aria-labelledby="plusTitle">
+    <form class="join-form" id="plusForm" method="dialog" novalidate>
+      <button type="button" class="join-close" data-plus-close aria-label="סגירה">×</button>
+      <h2 id="plusTitle">קבוצת הבדיקה של <span dir="ltr">SHIFT+</span></h2>
+      <p class="join-sub">קבוצה קטנה שנכנסת ראשונה ל-<span dir="ltr">SHIFT+</span> ומשפיעה על מה שנבנה בה.</p>
+
+      <label class="join-field">
+        <span>שם מלא</span>
+        <input type="text" name="name" autocomplete="name" required minlength="2" placeholder="שם ושם משפחה">
+      </label>
+      <div class="join-row">
+        <label class="join-field">
+          <span>טלפון</span>
+          <input type="tel" name="phone" autocomplete="tel" inputmode="tel" required placeholder="050-0000000">
+        </label>
+        <label class="join-field">
+          <span>מייל</span>
+          <input type="email" name="email" autocomplete="email" required placeholder="name@example.com">
+        </label>
+      </div>
+      <fieldset class="join-field join-radios">
+        <legend>עברתם את מסלול 21 הימים?</legend>
+        <label class="join-radio"><input type="radio" name="past" value="השלמתי את המסלול" checked> כן, השלמתי אותו</label>
+        <label class="join-radio"><input type="radio" name="past" value="התחלתי ולא סיימתי"> התחלתי ולא סיימתי</label>
+        <label class="join-radio"><input type="radio" name="past" value="לא עברתי"> לא, אני חדש/ה כאן</label>
+      </fieldset>
+      <label class="join-field">
+        <span>מה הכי תרצו שישתנה אצלכם <small>(אופציונלי)</small></span>
+        <textarea name="goal" rows="2" maxlength="300" placeholder="למשל: לישון טוב יותר, להפסיק לדחות דברים"></textarea>
+      </label>
+
+      <button type="submit" class="btn btn-primary join-submit">שלחו את הבקשה</button>
+      <p class="join-status" id="plusStatus" role="status" aria-live="polite"></p>
+    </form>
+  </dialog>
+
+  <!-- מדיטציה שבועית — הרשמה (med-form ב-main.js → meditationSignups) -->
+  <dialog class="join-dialog" id="medDialog" aria-labelledby="medTitle">
+    <form class="join-form" id="medForm" method="dialog" novalidate>
+      <button type="button" class="join-close" data-med-close aria-label="סגירה">×</button>
+      <h2 id="medTitle">מדיטציה שבועית</h2>
+      <p class="join-sub">מפגש קצר ומונחה בזום, כל יום חמישי 18:40–19:20. הקישור נשלח למייל לפני המפגש.</p>
+
+      <label class="join-field">
+        <span>איך קוראים לכם</span>
+        <input type="text" name="name" autocomplete="name" required minlength="2" placeholder="שם פרטי">
+      </label>
+      <label class="join-field">
+        <span>מייל לשליחת הקישור</span>
+        <input type="email" name="email" autocomplete="email" required placeholder="name@example.com">
+      </label>
+      <label class="join-field">
+        <span>טלפון <small>(אופציונלי, לתזכורת)</small></span>
+        <input type="tel" name="phone" autocomplete="tel" inputmode="tel" placeholder="050-0000000">
+      </label>
+
+      <button type="submit" class="btn btn-primary join-submit">שמרו לי מקום</button>
+      <p class="join-status" id="medStatus" role="status" aria-live="polite"></p>
+    </form>
+  </dialog>
+
   <script src="assets/vendor/gsap.min.js" defer></script>
   <script src="assets/vendor/ScrollTrigger.min.js" defer></script>
   <script src="assets/vendor/lenis.min.js" defer></script>
-  <script src="js/motion.js?v=20260915a" defer></script>
+  <script src="js/motion.js?v=20261005a" defer></script>
   <!-- טלמטריה של SHIFT: עד היום לא הייתה באתר שום מדידה. נטענת לפני main.js
        כדי לצרוך את dataLayer הקיים מהאירוע הראשון. מכבדת Do Not Track. -->
   <script src="js/shift-telemetry.js?v=tel-5" defer></script>
   <script src="js/tel-site.js?v=tel-5" defer></script>
-  <script src="js/main.js?v=20260915a" defer></script>
+  <script src="js/main.js?v=20261005a" defer></script>
 </body>
 </html>

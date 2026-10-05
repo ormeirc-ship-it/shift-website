@@ -37,6 +37,7 @@ const I18N = {
     joinAgeRequired: 'נא למלא גיל תקין.',
     joinGenderRequired: 'נא לבחור מין.',
     joinPhoneRequired: 'נא למלא מספר טלפון תקין.',
+    joinEmailRequired: 'נא למלא כתובת מייל תקינה.',
     joinSending: 'שולח…',
     joinSuccess: 'קיבלנו! נחזור אליכם בהקדם 🙏',
     joinSent: 'נשלח ✓',
@@ -63,6 +64,7 @@ const I18N = {
     joinAgeRequired: 'Please enter a valid age.',
     joinGenderRequired: 'Please select a gender.',
     joinPhoneRequired: 'Please enter a valid phone number.',
+    joinEmailRequired: 'Please enter a valid email address.',
     joinSending: 'Sending…',
     joinSuccess: 'Got it! We\'ll get back to you soon 🙏',
     joinSent: 'Sent ✓',
@@ -89,6 +91,7 @@ const I18N = {
     joinAgeRequired: 'Introduce una edad válida.',
     joinGenderRequired: 'Selecciona un género.',
     joinPhoneRequired: 'Introduce un número de teléfono válido.',
+    joinEmailRequired: 'Introduce un correo electrónico válido.',
     joinSending: 'Enviando…',
     joinSuccess: '¡Recibido! Te responderemos pronto 🙏',
     joinSent: 'Enviado ✓',
@@ -817,6 +820,109 @@ safe('join-form', () => {
         }
       })
       .finally(() => { sending = false; });
+  });
+});
+
+// ── מרחבים דיגיטליים: כפתור "להעמיק על המסלול" חושף את פירוט המסלול ────
+safe('spaces-reveal', () => {
+  document.querySelectorAll('[data-reveal]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const target = document.getElementById(btn.getAttribute('data-reveal'));
+      if (!target) return;
+      target.hidden = false;
+      btn.setAttribute('aria-expanded', 'true');
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+});
+
+// ── כתיבת ליד ל-Firestore (REST) — משותף לטפסי SHIFT+ והמדיטציה ───────
+const SPACES_FS_BASE = 'https://firestore.googleapis.com/v1/projects/shift-21-day-course-ceos/databases/(default)/documents/';
+function spacesFsFields(obj) {
+  const fields = {};
+  for (const [k, v] of Object.entries(obj)) {
+    if (typeof v === 'number' && Number.isInteger(v)) fields[k] = { integerValue: String(v) };
+    else fields[k] = { stringValue: String(v == null ? '' : v) };
+  }
+  return { fields };
+}
+function spacesPostLead(collection, payload) {
+  return fetch(SPACES_FS_BASE + collection, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(spacesFsFields(payload)),
+  }).then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); return true; });
+}
+function spacesIsEmail(s) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s); }
+function spacesLeadCtx() {
+  const ctx = { lang: LANG, page: (location.pathname.split('/').pop() || 'index.html') };
+  try { if (document.referrer) { const u = new URL(document.referrer); if (u.origin !== location.origin) ctx.referrer = (u.origin + u.pathname).slice(0, 120); } } catch (e) { /* ignore */ }
+  return ctx;
+}
+// פתיחה/סגירה גנרית ל-<dialog> של טופס. מחזיר את ה-dialog או null.
+function spacesWireDialog(openSel, dialogId, closeSel) {
+  const dialog = document.getElementById(dialogId);
+  if (!dialog || typeof dialog.showModal !== 'function') return null;
+  const open = (e) => {
+    if (e) e.preventDefault();
+    dialog.showModal();
+    const f = dialog.querySelector('input[name="name"]');
+    if (f) setTimeout(() => f.focus(), 60);
+  };
+  document.querySelectorAll(openSel).forEach((b) => b.addEventListener('click', open));
+  const closeBtn = dialog.querySelector(closeSel);
+  if (closeBtn) closeBtn.addEventListener('click', () => { if (dialog.open) dialog.close(); });
+  dialog.addEventListener('click', (e) => { if (e.target === dialog && dialog.open) dialog.close(); });
+  return dialog;
+}
+// מחבר טופס <dialog> לכתיבת ליד: validate() מחזיר {ok,msg|data}.
+function spacesWireForm(dialog, formId, statusId, collection, evName, validate) {
+  const form = document.getElementById(formId);
+  const status = document.getElementById(statusId);
+  if (!form || !status) return;
+  const submitBtn = form.querySelector('.join-submit');
+  const origLabel = submitBtn ? submitBtn.textContent : '';
+  let sending = false;
+  const setStatus = (m, k) => { status.textContent = m || ''; status.classList.toggle('is-error', k === 'error'); status.classList.toggle('is-ok', k === 'ok'); };
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (sending) return;
+    const res = validate(form);
+    if (!res.ok) { setStatus(res.msg, 'error'); return; }
+    sending = true; if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = t('joinSending'); } setStatus('');
+    const payload = Object.assign({}, res.data, { source: 'website' }, spacesLeadCtx());
+    spacesPostLead(collection, payload)
+      .then(() => { track(evName, { ok: true }); setStatus(t('joinSuccess'), 'ok'); form.reset(); if (submitBtn) submitBtn.textContent = t('joinSent'); setTimeout(() => { if (dialog.open) dialog.close(); }, 1800); })
+      .catch((err) => { track(evName, { ok: false }); if (window.console) console.error(collection + ':', err); setStatus(t('joinError'), 'error'); if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = origLabel; } })
+      .finally(() => { sending = false; });
+  });
+}
+
+// ── SHIFT+ — בקשה לקבוצת הבדיקה → plusBetaRequests ───────────────────
+safe('plus-form', () => {
+  const dialog = spacesWireDialog('[data-plus-open]', 'plusDialog', '[data-plus-close]');
+  if (!dialog) return;
+  spacesWireForm(dialog, 'plusForm', 'plusStatus', 'plusBetaRequests', 'plus_submit', (form) => {
+    const name = form.name.value.trim();
+    const phone = form.phone.value.replace(/\D/g, '');
+    const email = form.email.value.trim();
+    if (name.length < 2) return { ok: false, msg: t('joinNameRequired') };
+    if (phone.length < 9) return { ok: false, msg: t('joinPhoneRequired') };
+    if (!spacesIsEmail(email)) return { ok: false, msg: t('joinEmailRequired') };
+    return { ok: true, data: { name, phone, email, pastCourse: (form.past.value || ''), goal: form.goal.value.trim().slice(0, 300) } };
+  });
+});
+
+// ── מדיטציה שבועית — הרשמה → meditationSignups ───────────────────────
+safe('med-form', () => {
+  const dialog = spacesWireDialog('[data-med-open]', 'medDialog', '[data-med-close]');
+  if (!dialog) return;
+  spacesWireForm(dialog, 'medForm', 'medStatus', 'meditationSignups', 'med_submit', (form) => {
+    const name = form.name.value.trim();
+    const email = form.email.value.trim();
+    const phone = form.phone.value.replace(/\D/g, '');
+    if (name.length < 2) return { ok: false, msg: t('joinNameRequired') };
+    if (!spacesIsEmail(email)) return { ok: false, msg: t('joinEmailRequired') };
+    return { ok: true, data: { name, email, phone } };
   });
 });
 
